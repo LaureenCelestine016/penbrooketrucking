@@ -43,7 +43,7 @@ const location = () => {
                 // Add a marker to the map
                 L.marker(coords)
                     .addTo(map.value)
-                    .bindPopup("A pretty marker.<br> Easily customizable.")
+                    .bindPopup("You are here!")
                     .openPopup();
             },
             function () {
@@ -60,10 +60,12 @@ onMounted(() => {
 
 <template>
     <Head title="Welcome" />
-    <div class="w-full h-14 border-b bg-teal-500">
+    <div class="w-full h-14 border-b bg-blue-800">
         <div v-if="canLogin" class="flex h-full w-11/12 mx-auto">
             <div class="flex h-full items-center">
-                <h2 class="font-bold tracking-widest text-white">LOGO HERE</h2>
+                <h2 class="font-bold tracking-widest text-blue-100">
+                    LOGO HERE
+                </h2>
             </div>
             <div class="grow h-100"></div>
             <div class="flex gap-3 items-center flex-none h-full">
@@ -71,14 +73,14 @@ onMounted(() => {
                     >Dashboard</Link
                 >
                 <template v-else>
-                    <Link
+                    <!-- <Link
                         :href="route('login')"
-                        class="font-sans font-semibold hover:text-teal-900 text-white"
+                        class="font-sans font-semibold hover:text-blue-50 text-blue-100"
                         >Login</Link
-                    >
+                    > -->
                     <Link
                         :href="route('register')"
-                        class="font-sans font-semibold hover:text-teal-900 text-white"
+                        class="font-sans font-semibold hover:text-blue-50 text-blue-100"
                         >Register</Link
                     >
                 </template>
@@ -87,7 +89,7 @@ onMounted(() => {
     </div>
     <div>
         <div class="grid grid-cols-2 h-screen">
-            <div class="form--container">
+            <div class="flex flex-col items-center justify-center">
                 <Login />
             </div>
             <div id="map" class="w-full"></div>

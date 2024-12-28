@@ -22,7 +22,7 @@ const toast = useToast();
 
 const resolver = zodResolver(
     z.object({
-        username: z.string().min(1, { message: "Username is required." }),
+        username: z.string().min(1, { message: "Email is required." }),
         password: z.string().min(1, { message: "Password is required." }),
     })
 );
@@ -52,20 +52,19 @@ const submit = () => {
         {{ status }}
     </div>
 
-    <!-- <h2>Login to Penbrooke</h2> -->
-    <Form
-        v-slot="$form"
-        :initialValues
-        :resolver
-        @submit="submit"
-        class="flex flex-col gap-4 w-full sm:w-60"
-    >
+    <!-- class="flex flex-col gap-4 w-full sm:w-60" -->
+    <Form v-slot="$form" :initialValues :resolver @submit="submit" class="form">
+        <h2 class="font-semibold text-2xl text-slate-600 mb-6">
+            Login to Truck Management System
+        </h2>
         <div class="flex flex-col gap-1">
+            <label for="email" class="label">Email Address</label>
             <InputText
+                id="email"
                 name="username"
                 type="text"
                 v-model="form.email"
-                placeholder="Username"
+                placeholder="johndoe@example.com"
                 class="user--input"
             />
             <Message
@@ -77,13 +76,16 @@ const submit = () => {
             >
         </div>
         <div class="flex flex-col gap-1">
+            <label for="password" class="label">Password</label>
             <Password
+                id="password"
                 name="password"
-                placeholder="Password"
+                placeholder="••••••••••"
                 v-model="form.password"
                 :feedback="false"
                 toggleMask
                 fluid
+                class="user--input"
             />
             <Message
                 v-if="$form.password?.invalid"
@@ -100,8 +102,15 @@ const submit = () => {
                     </li>
                 </ul>
             </Message>
+            <Link
+                :href="route('password.request')"
+                class="text-blue-600 hover:text-gray-900 self-end"
+            >
+                Forgot your password?
+            </Link>
         </div>
-        <Button type="submit" severity="secondary" label="Submit" />
+
+        <Button type="submit" label="Log in" class="btn-submit" />
     </Form>
 
     <!-- <form @submit.prevent="submit">
@@ -163,10 +172,37 @@ const submit = () => {
         </form> -->
 </template>
 <style scoped>
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 70%;
+}
+
 .user--input {
-    margin-top: 10px;
-    height: 50px;
-    width: 250%;
-    border: ;
+    height: 48px;
+    background-color: #f8f9fa;
+}
+
+.label {
+    color: #495057;
+    font-size: 15px;
+    margin-bottom: 3px;
+}
+
+.btn-submit {
+    background-color: rgb(30, 64, 175);
+    border: none;
+    margin-top: 14px;
+    color: rgb(219 234 254);
+    height: 52px;
+    font-weight: 900;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 18px;
+}
+
+.btn-submit:hover {
+    background-color: rgb(41, 71, 167) !important;
+    border: none !important;
 }
 </style>
