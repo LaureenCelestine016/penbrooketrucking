@@ -1,11 +1,13 @@
 <script setup>
-import Checkbox from '@/Components/Checkbox.vue';
-import GuestLayout from '@/Layouts/GuestLayout.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
-import { Head, Link, useForm } from '@inertiajs/vue3';
+import { Head, Link, useForm } from "@inertiajs/vue3";
+import { Form } from "@primevue/forms";
+import { zodResolver } from "@primevue/forms/resolvers/zod";
+import { z } from "zod";
+import { useToast } from "primevue/usetoast";
+import Message from "primevue/message";
+import Password from "primevue/password";
+import Button from "primevue/button";
+import InputText from "primevue/inputtext";
 
 defineProps({
     canResetPassword: {
@@ -16,28 +18,93 @@ defineProps({
     },
 });
 
+const toast = useToast();
+
+const resolver = zodResolver(
+    z.object({
+        username: z.string().min(1, { message: "Username is required." }),
+        password: z.string().min(1, { message: "Password is required." }),
+    })
+);
+
 const form = useForm({
-    email: '',
-    password: '',
+    email: "",
+    password: "",
     remember: false,
 });
 
 const submit = () => {
-    form.post(route('login'), {
-        onFinish: () => form.reset('password'),
+    form.post(route("login"), {
+        onFinish: () => form.reset("password"),
+    });
+    toast.add({
+        severity: "success",
+        summary: "Form is submitted.",
+        life: 3000,
     });
 };
 </script>
 
 <template>
-    <GuestLayout>
-        <Head title="Log in" />
+    <Head title="Log in" />
 
-        <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
-            {{ status }}
+    <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
+        {{ status }}
+    </div>
+
+    <!-- <h2>Login to Penbrooke</h2> -->
+    <Form
+        v-slot="$form"
+        :initialValues
+        :resolver
+        @submit="submit"
+        class="flex flex-col gap-4 w-full sm:w-60"
+    >
+        <div class="flex flex-col gap-1">
+            <InputText
+                name="username"
+                type="text"
+                v-model="form.email"
+                placeholder="Username"
+                class="user--input"
+            />
+            <Message
+                v-if="$form.username?.invalid"
+                severity="error"
+                size="small"
+                variant="simple"
+                >{{ $form.username.error.message }}</Message
+            >
         </div>
+        <div class="flex flex-col gap-1">
+            <Password
+                name="password"
+                placeholder="Password"
+                v-model="form.password"
+                :feedback="false"
+                toggleMask
+                fluid
+            />
+            <Message
+                v-if="$form.password?.invalid"
+                severity="error"
+                size="small"
+                variant="simple"
+            >
+                <ul class="my-0 px-4 flex flex-col gap-1">
+                    <li
+                        v-for="(error, index) of $form.password.errors"
+                        :key="index"
+                    >
+                        {{ error.message }}
+                    </li>
+                </ul>
+            </Message>
+        </div>
+        <Button type="submit" severity="secondary" label="Submit" />
+    </Form>
 
-        <form @submit.prevent="submit">
+    <!-- <form @submit.prevent="submit">
             <div>
                 <InputLabel for="email" value="Email" />
 
@@ -85,10 +152,21 @@ const submit = () => {
                     Forgot your password?
                 </Link>
 
-                <PrimaryButton class="ms-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+                <PrimaryButton
+                    class="ms-4"
+                    :class="{ 'opacity-25': form.processing }"
+                    :disabled="form.processing"
+                >
                     Log in
                 </PrimaryButton>
             </div>
-        </form>
-    </GuestLayout>
+        </form> -->
 </template>
+<style scoped>
+.user--input {
+    margin-top: 10px;
+    height: 50px;
+    width: 250%;
+    border: ;
+}
+</style>
