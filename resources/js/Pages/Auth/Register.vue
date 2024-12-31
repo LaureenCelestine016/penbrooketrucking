@@ -14,7 +14,7 @@ import { useToast } from "primevue/usetoast";
 import Message from "primevue/message";
 
 import Password from "primevue/password";
-
+import Button from "primevue/button";
 const toast = useToast();
 
 const form = useForm({
@@ -98,36 +98,17 @@ const submit = () => {
                         <h2 class="font-semibold text-2xl text-slate-600 mb-6">
                             Create your Account
                         </h2>
-                        <FormField
-                            v-slot="$field"
-                            name="username"
-                            initialValue=""
-                            :resolver="zodUserNameResolver"
-                            class="flex flex-col gap-1"
+
+                        <label
+                            for="fullname"
+                            class="text-sm inline-block -mb-2 text-slate-800"
+                            >Full name</label
                         >
-                            <label for="license" class="label"
-                                >License Number</label
-                            >
-                            <InputText
-                                id="license"
-                                type="text"
-                                placeholder="License#"
-                                class="user--input"
-                            />
-                            <Message
-                                v-if="$field?.invalid"
-                                severity="error"
-                                size="small"
-                                variant="simple"
-                                >{{ $field.error?.message }}</Message
-                            >
-                        </FormField>
-                        <div class="flex flex-row gap-20">
+                        <div class="flex flex-row gap-24">
                             <div>
-                                <label for="license" class="label"
-                                    >First name</label
-                                >
+                                <!-- Firstname -->
                                 <FormField
+                                    id="fullname"
                                     v-slot="$field"
                                     name="firstname"
                                     initialValue=""
@@ -148,32 +129,30 @@ const submit = () => {
                                     >
                                 </FormField>
                             </div>
-                            <div>
-                                <label for="license" class="label"
-                                    >Last name</label
+                            <!-- Lastname -->
+                            <FormField
+                                id="fullname"
+                                v-slot="$field"
+                                name="lastname"
+                                initialValue=""
+                                :resolver="valibotLastNameResolver"
+                                class="flex flex-col gap-1 justify-end"
+                            >
+                                <InputText
+                                    type="text"
+                                    placeholder="Last Name"
+                                    class="user--input lastName"
+                                />
+                                <Message
+                                    v-if="$field?.invalid"
+                                    severity="error"
+                                    size="small"
+                                    variant="simple"
+                                    >{{ $field.error?.message }}</Message
                                 >
-                                <FormField
-                                    v-slot="$field"
-                                    name="lastname"
-                                    initialValue=""
-                                    :resolver="valibotLastNameResolver"
-                                    class="flex flex-col gap-1"
-                                >
-                                    <InputText
-                                        type="text"
-                                        placeholder="Last Name"
-                                        class="user--input lastName"
-                                    />
-                                    <Message
-                                        v-if="$field?.invalid"
-                                        severity="error"
-                                        size="small"
-                                        variant="simple"
-                                        >{{ $field.error?.message }}</Message
-                                    >
-                                </FormField>
-                            </div>
+                            </FormField>
                         </div>
+                        <!-- Mobile Number -->
                         <FormField
                             v-slot="$field"
                             name="username"
@@ -181,13 +160,101 @@ const submit = () => {
                             :resolver="zodUserNameResolver"
                             class="flex flex-col gap-1"
                         >
-                            <label for="license" class="label"
-                                >Contact number</label
+                            <span
+                                for="mobile_number"
+                                class="text-sm text-slate-800"
+                                >Mobile number</span
+                            >
+                            <span class="text-xs text-slate-500"
+                                >e.g.+63917XXXXXXXX</span
+                            >
+                            <InputText
+                                id="mobile_number"
+                                type="text"
+                                placeholder="+63"
+                                class="user--input"
+                            />
+                            <Message
+                                v-if="$field?.invalid"
+                                severity="error"
+                                size="small"
+                                variant="simple"
+                                >{{ $field.error?.message }}</Message
+                            >
+                        </FormField>
+                        <FormField
+                            v-slot="$field"
+                            name="username"
+                            initialValue=""
+                            :resolver="zodUserNameResolver"
+                            class="flex flex-col gap-1"
+                        >
+                            <span
+                                for="mobile_number"
+                                class="text-sm mb-1 text-slate-800"
+                                >Email address</span
+                            >
+
+                            <InputText
+                                id="mobile_number"
+                                type="text"
+                                placeholder="johndoe@example.com"
+                                class="user--input"
+                            />
+                            <Message
+                                v-if="$field?.invalid"
+                                severity="error"
+                                size="small"
+                                variant="simple"
+                                >{{ $field.error?.message }}</Message
+                            >
+                        </FormField>
+                        <FormField
+                            v-slot="$field"
+                            name="username"
+                            initialValue=""
+                            :resolver="zodUserNameResolver"
+                            class="flex flex-col gap-1"
+                        >
+                            <label
+                                for="license"
+                                class="text-sm mb-1 text-slate-800"
+                                >Username</label
                             >
                             <InputText
                                 id="license"
                                 type="text"
-                                placeholder="License#"
+                                placeholder="Username"
+                                class="user--input"
+                            />
+                            <Message
+                                v-if="$field?.invalid"
+                                severity="error"
+                                size="small"
+                                variant="simple"
+                                >{{ $field.error?.message }}</Message
+                            >
+                        </FormField>
+                        <FormField
+                            v-slot="$field"
+                            name="username"
+                            initialValue=""
+                            :resolver="zodUserNameResolver"
+                            class="flex flex-col gap-1"
+                        >
+                            <label
+                                for="license"
+                                class="text-sm mb-1 text-slate-800"
+                                >Password</label
+                            >
+                            <Password
+                                id="password"
+                                name="password"
+                                placeholder="••••••••••"
+                                v-model="form.password"
+                                :feedback="false"
+                                toggleMask
+                                fluid
                                 class="user--input"
                             />
                             <Message
@@ -201,8 +268,8 @@ const submit = () => {
 
                         <Button
                             type="submit"
-                            severity="secondary"
-                            label="Submit"
+                            label="Sign up"
+                            class="btn-submit"
                         />
                     </Form>
                 </div>
@@ -306,11 +373,33 @@ const submit = () => {
     background-color: #f8f9fa;
 }
 
+.label-fullname {
+    font-size: 14px;
+    line-height: 20px;
+    margin-bottom: 8px !important;
+}
+
 .firstName {
-    width: 130% !important;
+    width: 139% !important;
 }
 
 .lastName {
-    width: 130% !important;
+    width: 139% !important;
+}
+
+.btn-submit {
+    background-color: rgb(30, 64, 175);
+    border: none;
+    margin-top: 14px;
+    color: rgb(219 234 254);
+    height: 52px;
+    font-weight: 900;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 18px;
+}
+
+.btn-submit:hover {
+    background-color: rgb(41, 71, 167) !important;
+    border: none !important;
 }
 </style>
