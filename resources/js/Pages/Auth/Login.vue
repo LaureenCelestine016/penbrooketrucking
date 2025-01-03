@@ -53,7 +53,7 @@ const submit = () => {
     </div>
 
     <!-- class="flex flex-col gap-4 w-full sm:w-60" -->
-    <Form v-slot="$form" :initialValues :resolver @submit="submit" class="form">
+    <Form @submit="submit" class="form">
         <h2 class="font-semibold text-2xl text-slate-600 mb-6">
             Login to Truck Management System
         </h2>
@@ -68,11 +68,11 @@ const submit = () => {
                 class="user--input"
             />
             <Message
-                v-if="$form.username?.invalid"
+                v-if="form.username?.invalid"
                 severity="error"
                 size="small"
                 variant="simple"
-                >{{ $form.username.error.message }}</Message
+                >{{ form.username.error.message }}</Message
             >
         </div>
         <div class="flex flex-col gap-1">
@@ -88,14 +88,14 @@ const submit = () => {
                 class="user--input"
             />
             <Message
-                v-if="$form.password?.invalid"
+                v-if="form.password?.invalid"
                 severity="error"
                 size="small"
                 variant="simple"
             >
                 <ul class="my-0 px-4 flex flex-col gap-1">
                     <li
-                        v-for="(error, index) of $form.password.errors"
+                        v-for="(error, index) of form.password.errors"
                         :key="index"
                     >
                         {{ error.message }}

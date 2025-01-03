@@ -3,25 +3,23 @@ import { Head, Link, useForm } from "@inertiajs/vue3";
 import { onMounted, ref } from "vue";
 import L from "leaflet";
 
-import { Form } from "@primevue/forms";
-
 import { FormField } from "@primevue/forms";
-
 import InputText from "primevue/inputtext";
-
 import { useToast } from "primevue/usetoast";
-
 import Message from "primevue/message";
-
 import Password from "primevue/password";
 import Button from "primevue/button";
 const toast = useToast();
 
 const form = useForm({
-    name: "",
+    firstName: "",
+    lastName: "",
     email: "",
+    mobileNumber: "",
+    username: "",
     password: "",
     password_confirmation: "",
+    userType: 1,
 });
 
 const location = () => {
@@ -61,6 +59,8 @@ onMounted(() => {
 });
 
 const submit = () => {
+    console.log(form);
+
     form.post(route("register"), {
         onFinish: () => form.reset("password", "password_confirmation"),
     });
@@ -89,133 +89,114 @@ const submit = () => {
         <div class="grid grid-cols-2 h-screen">
             <div class="flex flex-col items-center justify-center">
                 <div class="card flex justify-center w-3/4">
-                    <Form
-                        :initialValues
-                        :resolver
-                        @submit="onFormSubmit"
-                        class="form"
-                    >
+                    <form @submit.prevent="submit" class="form">
                         <h2 class="font-semibold text-2xl text-slate-600 mb-6">
                             Create your Account
                         </h2>
 
-                        <label
-                            for="fullname"
-                            class="text-sm inline-block -mb-2 text-slate-800"
-                            >Full name</label
-                        >
+                        <!-- Full Name -->
                         <div class="flex flex-row gap-24">
                             <div>
-                                <!-- Firstname -->
+                                <!-- First Name -->
                                 <FormField
-                                    id="fullname"
-                                    v-slot="$field"
-                                    name="firstname"
-                                    initialValue=""
-                                    :resolver="yupFirstNameResolver"
+                                    id="firstname"
+                                    name="firstName"
                                     class="flex flex-col gap-1"
                                 >
                                     <InputText
                                         type="text"
                                         placeholder="First Name"
                                         class="user--input firstName"
+                                        v-model="form.firstName"
                                     />
                                     <Message
-                                        v-if="$field?.invalid"
+                                        v-if="form.errors.firstName"
                                         severity="error"
                                         size="small"
                                         variant="simple"
-                                        >{{ $field.error?.message }}</Message
+                                        >{{ form.errors.firstName }}</Message
                                     >
                                 </FormField>
                             </div>
-                            <!-- Lastname -->
-                            <FormField
-                                id="fullname"
-                                v-slot="$field"
-                                name="lastname"
-                                initialValue=""
-                                :resolver="valibotLastNameResolver"
-                                class="flex flex-col gap-1 justify-end"
-                            >
-                                <InputText
-                                    type="text"
-                                    placeholder="Last Name"
-                                    class="user--input lastName"
-                                />
-                                <Message
-                                    v-if="$field?.invalid"
-                                    severity="error"
-                                    size="small"
-                                    variant="simple"
-                                    >{{ $field.error?.message }}</Message
+
+                            <!-- Last Name -->
+                            <div>
+                                <FormField
+                                    id="lastname"
+                                    name="lastName"
+                                    class="flex flex-col gap-1 justify-end"
                                 >
-                            </FormField>
+                                    <InputText
+                                        type="text"
+                                        placeholder="Last Name"
+                                        v-model="form.lastName"
+                                        class="user--input lastName"
+                                    />
+                                    <Message
+                                        v-if="form.errors.lastName"
+                                        severity="error"
+                                        size="small"
+                                        variant="simple"
+                                        >{{ form.errors.lastName }}</Message
+                                    >
+                                </FormField>
+                            </div>
                         </div>
+
                         <!-- Mobile Number -->
                         <FormField
-                            v-slot="$field"
-                            name="username"
-                            initialValue=""
-                            :resolver="zodUserNameResolver"
+                            name="mobileNumber"
                             class="flex flex-col gap-1"
                         >
-                            <span
+                            <label
                                 for="mobile_number"
                                 class="text-sm text-slate-800"
-                                >Mobile number</span
+                                >Mobile number</label
                             >
                             <span class="text-xs text-slate-500"
-                                >e.g.+63917XXXXXXXX</span
+                                >e.g. +63917XXXXXXXX</span
                             >
                             <InputText
                                 id="mobile_number"
                                 type="text"
                                 placeholder="+63"
+                                v-model="form.mobileNumber"
                                 class="user--input"
                             />
                             <Message
-                                v-if="$field?.invalid"
+                                v-if="form.errors.mobileNumber"
                                 severity="error"
                                 size="small"
                                 variant="simple"
-                                >{{ $field.error?.message }}</Message
+                                >{{ form.errors.mobileNumber }}</Message
                             >
                         </FormField>
-                        <FormField
-                            v-slot="$field"
-                            name="username"
-                            initialValue=""
-                            :resolver="zodUserNameResolver"
-                            class="flex flex-col gap-1"
-                        >
-                            <span
-                                for="mobile_number"
-                                class="text-sm mb-1 text-slate-800"
-                                >Email address</span
-                            >
 
+                        <!-- Email -->
+                        <FormField name="email" class="flex flex-col gap-1">
+                            <label
+                                for="emailaddress"
+                                class="text-sm mb-1 text-slate-800"
+                                >Email address</label
+                            >
                             <InputText
-                                id="mobile_number"
+                                id="emailaddress"
                                 type="text"
                                 placeholder="johndoe@example.com"
+                                v-model="form.email"
                                 class="user--input"
                             />
                             <Message
-                                v-if="$field?.invalid"
+                                v-if="form.errors.email"
                                 severity="error"
                                 size="small"
                                 variant="simple"
-                                >{{ $field.error?.message }}</Message
+                                >{{ form.errors.email }}</Message
                             >
                         </FormField>
-                        <FormField
-                            v-slot="$field"
-                            name="username"
-                            initialValue=""
-                            :resolver="zodUserNameResolver"
-                            class="flex flex-col gap-1"
-                        >
+
+                        <!-- Username -->
+                        <FormField name="username" class="flex flex-col gap-1">
                             <label
                                 for="license"
                                 class="text-sm mb-1 text-slate-800"
@@ -225,25 +206,22 @@ const submit = () => {
                                 id="license"
                                 type="text"
                                 placeholder="Username"
+                                v-model="form.username"
                                 class="user--input"
                             />
                             <Message
-                                v-if="$field?.invalid"
+                                v-if="form.errors.username"
                                 severity="error"
                                 size="small"
                                 variant="simple"
-                                >{{ $field.error?.message }}</Message
+                                >{{ form.errors.username }}</Message
                             >
                         </FormField>
-                        <FormField
-                            v-slot="$field"
-                            name="username"
-                            initialValue=""
-                            :resolver="zodUserNameResolver"
-                            class="flex flex-col gap-1"
-                        >
+
+                        <!-- Password -->
+                        <FormField name="password" class="flex flex-col gap-1">
                             <label
-                                for="license"
+                                for="password"
                                 class="text-sm mb-1 text-slate-800"
                                 >Password</label
                             >
@@ -258,20 +236,21 @@ const submit = () => {
                                 class="user--input"
                             />
                             <Message
-                                v-if="$field?.invalid"
+                                v-if="form.errors.password"
                                 severity="error"
                                 size="small"
                                 variant="simple"
-                                >{{ $field.error?.message }}</Message
+                                >{{ form.errors.password }}</Message
                             >
                         </FormField>
 
+                        <!-- Submit Button -->
                         <Button
                             type="submit"
                             label="Sign up"
                             class="btn-submit"
                         />
-                    </Form>
+                    </form>
                 </div>
             </div>
             <div id="map" class="w-full"></div>
