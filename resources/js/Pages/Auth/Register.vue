@@ -22,6 +22,41 @@ const form = useForm({
     userType: 1,
 });
 
+const trimFormFields = () => {
+    for (const key in form) {
+        if (typeof form[key] === "string") {
+            form[key] = form[key].trim();
+        }
+    }
+};
+
+const submit = () => {
+    trimFormFields();
+
+    form.post(route("register"), {
+        onSuccess: () => {
+            toast.add({
+                severity: "success",
+                summary: "Success",
+                detail: "Account created successfully!",
+                life: 3000,
+            });
+            form.reset("password", "password_confirmation");
+        },
+        onError: () => {
+            toast.add({
+                severity: "error",
+                summary: "Error",
+                detail: "There were errors in your form submission.",
+                life: 3000,
+            });
+        },
+        onFinish: () => {
+            // This can handle additional cleanup if needed
+        },
+    });
+};
+
 const location = () => {
     const map = ref(null);
 
@@ -57,21 +92,13 @@ const location = () => {
 onMounted(() => {
     location();
 });
-
-const submit = () => {
-    console.log(form);
-
-    form.post(route("register"), {
-        onFinish: () => form.reset("password", "password_confirmation"),
-    });
-};
 </script>
 
 <template>
     <Head title="Register" />
-
+    <Toast />
     <div class="w-full h-14 border-b bg-blue-800">
-        <div class="flex h-full w-11/12 mx-auto">
+        <div class="flex h-full max-w-89rem mx-auto">
             <div class="flex h-full items-center">
                 <h2 class="font-bold tracking-widest text-blue-100">
                     LOGO HERE
@@ -79,8 +106,11 @@ const submit = () => {
             </div>
             <div class="grow h-100"></div>
             <div class="flex gap-3 items-center flex-none h-full">
-                <Link v-if="$page.props.auth.user" class="font-sans"
-                    >Dashboard</Link
+                <Link
+                    v-if="$page.component === 'Auth/Register'"
+                    :href="route('login')"
+                    class="font-sans font-semibold hover:text-blue-50 text-blue-100"
+                    >Log in</Link
                 >
             </div>
         </div>
@@ -244,6 +274,33 @@ const submit = () => {
                             >
                         </FormField>
 
+                        <FormField name="password" class="flex flex-col gap-1">
+                            <label
+                                for="password"
+                                class="text-sm mb-1 text-slate-800"
+                                >Confirm Password</label
+                            >
+                            <Password
+                                id="password"
+                                name="password"
+                                placeholder="••••••••••"
+                                v-model="form.password_confirmation"
+                                :feedback="false"
+                                toggleMask
+                                fluid
+                                class="user--input"
+                            />
+                            <Message
+                                v-if="form.errors.password_confirmation"
+                                severity="error"
+                                size="small"
+                                variant="simple"
+                                >{{
+                                    form.errors.password_confirmation
+                                }}</Message
+                            >
+                        </FormField>
+
                         <!-- Submit Button -->
                         <Button
                             type="submit"
@@ -256,88 +313,6 @@ const submit = () => {
             <div id="map" class="w-full"></div>
         </div>
     </div>
-    <!-- <form @submit.prevent="submit">
-        <div>
-            <InputLabel for="name" value="Name" />
-
-            <TextInput
-                id="name"
-                type="text"
-                class="mt-1 block w-full"
-                v-model="form.name"
-                required
-                autofocus
-                autocomplete="name"
-            />
-
-            <InputError class="mt-2" :message="form.errors.name" />
-        </div>
-
-        <div class="mt-4">
-            <InputLabel for="email" value="Email" />
-
-            <TextInput
-                id="email"
-                type="email"
-                class="mt-1 block w-full"
-                v-model="form.email"
-                required
-                autocomplete="username"
-            />
-
-            <InputError class="mt-2" :message="form.errors.email" />
-        </div>
-
-        <div class="mt-4">
-            <InputLabel for="password" value="Password" />
-
-            <TextInput
-                id="password"
-                type="password"
-                class="mt-1 block w-full"
-                v-model="form.password"
-                required
-                autocomplete="new-password"
-            />
-
-            <InputError class="mt-2" :message="form.errors.password" />
-        </div>
-
-        <div class="mt-4">
-            <InputLabel for="password_confirmation" value="Confirm Password" />
-
-            <TextInput
-                id="password_confirmation"
-                type="password"
-                class="mt-1 block w-full"
-                v-model="form.password_confirmation"
-                required
-                autocomplete="new-password"
-            />
-
-            <InputError
-                class="mt-2"
-                :message="form.errors.password_confirmation"
-            />
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            <Link
-                :href="route('login')"
-                class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            >
-                Already registered?
-            </Link>
-
-            <PrimaryButton
-                class="ms-4"
-                :class="{ 'opacity-25': form.processing }"
-                :disabled="form.processing"
-            >
-                Register
-            </PrimaryButton>
-        </div>
-    </form> -->
 </template>
 <style scoped>
 .form {

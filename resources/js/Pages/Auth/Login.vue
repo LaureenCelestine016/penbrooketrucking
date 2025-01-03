@@ -1,8 +1,9 @@
 <script setup>
 import { Head, Link, useForm } from "@inertiajs/vue3";
-import { Form } from "@primevue/forms";
-import { zodResolver } from "@primevue/forms/resolvers/zod";
-import { z } from "zod";
+import { onMounted, ref } from "vue";
+import L from "leaflet";
+
+import Toast from "primevue/toast";
 import { useToast } from "primevue/usetoast";
 import Message from "primevue/message";
 import Password from "primevue/password";
@@ -20,13 +21,6 @@ defineProps({
 
 const toast = useToast();
 
-const resolver = zodResolver(
-    z.object({
-        username: z.string().min(1, { message: "Email is required." }),
-        password: z.string().min(1, { message: "Password is required." }),
-    })
-);
-
 const form = useForm({
     email: "",
     password: "",
@@ -35,148 +29,166 @@ const form = useForm({
 
 const submit = () => {
     form.post(route("login"), {
+        onSuccess: (response) => {
+            toast.add({
+                severity: "success",
+                summary: "Success",
+                detail: "Account login successfully!",
+                life: 7000,
+            });
+            form.reset("password", "password_confirmation");
+            const redirectUrl =
+                response.data?.redirect || route("admin/dashboard");
+            window.location.href = redirectUrl;
+        },
+        onError: () => {
+            toast.add({
+                severity: "error",
+                summary: "Error",
+                detail: "There were errors in your form submission.",
+                life: 3000,
+            });
+        },
         onFinish: () => form.reset("password"),
     });
-    toast.add({
-        severity: "success",
-        summary: "Form is submitted.",
-        life: 3000,
-    });
 };
+const location = () => {
+    const map = ref(null);
+
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            function (position) {
+                const { latitude } = position.coords;
+                const { longitude } = position.coords;
+
+                const coords = [latitude, longitude];
+
+                // Initialize the map
+                map.value = L.map("map").setView(coords, 13);
+
+                // Add a tile layer to the map
+                L.tileLayer(
+                    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                ).addTo(map.value);
+
+                // Add a marker to the map
+                L.marker(coords)
+                    .addTo(map.value)
+                    .bindPopup("You are here!")
+                    .openPopup();
+            },
+            function () {
+                alert(`Could not get your position`);
+            }
+        );
+    }
+};
+
+onMounted(() => {
+    location();
+});
 </script>
 
 <template>
     <Head title="Log in" />
 
+    <Toast />
     <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
         {{ status }}
     </div>
-
-    <!-- class="flex flex-col gap-4 w-full sm:w-60" -->
-    <Form @submit="submit" class="form">
-        <h2 class="font-semibold text-2xl text-slate-600 mb-6">
-            Login to Truck Management System
-        </h2>
-        <div class="flex flex-col gap-1">
-            <label for="email" class="label">Email Address</label>
-            <InputText
-                id="email"
-                name="username"
-                type="text"
-                v-model="form.email"
-                placeholder="johndoe@example.com"
-                class="user--input"
-            />
-            <Message
-                v-if="form.username?.invalid"
-                severity="error"
-                size="small"
-                variant="simple"
-                >{{ form.username.error.message }}</Message
-            >
-        </div>
-        <div class="flex flex-col gap-1">
-            <label for="password" class="label">Password</label>
-            <Password
-                id="password"
-                name="password"
-                placeholder="••••••••••"
-                v-model="form.password"
-                :feedback="false"
-                toggleMask
-                fluid
-                class="user--input"
-            />
-            <Message
-                v-if="form.password?.invalid"
-                severity="error"
-                size="small"
-                variant="simple"
-            >
-                <ul class="my-0 px-4 flex flex-col gap-1">
-                    <li
-                        v-for="(error, index) of form.password.errors"
-                        :key="index"
-                    >
-                        {{ error.message }}
-                    </li>
-                </ul>
-            </Message>
-            <Link
-                :href="route('password.request')"
-                class="text-blue-600 hover:text-gray-900 self-end"
-            >
-                Forgot your password?
-            </Link>
-        </div>
-
-        <Button type="submit" label="Log in" class="btn-submit" />
-    </Form>
-
-    <!-- <form @submit.prevent="submit">
-            <div>
-                <InputLabel for="email" value="Email" />
-
-                <TextInput
-                    id="email"
-                    type="email"
-                    class="mt-1 block w-full"
-                    v-model="form.email"
-                    required
-                    autofocus
-                    autocomplete="username"
-                />
-
-                <InputError class="mt-2" :message="form.errors.email" />
+    <div class="w-full h-16 border-b bg-blue-800">
+        <div class="flex h-full max-w-89rem mx-auto">
+            <div class="flex h-full items-center">
+                <h2 class="font-bold tracking-widest text-blue-100">
+                    LOGO HERE
+                </h2>
             </div>
-
-            <div class="mt-4">
-                <InputLabel for="password" value="Password" />
-
-                <TextInput
-                    id="password"
-                    type="password"
-                    class="mt-1 block w-full"
-                    v-model="form.password"
-                    required
-                    autocomplete="current-password"
-                />
-
-                <InputError class="mt-2" :message="form.errors.password" />
-            </div>
-
-            <div class="block mt-4">
-                <label class="flex items-center">
-                    <Checkbox name="remember" v-model:checked="form.remember" />
-                    <span class="ms-2 text-sm text-gray-600">Remember me</span>
-                </label>
-            </div>
-
-            <div class="flex items-center justify-end mt-4">
+            <div class="grow h-100"></div>
+            <div class="flex gap-3 items-center flex-none h-full">
                 <Link
-                    v-if="canResetPassword"
-                    :href="route('password.request')"
-                    class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    v-if="$page.component === 'Auth/Login'"
+                    :href="route('register')"
+                    class="font-sans font-semibold hover:text-blue-50 text-blue-100"
+                    >Register</Link
                 >
-                    Forgot your password?
-                </Link>
-
-                <PrimaryButton
-                    class="ms-4"
-                    :class="{ 'opacity-25': form.processing }"
-                    :disabled="form.processing"
-                >
-                    Log in
-                </PrimaryButton>
             </div>
-        </form> -->
+        </div>
+    </div>
+    <div>
+        <div class="grid grid-cols-2 h-screen">
+            <div class="flex flex-col items-center justify-center">
+                <div class="card flex justify-center w-3/4">
+                    <!-- class="flex flex-col gap-4 w-full sm:w-60" -->
+                    <form @submit.prevent="submit" class="form">
+                        <h2 class="font-semibold text-2xl text-slate-600 mb-6">
+                            Login to Truck Management System
+                        </h2>
+                        <div class="flex flex-col gap-1">
+                            <label for="email" class="label"
+                                >Email Address</label
+                            >
+                            <InputText
+                                id="email"
+                                name="username"
+                                type="text"
+                                v-model="form.email"
+                                placeholder="johndoe@example.com"
+                                class="user--input"
+                            />
+                            <Message
+                                v-if="form.errors.email"
+                                severity="error"
+                                size="small"
+                                variant="simple"
+                                >{{ form.errors.email }}</Message
+                            >
+                        </div>
+                        <div class="flex flex-col gap-1">
+                            <label for="password" class="label">Password</label>
+                            <Password
+                                id="password"
+                                name="password"
+                                placeholder="••••••••••"
+                                v-model="form.password"
+                                :feedback="false"
+                                toggleMask
+                                fluid
+                                class="user--input"
+                            />
+                            <Message
+                                v-if="form.errors.password"
+                                severity="error"
+                                size="small"
+                                variant="simple"
+                            >
+                                {{ form.errors.password }}
+                            </Message>
+                            <Link
+                                :href="route('password.request')"
+                                class="text-blue-600 hover:text-gray-900 self-end"
+                            >
+                                Forgot your password?
+                            </Link>
+                        </div>
+
+                        <Button
+                            type="submit"
+                            label="Log in"
+                            class="btn-submit"
+                        />
+                    </form>
+                </div>
+            </div>
+            <div id="map" class="w-full"></div>
+        </div>
+    </div>
 </template>
 <style scoped>
 .form {
     display: flex;
     flex-direction: column;
     gap: 16px;
-    width: 70%;
+    width: 100%;
 }
 
 .user--input {

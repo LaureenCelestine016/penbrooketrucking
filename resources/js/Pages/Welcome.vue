@@ -20,48 +20,12 @@ defineProps({
         required: true,
     },
 });
-
-const location = () => {
-    const map = ref(null);
-
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            function (position) {
-                const { latitude } = position.coords;
-                const { longitude } = position.coords;
-
-                const coords = [latitude, longitude];
-
-                // Initialize the map
-                map.value = L.map("map").setView(coords, 13);
-
-                // Add a tile layer to the map
-                L.tileLayer(
-                    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                ).addTo(map.value);
-
-                // Add a marker to the map
-                L.marker(coords)
-                    .addTo(map.value)
-                    .bindPopup("You are here!")
-                    .openPopup();
-            },
-            function () {
-                alert(`Could not get your position`);
-            }
-        );
-    }
-};
-
-onMounted(() => {
-    location();
-});
 </script>
 
 <template>
     <Head title="Welcome" />
-    <div class="w-full h-14 border-b bg-blue-800">
-        <div v-if="canLogin" class="flex h-full w-11/12 mx-auto">
+    <div class="w-full h-16 border-b bg-blue-800">
+        <div v-if="canLogin" class="flex h-full max-w-89rem mx-auto">
             <div class="flex h-full items-center">
                 <h2 class="font-bold tracking-widest text-blue-100">
                     LOGO HERE
@@ -73,11 +37,11 @@ onMounted(() => {
                     >Dashboard</Link
                 >
                 <template v-else>
-                    <!-- <Link
+                    <Link
                         :href="route('login')"
                         class="font-sans font-semibold hover:text-blue-50 text-blue-100"
                         >Login</Link
-                    > -->
+                    >
                     <Link
                         :href="route('register')"
                         class="font-sans font-semibold hover:text-blue-50 text-blue-100"
@@ -87,14 +51,7 @@ onMounted(() => {
             </div>
         </div>
     </div>
-    <div>
-        <div class="grid grid-cols-2 h-screen">
-            <div class="flex flex-col items-center justify-center">
-                <Login />
-            </div>
-            <div id="map" class="w-full"></div>
-        </div>
-    </div>
+
     <!-- <div
         class="relative sm:flex sm:justify-center sm:items-center min-h-screen bg-dots-darker bg-center bg-gray-100 dark:bg-dots-lighter dark:bg-gray-900 selection:bg-red-500 selection:text-white"
     >
