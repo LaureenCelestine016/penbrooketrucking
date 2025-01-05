@@ -1,8 +1,8 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\Admin\AdminController;
-use App\Http\Controllers\Admin\AdminAuthController;
+use App\Http\Controllers\DriverController;
+use App\Http\Controllers\LocationController;
 use App\Http\Controllers\VehicleController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -30,5 +30,9 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::get('vehicle',[VehicleController::class,'index'])->name('vehicle');
+
+Route::get('driver',[DriverController::class,'index'])->name('driver');
+
+Route::get('location',[LocationController::class,'index'])->name('location');
 
 require __DIR__.'/auth.php';

@@ -1,24 +1,30 @@
-<script setup>
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { Head } from "@inertiajs/vue3";
-</script>
-
 <template>
-    <Head title="Dashboard" />
+    <Head title="Vehicle" />
 
     <AuthenticatedLayout>
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Dashboard
+                Vehicle
             </h2>
         </template>
 
         <div class="py-8">
             <div class="max-w-89rem mx-auto">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 text-gray-900">You're logged in!</div>
+                    {{ vehicles.data }}
                 </div>
             </div>
         </div>
     </AuthenticatedLayout>
 </template>
+<script setup>
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
+import { Head } from "@inertiajs/vue3";
+
+defineProps({
+    vehicles: {
+        type: String,
+        required: true,
+    },
+});
+</script>

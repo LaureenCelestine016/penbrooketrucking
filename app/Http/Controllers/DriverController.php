@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Driver;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class DriverController extends Controller
 {
@@ -12,7 +13,7 @@ class DriverController extends Controller
      */
     public function index()
     {
-        //
+        return Inertia::render('Driver/Index');
     }
 
     /**
@@ -20,7 +21,7 @@ class DriverController extends Controller
      */
     public function create()
     {
-        //
+
     }
 
     /**

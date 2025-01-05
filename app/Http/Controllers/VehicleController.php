@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Vehicle;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Http\Resources\VehicleResource;
 
 class VehicleController extends Controller
 {
@@ -13,7 +14,9 @@ class VehicleController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Vehicle/Vehicle');
+        $vehicles = VehicleResource::Collection(Vehicle::all());
+
+        return Inertia::render('Vehicle/Index', ['vehicles' => $vehicles]);
     }
 
     /**

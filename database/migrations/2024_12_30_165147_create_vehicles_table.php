@@ -13,14 +13,19 @@ return new class extends Migration
     {
         Schema::create('vehicles', function (Blueprint $table) {
             $table->id();
-            $table->string('manufacturer');
+            $table->string('name'); // Shorter and descriptive
+            $table->string('type'); // Simplified field name
             $table->string('model');
-            $table->year('year'); // Use year type for better semantics
-            $table->string('registration_number')->unique(); // Registration number should be unique
-            $table->string('license_plate')->unique(); // License plate should be unique
-            $table->enum('status', ['active', 'inactive', 'maintenance'])->default('active');
-            $table->timestamps();
-            $table->softDeletes();
+            $table->string('chassis_number')->unique(); // Ensure chassis number is unique
+            $table->string('engine_number')->unique(); // Ensure engine number is unique
+            $table->string('manufacturer'); // Manufacturer name (removed redundant 'by')
+            $table->string('registration_number')->unique(); // Registration number is unique
+            $table->date('registration_expiration_date'); // Changed to date type for better validation
+            $table->string('license_plate')->unique(); // License plate is unique
+            $table->year('manufacture_year'); // Clearer field name
+            $table->enum('status', ['active', 'inactive', 'maintenance'])->default('active'); // Predefined statuses
+            $table->timestamps(); // Created and updated timestamps
+            $table->softDeletes(); // For soft delete functionality
         });
     }
 
