@@ -19,4 +19,9 @@ class Gpstracker extends Model
     {
         return $this->hasMany(GpsLog::class);
     }
+
+    public function routes()
+    {
+        return $this->hasMany(Route::class, 'gpstracker_id');
+    }
 }

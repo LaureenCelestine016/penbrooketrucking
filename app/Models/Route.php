@@ -20,4 +20,10 @@ class Route extends Model
     {
         return $this->belongsTo(Location::class, 'end_location_id');
     }
+
+    public function gpsTracker()
+    {
+        return $this->belongsTo(GpsTracker::class, 'gpstracker_id');
+    }
+
 }

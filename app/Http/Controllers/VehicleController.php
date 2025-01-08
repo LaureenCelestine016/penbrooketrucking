@@ -24,7 +24,7 @@ class VehicleController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('Vehicle/Add');
     }
 
     /**
@@ -64,6 +64,17 @@ class VehicleController extends Controller
      */
     public function destroy(Vehicle $vehicle)
     {
-        //
+        $vehicle->delete();
+
+        return redirect()->route('vehicle');
     }
+
+    public function deletedAll(Request $request)
+    {
+        $ids = $request->ids;
+        Vehicle::whereIn('id', $ids)->delete();
+
+        return redirect()->route('vehicle');
+    }
+
 }

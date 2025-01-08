@@ -29,17 +29,14 @@ const form = useForm({
 
 const submit = () => {
     form.post(route("login"), {
-        onSuccess: (response) => {
+        onSuccess: () => {
             toast.add({
                 severity: "success",
                 summary: "Success",
                 detail: "Account login successfully!",
-                life: 7000,
+                life: 3000,
             });
             form.reset("password", "password_confirmation");
-            const redirectUrl =
-                response.data?.redirect || route("admin/dashboard");
-            window.location.href = redirectUrl;
         },
         onError: () => {
             toast.add({

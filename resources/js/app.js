@@ -1,6 +1,7 @@
 import "./bootstrap";
 import "../css/app.css";
 import "leaflet/dist/leaflet.css";
+import "primeicons/primeicons.css";
 
 import { createApp, h } from "vue";
 import PrimeVue from "primevue/config";

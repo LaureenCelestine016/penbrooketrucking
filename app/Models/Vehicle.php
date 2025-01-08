@@ -10,6 +10,9 @@ class Vehicle extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $dates = ['deleted_at'];
+
+
     public function gpsTrackers()
     {
         return $this->hasMany(GpsTracker::class);

@@ -17,7 +17,7 @@ Route::get('/', function () {
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
     ]);
-});
+})->middleware('user');
 
 Route::get('dashboard', function () {
     return Inertia::render('Dashboard');
@@ -29,7 +29,17 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+
+
+
 Route::get('vehicle',[VehicleController::class,'index'])->name('vehicle');
+Route::get('vehicle/add',[VehicleController::class,'create'])->name('vehicle.add');
+Route::delete('/delete/{vehicle}',[VehicleController::class,'destroy'])->name('vehicle.delete');
+Route::post('/delete',[VehicleController::class,'deletedAll'])->name('vehicles.delete');
+
+
+
+
 
 Route::get('driver',[DriverController::class,'index'])->name('driver');
 

@@ -20,6 +20,7 @@
         "@primevue/forms": "^4.2.5",
         "@primevue/themes": "^4.2.5",
         "leaflet": "^1.9.4",
+        "primeicons": "^7.0.0",
         "primevue": "^4.2.5",
         "zod": "^3.24.1"
     }
