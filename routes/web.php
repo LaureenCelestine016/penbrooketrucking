@@ -33,7 +33,8 @@ Route::middleware('auth')->group(function () {
 
 
 Route::get('vehicle',[VehicleController::class,'index'])->name('vehicle');
-Route::get('vehicle/add',[VehicleController::class,'create'])->name('vehicle.add');
+Route::get('vehicle/create',[VehicleController::class,'create'])->name('vehicle.create');
+Route::post('vehicle/store',[VehicleController::class,'store'])->name('vehicle.store');
 Route::delete('/delete/{vehicle}',[VehicleController::class,'destroy'])->name('vehicle.delete');
 Route::post('/delete',[VehicleController::class,'deletedAll'])->name('vehicles.delete');
 

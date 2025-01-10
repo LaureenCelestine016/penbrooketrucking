@@ -1,99 +1,3 @@
-<script setup>
-import { Head, Link, useForm } from "@inertiajs/vue3";
-import { onMounted, ref } from "vue";
-import L from "leaflet";
-
-import { FormField } from "@primevue/forms";
-import InputText from "primevue/inputtext";
-import { useToast } from "primevue/usetoast";
-import Message from "primevue/message";
-import Password from "primevue/password";
-import Button from "primevue/button";
-const toast = useToast();
-
-const form = useForm({
-    firstName: "",
-    lastName: "",
-    email: "",
-    mobileNumber: "",
-    username: "",
-    password: "",
-    password_confirmation: "",
-    userType: 1,
-});
-
-const trimFormFields = () => {
-    for (const key in form) {
-        if (typeof form[key] === "string") {
-            form[key] = form[key].trim();
-        }
-    }
-};
-
-const submit = () => {
-    trimFormFields();
-
-    form.post(route("register"), {
-        onSuccess: () => {
-            toast.add({
-                severity: "success",
-                summary: "Success",
-                detail: "Account created successfully!",
-                life: 3000,
-            });
-            form.reset("password", "password_confirmation");
-        },
-        onError: () => {
-            toast.add({
-                severity: "error",
-                summary: "Error",
-                detail: "There were errors in your form submission.",
-                life: 3000,
-            });
-        },
-        onFinish: () => {
-            // This can handle additional cleanup if needed
-        },
-    });
-};
-
-const location = () => {
-    const map = ref(null);
-
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            function (position) {
-                const { latitude } = position.coords;
-                const { longitude } = position.coords;
-
-                const coords = [latitude, longitude];
-
-                // Initialize the map
-                map.value = L.map("map").setView(coords, 13);
-
-                // Add a tile layer to the map
-                L.tileLayer(
-                    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                ).addTo(map.value);
-
-                // Add a marker to the map
-                L.marker(coords)
-                    .addTo(map.value)
-                    .bindPopup("You are here!")
-                    .openPopup();
-            },
-            function () {
-                alert(`Could not get your position`);
-            }
-        );
-    }
-};
-
-onMounted(() => {
-    location();
-});
-</script>
-
 <template>
     <Head title="Register" />
     <Toast />
@@ -128,6 +32,7 @@ onMounted(() => {
                         <div class="flex flex-row gap-24">
                             <div>
                                 <!-- First Name -->
+
                                 <FormField
                                     id="firstname"
                                     name="firstName"
@@ -314,6 +219,102 @@ onMounted(() => {
         </div>
     </div>
 </template>
+
+<script setup>
+import { Head, Link, useForm } from "@inertiajs/vue3";
+import { onMounted, ref } from "vue";
+import L from "leaflet";
+
+import { FormField } from "@primevue/forms";
+import InputText from "primevue/inputtext";
+import { useToast } from "primevue/usetoast";
+import Message from "primevue/message";
+import Password from "primevue/password";
+import Button from "primevue/button";
+const toast = useToast();
+
+const form = useForm({
+    firstName: "",
+    lastName: "",
+    email: "",
+    mobileNumber: "",
+    username: "",
+    password: "",
+    password_confirmation: "",
+    userType: 1,
+});
+
+const trimFormFields = () => {
+    for (const key in form) {
+        if (typeof form[key] === "string") {
+            form[key] = form[key].trim();
+        }
+    }
+};
+
+const submit = () => {
+    trimFormFields();
+
+    form.post(route("register"), {
+        onSuccess: () => {
+            toast.add({
+                severity: "success",
+                summary: "Success",
+                detail: "Account created successfully!",
+                life: 3000,
+            });
+            form.reset("password", "password_confirmation");
+        },
+        onError: () => {
+            toast.add({
+                severity: "error",
+                summary: "Error",
+                detail: "There were errors in your form submission.",
+                life: 3000,
+            });
+        },
+        onFinish: () => {
+            // This can handle additional cleanup if needed
+        },
+    });
+};
+
+const location = () => {
+    const map = ref(null);
+
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            function (position) {
+                const { latitude } = position.coords;
+                const { longitude } = position.coords;
+
+                const coords = [latitude, longitude];
+
+                // Initialize the map
+                map.value = L.map("map").setView(coords, 13);
+
+                // Add a tile layer to the map
+                L.tileLayer(
+                    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                ).addTo(map.value);
+
+                // Add a marker to the map
+                L.marker(coords)
+                    .addTo(map.value)
+                    .bindPopup("You are here!")
+                    .openPopup();
+            },
+            function () {
+                alert(`Could not get your position`);
+            }
+        );
+    }
+};
+
+onMounted(() => {
+    location();
+});
+</script>
 <style scoped>
 .form {
     display: flex;

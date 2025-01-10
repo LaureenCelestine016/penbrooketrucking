@@ -24,7 +24,7 @@ class VehicleController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Vehicle/Add');
+        return Inertia::render('Vehicle/Create');
     }
 
     /**
@@ -32,7 +32,22 @@ class VehicleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'registrationNumber' => ['required', 'string', 'max:255'],
+            'vehicleName' => ['required', 'string', 'max:255'],
+            'vehicleType' => ['required', 'string', 'max:255'],
+            'model' => ['required', 'string', 'max:255'],
+            'plateNumber' => ['required', 'string', 'max:10'],
+            'chassisNumber' => ['required', 'string', 'max:10'],
+            'engineNumber' => ['required', 'string', 'max:10'],
+            'manufacture' => ['required', 'string', 'max:10'],
+            'manufactureYear' => ['required', 'string', 'max:10'],
+            'status' => ['required', 'string', 'max:10'],
+            'registrationDate' => ['required', 'string', 'max:10'],
+            'registrationExp' => ['required', 'string', 'max:10'],
+
+        ]);
+        dd($request);
     }
 
     /**

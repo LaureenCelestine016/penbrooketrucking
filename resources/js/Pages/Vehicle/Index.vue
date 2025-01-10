@@ -16,7 +16,7 @@
                         <Toolbar class="mb-6">
                             <template #start>
                                 <Link
-                                    :href="route('vehicle.add')"
+                                    :href="route('vehicle.create')"
                                     icon="pi pi-car"
                                     class="btn--add"
                                 >
@@ -372,7 +372,7 @@ const getStatusLabel = (status) => {
     margin-right: 8px;
     display: flex;
     gap: 6px;
-    background-color: #10b981;
+    background-color: rgb(10, 61, 179);
     color: #ebfbee;
     padding: 8px 12px 8px 12px;
     border-radius: 6px;

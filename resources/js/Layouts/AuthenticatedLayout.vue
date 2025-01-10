@@ -177,7 +177,7 @@
             </nav>
             <nav class="bg-white border-b border-gray-100">
                 <!-- Primary Navigation Menu -->
-                <div class="max-w-89rem mx-auto">
+                <div class="max-w-89rem ml-2">
                     <div class="flex justify-start h-16">
                         <div class="flex">
                             <!-- Navigation Links -->
@@ -207,7 +207,10 @@
                                     />
                                     <NavLink
                                         :href="route('vehicle')"
-                                        :active="route().current('vehicle')"
+                                        :active="
+                                            route().current('vehicle') ||
+                                            route().current('vehicle/add')
+                                        "
                                     >
                                         Vehicle's
                                     </NavLink>

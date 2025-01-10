@@ -1,91 +1,3 @@
-<script setup>
-import { Head, Link, useForm } from "@inertiajs/vue3";
-import { onMounted, ref } from "vue";
-import L from "leaflet";
-
-import Toast from "primevue/toast";
-import { useToast } from "primevue/usetoast";
-import Message from "primevue/message";
-import Password from "primevue/password";
-import Button from "primevue/button";
-import InputText from "primevue/inputtext";
-
-defineProps({
-    canResetPassword: {
-        type: Boolean,
-    },
-    status: {
-        type: String,
-    },
-});
-
-const toast = useToast();
-
-const form = useForm({
-    email: "",
-    password: "",
-    remember: false,
-});
-
-const submit = () => {
-    form.post(route("login"), {
-        onSuccess: () => {
-            toast.add({
-                severity: "success",
-                summary: "Success",
-                detail: "Account login successfully!",
-                life: 3000,
-            });
-            form.reset("password", "password_confirmation");
-        },
-        onError: () => {
-            toast.add({
-                severity: "error",
-                summary: "Error",
-                detail: "There were errors in your form submission.",
-                life: 3000,
-            });
-        },
-        onFinish: () => form.reset("password"),
-    });
-};
-const location = () => {
-    const map = ref(null);
-
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            function (position) {
-                const { latitude } = position.coords;
-                const { longitude } = position.coords;
-
-                const coords = [latitude, longitude];
-
-                // Initialize the map
-                map.value = L.map("map").setView(coords, 13);
-
-                // Add a tile layer to the map
-                L.tileLayer(
-                    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                ).addTo(map.value);
-
-                // Add a marker to the map
-                L.marker(coords)
-                    .addTo(map.value)
-                    .bindPopup("You are here!")
-                    .openPopup();
-            },
-            function () {
-                alert(`Could not get your position`);
-            }
-        );
-    }
-};
-
-onMounted(() => {
-    location();
-});
-</script>
-
 <template>
     <Head title="Log in" />
 
@@ -180,6 +92,94 @@ onMounted(() => {
         </div>
     </div>
 </template>
+
+<script setup>
+import { Head, Link, useForm } from "@inertiajs/vue3";
+import { onMounted, ref } from "vue";
+import L from "leaflet";
+
+import Toast from "primevue/toast";
+import { useToast } from "primevue/usetoast";
+import Message from "primevue/message";
+import Password from "primevue/password";
+import Button from "primevue/button";
+import InputText from "primevue/inputtext";
+
+defineProps({
+    canResetPassword: {
+        type: Boolean,
+    },
+    status: {
+        type: String,
+    },
+});
+
+const toast = useToast();
+
+const form = useForm({
+    email: "",
+    password: "",
+    remember: false,
+});
+
+const submit = () => {
+    form.post(route("login"), {
+        onSuccess: () => {
+            toast.add({
+                severity: "success",
+                summary: "Success",
+                detail: "Account login successfully!",
+                life: 3000,
+            });
+            form.reset("password", "password_confirmation");
+        },
+        onError: () => {
+            toast.add({
+                severity: "error",
+                summary: "Error",
+                detail: "There were errors in your form submission.",
+                life: 3000,
+            });
+        },
+        onFinish: () => form.reset("password"),
+    });
+};
+const location = () => {
+    const map = ref(null);
+
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            function (position) {
+                const { latitude } = position.coords;
+                const { longitude } = position.coords;
+
+                const coords = [latitude, longitude];
+
+                // Initialize the map
+                map.value = L.map("map").setView(coords, 13);
+
+                // Add a tile layer to the map
+                L.tileLayer(
+                    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                ).addTo(map.value);
+
+                // Add a marker to the map
+                L.marker(coords)
+                    .addTo(map.value)
+                    .bindPopup("You are here!")
+                    .openPopup();
+            },
+            function () {
+                alert(`Could not get your position`);
+            }
+        );
+    }
+};
+
+onMounted(() => {
+    location();
+});
+</script>
 <style scoped>
 .form {
     display: flex;
