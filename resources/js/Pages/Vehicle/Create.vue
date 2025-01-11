@@ -413,12 +413,12 @@
 
                             <FileUpload
                                 for="image_upload"
-                                name="demo[]"
-                                url="/api/upload"
+                                url="/image/upload"
                                 @upload="onAdvancedUpload($event)"
                                 :multiple="true"
                                 accept="image/*"
                                 :maxFileSize="1000000"
+                                :headers="csrfHeaders"
                             >
                                 <template #empty>
                                     <span
@@ -445,7 +445,8 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head, Link, useForm } from "@inertiajs/vue3";
-import { computed, onMounted, ref } from "vue";
+import { watch, computed, ref } from "vue";
+import dayjs from "dayjs";
 
 import Toolbar from "primevue/toolbar";
 import Button from "primevue/button";
@@ -457,9 +458,16 @@ import { useToast } from "primevue/usetoast";
 import Message from "primevue/message";
 import { FormField } from "@primevue/forms";
 
+const csrfToken = document
+    .querySelector('meta[name="csrf-token"]')
+    .getAttribute("content");
+
 const toast = useToast();
 const vehicleTypeArr = ref([]);
 const vehicleStatus = ref([]);
+const csrfHeaders = ref({
+    "X-CSRF-TOKEN": csrfToken,
+});
 
 const form = useForm({
     registrationNumber: "",
@@ -477,14 +485,12 @@ const form = useForm({
 });
 
 const submit = () => {
-    console.log("Test");
-
     form.post(route("vehicle.store"), {
         onSuccess: () => {
             toast.add({
                 severity: "success",
                 summary: "Success",
-                detail: "Vehicle successfully added!",
+                detail: "Vehicle created successfully!",
                 life: 3000,
             });
         },
@@ -500,41 +506,34 @@ const submit = () => {
     });
 };
 
-const formattedDate = computed(() => {
-    if (!form.registrationDate) return "";
-    const inputDate = new Date(form.registrationDate);
-    const year = inputDate.getFullYear();
-    const month = String(inputDate.getMonth() + 1).padStart(2, "0");
-    const day = String(inputDate.getDate()).padStart(2, "0");
-    return `${year}-${month}-${day}`;
-});
-
-const afterAYear = computed(() => {
-    if (!formattedDate) return "";
-    const inputDate = new Date(formattedDate);
-    inputDate.setFullYear(toDisplayString.getFullYear() + 1);
-    const year = inputDate.getFullYear();
-    const month = String(inputDate.getMonth() + 1).padStart(2, "0");
-    const day = String(inputDate.getDate()).padStart(2, "0");
-    return `${year}-${month}-${day}`;
-});
+watch(
+    form,
+    function (old, newForm) {
+        form.registrationDate = form.registrationDate
+            ? dayjs(newForm.registrationDate).format("YYYY-MM-DD")
+            : "";
+        form.registrationExp = form.registrationDate
+            ? dayjs(form.registrationDate).add(1, "year").format("YYYY-MM-DD")
+            : old.registrationExp;
+    },
+    { deep: true }
+);
 
 const vehicleTypeSearch = () => {
-    vehicleTypeArr.value = ["Truck", "Tricycle", "Jeep"];
+    vehicleTypeArr.value = ["Truck", "Taxi", "Bus", "Taxi", "Jeep"];
 };
 
 const statusSearch = () => {
     vehicleStatus.value = ["Active", "Inactive", "Maintenance"];
 };
 
-const onAdvancedUpload = () => {
-    toast.add({
-        severity: "info",
-        summary: "Success",
-        detail: "File Uploaded",
-        life: 3000,
-    });
-};
+// const onAdvancedUpload = (event) => {
+//     if (event.xhr.status === 200) {
+//         console.log("Upload successful:", JSON.parse(event.xhr.response));
+//     } else {
+//         console.error("Upload failed:", event.xhr.response);
+//     }
+// };
 
 const goBack = () => {
     history.back();
@@ -553,3 +552,13 @@ const goBack = () => {
     font-weight: 600;
 }
 </style>
+
+<!-- Registration number: HR26DQ5551
+Vehicle Name : Truck
+Vehicle Type : Truck
+Model : 2016 GMC Canyon
+Plate no. PAQ323
+Chassis no. WDB1290601F012345
+Engine no. 52WVC10338
+Manufacture : Western Star Trucks
+Manufacture Year: 1990 -->

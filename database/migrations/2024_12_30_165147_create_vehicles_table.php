@@ -20,9 +20,11 @@ return new class extends Migration
             $table->string('engine_number')->unique(); // Ensure engine number is unique
             $table->string('manufacturer'); // Manufacturer name (removed redundant 'by')
             $table->string('registration_number')->unique(); // Registration number is unique
+            $table->date('registration_date')->unique(); // Registration number is unique
             $table->date('registration_expiration_date'); // Changed to date type for better validation
             $table->string('license_plate')->unique(); // License plate is unique
             $table->year('manufacture_year'); // Clearer field name
+            $table->string('image')->nullable(); // Clearer field name
             $table->enum('status', ['active', 'inactive', 'maintenance'])->default('active'); // Predefined statuses
             $table->timestamps(); // Created and updated timestamps
             $table->softDeletes(); // For soft delete functionality

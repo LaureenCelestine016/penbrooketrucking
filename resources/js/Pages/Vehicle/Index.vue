@@ -15,24 +15,13 @@
                     <div class="card">
                         <Toolbar class="mb-6">
                             <template #start>
-                                <Link
-                                    :href="route('vehicle.create')"
-                                    icon="pi pi-car"
-                                    class="btn--add"
-                                >
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="24"
-                                        height="24"
-                                        viewBox="0 0 24 24"
-                                    >
-                                        <path
-                                            fill="#fafafa"
-                                            d="M6 19v1q0 .425-.288.713T5 21H4q-.425 0-.712-.288T3 20v-8l2.1-6q.15-.45.538-.725T6.5 5H9V3h6v2h2.5q.475 0 .863.275T18.9 6l2.1 6v8q0 .425-.287.713T20 21h-1q-.425 0-.712-.288T18 20v-1zm-.2-9h12.4l-1.05-3H6.85zM5 12v5zm2.5 4q.625 0 1.063-.437T9 14.5t-.437-1.062T7.5 13t-1.062.438T6 14.5t.438 1.063T7.5 16m9 0q.625 0 1.063-.437T18 14.5t-.437-1.062T16.5 13t-1.062.438T15 14.5t.438 1.063T16.5 16M5 17h14v-5H5z"
-                                        />
-                                    </svg>
-                                    <span>Add Vehicle</span>
-                                </Link>
+                                <Button
+                                    label="Add Vehicle"
+                                    icon="pi pi-plus"
+                                    class="mr-3"
+                                    severity="info"
+                                    @click="addVehicle"
+                                />
                                 <Button
                                     label="Delete"
                                     icon="pi pi-trash"
@@ -148,12 +137,13 @@
                                 style="min-width: 8rem"
                             >
                                 <template #body="slotProps">
+                                    <Link> </Link>
                                     <Button
-                                        icon="pi pi-pencil"
+                                        icon="pi pi-eye"
                                         outlined
                                         rounded
                                         class="mr-2"
-                                        @click="editProduct(slotProps.data)"
+                                        @click="editProduct(slotProps.data.id)"
                                     />
                                     <Button
                                         icon="pi pi-trash"
@@ -271,6 +261,10 @@ const filters = ref({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
 });
 
+const addVehicle = () => {
+    router.get(route("vehicle.create"));
+};
+
 const confirmDeleteSelected = () => {
     deleteVehiclesDialog.value = true;
 };
@@ -278,6 +272,31 @@ const confirmDeleteSelected = () => {
 const confirmDeleteVehicle = (vehicle) => {
     vehicleData.value = vehicle;
     deleteVehicleDialog.value = true;
+};
+
+const editProduct = (id) => {
+    console.log(id);
+
+    router.get(route("vehicle.show", id), {
+        onSuccess: () => {
+            deleteVehicleDialog.value = false;
+            toast.add({
+                severity: "success",
+                summary: "Successful",
+                detail: "Vehicle Deleted",
+                life: 3000,
+            });
+        },
+        onError: (errors) => {
+            console.error("Error deleting vehicle:", errors);
+            toast.add({
+                severity: "error",
+                summary: "Error",
+                detail: "Failed to delete vehicle",
+                life: 3000,
+            });
+        },
+    });
 };
 
 const deleteVehicle = (id) => {
@@ -366,17 +385,6 @@ const getStatusLabel = (status) => {
 <style scoped>
 .status {
     font-size: 12px;
-}
-
-.btn--add {
-    margin-right: 8px;
-    display: flex;
-    gap: 6px;
-    background-color: rgb(10, 61, 179);
-    color: #ebfbee;
-    padding: 8px 12px 8px 12px;
-    border-radius: 6px;
-    font-weight: 600;
 }
 
 .btn--delete {

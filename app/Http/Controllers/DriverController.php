@@ -21,7 +21,7 @@ class DriverController extends Controller
      */
     public function create()
     {
-
+        return Inertia::render('Driver/Create');
     }
 
     /**

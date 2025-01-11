@@ -12,6 +12,22 @@ class Vehicle extends Model
 
     protected $dates = ['deleted_at'];
 
+    protected $fillable = [
+        'name',
+        'type',
+        'model',
+        'status',
+        'chassis_number',
+        'engine_number',
+        'manufacturer',
+        'manufacture_year',
+        'registration_number',
+        'registration_date',
+        'registration_expiration_date',
+        'license_plate',
+        'image',
+    ];
+
 
     public function gpsTrackers()
     {
