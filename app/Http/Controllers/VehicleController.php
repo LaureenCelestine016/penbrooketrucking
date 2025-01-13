@@ -87,7 +87,6 @@ class VehicleController extends Controller
      */
     public function show(Vehicle $vehicle)
     {
-        $vehicle = $vehicle->id;
         return Inertia::render('Vehicle/Show', ["Vehicle" => $vehicle]);
     }
 

@@ -1,6 +1,5 @@
 <script setup>
-import Login from "./Auth/Login.vue";
-import { Head, Link } from "@inertiajs/vue3";
+import { Head, Link, router } from "@inertiajs/vue3";
 import { onMounted, ref } from "vue";
 import L from "leaflet";
 
@@ -22,6 +21,10 @@ defineProps({
         required: true,
     },
 });
+
+const Login = () => {
+    router.get(route("login"));
+};
 </script>
 
 <template>
@@ -38,7 +41,7 @@ defineProps({
                 <Link v-if="$page.props.auth.user" class="font-sans"
                     >Dashboard</Link
                 >
-                <template v-else>
+                <!-- <template v-else>
                     <Link
                         :href="route('login')"
                         class="font-sans font-semibold hover:text-blue-50 text-blue-100"
@@ -49,7 +52,7 @@ defineProps({
                         class="font-sans font-semibold hover:text-blue-50 text-blue-100"
                         >Register</Link
                     >
-                </template>
+                </template> -->
             </div>
         </div>
     </div>
@@ -76,8 +79,13 @@ defineProps({
                 <div
                     class="flex items-center justify-center lg:justify-start gap-6"
                 >
-                    <Button label="Learn More" type="button" />
-                    <Button label="Live Demo" type="button" outlined />
+                    <Button label="Log in" type="button" @click="Login" />
+                    <Button
+                        label="Live Demo"
+                        type="button"
+                        outlined
+                        @click="Register"
+                    />
                 </div>
             </div>
         </div>

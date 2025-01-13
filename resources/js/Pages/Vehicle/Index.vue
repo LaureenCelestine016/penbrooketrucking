@@ -275,8 +275,6 @@ const confirmDeleteVehicle = (vehicle) => {
 };
 
 const editProduct = (id) => {
-    console.log(id);
-
     router.get(route("vehicle.show", id), {
         onSuccess: () => {
             deleteVehicleDialog.value = false;

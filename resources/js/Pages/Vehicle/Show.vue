@@ -11,7 +11,7 @@
         <div class="py-8">
             <div class="max-w-89rem mx-auto">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 text-gray-900">Driver</div>
+                    <div class="p-6 text-gray-900">{{ Vehicle.id }}</div>
                 </div>
             </div>
         </div>
@@ -23,7 +23,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head } from "@inertiajs/vue3";
 
 defineProps({
-    vehicle: {
+    Vehicle: {
         type: Object,
         required: true,
     },
