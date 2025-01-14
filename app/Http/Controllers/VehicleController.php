@@ -93,9 +93,13 @@ class VehicleController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Vehicle $vehicle)
+    public function edit(Request $request)
     {
+        $number = $request->query->get('number');
 
+
+
+        return Inertia::render('Vehicle/Show', ["number" => $number]);
     }
 
     /**
