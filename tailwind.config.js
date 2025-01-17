@@ -18,6 +18,10 @@ export default {
             maxWidth: {
                 "89rem": "89rem", // Adding custom max width
             },
+            height: {
+                "4/7": "75%",
+                "5/7": "90%", // Adding custom height (75%)
+            },
         },
     },
 

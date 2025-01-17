@@ -15,7 +15,7 @@ import Toast from "primevue/toast";
         </template>
 
         <div class="py-8">
-            <div class="max-w-89rem mx-auto">
+            <div class="mx-12">
                 <div
                     class="bg-surface-50 dark:bg-surface-950 px-6 py-8 md:px-12 lg:px-20"
                 >

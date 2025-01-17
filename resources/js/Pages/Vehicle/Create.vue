@@ -9,7 +9,7 @@
         </template>
 
         <div class="py-8">
-            <div class="max-w-89rem mx-auto">
+            <div class="mx-12">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <Toolbar class="mb-6">
                         <template #start>
@@ -526,14 +526,6 @@ const vehicleTypeSearch = () => {
 const statusSearch = () => {
     vehicleStatus.value = ["Active", "Inactive", "Maintenance"];
 };
-
-// const onAdvancedUpload = (event) => {
-//     if (event.xhr.status === 200) {
-//         console.log("Upload successful:", JSON.parse(event.xhr.response));
-//     } else {
-//         console.error("Upload failed:", event.xhr.response);
-//     }
-// };
 
 const goBack = () => {
     history.back();

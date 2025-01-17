@@ -30,7 +30,7 @@ const Login = () => {
 <template>
     <Head title="Welcome" />
     <div class="w-full h-16 border-b bg-blue-800">
-        <div v-if="canLogin" class="flex h-full max-w-89rem mx-auto">
+        <div v-if="canLogin" class="flex h-full mx-12">
             <div class="flex h-full items-center">
                 <h2 class="font-bold tracking-widest text-blue-100">
                     LOGO HERE

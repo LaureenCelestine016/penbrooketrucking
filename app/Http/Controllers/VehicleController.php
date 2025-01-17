@@ -113,7 +113,7 @@ class VehicleController extends Controller
             'engine_number'                 => 'required|string|max:10',
             'manufacturer'                  => 'required|string|max:255',
             'manufacture_year'              => 'required|string|max:10',
-            'status'                        => 'required|string|max:10',
+            'status'                        => 'required|string|max:15',
             'registration_date'             => 'required|string|max:10',
             'registration_expiration_date'  => 'required|string|max:10',
         ]);

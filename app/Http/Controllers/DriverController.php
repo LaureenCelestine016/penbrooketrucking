@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\DriverResource;
 use App\Models\Driver;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -13,7 +14,14 @@ class DriverController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Driver/Index');
+
+        $drivers = DriverResource::collection(
+            Driver::orderBy('created_at', 'desc')->get()
+        );
+
+
+
+        return Inertia::render('Driver/Index',  ['drivers' => $drivers]);
     }
 
     /**

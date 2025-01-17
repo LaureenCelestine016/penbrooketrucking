@@ -3,7 +3,7 @@
         <div class="min-h-screen bg-gray-100">
             <nav class="bg-blue-800 border-b border-gray-100">
                 <!-- Primary Navigation Menu -->
-                <div class="max-w-89rem mx-auto">
+                <div class="mx-12">
                     <div class="flex justify-between h-16">
                         <div class="flex">
                             <!-- Logo -->
@@ -251,7 +251,7 @@
 
             <!-- Page Heading -->
             <header v-if="$slots.header">
-                <div class="max-w-89rem mx-auto pt-5">
+                <div class="mx-12 pt-5">
                     <slot name="header" />
                 </div>
             </header>

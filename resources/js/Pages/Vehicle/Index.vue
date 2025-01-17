@@ -10,7 +10,7 @@
         </template>
 
         <div class="py-6">
-            <div class="max-w-89rem mx-auto">
+            <div class="mx-12">
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                     <div class="card">
                         <Toolbar class="mb-6">
@@ -42,7 +42,7 @@
                             :value="vehicles.data"
                             dataKey="id"
                             :paginator="true"
-                            :rows="5"
+                            :rows="10"
                             :filters="filters"
                             paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                             :rowsPerPageOptions="[5, 10, 25]"

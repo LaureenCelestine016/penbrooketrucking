@@ -9,7 +9,7 @@
         </template>
 
         <div class="py-8">
-            <div class="max-w-89rem mx-auto">
+            <div class="mx-12">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="card">
                         <Toolbar class="mb-6">
@@ -252,6 +252,13 @@ import Tag from "primevue/tag";
 import Dialog from "primevue/dialog";
 import { FilterMatchMode } from "@primevue/core/api";
 import { useToast } from "primevue/usetoast";
+
+defineProps({
+    drivers: {
+        type: Object,
+        required: true,
+    },
+});
 
 const addDriver = () => {
     router.get(route("driver.create"));
