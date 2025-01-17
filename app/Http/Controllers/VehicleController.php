@@ -95,11 +95,7 @@ class VehicleController extends Controller
      */
     public function edit(Request $request)
     {
-        $number = $request->query->get('number');
-
-
-
-        return Inertia::render('Vehicle/Show', ["number" => $number]);
+        //
     }
 
     /**
@@ -107,7 +103,24 @@ class VehicleController extends Controller
      */
     public function update(Request $request, Vehicle $vehicle)
     {
-        //
+        $validatedData = $request->validate([
+            'registration_number'           => 'required|string|max:255',
+            'name'                          => 'required|string|max:255',
+            'type'                          => 'required|string|max:255',
+            'model'                         => 'required|string|max:255',
+            'license_plate'                 => 'required|string|max:10',
+            'chassis_number'                => 'required|string|max:255',
+            'engine_number'                 => 'required|string|max:10',
+            'manufacturer'                  => 'required|string|max:255',
+            'manufacture_year'              => 'required|string|max:10',
+            'status'                        => 'required|string|max:10',
+            'registration_date'             => 'required|string|max:10',
+            'registration_expiration_date'  => 'required|string|max:10',
+        ]);
+
+        $vehicle->update($validatedData);
+
+        return Inertia::render('Vehicle/Show', ['Vehicle' => $vehicle]);
     }
 
     /**

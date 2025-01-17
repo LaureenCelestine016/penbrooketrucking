@@ -20,14 +20,14 @@ return new class extends Migration
             $table->string('civil_status');
             $table->date('birthday')->unique();
             $table->string('address');
-            $table->integer('contact_number');
-            $table->integer('contact_person');
+            $table->string('contact_number', 20);
+            $table->string('contact_person', 20);
             $table->unsignedTinyInteger('age'); // Age is usually a small positive integer
             $table->string('image')->nullable(); // Assuming this stores an image path or URL
-            $table->integer('pagibig_no')->nullable();
-            $table->integer('philhealth_no')->nullable();
-            $table->integer('sss_no')->nullable();
-            $table->integer('tin_no')->nullable();
+            $table->string('pagibig_no')->nullable();
+            $table->string('philhealth_no')->nullable();
+            $table->string('sss_no')->nullable();
+            $table->string('tin_no')->nullable();
             $table->string('license_number')->unique(); // License number should likely be unique
             $table->date('license_expired');
             $table->enum('status', ['Active', 'Inactive'])->default('active'); //

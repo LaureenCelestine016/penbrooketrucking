@@ -1,5 +1,6 @@
 <template>
     <Head title="Show" />
+    <Toast />
 
     <AuthenticatedLayout>
         <template #header>
@@ -32,28 +33,147 @@
                         </template>
                         <template #content>
                             <div class="grid grid-cols-2 border mb-7">
-                                <div class="border-b p-1 font-bold">Type</div>
                                 <div
-                                    class="border-b border-l p-1 flex items-center justify-between"
+                                    class="border-b flex items-center justify-between"
                                 >
-                                    <div>
-                                        <InputText
-                                            v-if="editNum === 1"
-                                            type="text"
-                                            class="!border-0"
-                                            v-model="Vehicle.type"
-                                            v-focus
-                                        />
-                                        <span v-else>{{ Vehicle.type }}</span>
-                                    </div>
-                                    <i
-                                        class="pi pi-pencil mr-3 cursor-pointer"
-                                        style="color: grey"
-                                        @click="edit(1)"
-                                    ></i>
+                                    <span class="pl-2 text-lg font-bold"
+                                        >Type</span
+                                    >
+                                    <Message
+                                        v-if="form.errors.type"
+                                        severity="error"
+                                        size="small"
+                                        class="!pr-1"
+                                        variant="simple"
+                                        >{{ form.errors.type }}</Message
+                                    >
                                 </div>
+
+                                <form @submit.prevent="submit">
+                                    <div
+                                        class="border-b border-l p-2 flex items-center justify-between"
+                                    >
+                                        <div
+                                            v-if="editNum === 1"
+                                            class="flex justify-between items-center gap-3"
+                                        >
+                                            <InputText
+                                                type="text"
+                                                class="!border-0 !p-0 bg"
+                                                v-model="form.type"
+                                            />
+                                            <span
+                                                style="
+                                                    color: #fff5f5;
+                                                    font-size: 10px;
+                                                    font-style: italic;
+                                                    background-color: #c92a2a;
+                                                    padding: 0px 4px 0px 4px;
+                                                    border-radius: 4px;
+                                                "
+                                                >Editing Mode</span
+                                            >
+                                        </div>
+                                        <span v-else>{{ form.type }}</span>
+
+                                        <div>
+                                            <i
+                                                v-if="editNum !== 1"
+                                                class="pi pi-pencil mr-1 cursor-pointer"
+                                                style="
+                                                    color: #1c7ed6;
+                                                    font-size: 14px;
+                                                    font-weight: 600;
+                                                "
+                                                @click="edit(1)"
+                                            ></i>
+
+                                            <div v-else>
+                                                <i
+                                                    class="pi pi-save mr-3 cursor-pointer"
+                                                    style="
+                                                        color: #28a745;
+                                                        font-size: 14px;
+                                                        font-weight: 600;
+                                                    "
+                                                    @click="submit"
+                                                ></i>
+                                                <i
+                                                    class="pi pi-times mr-2 cursor-pointer"
+                                                    style="
+                                                        color: #dc3545;
+                                                        font-size: 14px;
+                                                        font-weight: 600;
+                                                    "
+                                                    @click="cancel"
+                                                ></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+
                                 <div class="border-b p-1 font-bold">Model</div>
-                                <div
+                                <form @submit.prevent="submit">
+                                    <div
+                                        class="border-b border-l p-2 flex items-center justify-between"
+                                    >
+                                        <div>
+                                            <InputText
+                                                v-if="editNum === 2"
+                                                type="text"
+                                                class="!border-0 !p-0"
+                                                v-model="form.model"
+                                            />
+                                            <span v-else>{{ form.model }}</span>
+                                            <Message
+                                                v-if="
+                                                    form.errors.registrationExp
+                                                "
+                                                severity="error"
+                                                size="small"
+                                                variant="simple"
+                                                >{{
+                                                    form.errors.registrationExp
+                                                }}</Message
+                                            >
+                                        </div>
+                                        <div>
+                                            <i
+                                                v-if="editNum !== 2"
+                                                class="pi pi-pencil mr-1 cursor-pointer"
+                                                style="
+                                                    color: #1c7ed6;
+                                                    font-size: 14px;
+                                                    font-weight: 600;
+                                                "
+                                                @click="edit(2)"
+                                            ></i>
+
+                                            <div v-else>
+                                                <i
+                                                    class="pi pi-save mr-3 cursor-pointer"
+                                                    v-tooltip="Save"
+                                                    style="
+                                                        color: #1c7ed6;
+                                                        font-size: 14px;
+                                                        font-weight: 600;
+                                                    "
+                                                    @click="submit"
+                                                ></i>
+                                                <i
+                                                    class="pi pi-times mr-3 cursor-pointer"
+                                                    style="
+                                                        color: red;
+                                                        font-size: 14px;
+                                                        font-weight: 600;
+                                                    "
+                                                    @click="cancel"
+                                                ></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                                <!-- <div
                                     class="border-b border-l p-1 flex items-center justify-between"
                                 >
                                     <div>
@@ -69,7 +189,7 @@
                                         style="color: grey"
                                         @click="edit(2)"
                                     ></i>
-                                </div>
+                                </div> -->
                                 <div class="border-b p-1 font-bold">
                                     Chassis No.
                                 </div>
@@ -126,7 +246,7 @@
                                     </div>
                                     <i
                                         class="pi pi-pencil mr-3 cursor-pointer"
-                                        style="color: grey"
+                                        style="color: grey; font-size: 14px"
                                         @click="edit(5)"
                                     ></i>
                                 </div>
@@ -257,23 +377,60 @@
 
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { Head, router } from "@inertiajs/vue3";
-import { ref } from "vue";
+import { Head, router, useForm, usePage } from "@inertiajs/vue3";
+import { ref, watch } from "vue";
 
 import Card from "primevue/card";
 import Button from "primevue/button";
 import InputText from "primevue/inputtext";
+import Message from "primevue/message";
+import { useToast } from "primevue/usetoast";
+import Toast from "primevue/toast";
 
-const editNum = ref(0);
-
-defineProps({
+const props = defineProps({
     Vehicle: {
         type: Object,
         required: true,
     },
 });
 
+const editNum = ref(0);
+const toast = useToast();
+const updateVehicle = ref({ ...props.Vehicle });
+
 const edit = (number) => {
     editNum.value = number;
+};
+
+const cancel = () => {
+    editNum.value = 0;
+    updateVehicle.value = { ...props.Vehicle }; // Reset changes
+};
+
+const form = useForm({
+    ...props.Vehicle, // Bind all vehicle fields to the form
+});
+
+const submit = () => {
+    form.put(route("vehicle.update", props.Vehicle.id), {
+        onSuccess: () => {
+            toast.add({
+                severity: "success",
+                summary: "Success",
+                detail: "Vehicle updated successfully!",
+                life: 3000,
+            });
+            editNum.value = 0; // Exit edit mode after successful submission
+        },
+        onError: (errors) => {
+            console.error(errors); // Debug server errors if necessary
+            toast.add({
+                severity: "error",
+                summary: "Error",
+                detail: "There were errors in your form submission.",
+                life: 3000,
+            });
+        },
+    });
 };
 </script>
