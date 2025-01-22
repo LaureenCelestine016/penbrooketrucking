@@ -577,7 +577,6 @@
                                         :multiple="true"
                                         accept="image/*"
                                         :maxFileSize="1000000"
-                                        :headers="csrfHeaders"
                                     >
                                         <template #empty>
                                             <span
@@ -621,6 +620,7 @@ import Textarea from "primevue/textarea";
 import intlTelInput from "intl-tel-input";
 import "intl-tel-input/build/css/intlTelInput.css";
 
+const toast = useToast();
 const civilStatus = ref([]);
 const driverStatus = ref([]);
 const phoneInput = ref(null);
@@ -680,7 +680,6 @@ const submit = () => {
                 life: 3000,
             });
         },
-        onFinish: () => form.reset("password"),
     });
 };
 

@@ -559,7 +559,6 @@ const submit = () => {
                 life: 3000,
             });
         },
-        onFinish: () => form.reset("password"),
     });
 };
 

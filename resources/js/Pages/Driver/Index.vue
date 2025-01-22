@@ -1,5 +1,6 @@
 <template>
     <Head title="Driver" />
+    <Toast />
 
     <AuthenticatedLayout>
         <template #header>
