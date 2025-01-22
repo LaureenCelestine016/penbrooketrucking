@@ -5,11 +5,11 @@
     <AuthenticatedLayout>
         <template #header>
             <h2 class="font-semibold text-2xl text-gray-800 leading-tight">
-                Vehicle list
+                Vehicle List
             </h2>
         </template>
 
-        <div class="py-6">
+        <div class="py-4">
             <div class="mx-12">
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                     <div class="card">
@@ -46,7 +46,7 @@
                             :filters="filters"
                             paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                             :rowsPerPageOptions="[5, 10, 25]"
-                            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} vehivcles"
+                            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} vehicles"
                         >
                             <template #header>
                                 <div
@@ -143,7 +143,7 @@
                                         outlined
                                         rounded
                                         class="mr-2"
-                                        @click="editProduct(slotProps.data.id)"
+                                        @click="showDetail(slotProps.data.id)"
                                     />
                                     <Button
                                         icon="pi pi-trash"
@@ -274,7 +274,7 @@ const confirmDeleteVehicle = (vehicle) => {
     deleteVehicleDialog.value = true;
 };
 
-const editProduct = (id) => {
+const showDetail = (id) => {
     router.get(route("vehicle.show", id), {
         onSuccess: () => {
             deleteVehicleDialog.value = false;

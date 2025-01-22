@@ -2,6 +2,8 @@ import "./bootstrap";
 import "../css/app.css";
 import "leaflet/dist/leaflet.css";
 import "primeicons/primeicons.css";
+import "vue-tel-input/vue-tel-input.css";
+
 import Tooltip from "primevue/tooltip";
 
 import { createApp, h } from "vue";

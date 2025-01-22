@@ -3,12 +3,12 @@
 
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Driver
+            <h2 class="font-semibold text-2xl text-gray-800 leading-tight">
+                Driver List
             </h2>
         </template>
 
-        <div class="py-8">
+        <div class="py-4">
             <div class="mx-12">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="card">
@@ -37,12 +37,19 @@
 
                         <DataTable
                             ref="dt"
-                            v-model:selection="selectedVehicle"
-                            :value="vehicles"
+                            v-model:selection="selectedDriver"
+                            :value="drivers.data"
                             dataKey="id"
                             :paginator="true"
                             :rows="5"
                             :filters="filters"
+                            :globalFilterFields="[
+                                'name.first',
+                                'name.middle',
+                                'name.last',
+                                'license_details.license_number',
+                                'status',
+                            ]"
                             paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                             :rowsPerPageOptions="[5, 10, 25]"
                             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} vehivcles"
@@ -77,11 +84,16 @@
                                 :exportable="false"
                             ></Column>
                             <Column
-                                field="vehicle_name"
+                                field="name"
                                 header="Name"
                                 sortable
                                 style="min-width: 10rem"
-                            ></Column>
+                                ><template #body="slotProps">
+                                    {{ slotProps.data.name.first }}
+                                    {{ slotProps.data.name.middle }}
+                                    {{ slotProps.data.name.last }}
+                                </template>
+                            </Column>
                             <!-- <Column
                                 field="vehicle_type"
                                 header="Middle name"
@@ -96,30 +108,42 @@
                             >
                             </Column> -->
                             <Column
-                                field="registration_no."
                                 header="Age"
                                 sortable
                                 style="min-width: 5rem"
-                            ></Column>
+                                ><template #body="slotProps">
+                                    {{ slotProps.data.personal_details.age }}
+                                </template></Column
+                            >
                             <Column
-                                field="engine_no."
                                 header="Address"
                                 sortable
                                 style="min-width: 12rem"
-                            >
+                                ><template #body="slotProps">
+                                    {{ slotProps.data.contact_details.address }}
+                                </template>
                             </Column>
                             <Column
-                                field="registration_no."
                                 header="Civil status"
                                 sortable
                                 style="min-width: 5rem"
-                            ></Column>
+                                ><template #body="slotProps">
+                                    {{
+                                        slotProps.data.personal_details
+                                            .civil_status
+                                    }}
+                                </template></Column
+                            >
                             <Column
-                                field="engine_no."
                                 header="License number"
                                 sortable
                                 style="min-width: 12rem"
-                            >
+                                ><template #body="slotProps">
+                                    {{
+                                        slotProps.data.license_details
+                                            .license_number
+                                    }}
+                                </template>
                             </Column>
                             <Column
                                 field="status"
@@ -253,6 +277,8 @@ import Dialog from "primevue/dialog";
 import { FilterMatchMode } from "@primevue/core/api";
 import { useToast } from "primevue/usetoast";
 
+const selectedDriver = ref(0);
+
 defineProps({
     drivers: {
         type: Object,
@@ -267,4 +293,18 @@ const addDriver = () => {
 const filters = ref({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
 });
+
+console.log(filters);
+
+const getStatusLabel = (status) => {
+    switch (status) {
+        case "Active":
+            return "success";
+        case "Inactive":
+            return "danger";
+
+        default:
+            return null;
+    }
+};
 </script>

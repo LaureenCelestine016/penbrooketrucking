@@ -42,8 +42,12 @@ Route::middleware('auth')->group(function() {
 });
 
 
-Route::get('driver',[DriverController::class,'index'])->name('driver');
-Route::get('driver/create',[DriverController::class,'create'])->name('driver.create');
+Route::middleware('auth')->group(function() {
+    Route::get('driver',[DriverController::class,'index'])->name('driver');
+    Route::get('driver/create',[DriverController::class,'create'])->name('driver.create');
+    Route::post('driver/store',[DriverController::class,'store'])->name('driver.store');
+});
+
 
 Route::get('location',[LocationController::class,'index'])->name('location');
 
