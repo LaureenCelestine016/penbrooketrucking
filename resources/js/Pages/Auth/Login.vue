@@ -5,11 +5,11 @@
     <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
         {{ status }}
     </div>
-    <div class="w-full h-16 border-b bg-blue-800">
-        <div class="flex h-full max-w-89rem mx-auto">
+    <div class="w-full h-16 border-b bg-navyblue">
+        <div class="flex h-full mx-12">
             <div class="flex h-full items-center">
-                <h2 class="font-bold tracking-widest text-blue-100">
-                    LOGO HERE
+                <h2 class="text-2xl font-bold tracking-widest text-white">
+                    Penbrook Inc.
                 </h2>
             </div>
             <div class="grow h-100"></div>
@@ -34,22 +34,22 @@
                         </h2>
                         <div class="flex flex-col gap-1">
                             <label for="email" class="label"
-                                >Email Address</label
+                                >Email Address or Username</label
                             >
                             <InputText
                                 id="email"
                                 name="username"
                                 type="text"
-                                v-model="form.email"
+                                v-model="form.login"
                                 placeholder="johndoe@example.com"
                                 class="user--input"
                             />
                             <Message
-                                v-if="form.errors.email"
+                                v-if="form.errors.login"
                                 severity="error"
                                 size="small"
                                 variant="simple"
-                                >{{ form.errors.email }}</Message
+                                >{{ form.errors.login }}</Message
                             >
                         </div>
                         <div class="flex flex-col gap-1">
@@ -117,7 +117,7 @@ defineProps({
 const toast = useToast();
 
 const form = useForm({
-    email: "",
+    login: "",
     password: "",
     remember: false,
 });
@@ -200,7 +200,7 @@ onMounted(() => {
 }
 
 .btn-submit {
-    background-color: rgb(30, 64, 175);
+    background-color: #213555;
     border: none;
     margin-top: 14px;
     color: rgb(219 234 254);

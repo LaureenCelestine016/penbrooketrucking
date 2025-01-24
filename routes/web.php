@@ -29,23 +29,26 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::middleware('auth')->group(function() {
-    Route::get('vehicle',[VehicleController::class,'index'])->name('vehicle');
-    Route::get('vehicle/create',[VehicleController::class,'create'])->name('vehicle.create');
-    Route::post('vehicle/store',[VehicleController::class,'store'])->name('vehicle.store');
-    Route::get('vehicle/edit',[VehicleController::class,'edit'])->name('vehicle.edit');
-    Route::put('vehicle/{vehicle}',[VehicleController::class,'update'])->name('vehicle.update');
-    Route::delete('/delete/{vehicle}',[VehicleController::class,'destroy'])->name('vehicle.delete');
-    Route::get('/vehicle/{vehicle}',[VehicleController::class,'show'])->name('vehicle.show');
-    Route::post('/delete',[VehicleController::class,'deletedAll'])->name('vehicles.delete');
-    Route::post('/image/upload',[VehicleController::class,'upload'])->name('vehicles.upload');
+Route::middleware('auth')->prefix('vehicle')->group(function () {
+    Route::get('/', [VehicleController::class, 'index'])->name('vehicle');
+    Route::get('/create', [VehicleController::class, 'create'])->name('vehicle.create');
+    Route::post('/store', [VehicleController::class, 'store'])->name('vehicle.store');
+    Route::get('/edit', [VehicleController::class, 'edit'])->name('vehicle.edit');
+    Route::put('/{vehicle}', [VehicleController::class, 'update'])->name('vehicle.update');
+    Route::delete('/delete/{vehicle}', [VehicleController::class, 'destroy'])->name('vehicle.delete');
+    Route::get('/detail/{vehicle}', [VehicleController::class, 'show'])->name('vehicle.show');
+    Route::post('/delete-all', [VehicleController::class, 'deletedAll'])->name('vehicles.delete');
+    Route::post('/image/upload', [VehicleController::class, 'upload'])->name('vehicles.upload');
 });
 
 
-Route::middleware('auth')->group(function() {
-    Route::get('driver',[DriverController::class,'index'])->name('driver');
-    Route::get('driver/create',[DriverController::class,'create'])->name('driver.create');
-    Route::post('driver/store',[DriverController::class,'store'])->name('driver.store');
+Route::middleware('auth')->prefix('driver')->group(function () {
+    Route::get('/', [DriverController::class, 'index'])->name('driver');
+    Route::get('/create', [DriverController::class, 'create'])->name('driver.create');
+    Route::post('/store', [DriverController::class, 'store'])->name('driver.store');
+    Route::delete('/delete/{driver}', [DriverController::class, 'destroy'])->name('driver.delete');
+    Route::get('/detail/{driver}', [DriverController::class, 'show'])->name('driver.show');
+    Route::post('/delete-all', [DriverController::class, 'deletedAll'])->name('drivers.delete');
 });
 
 

@@ -8,6 +8,11 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Rules\AgeValidation;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Hash;
+use App\Models\User;
+use Illuminate\Validation\Rules\Password;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class DriverController extends Controller
 {
@@ -38,6 +43,7 @@ class DriverController extends Controller
     public function store(Request $request)
     {
 
+        dd($request);
         $validatedData = $request->validate([
             'firstName'             => 'required|string|max:255',
             'lastName'              => 'required|string|max:255',
@@ -47,36 +53,57 @@ class DriverController extends Controller
             'address'               => 'required|string|max:255',
             'contactNumber'         => ['required', 'regex:/^\+63[0-9]{10}$/'],
             'contactPerson'         => ['required', 'regex:/^\+63[0-9]{10}$/'],
-            'philhealth_no'         => 'required|string|max:10',
-            'pagibig_no'            => 'required|string|max:10',
-            'sss_no'                => 'required|string|max:10',
-            'tin_no'                => 'required|string|max:10',
-            'license_number'        => 'required|string|max:11|unique:drivers,license_number',
+            'philhealth_no'         => 'required|string|min:14|max:14',
+            'pagibig_no'            => 'required|string|min:14|max:14',
+            'sss_no'                => 'required|string|min:12|max:12',
+            'tin_no'                => 'required|string|min:15|max:15',
+            'license_number'        => 'required|string|min:13|max:13|unique:drivers,license_number',
             'license_expired'       => ['required', 'date', 'after:today'],
             'status'                => 'required|string|max:10',
+            'username' => ['nullable', 'string', 'max:255', 'unique:'.User::class],
+            'password' => ['required', 'confirmed', Password::min(8)],
 
         ],[ 'license_number.unique' => 'The license number is already taken.']
         );
 
-        Driver::create([
-            'first_name'          => $validatedData['firstName'],
-            'middle_name'         => $request->middleName,
-            'last_name'           => $validatedData['lastName'],
-            'civil_status'        => $validatedData['civilStatus'],
-            'birthday'            => Carbon::parse($validatedData['birthDay'])->format('Y-m-d'),
-            'address'             => $validatedData['address'],
-            'contact_number'      => $validatedData['contactNumber'],
-            'contact_person'      => $validatedData['contactPerson'],
-            'age'                 => $validatedData['age'],
-            'image'               => null,
-            'pagibig_no'          => $validatedData['pagibig_no'],
-            'philhealth_no'       => $validatedData['philhealth_no'],
-            'sss_no'              => $validatedData['sss_no'],
-            'tin_no'              => $validatedData['tin_no'],
-            'license_number'      => $validatedData['license_number'],
-            'license_expired'     => Carbon::parse($validatedData['license_expired'])->format('Y-m-d'),
-            'status'              => $validatedData['status'],
-        ]);
+        try{
+            DB::transaction(function () use ($validatedData, $request) {
+                $driver = Driver::create([
+                    'first_name' => $validatedData['firstName'],
+                    'middle_name' => $request->middleName,
+                    'last_name' => $validatedData['lastName'],
+                    'civil_status' => $validatedData['civilStatus'],
+                    'birthday' => Carbon::parse($validatedData['birthDay'])->format('Y-m-d'),
+                    'address' => $validatedData['address'],
+                    'contact_number' => $validatedData['contactNumber'],
+                    'contact_person' => $validatedData['contactPerson'],
+                    'age' => $validatedData['age'],
+                    'image' => null,
+                    'pagibig_no' => $validatedData['pagibig_no'],
+                    'philhealth_no' => $validatedData['philhealth_no'],
+                    'sss_no' => $validatedData['sss_no'],
+                    'tin_no' => $validatedData['tin_no'],
+                    'license_number' => $validatedData['license_number'],
+                    'license_expired' => Carbon::parse($validatedData['license_expired'])->format('Y-m-d'),
+                    'status' => $validatedData['status'],
+                ]);
+
+                User::create([
+                    'first_name' => $validatedData['firstName'],
+                    'last_name' => $validatedData['lastName'],
+                    'mobile_number' => $validatedData['contactNumber'],
+                    'username' => $validatedData['username'],
+                    'email' => $request->email_address,
+                    'user_type' => 0,
+                    'driver_id' => $driver->id,
+                    'password' => Hash::make($request->password),
+                ]);
+            });
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+        }
+
+
 
         return redirect()->route('driver')->with('success', 'Driver created successfully!');
     }
@@ -86,7 +113,8 @@ class DriverController extends Controller
      */
     public function show(Driver $driver)
     {
-        //
+        $user = Auth::user();
+        return Inertia::render('Driver/Show', ["Driver" => $driver, 'User' => $user]);
     }
 
     /**
@@ -110,6 +138,17 @@ class DriverController extends Controller
      */
     public function destroy(Driver $driver)
     {
-        //
+
+        $driver->delete();
+
+        return redirect()->route('driver');
+    }
+
+    public function deletedAll(Request $request)
+    {
+        $ids = $request->ids;
+        Driver::whereIn('id', $ids)->delete();
+
+        return redirect()->route('driver');
     }
 }

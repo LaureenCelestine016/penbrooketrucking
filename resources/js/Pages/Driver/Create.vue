@@ -11,18 +11,7 @@
         <div class="py-4">
             <div class="mx-12">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <Toolbar class="mb-6">
-                        <template #start>
-                            <Button
-                                label="Go back"
-                                icon="pi pi-chevron-circle-left"
-                                severity="info"
-                                @click="goBack"
-                            />
-                        </template>
-                    </Toolbar>
-
-                    <form @submit.prevent="submit" class="px-5">
+                    <form @submit.prevent="submit" class="p-6">
                         <!-- Personal Information -->
                         <div class="mb-4">
                             <label
@@ -120,7 +109,9 @@
                                 </div>
                             </div>
 
-                            <div class="grid grid-cols-3 gap-10 mb-4">
+                            <div
+                                class="grid grid-cols-3 gap-10 mb-4 items-center"
+                            >
                                 <!-- Civil Status -->
                                 <div class="w-100">
                                     <label
@@ -457,7 +448,9 @@
                                 >License Details</label
                             >
 
-                            <div class="grid grid-cols-2 gap-10 mb-4">
+                            <div
+                                class="grid grid-cols-2 gap-10 mb-4 items-center"
+                            >
                                 <!-- License no.-->
                                 <div class="w-100">
                                     <label
@@ -528,65 +521,197 @@
                                     </FormField>
                                 </div>
                             </div>
+                        </div>
+                        <!-- Account Details -->
+                        <div>
+                            <label
+                                class="text-gray-900 dark:text-surface-0 text-xl font-medium mb-4 mt-8 block"
+                                >Account Details</label
+                            >
 
-                            <div class="">
+                            <div class="grid grid-cols-3 gap-10 mb-4">
+                                <!-- Username-->
                                 <div class="w-100">
                                     <label
-                                        for="status"
-                                        class="text-gray-700 dark:text-surface-50 text-sm font-medium mb-2 block"
-                                        >Status<span class="ml-1 text-red-400"
+                                        for="username"
+                                        class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                        >Username<span class="ml-1 text-red-400"
                                             >*</span
                                         ></label
                                     >
                                     <FormField
-                                        id="status"
-                                        name="status"
+                                        id="username"
+                                        name="username"
                                         class="flex flex-col gap-1"
                                     >
-                                        <AutoComplete
-                                            id="status"
-                                            class="w-full"
-                                            v-model="form.status"
-                                            :suggestions="driverStatus"
-                                            @complete="statusSearch"
-                                            dropdown
-                                            placeholder="Status"
+                                        <InputText
+                                            id="username"
+                                            type="text"
+                                            v-model="form.username"
+                                            placeholder="Username"
                                         />
                                         <Message
-                                            v-if="form.errors.status"
+                                            v-if="form.errors.username"
                                             severity="error"
                                             size="small"
                                             variant="simple"
-                                            >{{ form.errors.status }}</Message
+                                            >{{ form.errors.username }}</Message
                                         >
                                     </FormField>
                                 </div>
-
-                                <div class="w-100 mt-8">
+                                <!-- Password -->
+                                <div class="w-100">
                                     <label
-                                        for="image_upload"
-                                        class="text-slate-800 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                        >Image Upload</label
+                                        for="password"
+                                        class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                        >Password<span class="ml-1 text-red-400"
+                                            >*</span
+                                        >
+                                    </label>
+                                    <FormField
+                                        id="password"
+                                        name="password"
+                                        class="flex flex-col gap-1"
                                     >
-                                    <Toast />
+                                        <Password
+                                            id="password"
+                                            name="password"
+                                            placeholder="Password"
+                                            v-model="form.password"
+                                            :feedback="false"
+                                            toggleMask
+                                            fluid
+                                            class="user--input"
+                                        />
 
-                                    <FileUpload
-                                        for="image_upload"
-                                        url="/image/upload"
-                                        @upload="onAdvancedUpload($event)"
-                                        :multiple="true"
-                                        accept="image/*"
-                                        :maxFileSize="1000000"
+                                        <Message
+                                            v-if="form.errors.password"
+                                            severity="error"
+                                            size="small"
+                                            variant="simple"
+                                            >{{ form.errors.password }}</Message
+                                        >
+                                    </FormField>
+                                </div>
+                                <!-- Confirm password -->
+                                <div class="w-100">
+                                    <label
+                                        for="confirm_password"
+                                        class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                        >Repeat Password<span
+                                            class="ml-1 text-red-400"
+                                            >*</span
+                                        >
+                                    </label>
+                                    <FormField
+                                        id="confirm_password"
+                                        name="confirm_password"
+                                        class="flex flex-col gap-1"
                                     >
-                                        <template #empty>
-                                            <span
-                                                >Drag and drop files to here to
-                                                upload.</span
-                                            >
-                                        </template>
-                                    </FileUpload>
+                                        <Password
+                                            id="password"
+                                            name="password"
+                                            placeholder="Confirm password"
+                                            v-model="form.password_confirmation"
+                                            :feedback="false"
+                                            toggleMask
+                                            fluid
+                                            class="user--input"
+                                        />
+                                        <Message
+                                            v-if="
+                                                form.errors
+                                                    .password_confirmation
+                                            "
+                                            severity="error"
+                                            size="small"
+                                            variant="simple"
+                                            >{{
+                                                form.errors
+                                                    .password_confirmation
+                                            }}</Message
+                                        >
+                                    </FormField>
                                 </div>
                             </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-10 items-center">
+                            <div class="w-100">
+                                <label
+                                    for="email"
+                                    class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                    >Email Address
+                                    <span class="text-red-400">(Optional)</span>
+                                </label>
+                                <FormField
+                                    id="email"
+                                    name="email"
+                                    class="flex flex-col gap-1"
+                                >
+                                    <InputText
+                                        id="email"
+                                        type="text"
+                                        v-model="form.email_address"
+                                        placeholder="Email Address"
+                                    />
+                                </FormField>
+                            </div>
+                            <div class="w-100">
+                                <label
+                                    for="status"
+                                    class="text-gray-700 dark:text-surface-50 text-sm font-medium mb-2 block"
+                                    >Status<span class="ml-1 text-red-400"
+                                        >*</span
+                                    ></label
+                                >
+                                <FormField
+                                    id="status"
+                                    name="status"
+                                    class="flex flex-col gap-1"
+                                >
+                                    <AutoComplete
+                                        id="status"
+                                        class="w-full"
+                                        v-model="form.status"
+                                        :suggestions="driverStatus"
+                                        @complete="statusSearch"
+                                        dropdown
+                                        placeholder="Status"
+                                    />
+                                    <Message
+                                        v-if="form.errors.status"
+                                        severity="error"
+                                        size="small"
+                                        variant="simple"
+                                        >{{ form.errors.status }}</Message
+                                    >
+                                </FormField>
+                            </div>
+                        </div>
+                        <div class="w-100 mt-8">
+                            <label
+                                for="image_upload"
+                                class="text-slate-800 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                >Image Upload</label
+                            >
+                            <Toast />
+
+                            <FileUpload
+                                for="image_upload"
+                                url="/image/upload"
+                                @upload="onAdvancedUpload($event)"
+                                :multiple="true"
+                                accept="image/*"
+                                :maxFileSize="1000000"
+                            >
+                                <template #empty>
+                                    <span
+                                        >Drag and drop files to here to
+                                        upload.</span
+                                    >
+                                </template>
+                            </FileUpload>
                         </div>
 
                         <Button
@@ -608,6 +733,7 @@ import { Head, useForm } from "@inertiajs/vue3";
 import { ref, onMounted, onBeforeUnmount, watch } from "vue";
 
 import Toolbar from "primevue/toolbar";
+import Password from "primevue/password";
 import Button from "primevue/button";
 import InputText from "primevue/inputtext";
 import AutoComplete from "primevue/autocomplete";
@@ -617,6 +743,7 @@ import { useToast } from "primevue/usetoast";
 import Message from "primevue/message";
 import { FormField } from "@primevue/forms";
 import Textarea from "primevue/textarea";
+import "primeicons/primeicons.css";
 import intlTelInput from "intl-tel-input";
 import "intl-tel-input/build/css/intlTelInput.css";
 
@@ -645,6 +772,10 @@ const form = useForm({
     tin_no: "",
     license_number: "",
     license_expired: "",
+    username: "",
+    email_address: "",
+    password: "",
+    password_confirmation: "",
     status: "",
 });
 

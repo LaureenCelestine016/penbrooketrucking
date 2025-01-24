@@ -10,19 +10,8 @@
 
         <div class="py-4">
             <div class="mx-12">
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <Toolbar class="mb-6">
-                        <template #start>
-                            <Button
-                                label="Go back"
-                                icon="pi pi-chevron-circle-left"
-                                severity="info"
-                                @click="goBack"
-                            />
-                        </template>
-                    </Toolbar>
-
-                    <form @submit.prevent="submit" class="px-5">
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-md">
+                    <form @submit.prevent="submit" class="p-6">
                         <!-- Vehicle Infomation -->
                         <div class="mb-11">
                             <label

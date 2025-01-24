@@ -22,6 +22,12 @@ export default {
                 "4/7": "75%",
                 "5/7": "90%", // Adding custom height (75%)
             },
+            colors: {
+                customblue: "#213555",
+            },
+            backgroundColor: {
+                navyblue: "#213555", // Custom background light blue
+            },
         },
     },
 

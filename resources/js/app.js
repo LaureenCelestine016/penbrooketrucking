@@ -14,23 +14,30 @@ import { createInertiaApp } from "@inertiajs/vue3";
 import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
 import { ZiggyVue } from "../../vendor/tightenco/ziggy";
 import { definePreset } from "@primevue/themes";
+import { TinyColor } from "@ctrl/tinycolor";
 
 const appName = import.meta.env.VITE_APP_NAME || "Laravel";
+
+const baseColor = "#213555";
+
+// Create a new instance with `new`
+const lightShade = new TinyColor(baseColor).lighten(20).toHexString(); // Lighter shade
+const darkShade = new TinyColor(baseColor).darken(20).toHexString(); // Darker shade
 
 const MyPreset = definePreset(Aura, {
     semantic: {
         primary: {
-            50: "{blue.50}",
-            100: "{blue.100}",
-            200: "{blue.200}",
-            300: "{blue.300}",
-            400: "{blue.400}",
-            500: "{blue.500}",
-            600: "{blue.600}",
-            700: "{blue.700}",
-            800: "{blue.800}",
-            900: "{blue.900}",
-            950: "{blue.950}",
+            50: new TinyColor(baseColor).lighten(40).toHexString(),
+            100: new TinyColor(baseColor).lighten(30).toHexString(),
+            200: new TinyColor(baseColor).lighten(20).toHexString(),
+            300: new TinyColor(baseColor).lighten(10).toHexString(),
+            400: new TinyColor(baseColor).lighten(5).toHexString(),
+            500: baseColor, // Main color
+            600: new TinyColor(baseColor).darken(5).toHexString(),
+            700: new TinyColor(baseColor).darken(10).toHexString(),
+            800: new TinyColor(baseColor).darken(20).toHexString(),
+            900: new TinyColor(baseColor).darken(30).toHexString(),
+            950: new TinyColor(baseColor).darken(40).toHexString(),
         },
     },
 });
@@ -56,7 +63,7 @@ createInertiaApp({
             })
             .use(ZiggyVue)
             .use(ToastService)
-            .use("tooltip", Tooltip)
+            .directive("tooltip", Tooltip) // Use `directive` for PrimeVue tooltips
             .mount(el);
     },
     progress: {

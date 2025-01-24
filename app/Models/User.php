@@ -25,6 +25,7 @@ class User extends Authenticatable
         'username',
         'user_type',
         'email',
+        'driver_id',
         'password',
     ];
 
@@ -46,4 +47,9 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function driver()
+{
+    return $this->belongsTo(Driver::class);
+}
 }

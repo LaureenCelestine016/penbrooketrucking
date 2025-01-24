@@ -87,6 +87,7 @@ class VehicleController extends Controller
      */
     public function show(Vehicle $vehicle)
     {
+
         return Inertia::render('Vehicle/Show', ["Vehicle" => $vehicle]);
     }
 

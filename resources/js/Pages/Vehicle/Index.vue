@@ -13,29 +13,6 @@
             <div class="mx-12">
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                     <div class="card">
-                        <Toolbar class="mb-6">
-                            <template #start>
-                                <Button
-                                    label="Add Vehicle"
-                                    icon="pi pi-plus"
-                                    class="mr-3"
-                                    severity="info"
-                                    @click="addVehicle"
-                                />
-                                <Button
-                                    label="Delete"
-                                    icon="pi pi-trash"
-                                    severity="danger"
-                                    outlined
-                                    @click="confirmDeleteSelected"
-                                    :disabled="
-                                        !selectedVehicle ||
-                                        !selectedVehicle.length
-                                    "
-                                />
-                            </template>
-                        </Toolbar>
-
                         <DataTable
                             ref="dt"
                             v-model:selection="selectedVehicle"
@@ -50,7 +27,7 @@
                         >
                             <template #header>
                                 <div
-                                    class="flex flex-wrap gap-2 items-center justify-between"
+                                    class="flex flex-wrap gap-2 items-center justify-between p-1"
                                 >
                                     <Button
                                         label="EXPORT TO EXCEL"
@@ -59,16 +36,34 @@
                                         @click="exportCSV($event)"
                                     />
 
-                                    <!-- <h4 class="m-0">Manage Products</h4> -->
-                                    <IconField>
-                                        <InputIcon>
-                                            <i class="pi pi-search" />
-                                        </InputIcon>
-                                        <InputText
-                                            v-model="filters['global'].value"
-                                            placeholder="Search..."
+                                    <div
+                                        class="flex gap-4 justify-center items-center"
+                                    >
+                                        <Button
+                                            label="Delete"
+                                            icon="pi pi-trash"
+                                            severity="danger"
+                                            outlined
+                                            @click="confirmDeleteSelected"
+                                            :disabled="
+                                                !selectedVehicle ||
+                                                !selectedVehicle.length
+                                            "
                                         />
-                                    </IconField>
+                                        <IconField>
+                                            <InputIcon>
+                                                <i class="pi pi-search" />
+                                            </InputIcon>
+                                            <InputText
+                                                v-model="
+                                                    filters['global'].value
+                                                "
+                                                placeholder="Search..."
+                                            />
+                                        </IconField>
+                                    </div>
+
+                                    <!-- <h4 class="m-0">Manage Products</h4> -->
                                 </div>
                             </template>
 
@@ -275,26 +270,7 @@ const confirmDeleteVehicle = (vehicle) => {
 };
 
 const showDetail = (id) => {
-    router.get(route("vehicle.show", id), {
-        onSuccess: () => {
-            deleteVehicleDialog.value = false;
-            toast.add({
-                severity: "success",
-                summary: "Successful",
-                detail: "Vehicle Deleted",
-                life: 3000,
-            });
-        },
-        onError: (errors) => {
-            console.error("Error deleting vehicle:", errors);
-            toast.add({
-                severity: "error",
-                summary: "Error",
-                detail: "Failed to delete vehicle",
-                life: 3000,
-            });
-        },
-    });
+    router.get(route("vehicle.show", id));
 };
 
 const deleteVehicle = (id) => {

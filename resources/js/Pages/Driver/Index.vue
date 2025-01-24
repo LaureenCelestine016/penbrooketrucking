@@ -13,29 +13,6 @@
             <div class="mx-12">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="card">
-                        <Toolbar class="mb-6">
-                            <template #start>
-                                <Button
-                                    label="Add Driver"
-                                    icon="pi pi-plus"
-                                    class="mr-3"
-                                    severity="info"
-                                    @click="addDriver"
-                                />
-                                <Button
-                                    label="Delete"
-                                    icon="pi pi-trash"
-                                    severity="danger"
-                                    outlined
-                                    @click="confirmDeleteSelected"
-                                    :disabled="
-                                        !selectedVehicle ||
-                                        !selectedVehicle.length
-                                    "
-                                />
-                            </template>
-                        </Toolbar>
-
                         <DataTable
                             ref="dt"
                             v-model:selection="selectedDriver"
@@ -65,17 +42,33 @@
                                         severity="secondary"
                                         @click="exportCSV($event)"
                                     />
-
-                                    <!-- <h4 class="m-0">Manage Products</h4> -->
-                                    <IconField>
-                                        <InputIcon>
-                                            <i class="pi pi-search" />
-                                        </InputIcon>
-                                        <InputText
-                                            v-model="filters['global'].value"
-                                            placeholder="Search..."
+                                    <div
+                                        class="flex gap-4 justify-center items-center"
+                                    >
+                                        <Button
+                                            label="Delete"
+                                            icon="pi pi-trash"
+                                            severity="danger"
+                                            outlined
+                                            @click="confirmDeleteSelected"
+                                            :disabled="
+                                                !selectedDriver ||
+                                                !selectedDriver.length
+                                            "
                                         />
-                                    </IconField>
+
+                                        <IconField>
+                                            <InputIcon>
+                                                <i class="pi pi-search" />
+                                            </InputIcon>
+                                            <InputText
+                                                v-model="
+                                                    filters['global'].value
+                                                "
+                                                placeholder="Search..."
+                                            />
+                                        </IconField>
+                                    </div>
                                 </div>
                             </template>
 
@@ -95,19 +88,6 @@
                                     {{ slotProps.data.name.last }}
                                 </template>
                             </Column>
-                            <!-- <Column
-                                field="vehicle_type"
-                                header="Middle name"
-                                sortable
-                                style="min-width: 10rem"
-                            ></Column>
-                            <Column
-                                field="license_plate"
-                                header="Last name"
-                                sortable
-                                style="min-width: 10rem"
-                            >
-                            </Column> -->
                             <Column
                                 header="Age"
                                 sortable
@@ -177,7 +157,7 @@
                                         outlined
                                         rounded
                                         class="mr-2"
-                                        @click="editProduct(slotProps.data.id)"
+                                        @click="showDetail(slotProps.data.id)"
                                     />
                                     <Button
                                         icon="pi pi-trash"
@@ -185,7 +165,7 @@
                                         rounded
                                         severity="danger"
                                         @click="
-                                            confirmDeleteVehicle(slotProps.data)
+                                            confirmDeleteDriver(slotProps.data)
                                         "
                                     />
                                 </template>
@@ -193,7 +173,7 @@
                         </DataTable>
 
                         <Dialog
-                            v-model:visible="deleteVehicleDialog"
+                            v-model:visible="deleteDriverDialog"
                             :style="{ width: '450px' }"
                             header="Confirm"
                             :modal="true"
@@ -202,9 +182,9 @@
                                 <i
                                     class="pi pi-exclamation-triangle !text-3xl"
                                 />
-                                <span v-if="vehicles"
+                                <span v-if="drivers"
                                     >Are you sure you want to delete
-                                    <b>{{ vehicleData.vehicle_name }}</b
+                                    <b>{{ driverData.name.first }}</b
                                     >?</span
                                 >
                             </div>
@@ -213,18 +193,18 @@
                                     label="No"
                                     icon="pi pi-times"
                                     text
-                                    @click="deleteVehicleDialog = false"
+                                    @click="deleteDriverDialog = false"
                                 />
                                 <Button
                                     label="Yes"
                                     icon="pi pi-check"
-                                    @click="deleteVehicle(vehicleData.id)"
+                                    @click="deleteDriver(driverData.id)"
                                 />
                             </template>
                         </Dialog>
 
                         <Dialog
-                            v-model:visible="deleteVehiclesDialog"
+                            v-model:visible="deleteDriversDialog"
                             :style="{ width: '450px' }"
                             header="Confirm"
                             :modal="true"
@@ -233,9 +213,9 @@
                                 <i
                                     class="pi pi-exclamation-triangle !text-3xl"
                                 />
-                                <span v-if="vehicles"
+                                <span v-if="drivers"
                                     >Are you sure you want to delete the
-                                    selected vehicles?</span
+                                    selected drivers?</span
                                 >
                             </div>
                             <template #footer>
@@ -243,13 +223,13 @@
                                     label="No"
                                     icon="pi pi-times"
                                     text
-                                    @click="deleteVehiclesDialog = false"
+                                    @click="deleteDriversDialog = false"
                                 />
                                 <Button
                                     label="Yes"
                                     icon="pi pi-check"
                                     text
-                                    @click="deleteSelectedVehicles"
+                                    @click="deleteSelectedDrivers"
                                 />
                             </template>
                         </Dialog>
@@ -279,6 +259,10 @@ import { FilterMatchMode } from "@primevue/core/api";
 import { useToast } from "primevue/usetoast";
 
 const selectedDriver = ref(0);
+const toast = useToast();
+const driverData = ref({});
+const deleteDriversDialog = ref(false);
+const deleteDriverDialog = ref(false);
 
 defineProps({
     drivers: {
@@ -289,6 +273,81 @@ defineProps({
 
 const addDriver = () => {
     router.get(route("driver.create"));
+};
+
+const confirmDeleteSelected = () => {
+    deleteDriversDialog.value = true;
+};
+
+const confirmDeleteDriver = (driver) => {
+    driverData.value = driver;
+    deleteDriverDialog.value = true;
+};
+
+const showDetail = (id) => {
+    router.get(route("driver.show", id));
+};
+
+const deleteDriver = (id) => {
+    router.delete(route("driver.delete", id), {
+        onSuccess: () => {
+            deleteDriverDialog.value = false;
+            toast.add({
+                severity: "success",
+                summary: "Successful",
+                detail: "Driver Deleted",
+                life: 3000,
+            });
+        },
+        onError: (errors) => {
+            console.error("Error deleting driver:", errors);
+            toast.add({
+                severity: "error",
+                summary: "Error",
+                detail: "Failed to delete driver",
+                life: 3000,
+            });
+        },
+    });
+};
+
+const deleteSelectedDrivers = () => {
+    const ids = selectedDriver.value.map((m) => m.id);
+
+    if (ids.length === 0) {
+        toast.add({
+            severity: "warn",
+            summary: "No Selection",
+            detail: "No vehicles selected for deletion",
+            life: 3000,
+        });
+        return;
+    }
+
+    router.post(
+        route("drivers.delete"),
+        { ids },
+        {
+            onSuccess: () => {
+                deleteDriversDialog.value = false;
+                toast.add({
+                    severity: "success",
+                    summary: "Successful",
+                    detail: "Drivers Deleted",
+                    life: 3000,
+                });
+            },
+            onError: (errors) => {
+                console.error("Error deleting drivers:", errors);
+                toast.add({
+                    severity: "error",
+                    summary: "Error",
+                    detail: "Failed to delete drivers",
+                    life: 3000,
+                });
+            },
+        }
+    );
 };
 
 const filters = ref({
