@@ -36,21 +36,78 @@
                             <Card class="profile">
                                 <template #content>
                                     <label
-                                        class="text-gray-900 dark:text-surface-0 text-xl font-medium mb-4 block"
-                                        >Account Details</label
+                                        class="text-gray-900 dark:text-surface-0 text-xl font-semibold mb-4 block"
+                                        >Account Information</label
                                     >
-                                    <div class="flex flex-row gap-4">
-                                        <label for="" class="font-semibold mr-5"
-                                            >Username:</label
-                                        >
-                                        <span>{{ User.username }}</span>
+                                    <div class="p-1">
+                                        <div class="grid grid-cols-2 mb-4">
+                                            <label
+                                                for=""
+                                                class="font-semibold mr-5"
+                                                >Username:</label
+                                            >
+                                            <span class="">{{
+                                                User?.username
+                                            }}</span>
+                                        </div>
+
+                                        <div class="grid grid-cols-2 mb-4">
+                                            <label
+                                                for=""
+                                                class="font-semibold mr-5"
+                                                >Fullname:</label
+                                            >
+                                            <span class=""
+                                                >{{ Driver.first_name }}
+                                                {{ Driver.middle_name }}
+                                                {{ Driver.last_name }}</span
+                                            >
+                                        </div>
+                                        <div class="grid grid-cols-2 mb-4">
+                                            <label
+                                                for=""
+                                                class="font-semibold mr-5"
+                                                >Contact:</label
+                                            >
+                                            <span
+                                                >{{
+                                                    replaceFirstnum(
+                                                        Driver.contact_number
+                                                    )
+                                                }}
+                                            </span>
+                                        </div>
+
+                                        <div class="grid grid-cols-2 mb-4">
+                                            <label
+                                                for=""
+                                                class="font-semibold mr-5"
+                                                >Email Address:</label
+                                            >
+                                            <span class=""
+                                                >{{ User?.email }}
+                                            </span>
+                                        </div>
+
+                                        <div class="grid grid-cols-2 mb-4">
+                                            <label
+                                                for=""
+                                                class="font-semibold mr-5"
+                                                >Created Date:</label
+                                            >
+                                            <span class=""
+                                                >{{
+                                                    formatDate(User?.created_at)
+                                                }}
+                                            </span>
+                                        </div>
                                     </div>
                                 </template>
                             </Card>
-                            <Card class="col-span-2 custom-account">
+                            <Card class="custom-account">
                                 <template #content>
-                                    <Tabs value="0">
-                                        <TabList>
+                                    <Tabs value="0" class="!w-100">
+                                        <TabList class="w-100">
                                             <Tab
                                                 value="0"
                                                 as="div"
@@ -125,27 +182,122 @@
                                                 </div>
                                             </Tab>
                                         </TabList>
-                                        <TabPanels>
+                                        <TabPanels class="tabpanels">
                                             <TabPanel
                                                 value="0"
                                                 as="p"
-                                                class="m-0"
+                                                class="!w-100"
                                             >
-                                                Lorem ipsum dolor sit amet,
-                                                consectetur adipiscing elit, sed
-                                                do eiusmod tempor incididunt ut
-                                                labore et dolore magna aliqua.
-                                                Ut enim ad minim veniam, quis
-                                                nostrud exercitation ullamco
-                                                laboris nisi ut aliquip ex ea
-                                                commodo consequat. Duis aute
-                                                irure dolor in reprehenderit in
-                                                voluptate velit esse cillum
-                                                dolore eu fugiat nulla pariatur.
-                                                Excepteur sint occaecat
-                                                cupidatat non proident, sunt in
-                                                culpa qui officia deserunt
-                                                mollit anim id est laborum.
+                                                <form
+                                                    @submit.prevent="submit"
+                                                    class="w-100"
+                                                >
+                                                    <div
+                                                        class="grid grid-cols-3 items-center gap-4"
+                                                    >
+                                                        <div class="w-100">
+                                                            <label
+                                                                for="First_name"
+                                                                class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                                                >First name<span
+                                                                    class="ml-1 text-red-400"
+                                                                    >*</span
+                                                                ></label
+                                                            >
+                                                            <FormField
+                                                                id="First_name"
+                                                                name="First_name"
+                                                                class="flex flex-col gap-1"
+                                                            >
+                                                                <InputText
+                                                                    type="text"
+                                                                    v-model="
+                                                                        form.firstName
+                                                                    "
+                                                                    class="user--input firstName"
+                                                                    placeholder="First name"
+                                                                />
+                                                                <Message
+                                                                    v-if="
+                                                                        form
+                                                                            .errors
+                                                                            .firstName
+                                                                    "
+                                                                    severity="error"
+                                                                    size="small"
+                                                                    variant="simple"
+                                                                    >{{
+                                                                        form
+                                                                            .errors
+                                                                            .firstName
+                                                                    }}</Message
+                                                                >
+                                                            </FormField>
+                                                        </div>
+                                                        <div class="w-100">
+                                                            <label
+                                                                for="middle_name"
+                                                                class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                                                >Middle Name
+                                                            </label>
+                                                            <FormField
+                                                                id="middle_name"
+                                                                name="middle_name"
+                                                                class="flex flex-col gap-1"
+                                                            >
+                                                                <InputText
+                                                                    type="text"
+                                                                    v-model="
+                                                                        form.middleName
+                                                                    "
+                                                                    placeholder="Middle name"
+                                                                />
+                                                                <Message
+                                                                    v-if="
+                                                                        form
+                                                                            .errors
+                                                                            .middle
+                                                                    "
+                                                                    severity="error"
+                                                                    size="small"
+                                                                    variant="simple"
+                                                                    >{{
+                                                                }}</Message>
+                                                            </FormField>
+                                                        </div>
+                                                        <div class="w-100">
+                                                            <label
+                                                                for="middle_name"
+                                                                class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                                                >Middle Name
+                                                            </label>
+                                                            <FormField
+                                                                id="middle_name"
+                                                                name="middle_name"
+                                                                class="flex flex-col gap-1"
+                                                            >
+                                                                <InputText
+                                                                    type="text"
+                                                                    v-model="
+                                                                        form.middleName
+                                                                    "
+                                                                    placeholder="Middle name"
+                                                                />
+                                                                <Message
+                                                                    v-if="
+                                                                        form
+                                                                            .errors
+                                                                            .middle
+                                                                    "
+                                                                    severity="error"
+                                                                    size="small"
+                                                                    variant="simple"
+                                                                    >{{
+                                                                }}</Message>
+                                                            </FormField>
+                                                        </div>
+                                                    </div>
+                                                </form>
                                             </TabPanel>
                                             <TabPanel
                                                 value="1"
@@ -217,6 +369,7 @@
 
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
+import { Head, useForm } from "@inertiajs/vue3";
 import { ref } from "vue";
 
 import Card from "primevue/card";
@@ -226,6 +379,9 @@ import Tab from "primevue/tab";
 import TabPanels from "primevue/tabpanels";
 import TabPanel from "primevue/tabpanel";
 import Avatar from "primevue/avatar";
+import dayjs from "dayjs";
+import VirtualScroller from "primevue/virtualscroller";
+import InputText from "primevue/inputtext";
 
 const props = defineProps({
     Driver: {
@@ -238,8 +394,20 @@ const props = defineProps({
     },
 });
 
+const form = useForm({
+    firstName: "",
+});
+
 const toUpperCase = (name) => {
     return name.toUpperCase();
+};
+
+const formatDate = (createDate) => {
+    return dayjs(createDate).format("DD/MM/YYYY");
+};
+
+const replaceFirstnum = (number) => {
+    return number.replace("+63", "0");
 };
 </script>
 
@@ -292,5 +460,15 @@ const toUpperCase = (name) => {
 
 .custom-account {
     border-radius: 5px;
+    width: 840px !important;
+    position: absolute;
+    left: 370px;
+}
+
+.p-tablist-content {
+    width: 100% !important;
+}
+
+.user--input {
 }
 </style>

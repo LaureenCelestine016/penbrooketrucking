@@ -111,10 +111,14 @@ class DriverController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Driver $driver)
+    public function show($id)
     {
-        $user = Auth::user();
-        return Inertia::render('Driver/Show', ["Driver" => $driver, 'User' => $user]);
+        $driver = Driver::with('user')->findOrFail($id);
+
+        return Inertia::render('Driver/Show', [
+            'Driver' => $driver,            // The driver data
+            'User' => $driver->user // The related user data
+        ]);
     }
 
     /**

@@ -47,7 +47,7 @@ Route::middleware('auth')->prefix('driver')->group(function () {
     Route::get('/create', [DriverController::class, 'create'])->name('driver.create');
     Route::post('/store', [DriverController::class, 'store'])->name('driver.store');
     Route::delete('/delete/{driver}', [DriverController::class, 'destroy'])->name('driver.delete');
-    Route::get('/detail/{driver}', [DriverController::class, 'show'])->name('driver.show');
+    Route::get('/detail/{id}', [DriverController::class, 'show'])->name('driver.show');
     Route::post('/delete-all', [DriverController::class, 'deletedAll'])->name('drivers.delete');
 });
 

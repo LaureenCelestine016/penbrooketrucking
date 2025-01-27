@@ -11,7 +11,7 @@
                                 <h2
                                     class="text-2xl font-bold tracking-widest text-white"
                                 >
-                                    Penbrook Inc.
+                                    Penbrooke Inc.
                                 </h2>
                             </div>
                         </div>

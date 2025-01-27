@@ -49,7 +49,7 @@ class User extends Authenticatable
     ];
 
     public function driver()
-{
-    return $this->belongsTo(Driver::class);
-}
+    {
+        return $this->belongsTo(Driver::class, 'driver_id', 'id');
+    }
 }

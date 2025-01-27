@@ -9,7 +9,7 @@
         <div class="flex h-full mx-12">
             <div class="flex h-full items-center">
                 <h2 class="text-2xl font-bold tracking-widest text-white">
-                    Penbrook Inc.
+                    Penbrooke Inc.
                 </h2>
             </div>
             <div class="grow h-100"></div>
