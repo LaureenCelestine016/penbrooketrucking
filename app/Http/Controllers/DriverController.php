@@ -43,7 +43,6 @@ class DriverController extends Controller
     public function store(Request $request)
     {
 
-        dd($request);
         $validatedData = $request->validate([
             'firstName'             => 'required|string|max:255',
             'lastName'              => 'required|string|max:255',
@@ -52,11 +51,9 @@ class DriverController extends Controller
             'age'                   => 'required|numeric|min:18|max:99',
             'address'               => 'required|string|max:255',
             'contactNumber'         => ['required', 'regex:/^\+63[0-9]{10}$/'],
+            'contactNamePerson'     => 'required|string|max:255',
             'contactPerson'         => ['required', 'regex:/^\+63[0-9]{10}$/'],
-            'philhealth_no'         => 'required|string|min:14|max:14',
-            'pagibig_no'            => 'required|string|min:14|max:14',
-            'sss_no'                => 'required|string|min:12|max:12',
-            'tin_no'                => 'required|string|min:15|max:15',
+            'relation'              => 'required|string|max:255',
             'license_number'        => 'required|string|min:13|max:13|unique:drivers,license_number',
             'license_expired'       => ['required', 'date', 'after:today'],
             'status'                => 'required|string|max:10',
@@ -76,13 +73,15 @@ class DriverController extends Controller
                     'birthday' => Carbon::parse($validatedData['birthDay'])->format('Y-m-d'),
                     'address' => $validatedData['address'],
                     'contact_number' => $validatedData['contactNumber'],
-                    'contact_person' => $validatedData['contactPerson'],
+                    'contact_person' => $validatedData['contactNamePerson'],
+                    'contact_no_person' => $validatedData['contactPerson'],
+                    'relation' => $validatedData['relation'],
                     'age' => $validatedData['age'],
                     'image' => null,
-                    'pagibig_no' => $validatedData['pagibig_no'],
-                    'philhealth_no' => $validatedData['philhealth_no'],
-                    'sss_no' => $validatedData['sss_no'],
-                    'tin_no' => $validatedData['tin_no'],
+                    'pagibig_no' => $request->pagibig_no,
+                    'philhealth_no' => $request->philhealth_no,
+                    'sss_no' => $request->sss_no,
+                    'tin_no' => $request->tin_no,
                     'license_number' => $validatedData['license_number'],
                     'license_expired' => Carbon::parse($validatedData['license_expired'])->format('Y-m-d'),
                     'status' => $validatedData['status'],
@@ -134,7 +133,33 @@ class DriverController extends Controller
      */
     public function update(Request $request, Driver $driver)
     {
-        //
+
+        $validatedData = $request->validate([
+            'first_name'            => 'required|string|max:255',
+            'last_name'             => 'required|string|max:255',
+            'civil_status'          => 'required|string|max:255',
+            'birthday'              => ['required', 'date', new AgeValidation(18)],
+            'age'                   => 'required|numeric|min:18|max:99',
+            'address'               => 'required|string|max:255',
+            'contact_number'        => ['required', 'regex:/^\+63[0-9]{10}$/'],
+            'contact_person'        => 'required|string|max:255',
+            'contact_no_person'        => ['required', 'regex:/^\+63[0-9]{10}$/'],
+            'relation'              => 'required|string|max:255',
+            'philhealth_no'         => 'required|string|min:14|max:14',
+            'pagibig_no'            => 'required|string|min:14|max:14',
+            'sss_no'                => 'required|string|min:12|max:12',
+            'tin_no'                => 'required|string|min:15|max:15',
+            'license_number'        => 'required|string|min:13|max:13',
+            'license_expired'       => ['required', 'date', 'after:today'],
+            'status'                => 'required|string|max:10',
+
+        ]
+        );
+
+        $driver->update($validatedData);
+
+        // return Inertia::render('Driver/Show', ['Driver' => $driver]);
+        return redirect()->route('driver');
     }
 
     /**

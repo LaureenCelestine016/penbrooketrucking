@@ -23,6 +23,8 @@ class Driver extends Model
         'image',
         'pagibig_no',
         'philhealth_no',
+        'contact_no_person',
+        'relation',
         'sss_no',
         'tin_no',
         'license_number',

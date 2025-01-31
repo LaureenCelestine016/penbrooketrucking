@@ -195,6 +195,12 @@
                 <slot />
             </main>
         </div>
+
+        <footer class="footer flex items-center justify-center">
+            <p class="text-gray-600">
+                Copyright <span class="mx-1">&#169;</span> 2025 - Penbrooke Inc.
+            </p>
+        </footer>
     </div>
 </template>
 
@@ -293,5 +299,10 @@ const showingNavigationDropdown = ref(false);
 .menubar {
     height: 54px;
     border: 0;
+    z-index: 10;
+}
+
+.footer {
+    height: 64px;
 }
 </style>

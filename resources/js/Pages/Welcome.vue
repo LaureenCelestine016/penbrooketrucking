@@ -1,39 +1,10 @@
-<script setup>
-import { Head, Link, router } from "@inertiajs/vue3";
-import { onMounted, ref } from "vue";
-import L from "leaflet";
-
-import Button from "primevue/button";
-
-defineProps({
-    canLogin: {
-        type: Boolean,
-    },
-    canRegister: {
-        type: Boolean,
-    },
-    laravelVersion: {
-        type: String,
-        required: true,
-    },
-    phpVersion: {
-        type: String,
-        required: true,
-    },
-});
-
-const Login = () => {
-    router.get(route("login"));
-};
-</script>
-
 <template>
     <Head title="Welcome" />
     <div class="w-full h-16 border-b bg-navyblue">
         <div v-if="canLogin" class="flex h-full mx-12">
             <div class="flex h-full items-center">
                 <h2 class="font-bold tracking-widest text-blue-100">
-                    LOGO HERE
+                    Penbrooke Inc.
                 </h2>
             </div>
             <div class="grow h-100"></div>
@@ -41,18 +12,6 @@ const Login = () => {
                 <Link v-if="$page.props.auth.user" class="font-sans"
                     >Dashboard</Link
                 >
-                <!-- <template v-else>
-                    <Link
-                        :href="route('login')"
-                        class="font-sans font-semibold hover:text-blue-50 text-blue-100"
-                        >Login</Link
-                    >
-                    <Link
-                        :href="route('register')"
-                        class="font-sans font-semibold hover:text-blue-50 text-blue-100"
-                        >Register</Link
-                    >
-                </template> -->
             </div>
         </div>
     </div>
@@ -126,6 +85,35 @@ const Login = () => {
         </div>
     </div> -->
 </template>
+
+<script setup>
+import { Head, Link, router } from "@inertiajs/vue3";
+import { onMounted, ref } from "vue";
+import L from "leaflet";
+
+import Button from "primevue/button";
+
+defineProps({
+    canLogin: {
+        type: Boolean,
+    },
+    canRegister: {
+        type: Boolean,
+    },
+    laravelVersion: {
+        type: String,
+        required: true,
+    },
+    phpVersion: {
+        type: String,
+        required: true,
+    },
+});
+
+const Login = () => {
+    router.get(route("login"));
+};
+</script>
 
 <style scoped>
 .img {

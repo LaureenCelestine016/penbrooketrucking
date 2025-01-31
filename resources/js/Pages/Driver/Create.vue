@@ -108,9 +108,8 @@
                                     </FormField>
                                 </div>
                             </div>
-
                             <div
-                                class="grid grid-cols-3 gap-10 mb-4 items-center"
+                                class="grid grid-cols-3 gap-10 mb-4 items-start"
                             >
                                 <!-- Civil Status -->
                                 <div class="w-100">
@@ -137,83 +136,84 @@
                                             placeholder="Civil Status"
                                         />
                                         <Message
-                                            v-if="form.errors.civilStatus"
+                                            v-if="form.errors.relation"
                                             severity="error"
                                             size="small"
                                             variant="simple"
-                                            >{{
-                                                form.errors.civilStatus
-                                            }}</Message
+                                            >{{ form.errors.relation }}</Message
                                         >
                                     </FormField>
                                 </div>
-                                <!-- Birthday -->
-                                <div class="w-100">
-                                    <label
-                                        for="birthday"
-                                        class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                        >Birthday<span class="ml-1 text-red-400"
-                                            >*</span
+                                <!-- Birthday & Age -->
+                                <div class="flex items-center gap-5">
+                                    <!-- Birthday -->
+                                    <div class="w-100">
+                                        <label
+                                            for="birthday"
+                                            class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                            >Birthday<span
+                                                class="ml-1 text-red-400"
+                                                >*</span
+                                            >
+                                        </label>
+                                        <FormField
+                                            id="birthday"
+                                            name="birthday"
+                                            class="flex flex-col gap-1"
                                         >
-                                    </label>
-                                    <FormField
-                                        id="age"
-                                        name="age"
-                                        class="flex flex-col gap-1"
-                                    >
-                                        <div class="flex-auto">
-                                            <DatePicker
-                                                id="registration_expired"
-                                                v-model="form.birthDay"
-                                                showIcon
-                                                fluid
-                                                :showOnFocus="false"
-                                                inputId="birthday"
-                                                placeholder="Birthday"
+                                            <div class="flex-auto">
+                                                <DatePicker
+                                                    id="birthday"
+                                                    v-model="form.birthDay"
+                                                    showIcon
+                                                    fluid
+                                                    :showOnFocus="false"
+                                                    inputId="birthday"
+                                                    placeholder="Birthday"
+                                                />
+                                            </div>
+                                            <Message
+                                                v-if="form.errors.birthDay"
+                                                severity="error"
+                                                size="small"
+                                                variant="simple"
+                                                >{{
+                                                    form.errors.birthDay
+                                                }}</Message
+                                            >
+                                        </FormField>
+                                    </div>
+                                    <!-- age -->
+                                    <div class="w-100">
+                                        <label
+                                            for="age"
+                                            class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                            >Age<span class="ml-1 text-red-400"
+                                                >*</span
+                                            ></label
+                                        >
+                                        <FormField
+                                            id="age"
+                                            name="age"
+                                            class="flex flex-col gap-1 class-age"
+                                        >
+                                            <InputText
+                                                disabled="true"
+                                                type="number"
+                                                class="classAge"
+                                                v-model="form.age"
+                                                placeholder="Age"
                                             />
-                                        </div>
-                                        <Message
-                                            v-if="form.errors.birthDay"
-                                            severity="error"
-                                            size="small"
-                                            variant="simple"
-                                            >{{ form.errors.birthDay }}</Message
-                                        >
-                                    </FormField>
+                                            <Message
+                                                v-if="form.errors.age"
+                                                severity="error"
+                                                size="small"
+                                                variant="simple"
+                                                >{{ form.errors.age }}</Message
+                                            >
+                                        </FormField>
+                                    </div>
                                 </div>
-                                <!-- age -->
-                                <div class="w-100">
-                                    <label
-                                        for="age"
-                                        class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                        >Age<span class="ml-1 text-red-400"
-                                            >*</span
-                                        ></label
-                                    >
-                                    <FormField
-                                        id="age"
-                                        name="age"
-                                        class="flex flex-col gap-1"
-                                    >
-                                        <InputText
-                                            disabled="true"
-                                            type="number"
-                                            class="classAge"
-                                            v-model="form.age"
-                                            placeholder="Age"
-                                        />
-                                        <Message
-                                            v-if="form.errors.age"
-                                            severity="error"
-                                            size="small"
-                                            variant="simple"
-                                            >{{ form.errors.age }}</Message
-                                        >
-                                    </FormField>
-                                </div>
-                            </div>
-
-                            <div class="grid grid-cols-3 gap-10 mb-4">
                                 <!-- Address -->
                                 <div class="w-100">
                                     <label
@@ -221,11 +221,14 @@
                                         class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
                                         >Address<span class="ml-1 text-red-400"
                                             >*</span
+                                        ><span class="text-xs font-thin"
+                                            >(Street,
+                                            Brgy.,Municipality,Province)</span
                                         ></label
                                     >
                                     <FormField
-                                        id="civil_status"
-                                        name="civil_status"
+                                        id="address"
+                                        name="address"
                                         class="flex flex-col gap-1"
                                     >
                                         <Textarea
@@ -244,26 +247,33 @@
                                         >
                                     </FormField>
                                 </div>
+                            </div>
+                            <label
+                                class="text-gray-900 dark:text-surface-0 text-xl font-medium mb-4 block"
+                                >Contact Information</label
+                            >
+                            <div class="grid grid-cols-2 gap-10 mb-4">
                                 <!-- Contact number -->
                                 <div class="w-100">
                                     <label
                                         for="contact_number"
                                         class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                        >Contact number<span
+                                        >Contact no.<span
                                             class="ml-1 text-red-400"
                                             >*</span
                                         >
                                     </label>
                                     <FormField
-                                        id="age"
-                                        name="age"
+                                        id="contact_number"
+                                        name="contact_number"
                                         class="flex flex-col gap-1"
                                     >
                                         <input
-                                            id="phone"
+                                            id="contact_number"
                                             type="tel"
                                             ref="phoneInput"
                                             v-model="form.contactNumber"
+                                            placeholder="Contact no."
                                         />
                                         <p v-if="phoneNumber">
                                             Formatted Phone Number:
@@ -283,16 +293,56 @@
                                 <!-- Contact Person -->
                                 <div class="w-100">
                                     <label
-                                        for="age"
+                                        for="contact_person"
                                         class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                        >Contact Person<span
-                                            class="ml-1 text-red-400"
+                                        >Contact Person
+                                        <span class="text-xs font-thin"
+                                            >(Incase of Emergency)</span
+                                        >
+                                        <span class="ml-1 text-red-400"
                                             >*</span
                                         ></label
                                     >
                                     <FormField
-                                        id="last_name"
-                                        name="last_name"
+                                        id="contact_person"
+                                        name="contact_person"
+                                        class="flex flex-col gap-1"
+                                    >
+                                        <InputText
+                                            type="text"
+                                            v-model="form.contactNamePerson"
+                                            placeholder="Contact Person"
+                                        />
+
+                                        <Message
+                                            v-if="form.errors.contactPerson"
+                                            severity="error"
+                                            size="small"
+                                            variant="simple"
+                                            >{{
+                                                form.errors.contactPerson
+                                            }}</Message
+                                        >
+                                    </FormField>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-10 mb-4">
+                                <!-- Contact number -->
+                                <div class="w-100">
+                                    <label
+                                        for="contact_number_person"
+                                        class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                        >Contact no.<span
+                                            class="text-xs font-thin ml-1"
+                                            >(of Person Incase of
+                                            Emergency)</span
+                                        ><span class="ml-1 text-red-400"
+                                            >*</span
+                                        >
+                                    </label>
+                                    <FormField
+                                        id="contact_number_person"
+                                        name="contact_number_person"
                                         class="flex flex-col gap-1"
                                     >
                                         <input
@@ -300,6 +350,46 @@
                                             type="tel"
                                             ref="phoneInputPerson"
                                             v-model="form.contactPerson"
+                                            placeholder="Contact no."
+                                        />
+                                        <p v-if="phoneNumber">
+                                            Formatted Phone Number:
+                                            {{ phoneNumber }}
+                                        </p>
+                                        <Message
+                                            v-if="form.errors.contactNumber"
+                                            severity="error"
+                                            size="small"
+                                            variant="simple"
+                                            >{{
+                                                form.errors.contactNumber
+                                            }}</Message
+                                        >
+                                    </FormField>
+                                </div>
+                                <!-- Relation -->
+                                <div class="w-100">
+                                    <label
+                                        for="relation"
+                                        class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                        >Relation
+                                        <span class="ml-1 text-red-400"
+                                            >*</span
+                                        ></label
+                                    >
+                                    <FormField
+                                        id="relation"
+                                        name="relation"
+                                        class="flex flex-col gap-1"
+                                    >
+                                        <AutoComplete
+                                            id="status"
+                                            class="w-full"
+                                            v-model="form.relation"
+                                            :suggestions="relation"
+                                            @complete="relationSearch"
+                                            dropdown
+                                            placeholder="Relation"
                                         />
 
                                         <Message
@@ -327,20 +417,27 @@
                                 <!-- Philhealth no. -->
                                 <div class="w-100">
                                     <label
-                                        for="address"
+                                        for="philhealth"
                                         class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
                                         >Philhealth no.</label
                                     >
                                     <FormField
-                                        id="civil_status"
-                                        name="civil_status"
+                                        id="philhealth"
+                                        name="philhealth"
                                         class="flex flex-col gap-1"
                                     >
-                                        <InputText
+                                        <!-- <InputText
                                             id="plate_no"
                                             type="text"
                                             v-model="form.philhealth_no"
                                             placeholder="Philhealth no."
+                                        /> -->
+                                        <InputMask
+                                            id="ssn"
+                                            v-model="form.philhealth_no"
+                                            mask="99-999999999-9"
+                                            placeholder="00-000000000-0"
+                                            fluid
                                         />
                                         <Message
                                             v-if="form.errors.philhealth_no"
@@ -365,10 +462,12 @@
                                         name="age"
                                         class="flex flex-col gap-1"
                                     >
-                                        <InputText
-                                            type="text"
+                                        <InputMask
+                                            id="ssn"
                                             v-model="form.pagibig_no"
-                                            placeholder="Pagibig no."
+                                            mask="9999-9999-9999"
+                                            placeholder="0000-0000-0000"
+                                            fluid
                                         />
                                         <Message
                                             v-if="form.errors.pagibig_no"
@@ -396,11 +495,12 @@
                                         name="civil_status"
                                         class="flex flex-col gap-1"
                                     >
-                                        <InputText
-                                            id="plate_no"
-                                            type="text"
+                                        <InputMask
+                                            id="ssn"
                                             v-model="form.sss_no"
-                                            placeholder="SSS no."
+                                            mask="99-9999999-9"
+                                            placeholder="00-0000000-0"
+                                            fluid
                                         />
                                         <Message
                                             v-if="form.errors.sss_no"
@@ -425,10 +525,12 @@
                                         name="age"
                                         class="flex flex-col gap-1"
                                     >
-                                        <InputText
-                                            type="text"
+                                        <InputMask
+                                            id="ssn"
                                             v-model="form.tin_no"
-                                            placeholder="TIN no."
+                                            mask="999-999-999-999"
+                                            placeholder="000-000-000-000"
+                                            fluid
                                         />
                                         <Message
                                             v-if="form.errors.tin_no"
@@ -466,11 +568,12 @@
                                         name="civil_status"
                                         class="flex flex-col gap-1"
                                     >
-                                        <InputText
-                                            id="plate_no"
-                                            type="text"
+                                        <InputMask
+                                            id="ssn"
                                             v-model="form.license_number"
-                                            placeholder="License no."
+                                            mask="a99-99-999999"
+                                            placeholder="000-00-000000"
+                                            fluid
                                         />
                                         <Message
                                             v-if="form.errors.license_number"
@@ -733,6 +836,7 @@ import { Head, useForm } from "@inertiajs/vue3";
 import { ref, onMounted, onBeforeUnmount, watch } from "vue";
 
 import Toolbar from "primevue/toolbar";
+import InputMask from "primevue/inputmask";
 import Password from "primevue/password";
 import Button from "primevue/button";
 import InputText from "primevue/inputtext";
@@ -750,6 +854,7 @@ import "intl-tel-input/build/css/intlTelInput.css";
 const toast = useToast();
 const civilStatus = ref([]);
 const driverStatus = ref([]);
+const relation = ref([]);
 const phoneInput = ref(null);
 const phoneInputPerson = ref(null);
 const phoneNumber = ref("");
@@ -765,7 +870,9 @@ const form = useForm({
     age: "",
     address: "",
     contactNumber: "",
+    contactNamePerson: "",
     contactPerson: "",
+    relation: "",
     philhealth_no: "",
     pagibig_no: "",
     sss_no: "",
@@ -868,6 +975,17 @@ const civilStatusSearch = () => {
     civilStatus.value = ["Single", "Married", "Widowed", "Divorced"];
 };
 
+const relationSearch = () => {
+    relation.value = [
+        "Spouse",
+        "Father",
+        "Mother",
+        "Children",
+        "Sibling",
+        "Other",
+    ];
+};
+
 const goBack = () => {
     history.back();
 };
@@ -885,5 +1003,6 @@ input {
 
 .classAge {
     background-color: whitesmoke !important;
+    width: 180px;
 }
 </style>

@@ -15,13 +15,15 @@ return new class extends Migration
             $table->engine = 'InnoDB';
             $table->id();
             $table->string('first_name');
-            $table->string('middle_name');
+            $table->string('middle_name')->nullable();
             $table->string('last_name');
             $table->string('civil_status');
             $table->date('birthday')->unique();
             $table->string('address');
             $table->string('contact_number', 20);
-            $table->string('contact_person', 20);
+            $table->string('contact_person');
+            $table->string('contact_no_person', 20);
+            $table->string('relation');
             $table->unsignedTinyInteger('age'); // Age is usually a small positive integer
             $table->string('image')->nullable(); // Assuming this stores an image path or URL
             $table->string('pagibig_no')->nullable();

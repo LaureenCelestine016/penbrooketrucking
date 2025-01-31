@@ -17,6 +17,7 @@ export default {
             },
             maxWidth: {
                 "89rem": "89rem", // Adding custom max width
+                "custom-wdth": "1028px",
             },
             height: {
                 "4/7": "75%",

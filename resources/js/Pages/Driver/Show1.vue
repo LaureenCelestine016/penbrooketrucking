@@ -7,120 +7,109 @@
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 {{}}
             </h2>
+        </template>
 
-            <div class="py-8">
-                <div class="">
-                    <div class="cover-pictue-container">
-                        <Card class="cover-picture">
-                            <template #content>
-                                <div class="flex items-center gap-4 mx-6 my-8">
-                                    <Avatar
-                                        image="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png"
-                                        class="avatar"
-                                        size="xlarge"
-                                        shape="circle"
-                                    />
-                                    <div>
-                                        <h1
-                                            class="text-white text-3xl font-black tracking-wider"
+        <div class="py-8">
+            <div class="mx-12">
+                <div class="parent-class">
+                    <Card class="custom-card">
+                        <template #header>
+                            <Avatar
+                                image="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png"
+                                class="profile-avatar"
+                                size="xlarge"
+                                shape="circle"
+                            />
+                            <h4
+                                class="absolute left-52 top-14 text-4xl font-black tracking-wider"
+                            >
+                                {{ toUpperCase(Driver.first_name) }}
+                                {{ toUpperCase(Driver.middle_name) }}
+                                {{ toUpperCase(Driver.last_name) }}
+                            </h4>
+                            <span
+                                class="text-xl font-medium tracking-widest absolute left-52 top-24 ml-1"
+                                >Driver</span
+                            >
+                        </template>
+                        <template #content>
+                            <div class="grid-container">
+                                <Card class="profile">
+                                    <template #content>
+                                        <label
+                                            class="text-gray-900 dark:text-surface-0 text-xl font-semibold mb-4 block"
+                                            >Account Information</label
                                         >
-                                            {{ toUpperCase(Driver.first_name) }}
-                                            {{
-                                                toUpperCase(Driver.middle_name)
-                                            }}
-                                            {{ toUpperCase(Driver.last_name) }}
-                                        </h1>
-                                        <span
-                                            class="text-white text-xl font-medium tracking-widest"
-                                            >DRIVER
-                                        </span>
-                                    </div>
-                                </div>
-                            </template>
-                        </Card>
-                        <div class="grid-container">
-                            <div class="transparent-head">
-                                <h3></h3>
-                            </div>
-                            <div class="transparent-head">
-                                <h3></h3>
-                            </div>
+                                        <div class="p-1">
+                                            <div class="grid grid-cols-2 mb-4">
+                                                <label
+                                                    for=""
+                                                    class="font-semibold mr-5"
+                                                    >Username:</label
+                                                >
+                                                <span class="">{{
+                                                    User?.username
+                                                }}</span>
+                                            </div>
 
-                            <Card class="accounts">
-                                <template #content>
-                                    <label
-                                        class="text-gray-900 dark:text-surface-0 text-xl font-semibold mb-4 block"
-                                        >Account Information</label
-                                    >
-                                    <div class="p-1">
-                                        <div class="grid grid-cols-2 mb-4">
-                                            <label
-                                                for=""
-                                                class="font-semibold mr-5"
-                                                >Username:</label
-                                            >
-                                            <span class="">{{
-                                                User?.username
-                                            }}</span>
-                                        </div>
+                                            <div class="grid grid-cols-2 mb-4">
+                                                <label
+                                                    for=""
+                                                    class="font-semibold mr-5"
+                                                    >Fullname:</label
+                                                >
+                                                <span class=""
+                                                    >{{ Driver.first_name }}
+                                                    {{ Driver.middle_name }}
+                                                    {{ Driver.last_name }}</span
+                                                >
+                                            </div>
+                                            <div class="grid grid-cols-2 mb-4">
+                                                <label
+                                                    for=""
+                                                    class="font-semibold mr-5"
+                                                    >Contact:</label
+                                                >
+                                                <span
+                                                    >{{
+                                                        replaceFirstnum(
+                                                            Driver.contact_number
+                                                        )
+                                                    }}
+                                                </span>
+                                            </div>
 
-                                        <div class="grid grid-cols-2 mb-4">
-                                            <label
-                                                for=""
-                                                class="font-semibold mr-5"
-                                                >Fullname:</label
-                                            >
-                                            <span class=""
-                                                >{{ Driver.first_name }}
-                                                {{ Driver.middle_name }}
-                                                {{ Driver.last_name }}</span
-                                            >
-                                        </div>
-                                        <div class="grid grid-cols-2 mb-4">
-                                            <label
-                                                for=""
-                                                class="font-semibold mr-5"
-                                                >Contact:</label
-                                            >
-                                            <span
-                                                >{{
-                                                    replaceFirstnum(
-                                                        Driver.contact_number
-                                                    )
-                                                }}
-                                            </span>
-                                        </div>
+                                            <div class="grid grid-cols-2 mb-4">
+                                                <label
+                                                    for=""
+                                                    class="font-semibold mr-5"
+                                                    >Email Address:</label
+                                                >
+                                                <span class=""
+                                                    >{{ User?.email }}
+                                                </span>
+                                            </div>
 
-                                        <div class="grid grid-cols-2 mb-4">
-                                            <label
-                                                for=""
-                                                class="font-semibold mr-5"
-                                                >Email Address:</label
-                                            >
-                                            <span class=""
-                                                >{{ User?.email }}
-                                            </span>
+                                            <div class="grid grid-cols-2 mb-4">
+                                                <label
+                                                    for=""
+                                                    class="font-semibold mr-5"
+                                                    >Created Date:</label
+                                                >
+                                                <span class=""
+                                                    >{{
+                                                        formatDate(
+                                                            User?.created_at
+                                                        )
+                                                    }}
+                                                </span>
+                                            </div>
                                         </div>
-
-                                        <div class="grid grid-cols-2 mb-4">
-                                            <label
-                                                for=""
-                                                class="font-semibold mr-5"
-                                                >Created Date:</label
-                                            >
-                                            <span class=""
-                                                >{{
-                                                    formatDate(User?.created_at)
-                                                }}
-                                            </span>
-                                        </div>
-                                    </div>
-                                </template>
-                            </Card>
-                            <Card class="card">
-                                <template #content>
-                                    <Tabs value="0" class="tab-container">
-                                        <TabList>
+                                    </template>
+                                </Card>
+                                <div class="parent-tab">
+                                    <Tabs value="0" class="tabs--class">
+                                        <TabList class="w-100">
                                             <Tab
                                                 value="0"
                                                 as="div"
@@ -160,10 +149,14 @@
                                                 </svg>
                                                 <span
                                                     class="font-bold whitespace-nowrap"
-                                                    >License</span
+                                                    >License Information</span
                                                 >
                                             </Tab>
-                                            <Tab v-slot="slotProps" value="2">
+                                            <Tab
+                                                v-slot="slotProps"
+                                                value="2"
+                                                asChild
+                                            >
                                                 <div
                                                     :class="[
                                                         'flex items-center gap-2',
@@ -190,58 +183,26 @@
                                                     <Badge value="2" />
                                                 </div>
                                             </Tab>
-                                            <Tab v-slot="slotProps" value="3">
-                                                <div
-                                                    :class="[
-                                                        'flex items-center gap-2',
-                                                        slotProps.class,
-                                                    ]"
-                                                    @click="slotProps.onClick"
-                                                    v-bind="slotProps.a11yAttrs"
-                                                >
-                                                    <svg
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                        width="32"
-                                                        height="32"
-                                                        viewBox="0 0 24 24"
-                                                    >
-                                                        <path
-                                                            fill="#8c8c8c"
-                                                            d="m5 8.75l-2.75-3.1q-.425-.5-.162-1.075Q2.35 4 3 4h17q.825 0 1.413.588Q22 5.175 22 6v12q0 .825-.587 1.413Q20.825 20 20 20H7q-.825 0-1.412-.587Q5 18.825 5 18ZM5.225 6ZM9 13h9q.425 0 .712-.288Q19 12.425 19 12t-.288-.713Q18.425 11 18 11H9q-.425 0-.712.287Q8 11.575 8 12t.288.712Q8.575 13 9 13Zm0 3h6q.425 0 .713-.288Q16 15.425 16 15t-.287-.713Q15.425 14 15 14H9q-.425 0-.712.287Q8 14.575 8 15t.288.712Q8.575 16 9 16Zm0-6h9q.425 0 .712-.288Q19 9.425 19 9t-.288-.713Q18.425 8 18 8H9q-.425 0-.712.287Q8 8.575 8 9t.288.712Q8.575 10 9 10ZM7 8v10h13V6H5.225Z"
-                                                        />
-                                                    </svg>
-                                                    <span
-                                                        class="font-bold whitespace-nowrap"
-                                                        >Conversation</span
-                                                    >
-                                                    <Badge value="2" />
-                                                </div>
-                                            </Tab>
                                         </TabList>
-                                        <form @submit.prevent="submit" class="">
-                                            <TabPanels>
+                                        <form @submit.prevent="submit">
+                                            <TabPanels class="tabpanels">
                                                 <TabPanel
                                                     value="0"
                                                     as="p"
-                                                    class="m-0"
+                                                    class="!w-100"
                                                 >
-                                                    <Accordion
-                                                        :value="['0']"
-                                                        multiple
-                                                    >
+                                                    <Accordion value="0">
                                                         <AccordionPanel
                                                             value="0"
                                                         >
                                                             <AccordionHeader
-                                                                class="title"
                                                                 >Personal
-                                                                Information</AccordionHeader
-                                                            >
+                                                                Information
+                                                            </AccordionHeader>
                                                             <AccordionContent>
                                                                 <div
-                                                                    class="grid grid-cols-3 gap-10 mb-4"
+                                                                    class="grid grid-cols-3 items-center gap-6 mb-6"
                                                                 >
-                                                                    <!-- firstName -->
                                                                     <div
                                                                         class="w-100"
                                                                     >
@@ -249,10 +210,7 @@
                                                                             for="First_name"
                                                                             class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
                                                                             >First
-                                                                            name<span
-                                                                                class="ml-1 text-red-400"
-                                                                                >*</span
-                                                                            ></label
+                                                                            name</label
                                                                         >
                                                                         <FormField
                                                                             id="First_name"
@@ -271,7 +229,7 @@
                                                                                 v-if="
                                                                                     form
                                                                                         .errors
-                                                                                        .first_name
+                                                                                        .firstName
                                                                                 "
                                                                                 severity="error"
                                                                                 size="small"
@@ -284,19 +242,18 @@
                                                                             >
                                                                         </FormField>
                                                                     </div>
-                                                                    <!-- middlename -->
                                                                     <div
                                                                         class="w-100"
                                                                     >
                                                                         <label
-                                                                            for="Middle_name"
+                                                                            for="middle_name"
                                                                             class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
                                                                             >Middle
                                                                             Name
                                                                         </label>
                                                                         <FormField
-                                                                            id="Middle_name"
-                                                                            name="Middle_name"
+                                                                            id="middle_name"
+                                                                            name="middle_name"
                                                                             class="flex flex-col gap-1"
                                                                         >
                                                                             <InputText
@@ -319,52 +276,44 @@
                                                                             }}</Message>
                                                                         </FormField>
                                                                     </div>
-                                                                    <!-- lastname -->
                                                                     <div
                                                                         class="w-100"
                                                                     >
                                                                         <label
-                                                                            for="Last_name"
+                                                                            for="middle_name"
                                                                             class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
                                                                             >Last
-                                                                            name<span
-                                                                                class="ml-1 text-red-400"
-                                                                                >*</span
-                                                                            ></label
-                                                                        >
+                                                                            Name
+                                                                        </label>
                                                                         <FormField
-                                                                            id="Last_name"
-                                                                            name="Last_name"
+                                                                            id="middle_name"
+                                                                            name="middle_name"
                                                                             class="flex flex-col gap-1"
                                                                         >
                                                                             <InputText
                                                                                 type="text"
-                                                                                placeholder="Last name"
-                                                                                class="user--input firstName"
                                                                                 v-model="
                                                                                     form.last_name
                                                                                 "
+                                                                                placeholder="Middle name"
                                                                             />
                                                                             <Message
                                                                                 v-if="
                                                                                     form
                                                                                         .errors
-                                                                                        .lastName
+                                                                                        .middle
                                                                                 "
                                                                                 severity="error"
                                                                                 size="small"
                                                                                 variant="simple"
                                                                                 >{{
-                                                                                    form
-                                                                                        .errors
-                                                                                        .lastName
-                                                                                }}</Message
-                                                                            >
+                                                                            }}</Message>
                                                                         </FormField>
                                                                     </div>
                                                                 </div>
+
                                                                 <div
-                                                                    class="grid grid-cols-3 gap-10 items-start"
+                                                                    class="grid grid-cols-3 gap-6 mb-6 items-start justify-center"
                                                                 >
                                                                     <!-- Civil Status -->
                                                                     <div
@@ -416,7 +365,8 @@
                                                                             >
                                                                         </FormField>
                                                                     </div>
-                                                                    <!-- Birthday && Age -->
+                                                                    <!-- Birthday -->
+
                                                                     <div
                                                                         class="flex flex-rows gap-3"
                                                                     >
@@ -432,8 +382,8 @@
                                                                                 >
                                                                             </label>
                                                                             <FormField
-                                                                                id="birthday"
-                                                                                name="birthday"
+                                                                                id="age"
+                                                                                name="age"
                                                                                 class="flex flex-col gap-1"
                                                                             >
                                                                                 <div
@@ -488,7 +438,7 @@
                                                                                 class="flex flex-col gap-1"
                                                                             >
                                                                                 <InputText
-                                                                                    type="text"
+                                                                                    type="number"
                                                                                     class="class-age"
                                                                                     v-model="
                                                                                         form.age
@@ -513,6 +463,7 @@
                                                                             </FormField>
                                                                         </div>
                                                                     </div>
+
                                                                     <div
                                                                         class="w-100"
                                                                     >
@@ -525,8 +476,8 @@
                                                                             ></label
                                                                         >
                                                                         <FormField
-                                                                            id="address"
-                                                                            name="address"
+                                                                            id="civil_status"
+                                                                            name="civil_status"
                                                                             class="flex flex-col gap-1"
                                                                         >
                                                                             <Textarea
@@ -534,7 +485,7 @@
                                                                                     form.address
                                                                                 "
                                                                                 variant="filled"
-                                                                                rows="2"
+                                                                                rows="3"
                                                                                 cols="30"
                                                                                 placeholder="Address"
                                                                             />
@@ -562,15 +513,16 @@
                                                             value="1"
                                                         >
                                                             <AccordionHeader
-                                                                class="title"
                                                                 >Contact
-                                                                Information</AccordionHeader
-                                                            >
+                                                                Information
+                                                            </AccordionHeader>
                                                             <AccordionContent>
                                                                 <div
-                                                                    class="grid grid-cols-2 gap-10 mb-4"
+                                                                    class="grid grid-cols-2 gap-6 mb-4"
                                                                 >
-                                                                    <!-- contact_number -->
+                                                                    <!-- Address -->
+
+                                                                    <!-- Contact number -->
                                                                     <div
                                                                         class="w-100"
                                                                     >
@@ -578,26 +530,30 @@
                                                                             for="contact_number"
                                                                             class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
                                                                             >Contact
-                                                                            no.</label
-                                                                        >
+                                                                            number<span
+                                                                                class="ml-1 text-red-400"
+                                                                                >*</span
+                                                                            >
+                                                                        </label>
                                                                         <FormField
-                                                                            id="contact_number"
-                                                                            name="contact_number"
+                                                                            id="age"
+                                                                            name="age"
                                                                             class="flex flex-col gap-1"
                                                                         >
                                                                             <InputText
                                                                                 type="text"
+                                                                                class="classAge"
                                                                                 v-model="
                                                                                     form.contact_number
                                                                                 "
-                                                                                class="user--input firstName"
-                                                                                placeholder="Contact no."
+                                                                                placeholder="Age"
                                                                             />
+
                                                                             <Message
                                                                                 v-if="
                                                                                     form
                                                                                         .errors
-                                                                                        .contact_number
+                                                                                        .contactNumber
                                                                                 "
                                                                                 severity="error"
                                                                                 size="small"
@@ -605,140 +561,42 @@
                                                                                 >{{
                                                                                     form
                                                                                         .errors
-                                                                                        .contact_number
+                                                                                        .contactNumber
                                                                                 }}</Message
                                                                             >
                                                                         </FormField>
                                                                     </div>
-                                                                    <!-- contact_person -->
+                                                                    <!-- Contact Person -->
                                                                     <div
                                                                         class="w-100"
                                                                     >
                                                                         <label
-                                                                            for="contact_person"
+                                                                            for="age"
                                                                             class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
                                                                             >Contact
-                                                                            Person
-                                                                            <span
-                                                                                class="text-xs font-thin"
-                                                                                >(Incase
-                                                                                of
-                                                                                Emergency)</span
-                                                                            >
-                                                                        </label>
-                                                                        <FormField
-                                                                            id="contact_person"
-                                                                            name="contact_person"
-                                                                            class="flex flex-col gap-1"
-                                                                        >
-                                                                            <InputText
-                                                                                type="text"
-                                                                                v-model="
-                                                                                    form.contact_person
-                                                                                "
-                                                                                placeholder="Contact Person"
-                                                                            />
-                                                                            <Message
-                                                                                v-if="
-                                                                                    form
-                                                                                        .errors
-                                                                                        .contact_person
-                                                                                "
-                                                                                severity="error"
-                                                                                size="small"
-                                                                                variant="simple"
-                                                                                >{{
-                                                                            }}</Message>
-                                                                        </FormField>
-                                                                    </div>
-                                                                </div>
-                                                                <div
-                                                                    class="grid grid-cols-2 gap-10"
-                                                                >
-                                                                    <!-- contact_#_person -->
-                                                                    <div
-                                                                        class="w-100"
-                                                                    >
-                                                                        <label
-                                                                            for="contact_#_person"
-                                                                            class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                                                            >Contact
-                                                                            no.
-                                                                            <span
-                                                                                class="text-xs font-thin"
-                                                                                >(of
-                                                                                Person
-                                                                                Incase
-                                                                                of
-                                                                                Emergency)</span
-                                                                            >
-                                                                        </label>
-                                                                        <FormField
-                                                                            id="contact_#_person"
-                                                                            name="contact_#_person"
-                                                                            class="flex flex-col gap-1"
-                                                                        >
-                                                                            <InputText
-                                                                                type="text"
-                                                                                placeholder="Last name"
-                                                                                class="user--input firstName"
-                                                                                v-model="
-                                                                                    form.contact_no_person
-                                                                                "
-                                                                            />
-                                                                            <Message
-                                                                                v-if="
-                                                                                    form
-                                                                                        .errors
-                                                                                        .contact_no_person
-                                                                                "
-                                                                                severity="error"
-                                                                                size="small"
-                                                                                variant="simple"
-                                                                                >{{
-                                                                                    form
-                                                                                        .errors
-                                                                                        .contact_no_person
-                                                                                }}</Message
-                                                                            >
-                                                                        </FormField>
-                                                                    </div>
-                                                                    <div
-                                                                        class="w-100"
-                                                                    >
-                                                                        <label
-                                                                            for="relation"
-                                                                            class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                                                            >Relation<span
+                                                                            Person<span
                                                                                 class="ml-1 text-red-400"
                                                                                 >*</span
                                                                             ></label
                                                                         >
                                                                         <FormField
-                                                                            id="relation"
-                                                                            name="relation"
+                                                                            id="last_name"
+                                                                            name="last_name"
                                                                             class="flex flex-col gap-1"
                                                                         >
-                                                                            <AutoComplete
-                                                                                id="status"
-                                                                                class="w-full"
+                                                                            <InputText
+                                                                                type="text"
+                                                                                class="classAge"
                                                                                 v-model="
-                                                                                    form.relation
+                                                                                    form.contact_person
                                                                                 "
-                                                                                :suggestions="
-                                                                                    relation
-                                                                                "
-                                                                                @complete="
-                                                                                    relationSearch
-                                                                                "
-                                                                                dropdown
-                                                                                placeholder="Relation"
+                                                                                placeholder="Age"
                                                                             />
                                                                             <Message
                                                                                 v-if="
                                                                                     form
                                                                                         .errors
-                                                                                        .relation
+                                                                                        .contactPerson
                                                                                 "
                                                                                 severity="error"
                                                                                 size="small"
@@ -746,7 +604,7 @@
                                                                                 >{{
                                                                                     form
                                                                                         .errors
-                                                                                        .relation
+                                                                                        .contactPerson
                                                                                 }}</Message
                                                                             >
                                                                         </FormField>
@@ -758,31 +616,30 @@
                                                             value="2"
                                                         >
                                                             <AccordionHeader
-                                                                class="title"
                                                                 >Government
                                                                 Id's</AccordionHeader
                                                             >
                                                             <AccordionContent>
                                                                 <div
-                                                                    class="grid grid-cols-2 gap-10 mb-4"
+                                                                    class="grid grid-cols-4 gap-4 mb-4"
                                                                 >
                                                                     <!-- Philhealth no. -->
                                                                     <div
                                                                         class="w-100"
                                                                     >
                                                                         <label
-                                                                            for="philhealth"
+                                                                            for="address"
                                                                             class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
                                                                             >Philhealth
                                                                             no.</label
                                                                         >
                                                                         <FormField
-                                                                            id="philhealth"
-                                                                            name="philhealth"
+                                                                            id="civil_status"
+                                                                            name="civil_status"
                                                                             class="flex flex-col gap-1"
                                                                         >
                                                                             <InputText
-                                                                                id="philhealth"
+                                                                                id="plate_no"
                                                                                 type="text"
                                                                                 v-model="
                                                                                     form.philhealth_no
@@ -811,14 +668,14 @@
                                                                         class="w-100"
                                                                     >
                                                                         <label
-                                                                            for="pagibig"
+                                                                            for="contact_number"
                                                                             class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
                                                                             >Pagibig
                                                                             no.
                                                                         </label>
                                                                         <FormField
-                                                                            id="pagibig"
-                                                                            name="pagibig"
+                                                                            id="age"
+                                                                            name="age"
                                                                             class="flex flex-col gap-1"
                                                                         >
                                                                             <InputText
@@ -845,24 +702,19 @@
                                                                             >
                                                                         </FormField>
                                                                     </div>
-                                                                </div>
 
-                                                                <div
-                                                                    class="grid grid-cols-2 gap-10 mb-4"
-                                                                >
-                                                                    <!-- SSS no. -->
                                                                     <div
                                                                         class="w-100"
                                                                     >
                                                                         <label
-                                                                            for="sss_no"
+                                                                            for="address"
                                                                             class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
                                                                             >SSS
                                                                             no.</label
                                                                         >
                                                                         <FormField
-                                                                            id="sss_no"
-                                                                            name="sss_no"
+                                                                            id="civil_status"
+                                                                            name="civil_status"
                                                                             class="flex flex-col gap-1"
                                                                         >
                                                                             <InputText
@@ -885,24 +737,24 @@
                                                                                 >{{
                                                                                     form
                                                                                         .errors
-                                                                                        .sss_no
+                                                                                        .philhealth_no
                                                                                 }}</Message
                                                                             >
                                                                         </FormField>
                                                                     </div>
-                                                                    <!-- TIN no. -->
+
                                                                     <div
                                                                         class="w-100"
                                                                     >
                                                                         <label
-                                                                            for="tin_no"
+                                                                            for="contact_number"
                                                                             class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
                                                                             >TIN
                                                                             no.
                                                                         </label>
                                                                         <FormField
-                                                                            id="tin_no"
-                                                                            name="tin_no"
+                                                                            id="age"
+                                                                            name="age"
                                                                             class="flex flex-col gap-1"
                                                                         >
                                                                             <InputText
@@ -937,241 +789,68 @@
                                                 <TabPanel
                                                     value="1"
                                                     as="p"
-                                                    class="m-0 p-4"
+                                                    class="m-0"
                                                 >
-                                                    <div>
-                                                        <label
-                                                            class="text-customblue dark:text-surface-0 text-lg font-semibold mb-4 block"
-                                                            >License
-                                                            Details</label
-                                                        >
-
-                                                        <div
-                                                            class="grid grid-cols-2 gap-10 mb-4 items-center"
-                                                        >
-                                                            <!-- License no.-->
-                                                            <div class="w-100">
-                                                                <label
-                                                                    for="license_no"
-                                                                    class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                                                    >License
-                                                                    no.<span
-                                                                        class="ml-1 text-red-400"
-                                                                        >*</span
-                                                                    ></label
-                                                                >
-                                                                <FormField
-                                                                    id="license_no"
-                                                                    name="license_no"
-                                                                    class="flex flex-col gap-1"
-                                                                >
-                                                                    <InputText
-                                                                        id="license_no"
-                                                                        type="text"
-                                                                        v-model="
-                                                                            form.license_number
-                                                                        "
-                                                                        placeholder="License no."
-                                                                    />
-                                                                    <Message
-                                                                        v-if="
-                                                                            form
-                                                                                .errors
-                                                                                .license_number
-                                                                        "
-                                                                        severity="error"
-                                                                        size="small"
-                                                                        variant="simple"
-                                                                        >{{
-                                                                            form
-                                                                                .errors
-                                                                                .license_number
-                                                                        }}</Message
-                                                                    >
-                                                                </FormField>
-                                                            </div>
-                                                            <!-- License Expired Date. -->
-                                                            <div class="w-100">
-                                                                <label
-                                                                    for="license_expired_date"
-                                                                    class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                                                    >License
-                                                                    Expired
-                                                                    Date<span
-                                                                        class="ml-1 text-red-400"
-                                                                        >*</span
-                                                                    >
-                                                                </label>
-                                                                <FormField
-                                                                    id="license_expired_date"
-                                                                    name="license_expired_date"
-                                                                    class="flex flex-col gap-1"
-                                                                >
-                                                                    <div
-                                                                        class="flex-auto"
-                                                                    >
-                                                                        <DatePicker
-                                                                            id="registration_expired"
-                                                                            v-model="
-                                                                                form.license_expired
-                                                                            "
-                                                                            showIcon
-                                                                            fluid
-                                                                            :showOnFocus="
-                                                                                false
-                                                                            "
-                                                                            inputId="license_expired"
-                                                                            placeholder="Expiration Date"
-                                                                        />
-                                                                    </div>
-                                                                    <Message
-                                                                        v-if="
-                                                                            form
-                                                                                .errors
-                                                                                .license_expired
-                                                                        "
-                                                                        severity="error"
-                                                                        size="small"
-                                                                        variant="simple"
-                                                                        >{{
-                                                                            form
-                                                                                .errors
-                                                                                .license_expired
-                                                                        }}</Message
-                                                                    >
-                                                                </FormField>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                    Sed ut perspiciatis unde
+                                                    omnis iste natus error sit
+                                                    voluptatem accusantium
+                                                    doloremque laudantium, totam
+                                                    rem aperiam, eaque ipsa quae
+                                                    ab illo inventore veritatis
+                                                    et quasi architecto beatae
+                                                    vitae dicta sunt explicabo.
+                                                    Nemo enim ipsam voluptatem
+                                                    quia voluptas sit aspernatur
+                                                    aut odit aut fugit, sed quia
+                                                    consequuntur magni dolores
+                                                    eos qui ratione voluptatem
+                                                    sequi nesciunt. Consectetur,
+                                                    adipisci velit, sed quia non
+                                                    numquam eius modi.
                                                 </TabPanel>
                                                 <TabPanel
                                                     v-slot="slotProps"
                                                     value="2"
+                                                    asChild
                                                 >
-                                                    <div class="card">
-                                                        <DataTable
-                                                            :value="customers"
-                                                            paginator
-                                                            :rows="5"
-                                                            :rowsPerPageOptions="[
-                                                                5, 10, 20, 50,
-                                                            ]"
-                                                            tableStyle="min-width: 50rem"
-                                                        >
-                                                            <Column
-                                                                field="name"
-                                                                header="Name"
-                                                                style="
-                                                                    width: 25%;
-                                                                "
-                                                            ></Column>
-                                                            <Column
-                                                                field="country.name"
-                                                                header="Country"
-                                                                style="
-                                                                    width: 25%;
-                                                                "
-                                                            ></Column>
-                                                            <Column
-                                                                field="company"
-                                                                header="Company"
-                                                                style="
-                                                                    width: 25%;
-                                                                "
-                                                            ></Column>
-                                                            <Column
-                                                                field="representative.name"
-                                                                header="Representative"
-                                                                style="
-                                                                    width: 25%;
-                                                                "
-                                                            ></Column>
-                                                            <template
-                                                                #paginatorcontainer="{
-                                                                    first,
-                                                                    last,
-                                                                    page,
-                                                                    pageCount,
-                                                                    prevPageCallback,
-                                                                    nextPageCallback,
-                                                                    totalRecords,
-                                                                }"
-                                                            >
-                                                                <div
-                                                                    class="flex items-center gap-4 border border-primary bg-transparent rounded-full w-full py-1 px-2 justify-between"
-                                                                >
-                                                                    <Button
-                                                                        icon="pi pi-chevron-left"
-                                                                        rounded
-                                                                        text
-                                                                        @click="
-                                                                            prevPageCallback
-                                                                        "
-                                                                        :disabled="
-                                                                            page ===
-                                                                            0
-                                                                        "
-                                                                    />
-                                                                    <div
-                                                                        class="text-color font-medium"
-                                                                    >
-                                                                        <span
-                                                                            class="hidden sm:block"
-                                                                            >Showing
-                                                                            {{
-                                                                                first
-                                                                            }}
-                                                                            to
-                                                                            {{
-                                                                                last
-                                                                            }}
-                                                                            of
-                                                                            {{
-                                                                                totalRecords
-                                                                            }}</span
-                                                                        >
-                                                                        <span
-                                                                            class="block sm:hidden"
-                                                                            >Page
-                                                                            {{
-                                                                                page +
-                                                                                1
-                                                                            }}
-                                                                            of
-                                                                            {{
-                                                                                pageCount
-                                                                            }}</span
-                                                                        >
-                                                                    </div>
-                                                                    <Button
-                                                                        icon="pi pi-chevron-right"
-                                                                        rounded
-                                                                        text
-                                                                        @click="
-                                                                            nextPageCallback
-                                                                        "
-                                                                        :disabled="
-                                                                            page ===
-                                                                            pageCount -
-                                                                                1
-                                                                        "
-                                                                    />
-                                                                </div>
-                                                            </template>
-                                                        </DataTable>
+                                                    <div
+                                                        v-show="
+                                                            slotProps.active
+                                                        "
+                                                        :class="slotProps.class"
+                                                        v-bind="
+                                                            slotProps.a11yAttrs
+                                                        "
+                                                    >
+                                                        <p class="m-0">
+                                                            At vero eos et
+                                                            accusamus et iusto
+                                                            odio dignissimos
+                                                            ducimus qui
+                                                            blanditiis
+                                                            praesentium
+                                                            voluptatum deleniti
+                                                            atque corrupti quos
+                                                            dolores et quas
+                                                            molestias excepturi
+                                                            sint occaecati
+                                                            cupiditate non
+                                                            provident, similique
+                                                            sunt in culpa qui
+                                                            officia deserunt
+                                                            mollitia animi, id
+                                                            est laborum et
+                                                            dolorum fuga. Et
+                                                            harum quidem rerum
+                                                            facilis est et
+                                                            expedita distinctio.
+                                                            Nam libero tempore,
+                                                            cum soluta nobis est
+                                                            eligendi optio
+                                                            cumque nihil impedit
+                                                            quo minus.
+                                                        </p>
                                                     </div>
-                                                </TabPanel>
-                                                <TabPanel
-                                                    v-slot="slotProps"
-                                                    value="3"
-                                                >
-                                                    <Textarea
-                                                        v-model="value"
-                                                        variant="filled"
-                                                        rows="5"
-                                                        cols="30"
-                                                        class="w-full"
-                                                    />
                                                 </TabPanel>
                                             </TabPanels>
                                             <Button
@@ -1182,29 +861,29 @@
                                             />
                                         </form>
                                     </Tabs>
-                                </template>
-                            </Card>
-                        </div>
-                    </div>
+                                </div>
+                            </div>
+                        </template>
+                    </Card>
                 </div>
-            </div> </template
+            </div></div
     ></AuthenticatedLayout>
 </template>
 
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head, useForm } from "@inertiajs/vue3";
-import { ref, onMounted } from "vue";
-// import { CustomerService } from "@/service/CustomerService";
+import { ref } from "vue";
 
-import dayjs from "dayjs";
-import Avatar from "primevue/avatar";
 import Card from "primevue/card";
 import Tabs from "primevue/tabs";
 import TabList from "primevue/tablist";
 import Tab from "primevue/tab";
 import TabPanels from "primevue/tabpanels";
 import TabPanel from "primevue/tabpanel";
+import Avatar from "primevue/avatar";
+import dayjs from "dayjs";
+import VirtualScroller from "primevue/virtualscroller";
 import InputText from "primevue/inputtext";
 import AutoComplete from "primevue/autocomplete";
 import DatePicker from "primevue/datepicker";
@@ -1214,15 +893,6 @@ import Accordion from "primevue/accordion";
 import AccordionPanel from "primevue/accordionpanel";
 import AccordionHeader from "primevue/accordionheader";
 import AccordionContent from "primevue/accordioncontent";
-import DataTable from "primevue/datatable";
-import Column from "primevue/column";
-import Message from "primevue/message";
-import { useToast } from "primevue/usetoast";
-import Toast from "primevue/toast";
-
-const civilStatus = ref([]);
-const relation = ref([]);
-const toast = useToast();
 
 const props = defineProps({
     Driver: {
@@ -1234,6 +904,8 @@ const props = defineProps({
         required: true,
     },
 });
+
+const civilStatus = ref([]);
 
 const form = useForm({
     ...props.Driver,
@@ -1249,6 +921,7 @@ const submit = () => {
                 detail: "Driver updated successfully!",
                 life: 3000,
             });
+            editNum.value = 0; // Exit edit mode after successful submission
         },
         onError: (errors) => {
             console.error(errors); // Debug server errors if necessary
@@ -1277,90 +950,102 @@ const replaceFirstnum = (number) => {
 const civilStatusSearch = () => {
     civilStatus.value = ["Single", "Married", "Widowed", "Divorced"];
 };
-
-const relationSearch = () => {
-    relation.value = [
-        "Spouse",
-        "Father",
-        "Mother",
-        "Children",
-        "Sibling",
-        "Other",
-    ];
-};
 </script>
 
 <style scoped>
-.cover-pictue-container {
-    position: relative;
-}
-
-.cover-picture {
-    height: 250px;
-    position: absolute;
-    margin-top: 14px;
-    top: 80;
-    left: 0;
-    z-index: 1;
-    width: 100%;
-    border-radius: 6px;
-
+.custom-card {
     background: linear-gradient(rgba(33, 53, 85, 0.9), rgba(33, 53, 85, 0.9)),
         url("/storage/images/Truck.jpg"); /* Replace with your image path */
     background-size: cover; /* Ensure the image covers the entire area */
     background-position: center; /* Center the image */
-    background-repeat: no-repeat;
+    background-repeat: no-repeat; /* Avoid repeating the image */
+    height: 350px; /* Set header height */
+    display: flex; /* Align content inside the header */
+    align-items: center; /* Center content vertically */
+    justify-content: center; /* Center content horizontally */
+    padding: 0 20px; /* Add padding for the logo */
+    color: white; /* Text color */
+    border-radius: 5px; /* Rounded corners */
+    position: absolute; /* Keeps it positioned inside its parent */
+    top: 0; /* Align to top */
+    left: 50%; /* Center horizontally */
+    transform: translateX(-50%); /* Adjusts position to truly center */
+    width: 98%; /* Keeps width at 90% of parent */
+    z-index: 1; /* Keeps it below other elements */
 }
+
+.parent-class {
+    position: relative;
+    width: 100%;
+}
+
+.parent-tab {
+    background-color: white;
+    width: 100%;
+    grid-column: 2 / 4;
+    padding: 12px;
+    border-radius: 4px;
+    position: relative;
+}
+
+.custom-menubar {
+    background: transparent;
+    border: 0;
+    position: absolute;
+    left: 0; /* Align to the left */
+    bottom: 0;
+}
+
+/* .grid-container {
+    display: grid;
+    grid-template-columns: 350px auto;
+    gap: 30px;
+    position: abo;
+    left: 0;
+    top: 200px;
+    margin: 22px;
+    width: 97%;
+} */
 
 .grid-container {
     display: grid;
-    position: relative;
-    grid-template-columns: 350px 1fr;
-    margin: auto;
-    width: 95%;
-    z-index: 15;
-    column-gap: 24px;
-}
-
-.transparent-head {
-    background-color: transparent;
-    height: 200px;
-}
-
-.tab-container {
-    padding: none !important;
-}
-
-.accounts {
-    border-radius: 4px;
-    height: 300px;
-}
-
-.card {
-    border-radius: 4px;
-}
-
-.card .p-card-body {
-    padding: 1px !important;
+    grid-template-columns: 350px auto;
+    gap: 30px;
+    position: absolute;
+    left: 0;
+    top: 200px;
+    margin: 22px;
+    width: 97%;
 }
 
 .profile {
-    background-color: green;
-    height: 300px;
+    border-radius: 4px;
+    height: 22rem;
 }
 
-.avatar {
-    height: 6rem;
-    width: 6rem;
-    border: wheat 6px solid;
+.profile-avatar {
+    position: absolute;
+    top: 42px;
+    left: 43px;
+    width: 150px;
+    height: 150px;
+    border: 4px solid white;
+}
+
+.custom-account {
+    border-radius: 5px;
+    width: 100%;
+    left: 370px;
+    z-index: 10;
+    padding-bottom: 400px;
+}
+
+.p-tablist-content {
+    width: 100% !important;
+    height: 32px;
 }
 
 .class-age {
     width: 116px;
-}
-
-.title {
-    font-size: 18px;
-    color: #213555;
 }
 </style>

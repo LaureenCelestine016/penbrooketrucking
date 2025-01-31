@@ -24,7 +24,9 @@ class DriverFactory extends Factory
             'birthday' => $this->faker->dateTimeBetween('-60 years', '-20 years')->format('Y-m-d'),
             'address' => $this->faker->address,
             'contact_number' => $this->faker->unique()->phoneNumber,
-            'contact_person' => $this->faker->unique()->phoneNumber,
+            'contact_person' =>$this->faker->name,
+            'contact_#_person' => $this->faker->unique()->phoneNumber,
+            'relation' => $this->faker->randomElement(['Spouse','Father','Mother','Children','Sibling','Other']),
             'age' => $this->faker->numberBetween(20, 60),
             'image' => $this->faker->imageUrl(640, 480, 'people'),
             'pagibig_no' => $this->faker->optional()->regexify('[0-9]{12}'), // Generates a 12-digit string

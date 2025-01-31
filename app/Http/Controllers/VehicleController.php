@@ -104,6 +104,7 @@ class VehicleController extends Controller
      */
     public function update(Request $request, Vehicle $vehicle)
     {
+
         $validatedData = $request->validate([
             'registration_number'           => 'required|string|max:255',
             'name'                          => 'required|string|max:255',
