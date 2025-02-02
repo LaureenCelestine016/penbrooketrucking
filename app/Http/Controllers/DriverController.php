@@ -102,8 +102,6 @@ class DriverController extends Controller
             dd($e->getMessage());
         }
 
-
-
         return redirect()->route('driver')->with('success', 'Driver created successfully!');
     }
 
@@ -136,6 +134,7 @@ class DriverController extends Controller
 
         $validatedData = $request->validate([
             'first_name'            => 'required|string|max:255',
+            'middle_name'           => 'nullable|string|max:255',
             'last_name'             => 'required|string|max:255',
             'civil_status'          => 'required|string|max:255',
             'birthday'              => ['required', 'date', new AgeValidation(18)],
@@ -143,12 +142,12 @@ class DriverController extends Controller
             'address'               => 'required|string|max:255',
             'contact_number'        => ['required', 'regex:/^\+63[0-9]{10}$/'],
             'contact_person'        => 'required|string|max:255',
-            'contact_no_person'        => ['required', 'regex:/^\+63[0-9]{10}$/'],
+            'contact_no_person'     => ['required', 'regex:/^\+63[0-9]{10}$/'],
             'relation'              => 'required|string|max:255',
-            'philhealth_no'         => 'required|string|min:14|max:14',
-            'pagibig_no'            => 'required|string|min:14|max:14',
-            'sss_no'                => 'required|string|min:12|max:12',
-            'tin_no'                => 'required|string|min:15|max:15',
+            'philhealth_no'         => 'nullable|string|min:14|max:14',
+            'pagibig_no'            => 'nullable|string|min:14|max:14',
+            'sss_no'                => 'nullable|string|min:12|max:12',
+            'tin_no'                => 'nullable|string|min:15|max:15',
             'license_number'        => 'required|string|min:13|max:13',
             'license_expired'       => ['required', 'date', 'after:today'],
             'status'                => 'required|string|max:10',
@@ -158,8 +157,8 @@ class DriverController extends Controller
 
         $driver->update($validatedData);
 
-        // return Inertia::render('Driver/Show', ['Driver' => $driver]);
-        return redirect()->route('driver');
+        return redirect()->route('driver.show', $driver);
+
     }
 
     /**
@@ -179,5 +178,12 @@ class DriverController extends Controller
         Driver::whereIn('id', $ids)->delete();
 
         return redirect()->route('driver');
+    }
+
+    public function status(Request $request)
+    {
+        $status = DB::table('drivers')
+                ->where('id', $request['id'])
+                ->update(['status' => $request['status']]);
     }
 }

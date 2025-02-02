@@ -122,7 +122,7 @@ class VehicleController extends Controller
 
         $vehicle->update($validatedData);
 
-        return Inertia::render('Vehicle/Show', ['Vehicle' => $vehicle]);
+        return redirect()->route('vehicle.show', $vehicle);
     }
 
     /**

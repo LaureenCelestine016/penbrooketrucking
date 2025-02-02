@@ -48,8 +48,13 @@ Route::middleware('auth')->prefix('driver')->group(function () {
     Route::post('/store', [DriverController::class, 'store'])->name('driver.store');
     Route::put('/{driver}', [DriverController::class, 'update'])->name('driver.update');
     Route::delete('/delete/{driver}', [DriverController::class, 'destroy'])->name('driver.delete');
-    Route::get('/detail/{id}', [DriverController::class, 'show'])->name('driver.show');
+    Route::get('/detail/{driver}', [DriverController::class, 'show'])->name('driver.show');
+
+
     Route::post('/delete-all', [DriverController::class, 'deletedAll'])->name('drivers.delete');
+    Route::post('/status', [DriverController::class, 'status'])->name('driver.status');
+
+
 });
 
 

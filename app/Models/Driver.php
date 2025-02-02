@@ -10,6 +10,10 @@ class Driver extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $dates = ['deleted_at'];
+
+    protected $table = 'drivers';
+
     protected $fillable = [
         'first_name',
         'middle_name',
@@ -31,9 +35,6 @@ class Driver extends Model
         'license_expired',
         'status',
     ];
-
-
-
 
     public function user()
     {

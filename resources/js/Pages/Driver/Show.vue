@@ -116,6 +116,26 @@
                                         </div>
                                     </div>
                                 </template>
+                                <template #footer
+                                    ><Button
+                                        v-if="Driver.status === 'Active'"
+                                        label="Active"
+                                        severity="success"
+                                        variant="outlined"
+                                        icon="pi pi-unlock"
+                                        class="btn-status"
+                                        @click="
+                                            status('Inactive', Driver.id)
+                                        " />
+                                    <Button
+                                        v-else
+                                        label="Inactive"
+                                        severity="danger"
+                                        variant="outlined"
+                                        icon="pi pi-lock"
+                                        class="btn-status"
+                                        @click="status('Active', Driver.id)"
+                                /></template>
                             </Card>
                             <Card class="card">
                                 <template #content>
@@ -279,7 +299,7 @@
                                                                                 >{{
                                                                                     form
                                                                                         .errors
-                                                                                        .firstName
+                                                                                        .first_name
                                                                                 }}</Message
                                                                             >
                                                                         </FormField>
@@ -310,13 +330,17 @@
                                                                                 v-if="
                                                                                     form
                                                                                         .errors
-                                                                                        .middle
+                                                                                        .middle_name
                                                                                 "
                                                                                 severity="error"
                                                                                 size="small"
                                                                                 variant="simple"
                                                                                 >{{
-                                                                            }}</Message>
+                                                                                    form
+                                                                                        .errors
+                                                                                        .middle_name
+                                                                                }}</Message
+                                                                            >
                                                                         </FormField>
                                                                     </div>
                                                                     <!-- lastname -->
@@ -349,7 +373,7 @@
                                                                                 v-if="
                                                                                     form
                                                                                         .errors
-                                                                                        .lastName
+                                                                                        .last_name
                                                                                 "
                                                                                 severity="error"
                                                                                 size="small"
@@ -357,7 +381,7 @@
                                                                                 >{{
                                                                                     form
                                                                                         .errors
-                                                                                        .lastName
+                                                                                        .last_name
                                                                                 }}</Message
                                                                             >
                                                                         </FormField>
@@ -403,7 +427,7 @@
                                                                                 v-if="
                                                                                     form
                                                                                         .errors
-                                                                                        .civilStatus
+                                                                                        .civil_status
                                                                                 "
                                                                                 severity="error"
                                                                                 size="small"
@@ -411,7 +435,7 @@
                                                                                 >{{
                                                                                     form
                                                                                         .errors
-                                                                                        .civilStatus
+                                                                                        .civil_status
                                                                                 }}</Message
                                                                             >
                                                                         </FormField>
@@ -457,7 +481,7 @@
                                                                                     v-if="
                                                                                         form
                                                                                             .errors
-                                                                                            .birthDay
+                                                                                            .birthday
                                                                                     "
                                                                                     severity="error"
                                                                                     size="small"
@@ -465,7 +489,7 @@
                                                                                     >{{
                                                                                         form
                                                                                             .errors
-                                                                                            .birthDay
+                                                                                            .birthday
                                                                                     }}</Message
                                                                                 >
                                                                             </FormField>
@@ -648,7 +672,11 @@
                                                                                 size="small"
                                                                                 variant="simple"
                                                                                 >{{
-                                                                            }}</Message>
+                                                                                    form
+                                                                                        .errors
+                                                                                        .contact_person
+                                                                                }}</Message
+                                                                            >
                                                                         </FormField>
                                                                     </div>
                                                                 </div>
@@ -1177,7 +1205,7 @@
                                             <Button
                                                 label="UPDATE CHANGE"
                                                 type="submit"
-                                                icon="pi pi-send"
+                                                icon="pi pi-pencil"
                                                 class="w-full"
                                             />
                                         </form>
@@ -1193,7 +1221,7 @@
 
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { Head, useForm } from "@inertiajs/vue3";
+import { Head, useForm, router } from "@inertiajs/vue3";
 import { ref, onMounted } from "vue";
 // import { CustomerService } from "@/service/CustomerService";
 
@@ -1219,10 +1247,12 @@ import Column from "primevue/column";
 import Message from "primevue/message";
 import { useToast } from "primevue/usetoast";
 import Toast from "primevue/toast";
+import Dialog from "primevue/dialog";
 
 const civilStatus = ref([]);
 const relation = ref([]);
 const toast = useToast();
+const statusDialog = ref(false);
 
 const props = defineProps({
     Driver: {
@@ -1241,6 +1271,8 @@ const form = useForm({
 });
 
 const submit = () => {
+    console.log(props.Driver.id);
+
     form.put(route("driver.update", props.Driver.id), {
         onSuccess: () => {
             toast.add({
@@ -1288,6 +1320,23 @@ const relationSearch = () => {
         "Other",
     ];
 };
+
+const status = (status, id) => {
+    router.post(
+        route("driver.status"),
+        { status, id },
+        {
+            onSuccess: () => {
+                toast.add({
+                    severity: "success",
+                    summary: "Success",
+                    detail: "Status changed successfully!",
+                    life: 3000,
+                });
+            },
+        }
+    );
+};
 </script>
 
 <style scoped>
@@ -1317,7 +1366,7 @@ const relationSearch = () => {
     position: relative;
     grid-template-columns: 350px 1fr;
     margin: auto;
-    width: 95%;
+    width: 97%;
     z-index: 15;
     column-gap: 24px;
 }
@@ -1362,5 +1411,12 @@ const relationSearch = () => {
 .title {
     font-size: 18px;
     color: #213555;
+}
+
+.btn-status {
+    width: 350px;
+    margin-left: -20px;
+    margin-top: 32px;
+    border-radius: none;
 }
 </style>
