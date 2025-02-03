@@ -123,7 +123,7 @@
                                         severity="success"
                                         variant="outlined"
                                         icon="pi pi-unlock"
-                                        class="btn-status"
+                                        class="btn-active"
                                         @click="
                                             status('Inactive', Driver.id)
                                         " />
@@ -133,7 +133,7 @@
                                         severity="danger"
                                         variant="outlined"
                                         icon="pi pi-lock"
-                                        class="btn-status"
+                                        class="btn-inactive"
                                         @click="status('Active', Driver.id)"
                                 /></template>
                             </Card>
@@ -969,9 +969,9 @@
                                                 >
                                                     <div>
                                                         <label
-                                                            class="text-customblue dark:text-surface-0 text-lg font-semibold mb-4 block"
+                                                            class="text-customblue dark:text-surface-0 text-xl font-semibold mb-4 block"
                                                             >License
-                                                            Details</label
+                                                            Detail</label
                                                         >
 
                                                         <div
@@ -1322,6 +1322,11 @@ const relationSearch = () => {
 };
 
 const status = (status, id) => {
+    alert(
+        `Are you sure you want to ${
+            status === "Active" ? "Activate" : "Deactivate"
+        } this user?`
+    );
     router.post(
         route("driver.status"),
         { status, id },
@@ -1413,10 +1418,27 @@ const status = (status, id) => {
     color: #213555;
 }
 
-.btn-status {
+.btn-active {
     width: 350px;
     margin-left: -20px;
     margin-top: 32px;
-    border-radius: none;
+    border: #69db7c solid 1px !important;
+}
+
+.btn-active:hover {
+    background-color: #69db7c !important;
+    color: #ebfbee !important;
+}
+
+.btn-inactive {
+    width: 350px;
+    margin-left: -20px;
+    margin-top: 32px;
+    border: #ff6b6b solid 1px !important;
+}
+
+.btn-inactive:hover {
+    background-color: #ff8787 !important;
+    color: #fff5f5 !important;
 }
 </style>

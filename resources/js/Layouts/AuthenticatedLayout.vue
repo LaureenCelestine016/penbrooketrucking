@@ -263,7 +263,7 @@ const items = ref([
         ],
     },
     {
-        label: "Location",
+        label: "Travel",
         icon: "pi pi-map-marker",
         items: [
             {
