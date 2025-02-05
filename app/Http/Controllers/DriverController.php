@@ -186,4 +186,11 @@ class DriverController extends Controller
                 ->where('id', $request['id'])
                 ->update(['status' => $request['status']]);
     }
+
+    public function location(Request $request)
+    {
+
+        $region = 'https://psgc.cloud/api/regions';
+
+    }
 }

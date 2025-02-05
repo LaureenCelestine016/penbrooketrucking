@@ -4,16 +4,16 @@
 
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{}}
-            </h2>
+            <h2
+                class="font-semibold text-xl text-gray-800 leading-tight mb-4 flex items-center"
+            ></h2>
 
             <div class="py-8">
                 <div class="">
                     <div class="cover-pictue-container">
                         <Card class="cover-picture">
                             <template #content>
-                                <div class="flex items-center gap-4 mx-6 my-8">
+                                <div class="flex items-center gap-4 mx-6 my-2">
                                     <Avatar
                                         image="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png"
                                         class="avatar"
@@ -148,8 +148,8 @@
                                             >
                                                 <svg
                                                     xmlns="http://www.w3.org/2000/svg"
-                                                    width="32"
-                                                    height="32"
+                                                    width="24"
+                                                    height="24"
                                                     viewBox="0 0 24 24"
                                                 >
                                                     <path
@@ -169,8 +169,8 @@
                                             >
                                                 <svg
                                                     xmlns="http://www.w3.org/2000/svg"
-                                                    width="32"
-                                                    height="32"
+                                                    width="24"
+                                                    height="24"
                                                     viewBox="0 0 24 24"
                                                 >
                                                     <path
@@ -194,8 +194,8 @@
                                                 >
                                                     <svg
                                                         xmlns="http://www.w3.org/2000/svg"
-                                                        width="32"
-                                                        height="32"
+                                                        width="24"
+                                                        height="24"
                                                         viewBox="0 0 24 24"
                                                     >
                                                         <path
@@ -221,8 +221,8 @@
                                                 >
                                                     <svg
                                                         xmlns="http://www.w3.org/2000/svg"
-                                                        width="32"
-                                                        height="32"
+                                                        width="24"
+                                                        height="24"
                                                         viewBox="0 0 24 24"
                                                     >
                                                         <path
@@ -961,6 +961,12 @@
                                                             </AccordionContent>
                                                         </AccordionPanel>
                                                     </Accordion>
+                                                    <Button
+                                                        label="UPDATE CHANGE"
+                                                        type="submit"
+                                                        icon="pi pi-pencil"
+                                                        class="w-full mt-6"
+                                                    />
                                                 </TabPanel>
                                                 <TabPanel
                                                     value="1"
@@ -1071,6 +1077,12 @@
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    <Button
+                                                        label="UPDATE CHANGE"
+                                                        type="submit"
+                                                        icon="pi pi-pencil"
+                                                        class="w-full mt-4"
+                                                    />
                                                 </TabPanel>
                                                 <TabPanel
                                                     v-slot="slotProps"
@@ -1202,12 +1214,6 @@
                                                     />
                                                 </TabPanel>
                                             </TabPanels>
-                                            <Button
-                                                label="UPDATE CHANGE"
-                                                type="submit"
-                                                icon="pi pi-pencil"
-                                                class="w-full"
-                                            />
                                         </form>
                                     </Tabs>
                                 </template>
@@ -1352,7 +1358,7 @@ const status = (status, id) => {
 .cover-picture {
     height: 250px;
     position: absolute;
-    margin-top: 14px;
+    margin-top: 8px;
     top: 80;
     left: 0;
     z-index: 1;
@@ -1378,7 +1384,7 @@ const status = (status, id) => {
 
 .transparent-head {
     background-color: transparent;
-    height: 200px;
+    height: 170px;
 }
 
 .tab-container {
@@ -1421,7 +1427,7 @@ const status = (status, id) => {
 .btn-active {
     width: 350px;
     margin-left: -20px;
-    margin-top: 32px;
+    margin-top: 16px;
     border: #69db7c solid 1px !important;
 }
 
@@ -1433,7 +1439,7 @@ const status = (status, id) => {
 .btn-inactive {
     width: 350px;
     margin-left: -20px;
-    margin-top: 32px;
+    margin-top: 16px;
     border: #ff6b6b solid 1px !important;
 }
 

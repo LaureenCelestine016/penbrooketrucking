@@ -263,32 +263,144 @@ const items = ref([
         ],
     },
     {
-        label: "Travel",
+        label: "Location",
         icon: "pi pi-map-marker",
         items: [
             {
                 label: "Location List",
                 icon: "pi pi-list",
                 command: () => {
-                    router.get("/driver");
+                    router.get("/location");
                 },
             },
             {
                 label: "Add Location",
                 icon: "pi pi-plus",
                 command: () => {
-                    router.get("/driver");
+                    router.get("/location/create");
                 },
+            },
+        ],
+    },
+    {
+        label: "Route",
+        icon: "pi pi-map-marker",
+        items: [
+            {
+                label: "Route List",
+                icon: "pi pi-list",
+                command: () => {
+                    router.get("/location");
+                },
+            },
+            {
+                label: "Add Route",
+                icon: "pi pi-plus",
+                command: () => {
+                    router.get("/location/create");
+                },
+            },
+        ],
+    },
+    {
+        label: "Fuel",
+        icon: "pi pi-map-marker",
+        items: [
+            {
+                label: "Fuel Record",
+                icon: "pi pi-list",
+                command: () => {
+                    router.get("/location");
+                },
+            },
+            {
+                label: "Add Fuel",
+                icon: "pi pi-plus",
+                command: () => {
+                    router.get("/location/create");
+                },
+            },
+        ],
+    },
+    {
+        label: "Maintenance",
+        icon: "pi pi-map-marker",
+        items: [
+            {
+                label: "Vehicle Maintenance Record",
+                icon: "pi pi-list",
+                command: () => {
+                    router.get("/location");
+                },
+            },
+            {
+                label: "Add Vehicle Maintenance",
+                icon: "pi pi-plus",
+                command: () => {
+                    router.get("/location/create");
+                },
+            },
+        ],
+    },
+    {
+        label: "Sale & Expenses",
+        icon: "pi pi-map-marker",
+        items: [
+            {
+                label: "Sale",
+                icon: "pi pi-list",
+                command: () => {
+                    router.get("/location");
+                },
+                items: [
+                    {
+                        label: "Sale Record",
+                        icon: "pi pi-list",
+                        command: () => {
+                            router.get("/location");
+                        },
+                        items: [],
+                    },
+                    {
+                        label: "Add Sale",
+                        icon: "pi pi-list",
+                        command: () => {
+                            router.get("/location");
+                        },
+                        items: [],
+                    },
+                ],
+            },
+            {
+                label: "Expenses",
+                icon: "pi pi-plus",
+                command: () => {
+                    router.get("/location/create");
+                },
+                items: [
+                    {
+                        label: "Sale Record",
+                        icon: "pi pi-list",
+                        command: () => {
+                            router.get("/location");
+                        },
+                        items: [],
+                    },
+                    {
+                        label: "Add Sale",
+                        icon: "pi pi-list",
+                        command: () => {
+                            router.get("/location");
+                        },
+                        items: [],
+                    },
+                ],
             },
         ],
     },
     {
         label: "Report",
         icon: "pi pi-book",
-    },
-    {
-        label: "Maintenance",
-        icon: "pi pi-cog",
     },
 ]);
 
@@ -299,7 +411,6 @@ const showingNavigationDropdown = ref(false);
 .menubar {
     height: 54px;
     border: 0;
-    z-index: 10;
 }
 
 .footer {

@@ -57,6 +57,17 @@ Route::middleware('auth')->prefix('driver')->group(function () {
 
 });
 
+Route::middleware('auth')->prefix('location')->group(function () {
+    Route::get('/', [LocationController::class,'index'])->name('location');
+    Route::get('/create', [LocationController::class,'create'])->name('location.create');
+
+
+
+
+
+
+});
+
 
 Route::get('location',[LocationController::class,'index'])->name('location');
 

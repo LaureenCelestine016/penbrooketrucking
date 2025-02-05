@@ -74,7 +74,7 @@ class VehicleController extends Controller
 
     public function upload(Request $request)
     {
-        dd($request);
+
 
         $request->validate([
             'files.*' => 'required|file|mimes:jpeg,png,jpg,gif|max:1024', // Max 1MB per file
