@@ -60,15 +60,8 @@ Route::middleware('auth')->prefix('driver')->group(function () {
 Route::middleware('auth')->prefix('location')->group(function () {
     Route::get('/', [LocationController::class,'index'])->name('location');
     Route::get('/create', [LocationController::class,'create'])->name('location.create');
-
-
-
-
-
+    Route::post('/store', [LocationController::class,'store'])->name('location.store');
 
 });
-
-
-Route::get('location',[LocationController::class,'index'])->name('location');
 
 require __DIR__.'/auth.php';

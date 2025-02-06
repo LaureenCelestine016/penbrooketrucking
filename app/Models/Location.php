@@ -10,6 +10,19 @@ class Location extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $fillable = [
+        'name',
+        'street',
+        'barangay',
+        'municipality',
+        'city',
+        'province',
+        'region',
+        'latitude',
+        'longitude',
+    ];
+
+
     public function gpsLogs()
     {
         return $this->hasMany(GpsLog::class);

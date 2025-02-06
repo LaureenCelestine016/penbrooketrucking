@@ -29,7 +29,33 @@ class LocationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $validatedData = $request->validate([
+            'region'           => 'required|string|max:255',
+            'province'         => 'required|string|max:255',
+            'city'             => 'nullable|string|max:255',
+            'municipality'     => 'nullable|string|max:255',
+            'barangay'         => 'required|string|max:10',
+            'street'           => 'required|string|max:255',
+            'name'             => 'required|string|max:255',
+            'latitude'         => 'required|numeric|min:-90|max:90',
+            'longitude'        => 'required|numeric|min:-180|max:180',
+        ]);
+
+        Location::create([
+            'name'               => $validatedData['name'],
+            'street'             => $validatedData['street'],
+            'barangay'           => $validatedData['barangay'],
+            'municipality'       => $validatedData['municipality'],
+            'city'               => $validatedData['city'],
+            'province'           => $validatedData['province'],
+            'region'             => $validatedData['region'],
+            'latitude'           => $validatedData['latitude'],
+            'longitude'          => $validatedData['longitude'],
+
+        ]);
+
+        return redirect()->route('location')->with('success', 'Location created successfully!');
     }
 
     /**

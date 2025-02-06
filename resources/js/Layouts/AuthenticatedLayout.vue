@@ -178,7 +178,7 @@
             <nav class="bg-white border-b border-gray-100 w-100">
                 <!-- Primary Navigation Menu -->
                 <div class="mx-12">
-                    <div class="card w-100">
+                    <div class="card w-100 sm:text-sm font-semibold">
                         <Menubar :model="items" class="menubar" />
                     </div>
                 </div>

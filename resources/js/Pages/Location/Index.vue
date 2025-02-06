@@ -1,9 +1,6 @@
-<script setup>
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { Head } from "@inertiajs/vue3";
-</script>
 <template>
     <Head title="Vehicle" />
+    <Toast />
 
     <AuthenticatedLayout>
         <template #header>
@@ -21,3 +18,13 @@ import { Head } from "@inertiajs/vue3";
         </div>
     </AuthenticatedLayout>
 </template>
+
+<script setup>
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
+import { Head } from "@inertiajs/vue3";
+
+import Toast from "primevue/toast";
+import { useToast } from "primevue/usetoast";
+
+const toast = useToast();
+</script>

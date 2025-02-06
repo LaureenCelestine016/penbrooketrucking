@@ -1,6 +1,6 @@
 <template>
     <Head title="Add Location" />
-
+    <Toast />
     <AuthenticatedLayout>
         <template #header>
             <h2 class="font-semibold text-2xl text-gray-800 leading-tight">
@@ -82,15 +82,12 @@
                                 </div>
                             </div>
                             <div class="grid grid-cols-2 gap-10 mb-4">
-                                <!-- cities -->
+                                <!-- municipality -->
                                 <div class="w-full">
                                     <label
                                         for="municipality"
                                         class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                        >Municipality<span
-                                            class="ml-1 text-red-400"
-                                            >*</span
-                                        ></label
+                                        >Municipality</label
                                     >
                                     <FormField
                                         id="municipality"
@@ -119,9 +116,7 @@
                                     <label
                                         for="municipality"
                                         class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                        >City<span class="ml-1 text-red-400"
-                                            >*</span
-                                        ></label
+                                        >City</label
                                     >
                                     <FormField
                                         id="municipality"
@@ -198,6 +193,7 @@
                                         <InputText
                                             type="text"
                                             placeholder="Street"
+                                            v-model="form.street"
                                         />
                                         <Message
                                             severity="error"
@@ -225,6 +221,7 @@
                                         type="text"
                                         class="user--input firstName"
                                         placeholder="Landmark"
+                                        v-model="form.name"
                                     />
                                     <Message
                                         severity="error"
@@ -234,11 +231,32 @@
                                     }}</Message>
                                 </FormField>
                             </div>
-
-                            <label
-                                class="text-gray-900 dark:text-surface-0 text-xl font-medium my-4 block"
-                                >Coordinates</label
-                            >
+                            <div class="flex items-center gap-2 mt-3">
+                                <label
+                                    class="text-gray-900 dark:text-surface-0 text-xl font-medium my-4 block"
+                                    >Coordinates</label
+                                >
+                                <div
+                                    class="flex flex-row items-center gap-1 cursor-pointer"
+                                    @click="latitudeModal = true"
+                                >
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="24"
+                                        height="24"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            fill="#8c8c8c"
+                                            d="M11 21.95v-1q-3.125-.35-5.363-2.587T3.05 13h-1q-.425 0-.712-.288T1.05 12t.288-.712T2.05 11h1q.35-3.125 2.588-5.363T11 3.05v-1q0-.425.288-.712T12 1.05t.713.288t.287.712v1q3.125.35 5.363 2.588T20.95 11h1q.425 0 .713.288t.287.712t-.287.713t-.713.287h-1q-.35 3.125-2.587 5.363T13 20.95v1q0 .425-.288.713T12 22.95t-.712-.287T11 21.95M12 19q2.9 0 4.95-2.05T19 12t-2.05-4.95T12 5T7.05 7.05T5 12t2.05 4.95T12 19m0-3q-1.65 0-2.825-1.175T8 12t1.175-2.825T12 8t2.825 1.175T16 12t-1.175 2.825T12 16"
+                                        />
+                                    </svg>
+                                    <span
+                                        class="text-xs text-red-400 hover:underline"
+                                        >Get Coordinates here</span
+                                    >
+                                </div>
+                            </div>
 
                             <div class="grid grid-cols-2 gap-10 mb-4">
                                 <!-- latitude -->
@@ -254,28 +272,12 @@
                                         name="barangay"
                                         class="flex flex-col gap-1"
                                     >
-                                        <span
-                                            class="flex flex-row items-center relative"
-                                        >
-                                            <InputText
-                                                type="text"
-                                                placeholder="Latitude"
-                                                v-model="form.latitude"
-                                                class="w-full"
-                                            />
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="26"
-                                                height="26"
-                                                viewBox="0 0 24 24"
-                                                class="absolute right-0 mr-2 cursor-pointer"
-                                            >
-                                                <path
-                                                    fill="#8c8c8c"
-                                                    d="M11 21.95v-1q-3.125-.35-5.363-2.587T3.05 13h-1q-.425 0-.712-.288T1.05 12t.288-.712T2.05 11h1q.35-3.125 2.588-5.363T11 3.05v-1q0-.425.288-.712T12 1.05t.713.288t.287.712v1q3.125.35 5.363 2.588T20.95 11h1q.425 0 .713.288t.287.712t-.287.713t-.713.287h-1q-.35 3.125-2.587 5.363T13 20.95v1q0 .425-.288.713T12 22.95t-.712-.287T11 21.95M12 19q2.9 0 4.95-2.05T19 12t-2.05-4.95T12 5T7.05 7.05T5 12t2.05 4.95T12 19m0-3q-1.65 0-2.825-1.175T8 12t1.175-2.825T12 8t2.825 1.175T16 12t-1.175 2.825T12 16"
-                                                />
-                                            </svg>
-                                        </span>
+                                        <InputText
+                                            type="text"
+                                            placeholder="Latitude"
+                                            v-model="form.latitude"
+                                            class="w-full"
+                                        />
 
                                         <Message
                                             severity="error"
@@ -308,18 +310,6 @@
                                                 v-model="form.longitude"
                                                 class="w-full"
                                             />
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="26"
-                                                height="26"
-                                                viewBox="0 0 24 24"
-                                                class="absolute right-0 mr-2 cursor-pointer"
-                                            >
-                                                <path
-                                                    fill="#8c8c8c"
-                                                    d="M11 21.95v-1q-3.125-.35-5.363-2.587T3.05 13h-1q-.425 0-.712-.288T1.05 12t.288-.712T2.05 11h1q.35-3.125 2.588-5.363T11 3.05v-1q0-.425.288-.712T12 1.05t.713.288t.287.712v1q3.125.35 5.363 2.588T20.95 11h1q.425 0 .713.288t.287.712t-.287.713t-.713.287h-1q-.35 3.125-2.587 5.363T13 20.95v1q0 .425-.288.713T12 22.95t-.712-.287T11 21.95M12 19q2.9 0 4.95-2.05T19 12t-2.05-4.95T12 5T7.05 7.05T5 12t2.05 4.95T12 19m0-3q-1.65 0-2.825-1.175T8 12t1.175-2.825T12 8t2.825 1.175T16 12t-1.175 2.825T12 16"
-                                                />
-                                            </svg>
                                         </span>
 
                                         <Message
@@ -340,6 +330,21 @@
                             />
                         </div>
                     </form>
+
+                    <!-- latitude modal -->
+                    <Dialog
+                        v-model:visible="latitudeModal"
+                        maximizable
+                        modal
+                        header="Location"
+                        :style="{ width: '70rem', height: '50rem' }"
+                        :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
+                    >
+                        <div
+                            id="map"
+                            style="width: 100%; height: 600px; background: #eee"
+                        ></div>
+                    </Dialog>
                 </div>
             </div>
         </div>
@@ -349,17 +354,26 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head, useForm } from "@inertiajs/vue3";
-import { ref, onMounted } from "vue";
+import { ref, watch, onMounted, nextTick } from "vue";
+
+import L from "leaflet";
 
 import AutoComplete from "primevue/autocomplete";
 import InputText from "primevue/inputtext";
 import Button from "primevue/button";
+import Dialog from "primevue/dialog";
+import { useToast } from "primevue/usetoast";
+import Toast from "primevue/toast";
 
+const toast = useToast();
 const regions = ref([]);
 const provinces = ref([]);
 const municipalities = ref([]);
 const cities = ref([]);
 const barangays = ref([]);
+const latitudeModal = ref(false);
+const map = ref(null);
+const marker = ref(null);
 
 const form = useForm({
     region: "",
@@ -367,9 +381,33 @@ const form = useForm({
     city: "",
     municipality: "",
     barangay: "",
+    street: "",
+    name: "",
     latitude: "",
     longitude: "",
 });
+
+const submit = () => {
+    form.post(route("location.store"), {
+        onSuccess: () => {
+            toast.add({
+                severity: "success",
+                summary: "Success",
+                detail: "Location created successfully!",
+                life: 3000,
+            });
+        },
+        onError: () => {
+            toast.add({
+                severity: "error",
+                summary: "Error",
+                detail: "There were errors in your form submission.",
+                life: 3000,
+            });
+        },
+        onFinish: () => form.reset("password"),
+    });
+};
 
 // ✅ Fetch regions on component mount
 const fetchRegions = async () => {
@@ -455,7 +493,64 @@ const fetchBarangays = async () => {
     }
 };
 
-onMounted(fetchRegions);
+const location = async () => {
+    await nextTick(); // Ensure DOM updates before initializing the map
+
+    const mapContainer = document.getElementById("map");
+    if (!mapContainer) {
+        console.error("Map container not found!"); // Debugging log
+        return;
+    }
+
+    if (map.value) {
+        map.value.remove(); // Prevent duplicate maps
+        map.value = null;
+    }
+
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const { latitude, longitude } = position.coords;
+                const coords = [latitude, longitude];
+
+                console.log("Initializing map at:", coords); // Debugging log
+
+                map.value = L.map("map").setView(coords, 13);
+
+                L.tileLayer(
+                    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                ).addTo(map.value);
+
+                map.value.on("click", function (e) {
+                    console.log(e.latlng);
+                    const { lat, lng } = e.latlng;
+                    form.latitude = lat;
+                    form.longitude = lng;
+
+                    if (marker.value) {
+                        map.value.removeLayer(marker.value);
+                    }
+
+                    marker.value = L.marker([lat, lng]).addTo(map.value);
+                });
+            },
+            () => {
+                alert("Could not get your position");
+            }
+        );
+    }
+};
+
+watch(latitudeModal, async (newValue) => {
+    if (newValue) {
+        await nextTick(); // Ensure DOM updates before initializing
+        setTimeout(() => location(), 500); // Small delay for rendering
+    }
+});
+
+onMounted(() => {
+    fetchRegions();
+});
 </script>
 
 <style scoped>
