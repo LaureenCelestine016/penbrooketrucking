@@ -18,6 +18,7 @@ class Location extends Model
         'city',
         'province',
         'region',
+        'address',
         'latitude',
         'longitude',
     ];

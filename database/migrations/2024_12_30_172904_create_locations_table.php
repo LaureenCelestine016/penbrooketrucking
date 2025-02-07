@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('city')->nullable(); // Optional detailed address
             $table->string('province')->nullable(); // Optional detailed address
             $table->string('region')->nullable(); // Optional detailed address
+            $table->string('address')->nullable(); // Optional detailed address
             $table->decimal('latitude', 10, 8)->nullable(); // Latitude for geolocation
             $table->decimal('longitude', 11, 8)->nullable(); // Longitude for geolocation
             $table->timestamps();

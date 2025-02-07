@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Location;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Http\Resources\LocationResource;
 
 class LocationController extends Controller
 {
@@ -13,7 +14,12 @@ class LocationController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Location/Index');
+
+        $location = LocationResource::collection(
+            Location::orderBy('created_at', 'desc')->get()
+        );
+
+        return Inertia::render('Location/Index',['location' => $location]);
     }
 
     /**
@@ -31,11 +37,12 @@ class LocationController extends Controller
     {
 
         $validatedData = $request->validate([
+            'address'          => 'nullable|string|max:255',
             'region'           => 'required|string|max:255',
             'province'         => 'required|string|max:255',
             'city'             => 'nullable|string|max:255',
             'municipality'     => 'nullable|string|max:255',
-            'barangay'         => 'required|string|max:10',
+            'barangay'         => 'required|string|max:255',
             'street'           => 'required|string|max:255',
             'name'             => 'required|string|max:255',
             'latitude'         => 'required|numeric|min:-90|max:90',
@@ -50,9 +57,9 @@ class LocationController extends Controller
             'city'               => $validatedData['city'],
             'province'           => $validatedData['province'],
             'region'             => $validatedData['region'],
+            'address'            => $validatedData['address'],
             'latitude'           => $validatedData['latitude'],
             'longitude'          => $validatedData['longitude'],
-
         ]);
 
         return redirect()->route('location')->with('success', 'Location created successfully!');

@@ -354,7 +354,7 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head, useForm } from "@inertiajs/vue3";
-import { ref, watch, onMounted, nextTick } from "vue";
+import { ref, watch, onMounted, nextTick, computed } from "vue";
 
 import L from "leaflet";
 
@@ -385,9 +385,27 @@ const form = useForm({
     name: "",
     latitude: "",
     longitude: "",
+    address: "",
 });
 
+const updateAddress = () => {
+    form.address = `${form.street}, ${form.barangay} ${form.municipality} ${form.province}, ${form.region}`;
+};
+
+watch(
+    [
+        () => form.street,
+        () => form.barangay,
+        () => form.municipality,
+        () => form.province,
+        () => form.region,
+    ],
+    updateAddress
+);
+
 const submit = () => {
+    updateAddress();
+
     form.post(route("location.store"), {
         onSuccess: () => {
             toast.add({
@@ -513,8 +531,6 @@ const location = async () => {
                 const { latitude, longitude } = position.coords;
                 const coords = [latitude, longitude];
 
-                console.log("Initializing map at:", coords); // Debugging log
-
                 map.value = L.map("map").setView(coords, 13);
 
                 L.tileLayer(
@@ -522,7 +538,6 @@ const location = async () => {
                 ).addTo(map.value);
 
                 map.value.on("click", function (e) {
-                    console.log(e.latlng);
                     const { lat, lng } = e.latlng;
                     form.latitude = lat;
                     form.longitude = lng;

@@ -246,7 +246,7 @@ import { Head, router } from "@inertiajs/vue3";
 import { ref } from "vue";
 
 import Toolbar from "primevue/toolbar";
-import Toast from "primevue/toast";
+
 import Button from "primevue/button";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
