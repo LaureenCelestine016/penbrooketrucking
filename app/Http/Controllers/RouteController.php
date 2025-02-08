@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Route;
+use App\Models\Vehicle;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class RouteController extends Controller
 {
@@ -12,7 +14,7 @@ class RouteController extends Controller
      */
     public function index()
     {
-        //
+        return Inertia::render('Route/Index');
     }
 
     /**
@@ -20,7 +22,9 @@ class RouteController extends Controller
      */
     public function create()
     {
-        //
+        $vehicles = Vehicle::select('id', 'name')->get();
+
+        return Inertia::render('Route/Create');
     }
 
     /**

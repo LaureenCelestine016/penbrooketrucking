@@ -290,14 +290,14 @@ const items = ref([
                 label: "Route List",
                 icon: "pi pi-list",
                 command: () => {
-                    router.get("/location");
+                    router.get("/route");
                 },
             },
             {
                 label: "Add Route",
                 icon: "pi pi-plus",
                 command: () => {
-                    router.get("/location/create");
+                    router.get("/route/create");
                 },
             },
         ],

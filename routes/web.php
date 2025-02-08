@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\VehicleController;
+use App\Http\Controllers\RouteController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -49,8 +50,6 @@ Route::middleware('auth')->prefix('driver')->group(function () {
     Route::put('/{driver}', [DriverController::class, 'update'])->name('driver.update');
     Route::delete('/delete/{driver}', [DriverController::class, 'destroy'])->name('driver.delete');
     Route::get('/detail/{driver}', [DriverController::class, 'show'])->name('driver.show');
-
-
     Route::post('/delete-all', [DriverController::class, 'deletedAll'])->name('drivers.delete');
     Route::post('/status', [DriverController::class, 'status'])->name('driver.status');
 
@@ -63,6 +62,13 @@ Route::middleware('auth')->prefix('location')->group(function () {
     Route::post('/store', [LocationController::class,'store'])->name('location.store');
     Route::delete('/delete/{location}', [LocationController::class, 'destroy'])->name('location.delete');
     Route::post('/delete-all', [LocationController::class, 'deletedAll'])->name('locations.delete');
+
+});
+
+Route::middleware('auth')->prefix('route')->group(function () {
+    Route::get('/', [RouteController::class,'index'])->name('route');
+    Route::get('/create', [RouteController::class,'create'])->name('route.create');
+
 
 });
 
