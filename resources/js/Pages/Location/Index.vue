@@ -1,5 +1,5 @@
 <template>
-    <Head title="Vehicle" />
+    <Head title="Location" />
     <Toast />
 
     <AuthenticatedLayout>
@@ -8,14 +8,13 @@
                 Location List
             </h2>
         </template>
-
         <div class="py-4">
             <div class="mx-12">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="card">
                         <DataTable
                             ref="dt"
-                            v-model:selection="selectedVehicle"
+                            v-model:selection="selectedLocation"
                             :value="location.data"
                             dataKey="id"
                             :paginator="true"
@@ -46,8 +45,8 @@
                                             outlined
                                             @click="confirmDeleteSelected"
                                             :disabled="
-                                                !selectedVehicle ||
-                                                !selectedVehicle.length
+                                                !selectedLocation ||
+                                                !selectedLocation.length
                                             "
                                         />
                                         <IconField>
@@ -62,8 +61,6 @@
                                             />
                                         </IconField>
                                     </div>
-
-                                    <!-- <h4 class="m-0">Manage Products</h4> -->
                                 </div>
                             </template>
 
@@ -76,23 +73,22 @@
                                 field="street"
                                 header="Street"
                                 sortable
-                                style="min-width: 10rem"
+                                style="min-width: 7rem"
                             ></Column>
                             <Column
                                 field="barangay"
                                 header="Barangay"
                                 sortable
-                                style="min-width: 5rem"
+                                style="min-width: 10rem"
                             ></Column>
                             <Column
-                                field="municipality"
-                                header="Municipality"
+                                header="Municipality (City)"
                                 sortable
-                                style="min-width: 8rem"
-                            >
-                                <!-- <template #body="slotProps">
-                                    {{ formatCurrency(slotProps.data.price) }}
-                                </template> -->
+                                style="min-width: 10rem"
+                                ><template #body="slotProps">
+                                    {{ slotProps.data.municipality }}
+                                    {{ slotProps.data.city }}
+                                </template>
                             </Column>
                             <Column
                                 field="province"
@@ -105,32 +101,15 @@
                                 field="region"
                                 header="Region"
                                 sortable
-                                style="min-width: 12rem"
+                                style="min-width: 10rem"
                             >
                             </Column>
-                            <!-- <Column
-                                field="status"
-                                header="Status"
-                                sortable
-                                style="min-width: 8rem"
-                            >
-                                <template #body="slotProps">
-                                    <Tag
-                                        class="status"
-                                        :value="slotProps.data.status"
-                                        :severity="
-                                            getStatusLabel(
-                                                slotProps.data.status
-                                            )
-                                        "
-                                    />
-                                </template>
-                            </Column> -->
+
                             <Column
                                 header="Action"
                                 sortable=""
                                 :exportable="false"
-                                style="min-width: 8rem"
+                                style="min-width: 5rem"
                             >
                                 <template #body="slotProps">
                                     <Link> </Link>
@@ -147,7 +126,9 @@
                                         rounded
                                         severity="danger"
                                         @click="
-                                            confirmDeleteVehicle(slotProps.data)
+                                            confirmDeleteLocation(
+                                                slotProps.data
+                                            )
                                         "
                                     />
                                 </template>
@@ -217,7 +198,7 @@
                                         >Name is required.</small
                                     >
                                 </div>
-                                <div class="w-full">
+                                <div class="w-full" v-if="form.municipality">
                                     <label
                                         for="name"
                                         class="block font-bold mb-3"
@@ -227,6 +208,24 @@
                                         id="name"
                                         required="true"
                                         v-model="form.municipality"
+                                        fluid
+                                    />
+                                    <small
+                                        v-if="submitted && !product.name"
+                                        class="text-red-500"
+                                        >Name is required.</small
+                                    >
+                                </div>
+                                <div class="w-full" v-else>
+                                    <label
+                                        for="name"
+                                        class="block font-bold mb-3"
+                                        >City</label
+                                    >
+                                    <InputText
+                                        id="name"
+                                        required="true"
+                                        v-model="form.city"
                                         fluid
                                     />
                                     <small
@@ -275,6 +274,48 @@
                                     >
                                 </div>
                             </div>
+                            <div class="flex flex-row gap-5 mb-4">
+                                <div class="w-full">
+                                    <label
+                                        for="name"
+                                        class="block font-bold mb-3"
+                                        >Latitude</label
+                                    >
+                                    <InputText
+                                        id="name"
+                                        disabled=""
+                                        required="true"
+                                        v-model="form.latitude"
+                                        class="!bg-gray-50"
+                                        fluid
+                                    />
+                                    <small
+                                        v-if="submitted && !product.name"
+                                        class="text-red-500"
+                                        >Name is required.</small
+                                    >
+                                </div>
+                                <div class="w-full">
+                                    <label
+                                        for="name"
+                                        class="block font-bold mb-3"
+                                        >Longitude</label
+                                    >
+                                    <InputText
+                                        id="name"
+                                        required="true"
+                                        disabled=""
+                                        v-model="form.longitude"
+                                        class="!bg-gray-50"
+                                        fluid
+                                    />
+                                    <small
+                                        v-if="submitted && !product.name"
+                                        class="text-red-500"
+                                        >Name is required.</small
+                                    >
+                                </div>
+                            </div>
                             <div class="w-full">
                                 <label for="name" class="block font-bold mb-3"
                                     >Address</label
@@ -305,7 +346,7 @@
                         </Dialog>
 
                         <Dialog
-                            v-model:visible="deleteVehicleDialog"
+                            v-model:visible="deleteLocationsDialog"
                             :style="{ width: '450px' }"
                             header="Confirm"
                             :modal="true"
@@ -314,10 +355,9 @@
                                 <i
                                     class="pi pi-exclamation-triangle !text-3xl"
                                 />
-                                <span v-if="vehicles"
-                                    >Are you sure you want to delete
-                                    <b>{{ vehicleData.vehicle_name }}</b
-                                    >?</span
+                                <span
+                                    >Are you sure you want to delete the
+                                    selected location?</span
                                 >
                             </div>
                             <template #footer>
@@ -325,18 +365,18 @@
                                     label="No"
                                     icon="pi pi-times"
                                     text
-                                    @click="deleteVehicleDialog = false"
+                                    @click="deleteLocationsDialog = false"
                                 />
                                 <Button
                                     label="Yes"
                                     icon="pi pi-check"
-                                    @click="deleteVehicle(vehicleData.id)"
+                                    @click="deleteSelectedLocation"
                                 />
                             </template>
                         </Dialog>
 
                         <Dialog
-                            v-model:visible="deleteVehiclesDialog"
+                            v-model:visible="deleteLocationDialog"
                             :style="{ width: '450px' }"
                             header="Confirm"
                             :modal="true"
@@ -345,9 +385,9 @@
                                 <i
                                     class="pi pi-exclamation-triangle !text-3xl"
                                 />
-                                <span v-if="vehicles"
-                                    >Are you sure you want to delete the
-                                    selected vehicles?</span
+                                <span v-if="locationData"
+                                    >Are you sure you want to delete this
+                                    location?</span
                                 >
                             </div>
                             <template #footer>
@@ -361,7 +401,7 @@
                                     label="Yes"
                                     icon="pi pi-check"
                                     text
-                                    @click="deleteSelectedVehicles"
+                                    @click="deleteLocation(locationData.id)"
                                 />
                             </template>
                         </Dialog>
@@ -374,7 +414,7 @@
 
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { Head, useForm } from "@inertiajs/vue3";
+import { Head, useForm, router } from "@inertiajs/vue3";
 import { ref, watch } from "vue";
 
 import Toast from "primevue/toast";
@@ -390,15 +430,19 @@ import Dialog from "primevue/dialog";
 import { FilterMatchMode } from "@primevue/core/api";
 
 const toast = useToast();
-
-const locationDialog = ref(false);
-
-defineProps({
+const props = defineProps({
     location: {
         type: Object,
         required: true,
     },
 });
+
+const selectedLocation = ref(0);
+const locationDialog = ref(false);
+const deleteLocationsDialog = ref(false);
+const deleteLocationDialog = ref(false);
+const locationData = ref({});
+const dt = ref();
 
 const form = useForm({
     name: "",
@@ -423,12 +467,13 @@ watch(
         () => form.street,
         () => form.barangay,
         () => form.municipality,
+        () => form.city,
         () => form.province,
         () => form.region,
     ],
     () => {
         form.address = `${form.name}, ${form.street}, ${form.barangay} ${
-            form.municipality ? form.municipality : ""
+            form.municipality ? form.municipality : form.city
         } ${form.province}, ${form.region}`;
     }
 );
@@ -445,5 +490,80 @@ const editLocation = (loc) => {
     form.longitude = loc.longitude;
 
     locationDialog.value = true;
+};
+
+const exportCSV = () => {
+    dt.value.exportCSV();
+};
+
+const confirmDeleteLocation = (loc) => {
+    locationData.value = loc;
+    deleteLocationDialog.value = true;
+};
+
+const confirmDeleteSelected = () => {
+    deleteLocationsDialog.value = true;
+};
+
+const deleteLocation = (id) => {
+    router.delete(route("location.delete", id), {
+        onSuccess: () => {
+            deleteLocationDialog.value = false;
+            toast.add({
+                severity: "success",
+                summary: "Successful",
+                detail: "Location Deleted",
+                life: 3000,
+            });
+        },
+        onError: (errors) => {
+            console.error("Error deleting driver:", errors);
+            toast.add({
+                severity: "error",
+                summary: "Error",
+                detail: "Failed to delete driver",
+                life: 3000,
+            });
+        },
+    });
+};
+
+const deleteSelectedLocation = () => {
+    const ids = selectedLocation.value.map((m) => m.id);
+
+    if (ids.length === 0) {
+        toast.add({
+            severity: "warn",
+            summary: "No Selection",
+            detail: "No vehicles selected for deletion",
+            life: 3000,
+        });
+        return;
+    }
+
+    router.post(
+        route("locations.delete"),
+        { ids },
+        {
+            onSuccess: () => {
+                deleteLocationsDialog.value = false;
+                toast.add({
+                    severity: "success",
+                    summary: "Successful",
+                    detail: "Locations Deleted",
+                    life: 3000,
+                });
+            },
+            onError: (errors) => {
+                console.error("Error deleting drivers:", errors);
+                toast.add({
+                    severity: "error",
+                    summary: "Error",
+                    detail: "Failed to delete drivers",
+                    life: 3000,
+                });
+            },
+        }
+    );
 };
 </script>

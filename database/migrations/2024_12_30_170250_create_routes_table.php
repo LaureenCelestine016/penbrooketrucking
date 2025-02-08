@@ -15,6 +15,8 @@ return new class extends Migration
             $table->engine = 'InnoDB';
             $table->id();
             $table->foreignId('gpstracker_id')->constrained('gpstrackers')->onDelete('cascade'); // Start location
+            $table->foreignId('vehicle_id')->constrained('vehicles')->onDelete('cascade'); // Start location
+            $table->foreignId('driver_id')->constrained('drivers')->onDelete('cascade'); // Start location
             $table->foreignId('start_location_id')->constrained('locations')->onDelete('cascade'); // Start location
             $table->foreignId('end_location_id')->constrained('locations')->onDelete('cascade'); // End location
             $table->decimal('distance_km', 8, 2); // Distance between locations in kilometers

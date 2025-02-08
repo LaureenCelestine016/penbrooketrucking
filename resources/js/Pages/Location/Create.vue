@@ -7,7 +7,6 @@
                 Add Location
             </h2>
         </template>
-
         <div class="py-4">
             <div class="mx-12">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
@@ -17,7 +16,6 @@
                                 class="text-gray-900 dark:text-surface-0 text-xl font-medium mb-4 block"
                                 >Address Information</label
                             >
-
                             <div class="grid grid-cols-2 gap-10 mb-4">
                                 <!-- region -->
                                 <div class="w-full">
@@ -34,7 +32,7 @@
                                         class="flex flex-col gap-1"
                                     >
                                         <AutoComplete
-                                            id="status"
+                                            id="region"
                                             class="w-full"
                                             v-model="form.region"
                                             :suggestions="regions"
@@ -43,11 +41,12 @@
                                             placeholder="Region"
                                         />
                                         <Message
+                                            v-if="form.errors.region"
                                             severity="error"
                                             size="small"
                                             variant="simple"
-                                            >{{
-                                        }}</Message>
+                                            >{{ form.errors.region }}</Message
+                                        >
                                     </FormField>
                                 </div>
                                 <!-- province -->
@@ -64,7 +63,7 @@
                                         class="flex flex-col gap-1"
                                     >
                                         <AutoComplete
-                                            id="status"
+                                            id="province"
                                             class="w-full"
                                             v-model="form.province"
                                             :suggestions="provinces"
@@ -73,11 +72,12 @@
                                             placeholder="Province"
                                         />
                                         <Message
+                                            v-if="form.errors.province"
                                             severity="error"
                                             size="small"
                                             variant="simple"
-                                            >{{
-                                        }}</Message>
+                                            >{{ form.errors.province }}</Message
+                                        >
                                     </FormField>
                                 </div>
                             </div>
@@ -107,24 +107,23 @@
                                             severity="error"
                                             size="small"
                                             variant="simple"
-                                            >{{
-                                        }}</Message>
+                                        ></Message>
                                     </FormField>
                                 </div>
-
+                                <!-- city -->
                                 <div class="w-full">
                                     <label
-                                        for="municipality"
+                                        for="city"
                                         class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
                                         >City</label
                                     >
                                     <FormField
-                                        id="municipality"
-                                        name="municipality"
+                                        id="city"
+                                        name="city"
                                         class="flex flex-col gap-1"
                                     >
                                         <AutoComplete
-                                            id="municipality"
+                                            id="city"
                                             class="w-full"
                                             v-model="form.city"
                                             :suggestions="cities"
@@ -140,12 +139,10 @@
                                         }}</Message>
                                     </FormField>
                                 </div>
-                                <!-- barangay -->
                             </div>
-
                             <div class="grid grid-cols-2 gap-10 mb-4">
-                                <!-- cities -->
-                                <div class="w-100">
+                                <!-- barangay -->
+                                <div class="w-full">
                                     <label
                                         for="barangay"
                                         class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
@@ -167,15 +164,16 @@
                                             placeholder="Barangay"
                                         />
                                         <Message
+                                            v-if="form.errors.barangay"
                                             severity="error"
                                             size="small"
                                             variant="simple"
-                                            >{{
-                                        }}</Message>
+                                            >{{ form.errors.barangay }}</Message
+                                        >
                                     </FormField>
                                 </div>
-
-                                <div class="w-100">
+                                <!-- street -->
+                                <div class="w-full">
                                     <label
                                         for="street"
                                         class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
@@ -186,50 +184,57 @@
                                         <span class="ml-1 text-red-400">*</span>
                                     </label>
                                     <FormField
-                                        id="barangay"
-                                        name="barangay"
+                                        id="street"
+                                        name="street"
                                         class="flex flex-col gap-1"
                                     >
                                         <InputText
+                                            id="street"
                                             type="text"
                                             placeholder="Street"
                                             v-model="form.street"
                                         />
                                         <Message
+                                            v-if="form.errors.street"
                                             severity="error"
                                             size="small"
                                             variant="simple"
-                                            >{{
-                                        }}</Message>
+                                            >{{ form.errors.street }}</Message
+                                        >
                                     </FormField>
                                 </div>
                             </div>
-                            <div class="w-full">
-                                <label
-                                    for="First_name"
-                                    class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                    >Landmark<span class="ml-1 text-red-400"
-                                        >*</span
-                                    ></label
-                                >
-                                <FormField
-                                    id="First_name"
-                                    name="First_name"
-                                    class="flex flex-col gap-1"
-                                >
-                                    <InputText
-                                        type="text"
-                                        class="user--input firstName"
-                                        placeholder="Landmark"
-                                        v-model="form.name"
-                                    />
-                                    <Message
-                                        severity="error"
-                                        size="small"
-                                        variant="simple"
-                                        >{{
-                                    }}</Message>
-                                </FormField>
+                            <!-- landmark -->
+                            <div>
+                                <div class="w-full">
+                                    <label
+                                        for="landmark"
+                                        class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                        >Landmark<span class="ml-1 text-red-400"
+                                            >*</span
+                                        ></label
+                                    >
+                                    <FormField
+                                        id="landmark"
+                                        name="landmark"
+                                        class="flex flex-col gap-1"
+                                    >
+                                        <InputText
+                                            id="landmark"
+                                            type="text"
+                                            class="user--input firstName"
+                                            placeholder="Landmark"
+                                            v-model="form.name"
+                                        />
+                                        <Message
+                                            v-if="form.errors.name"
+                                            severity="error"
+                                            size="small"
+                                            variant="simple"
+                                            >{{ form.errors.name }}</Message
+                                        >
+                                    </FormField>
+                                </div>
                             </div>
                             <div class="flex items-center gap-2 mt-3">
                                 <label
@@ -257,22 +262,22 @@
                                     >
                                 </div>
                             </div>
-
                             <div class="grid grid-cols-2 gap-10 mb-4">
                                 <!-- latitude -->
                                 <div class="w-full">
                                     <label
-                                        for="street"
+                                        for="latitude"
                                         class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
                                         >Latitude
                                         <span class="ml-1 text-red-400">*</span>
                                     </label>
                                     <FormField
-                                        id="barangay"
-                                        name="barangay"
+                                        id="latitude"
+                                        name="latitude"
                                         class="flex flex-col gap-1"
                                     >
                                         <InputText
+                                            id="latitude"
                                             type="text"
                                             placeholder="Latitude"
                                             v-model="form.latitude"
@@ -280,25 +285,25 @@
                                         />
 
                                         <Message
+                                            v-if="form.errors.latitude"
                                             severity="error"
                                             size="small"
                                             variant="simple"
-                                            >{{
-                                        }}</Message>
+                                            >{{ form.errors.latitude }}</Message
+                                        >
                                     </FormField>
                                 </div>
-
                                 <!-- longitude -->
                                 <div class="w-full">
                                     <label
-                                        for="street"
+                                        for="longitude"
                                         class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
                                         >Longitude
                                         <span class="ml-1 text-red-400">*</span>
                                     </label>
                                     <FormField
-                                        id="barangay"
-                                        name="barangay"
+                                        id="longitude"
+                                        name="longitude"
                                         class="flex flex-col gap-1"
                                     >
                                         <span
@@ -313,15 +318,17 @@
                                         </span>
 
                                         <Message
+                                            v-if="form.errors.longitude"
                                             severity="error"
                                             size="small"
                                             variant="simple"
                                             >{{
-                                        }}</Message>
+                                                form.errors.longitude
+                                            }}</Message
+                                        >
                                     </FormField>
                                 </div>
                             </div>
-
                             <Button
                                 label="SUBMIT"
                                 type="submit"
@@ -330,8 +337,6 @@
                             />
                         </div>
                     </form>
-
-                    <!-- latitude modal -->
                     <Dialog
                         v-model:visible="latitudeModal"
                         maximizable
@@ -364,6 +369,7 @@ import Button from "primevue/button";
 import Dialog from "primevue/dialog";
 import { useToast } from "primevue/usetoast";
 import Toast from "primevue/toast";
+import Message from "primevue/message";
 
 const toast = useToast();
 const regions = ref([]);

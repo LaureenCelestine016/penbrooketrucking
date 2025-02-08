@@ -8,7 +8,6 @@
                 Driver List
             </h2>
         </template>
-
         <div class="py-4">
             <div class="mx-12">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
@@ -182,7 +181,7 @@
                                 <i
                                     class="pi pi-exclamation-triangle !text-3xl"
                                 />
-                                <span v-if="drivers"
+                                <span v-if="driverData"
                                     >Are you sure you want to delete
                                     <b>{{ driverData.name.first }}</b
                                     >?</span
@@ -261,6 +260,7 @@ import { useToast } from "primevue/usetoast";
 const selectedDriver = ref(0);
 const toast = useToast();
 const driverData = ref({});
+const dt = ref();
 const deleteDriversDialog = ref(false);
 const deleteDriverDialog = ref(false);
 
@@ -270,10 +270,6 @@ defineProps({
         required: true,
     },
 });
-
-const addDriver = () => {
-    router.get(route("driver.create"));
-};
 
 const confirmDeleteSelected = () => {
     deleteDriversDialog.value = true;
@@ -286,6 +282,10 @@ const confirmDeleteDriver = (driver) => {
 
 const showDetail = (id) => {
     router.get(route("driver.show", id));
+};
+
+const exportCSV = () => {
+    dt.value.exportCSV();
 };
 
 const deleteDriver = (id) => {

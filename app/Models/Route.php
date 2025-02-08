@@ -26,4 +26,15 @@ class Route extends Model
         return $this->belongsTo(GpsTracker::class, 'gpstracker_id');
     }
 
+    public function vehicle()
+    {
+        return $this->belongsTo(Vehicle::class);
+    }
+
+    // Relationship with Driver
+    public function driver()
+    {
+        return $this->belongsTo(Driver::class);
+    }
+
 }

@@ -900,10 +900,6 @@ watch(
     { deep: true }
 );
 
-// onMounted(() => {
-//     document.body.style.overflow = "hidden";
-// });
-
 const submit = () => {
     form.post(route("driver.store"), {
         onSuccess: () => {

@@ -48,4 +48,9 @@ class Vehicle extends Model
     {
         return $this->hasMany(Notification::class);
     }
+
+    public function routes()
+    {
+        return $this->hasMany(Route::class);
+    }
 }

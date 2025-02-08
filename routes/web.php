@@ -61,6 +61,8 @@ Route::middleware('auth')->prefix('location')->group(function () {
     Route::get('/', [LocationController::class,'index'])->name('location');
     Route::get('/create', [LocationController::class,'create'])->name('location.create');
     Route::post('/store', [LocationController::class,'store'])->name('location.store');
+    Route::delete('/delete/{location}', [LocationController::class, 'destroy'])->name('location.delete');
+    Route::post('/delete-all', [LocationController::class, 'deletedAll'])->name('locations.delete');
 
 });
 
