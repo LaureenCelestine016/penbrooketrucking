@@ -14,6 +14,8 @@ class Driver extends Model
 
     protected $table = 'drivers';
 
+    // protected $appends = ['fullname'];
+
     protected $fillable = [
         'first_name',
         'middle_name',
@@ -35,6 +37,11 @@ class Driver extends Model
         'license_expired',
         'status',
     ];
+
+    // public function getFullnameAttribute()
+    // {
+    //     return "{$this->first_name} {$this->last_name}";
+    // }
 
     public function user()
     {

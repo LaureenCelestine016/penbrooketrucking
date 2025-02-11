@@ -42,7 +42,6 @@ Route::middleware('auth')->prefix('vehicle')->group(function () {
     Route::post('/image/upload', [VehicleController::class, 'upload'])->name('vehicles.upload');
 });
 
-
 Route::middleware('auth')->prefix('driver')->group(function () {
     Route::get('/', [DriverController::class, 'index'])->name('driver');
     Route::get('/create', [DriverController::class, 'create'])->name('driver.create');
@@ -52,7 +51,6 @@ Route::middleware('auth')->prefix('driver')->group(function () {
     Route::get('/detail/{driver}', [DriverController::class, 'show'])->name('driver.show');
     Route::post('/delete-all', [DriverController::class, 'deletedAll'])->name('drivers.delete');
     Route::post('/status', [DriverController::class, 'status'])->name('driver.status');
-
 
 });
 
@@ -68,6 +66,7 @@ Route::middleware('auth')->prefix('location')->group(function () {
 Route::middleware('auth')->prefix('route')->group(function () {
     Route::get('/', [RouteController::class,'index'])->name('route');
     Route::get('/create', [RouteController::class,'create'])->name('route.create');
+    Route::post('/store', [RouteController::class,'store'])->name('route.store');
 
 
 });

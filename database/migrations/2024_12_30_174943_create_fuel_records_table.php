@@ -19,6 +19,7 @@ return new class extends Migration
             $table->decimal('cost', 10, 2); // Cost in decimal with precision and scale (e.g., 99999999.99)
             $table->date('refueling_date'); // The date of the refueling
             $table->string('fuel_type')->nullable(); // Optional: type of fuel (e.g., diesel, petrol)
+            $table->string('liters')->nullable(); // Optional: type of fuel (e.g., diesel, petrol)
             $table->timestamps();
         });
     }

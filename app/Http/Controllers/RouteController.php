@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Driver;
+use App\Models\Location;
 use App\Models\Route;
 use App\Models\Vehicle;
 use Illuminate\Http\Request;
@@ -22,9 +24,13 @@ class RouteController extends Controller
      */
     public function create()
     {
-        $vehicles = Vehicle::select('id', 'name')->get();
 
-        return Inertia::render('Route/Create');
+        return Inertia::render('Route/Create', [
+            "vehicles" => Vehicle::where('status', 'active')->get(['id', 'name']),
+            "locations" => Location::get(['id', 'address']),
+            "drivers" => Driver::selectRaw("id, CONCAT(first_name, ' ', last_name) AS fullname")->get(),
+        ]);
+
     }
 
     /**
@@ -32,7 +38,7 @@ class RouteController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        dd($request);
     }
 
     /**

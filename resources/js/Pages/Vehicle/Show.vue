@@ -80,7 +80,7 @@
                                             <Tab
                                                 value="1"
                                                 as="div"
-                                                class="flex items-center gap-2"
+                                                class="flex items-center gap-2 relative"
                                             >
                                                 <svg
                                                     xmlns="http://www.w3.org/2000/svg"
@@ -97,6 +97,11 @@
                                                     class="font-bold whitespace-nowrap"
                                                     >Registration Details</span
                                                 >
+                                                <Badge
+                                                    class="absolute right-1 top-2"
+                                                    value="3"
+                                                    severity="danger"
+                                                ></Badge>
                                             </Tab>
                                             <Tab v-slot="slotProps" value="2">
                                                 <div
@@ -123,7 +128,6 @@
                                                         >Technical
                                                         Specifications</span
                                                     >
-                                                    <Badge value="2" />
                                                 </div>
                                             </Tab>
                                             <Tab v-slot="slotProps" value="3">
@@ -151,7 +155,6 @@
                                                         >Maintenance
                                                         History</span
                                                     >
-                                                    <Badge value="2" />
                                                 </div>
                                             </Tab>
                                             <!-- <Tab v-slot="slotProps" value="4">
@@ -1025,6 +1028,8 @@ import Message from "primevue/message";
 import { useToast } from "primevue/usetoast";
 import Toast from "primevue/toast";
 import Dialog from "primevue/dialog";
+import Badge from "primevue/badge";
+import OverlayBadge from "primevue/overlaybadge";
 
 const vehicleTypeArr = ref([]);
 const vehicleStatus = ref([]);

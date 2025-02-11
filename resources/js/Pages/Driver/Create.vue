@@ -20,7 +20,7 @@
                             >
                             <div class="grid grid-cols-3 gap-10 mb-4">
                                 <!-- firstName -->
-                                <div class="w-100">
+                                <div class="w-full">
                                     <label
                                         for="First_name"
                                         class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
@@ -52,7 +52,7 @@
                                     </FormField>
                                 </div>
                                 <!-- middlename -->
-                                <div class="w-100">
+                                <div class="w-full">
                                     <label
                                         for="middle_name"
                                         class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
@@ -78,7 +78,7 @@
                                     </FormField>
                                 </div>
                                 <!-- lastname -->
-                                <div class="w-100">
+                                <div class="w-full">
                                     <label
                                         for="last_name"
                                         class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
@@ -112,7 +112,7 @@
                                 class="grid grid-cols-3 gap-10 mb-4 items-start"
                             >
                                 <!-- Civil Status -->
-                                <div class="w-100">
+                                <div class="w-full">
                                     <label
                                         for="civil_status"
                                         class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
@@ -147,7 +147,7 @@
                                 <!-- Birthday & Age -->
                                 <div class="flex items-center gap-5">
                                     <!-- Birthday -->
-                                    <div class="w-100">
+                                    <div class="w-full">
                                         <label
                                             for="birthday"
                                             class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
@@ -184,7 +184,7 @@
                                         </FormField>
                                     </div>
                                     <!-- age -->
-                                    <div class="w-100">
+                                    <div class="w-full">
                                         <label
                                             for="age"
                                             class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
@@ -215,7 +215,7 @@
                                     </div>
                                 </div>
                                 <!-- Address -->
-                                <div class="w-100">
+                                <div class="w-full">
                                     <label
                                         for="address"
                                         class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
@@ -254,7 +254,7 @@
                             >
                             <div class="grid grid-cols-2 gap-10 mb-4">
                                 <!-- Contact number -->
-                                <div class="w-100">
+                                <div class="w-full">
                                     <label
                                         for="contact_number"
                                         class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
@@ -291,7 +291,7 @@
                                     </FormField>
                                 </div>
                                 <!-- Contact Person -->
-                                <div class="w-100">
+                                <div class="w-full">
                                     <label
                                         for="contact_person"
                                         class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
@@ -412,10 +412,9 @@
                                 class="text-gray-900 dark:text-surface-0 text-xl font-medium mb-4 mt-8 block"
                                 >Government Id's</label
                             >
-
                             <div class="grid grid-cols-2 gap-10 mb-4">
                                 <!-- Philhealth no. -->
-                                <div class="w-100">
+                                <div class="w-full">
                                     <label
                                         for="philhealth"
                                         class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
@@ -451,7 +450,7 @@
                                     </FormField>
                                 </div>
                                 <!-- Pagibig no. -->
-                                <div class="w-100">
+                                <div class="w-full">
                                     <label
                                         for="contact_number"
                                         class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
@@ -484,7 +483,7 @@
 
                             <div class="grid grid-cols-2 gap-10 mb-4">
                                 <!-- SSS no. -->
-                                <div class="w-100">
+                                <div class="w-full">
                                     <label
                                         for="address"
                                         class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
@@ -514,7 +513,7 @@
                                     </FormField>
                                 </div>
                                 <!-- Pagibig no. -->
-                                <div class="w-100">
+                                <div class="w-full">
                                     <label
                                         for="contact_number"
                                         class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
@@ -549,12 +548,11 @@
                                 class="text-gray-900 dark:text-surface-0 text-xl font-medium mb-4 mt-8 block"
                                 >License Details</label
                             >
-
                             <div
                                 class="grid grid-cols-2 gap-10 mb-4 items-center"
                             >
                                 <!-- License no.-->
-                                <div class="w-100">
+                                <div class="w-full">
                                     <label
                                         for="address"
                                         class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
@@ -587,7 +585,7 @@
                                     </FormField>
                                 </div>
                                 <!-- License Expired Date. -->
-                                <div class="w-100">
+                                <div class="w-full">
                                     <label
                                         for="license_expired_date"
                                         class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
@@ -816,7 +814,6 @@
                                 </template>
                             </FileUpload>
                         </div>
-
                         <Button
                             label="SUBMIT"
                             type="submit"

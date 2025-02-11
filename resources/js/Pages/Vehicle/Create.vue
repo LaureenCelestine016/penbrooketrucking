@@ -18,9 +18,8 @@
                                 class="text-gray-900 dark:text-surface-0 text-xl font-medium mb-4 block"
                                 >Vehicle Information</label
                             >
-
                             <div class="grid grid-cols-2 gap-10">
-                                <div class="w-100">
+                                <div class="w-full">
                                     <label
                                         for="vehicle_name"
                                         class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
@@ -51,7 +50,7 @@
                                         >
                                     </FormField>
                                 </div>
-                                <div class="w-100">
+                                <div class="w-full">
                                     <label
                                         for="model"
                                         class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
@@ -79,14 +78,13 @@
                                     </FormField>
                                 </div>
                             </div>
-
                             <div
                                 :class="[
                                     'grid grid-cols-2 gap-10 ',
                                     form.hasErrors ? 'mt-3' : 'mt-6',
                                 ]"
                             >
-                                <div class="w-100">
+                                <div class="w-full">
                                     <label
                                         for="vehicle_name"
                                         class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
@@ -120,7 +118,7 @@
                                         >
                                     </FormField>
                                 </div>
-                                <div class="w-100">
+                                <div class="w-full">
                                     <label
                                         for="status"
                                         class="text-gray-700 dark:text-surface-50 text-sm font-medium mb-2 block"
@@ -314,7 +312,7 @@
                             >
 
                             <div class="grid grid-cols-2 gap-10">
-                                <div class="w-100">
+                                <div class="w-full">
                                     <label
                                         for="engine_number"
                                         class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
@@ -345,7 +343,7 @@
                                         >
                                     </FormField>
                                 </div>
-                                <div class="w-100">
+                                <div class="w-full">
                                     <label
                                         for="chassis_number"
                                         class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
@@ -377,14 +375,13 @@
                                     </FormField>
                                 </div>
                             </div>
-
                             <div
                                 :class="[
                                     'grid grid-cols-2 gap-10 ',
                                     form.hasErrors ? 'mt-3' : 'mt-6',
                                 ]"
                             >
-                                <div class="w-100">
+                                <div class="w-full">
                                     <label
                                         for="manufacturer"
                                         class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
@@ -415,7 +412,7 @@
                                         >
                                     </FormField>
                                 </div>
-                                <div class="w-100">
+                                <div class="w-full">
                                     <label
                                         for="manufacturer_year"
                                         class="text-gray-700 dark:text-surface-50 text-sm font-medium mb-2 block"
@@ -448,8 +445,7 @@
                                 </div>
                             </div>
                         </div>
-
-                        <div class="w-100 mt-8">
+                        <div class="w-full mt-8">
                             <label
                                 for="image_upload"
                                 class="text-slate-800 dark:text-surface-0 text-sm font-medium mb-2 block"
@@ -474,7 +470,6 @@
                                 </template>
                             </FileUpload>
                         </div>
-
                         <Button
                             label="SUBMIT"
                             type="submit"
@@ -490,8 +485,8 @@
 
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { Head, Link, useForm } from "@inertiajs/vue3";
-import { watch, computed, ref } from "vue";
+import { Head, useForm } from "@inertiajs/vue3";
+import { watch, ref } from "vue";
 import dayjs from "dayjs";
 
 import Toolbar from "primevue/toolbar";

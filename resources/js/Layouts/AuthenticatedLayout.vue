@@ -18,7 +18,10 @@
 
                         <div class="hidden sm:flex sm:items-center sm:ms-6">
                             <!-- Settings Dropdown -->
-                            <div class="ms-3 relative">
+                            <div
+                                class="ms-3 relative flex flex-row items-center gap-4"
+                            >
+                                <Badge value="4" severity="info"></Badge>
                                 <Dropdown align="right" width="48">
                                     <template #trigger>
                                         <div
@@ -216,6 +219,8 @@ import Breadcrumb from "@/Components/Breadcrumb.vue";
 import { Link, router } from "@inertiajs/vue3";
 
 import Menubar from "primevue/menubar";
+import Badge from "primevue/badge";
+import OverlayBadge from "primevue/overlaybadge";
 
 const items = ref([
     {

@@ -359,8 +359,7 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head, useForm } from "@inertiajs/vue3";
-import { ref, watch, onMounted, nextTick, computed } from "vue";
-
+import { ref, watch, onMounted, nextTick } from "vue";
 import L from "leaflet";
 
 import AutoComplete from "primevue/autocomplete";
