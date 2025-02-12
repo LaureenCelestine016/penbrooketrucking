@@ -13,14 +13,16 @@ return new class extends Migration
     {
         Schema::create('fuel_records', function (Blueprint $table) {
             $table->engine = 'InnoDB';
-            $table->id();
-            $table->foreignId('vehicle_id')->constrained('vehicles')->onDelete('cascade');
+            $table->id(); // Primary key
+            $table->unsignedBigInteger('vehicle_id'); // Add the vehicle_id column as an unsigned big integer
+            $table->foreign('vehicle_id')->references('id')->on('vehicles')->onDelete('cascade'); // Foreign key constraint
             $table->integer('quantity'); // Amount of fuel in liters/gallons, depending on the unit
             $table->decimal('cost', 10, 2); // Cost in decimal with precision and scale (e.g., 99999999.99)
             $table->date('refueling_date'); // The date of the refueling
             $table->string('fuel_type')->nullable(); // Optional: type of fuel (e.g., diesel, petrol)
             $table->string('liters')->nullable(); // Optional: type of fuel (e.g., diesel, petrol)
             $table->timestamps();
+            $table->softDeletes(); // Add soft deletes column
         });
     }
 

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DriverController;
+use App\Http\Controllers\FuelRecordController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\RouteController;
@@ -68,6 +69,12 @@ Route::middleware('auth')->prefix('route')->group(function () {
     Route::get('/create', [RouteController::class,'create'])->name('route.create');
     Route::post('/store', [RouteController::class,'store'])->name('route.store');
 
+});
+
+Route::middleware('auth')->prefix('fuel')->group(function () {
+    Route::get('/', [FuelRecordController::class,'index'])->name('fuel');
+    Route::get('/create', [FuelRecordController::class,'create'])->name('fuel.create');
+    Route::post('/store', [FuelRecordController::class,'store'])->name('fuel.store');
 
 });
 

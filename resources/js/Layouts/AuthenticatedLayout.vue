@@ -21,7 +21,26 @@
                             <div
                                 class="ms-3 relative flex flex-row items-center gap-4"
                             >
-                                <Badge value="4" severity="info"></Badge>
+                                <div class="relative">
+                                    <Badge
+                                        value="1"
+                                        severity="info"
+                                        size="small"
+                                        class="absolute -top-1 -right-0"
+                                    ></Badge>
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="32"
+                                        height="32"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            fill="#ecebef"
+                                            d="M5 18.77v-1h1.616V9.845q0-1.96 1.24-3.447T11 4.546V3h2v1.546q1.904.366 3.144 1.853t1.24 3.447v7.923H19v1zm6.997 2.615q-.668 0-1.14-.475t-.472-1.14h3.23q0 .67-.475 1.142q-.476.472-1.143.472M7.616 17.77h8.769V9.846q0-1.823-1.281-3.104T12 5.462t-3.104 1.28t-1.28 3.104z"
+                                        />
+                                    </svg>
+                                </div>
+
                                 <Dropdown align="right" width="48">
                                     <template #trigger>
                                         <div
@@ -181,7 +200,7 @@
             <nav class="bg-white border-b border-gray-100 w-100">
                 <!-- Primary Navigation Menu -->
                 <div class="mx-12">
-                    <div class="card w-100 sm:text-sm font-semibold">
+                    <div class="card w-100 font-semibold">
                         <Menubar :model="items" class="menubar" />
                     </div>
                 </div>
@@ -289,7 +308,7 @@ const items = ref([
     },
     {
         label: "Route",
-        icon: "pi pi-map-marker",
+        icon: "pi pi-wave-pulse",
         items: [
             {
                 label: "Route List",
@@ -309,27 +328,27 @@ const items = ref([
     },
     {
         label: "Fuel",
-        icon: "pi pi-map-marker",
+        icon: "pi pi-gauge",
         items: [
             {
                 label: "Fuel Record",
                 icon: "pi pi-list",
                 command: () => {
-                    router.get("/location");
+                    router.get("/fuel");
                 },
             },
             {
                 label: "Add Fuel",
                 icon: "pi pi-plus",
                 command: () => {
-                    router.get("/location/create");
+                    router.get("/fuel/create");
                 },
             },
         ],
     },
     {
         label: "Maintenance",
-        icon: "pi pi-map-marker",
+        icon: "pi pi-wrench",
         items: [
             {
                 label: "Vehicle Maintenance Record",
@@ -349,7 +368,7 @@ const items = ref([
     },
     {
         label: "Sale & Expenses",
-        icon: "pi pi-map-marker",
+        icon: "pi pi-money-bill",
         items: [
             {
                 label: "Sale",

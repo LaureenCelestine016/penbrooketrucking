@@ -254,25 +254,27 @@
                                 </div>
                                 <div class="w-full">
                                     <label
-                                        for="middle_name"
+                                        for="vehicle_name"
                                         class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                        >Fuel Amount<span
+                                        >Fuel amount<span
                                             class="ml-1 text-red-400"
                                             >*</span
-                                        >
-                                    </label>
+                                        ></label
+                                    >
                                     <FormField
-                                        id="middle_name"
-                                        name="middle_name"
+                                        id="vehicle_name"
+                                        name="vehicle_name"
                                         class="flex flex-col gap-1"
                                     >
-                                        <InputText
-                                            type="text"
-                                            v-model="form.middleName"
-                                            placeholder="Amount"
+                                        <AutoComplete
+                                            id="vehicle_name"
+                                            class="w-full"
+                                            :suggestions="fuelAmount"
+                                            @complete="fuelAmountSearch"
+                                            dropdown
+                                            placeholder="Vehicle name"
                                         />
                                         <Message
-                                            v-if="form.errors.middle"
                                             severity="error"
                                             size="small"
                                             variant="simple"
@@ -347,6 +349,7 @@ const driverName = ref([]);
 const startLoc = ref([]);
 const endLoc = ref([]);
 const tripStatus = ref([]);
+const fuelAmount = ref([]);
 
 const props = defineProps({
     vehicles: {
@@ -437,5 +440,17 @@ const onEndLocSelect = (event) => {
 
 const tripStatusSearch = () => {
     tripStatus.value = ["Yet to start", "Completed", "Ongoing", "Cancelled"];
+};
+
+const fuelAmountSearch = () => {
+    // for (let i = 0; i < props.vehicles.length; i++) {
+    //     const element = props.vehicles[i].fuel_records;
+    //     fuelAmount.value = element.map((fuel) => fuel);
+    //     console.log(fuelAmount.value.data);
+    // }
+
+    fuelAmount.value = props.vehicles.map((vehicle) => vehicle).fuel_record;
+
+    console.log(fuelAmount.value);
 };
 </script>

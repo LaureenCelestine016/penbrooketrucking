@@ -10,6 +10,14 @@ class Fuel_record extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $fillable = [
+        'vehicle_id',
+        'quantity',
+        'cost',
+        'refueling_date',
+        'fuel_type',
+    ];
+
     public function vehicle()
     {
         return $this->belongsTo(Vehicle::class);

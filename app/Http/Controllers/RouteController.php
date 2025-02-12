@@ -26,9 +26,18 @@ class RouteController extends Controller
     {
 
         return Inertia::render('Route/Create', [
-            "vehicles" => Vehicle::where('status', 'active')->get(['id', 'name']),
-            "locations" => Location::get(['id', 'address']),
-            "drivers" => Driver::selectRaw("id, CONCAT(first_name, ' ', last_name) AS fullname")->get(),
+            "vehicles" => Vehicle::with(['fuelRecords' => function ($query) {
+                $query->orderBy('created_at', 'desc'); // Sort fuel records by latest first
+            }])
+            ->where('status', 'active')
+            ->orderBy('created_at', 'desc')
+            ->get(['id', 'name']), // Fetch only id and name
+
+            "locations" => Location::get(['id', 'address']), // Fetch all locations with id and address
+
+            "drivers" => Driver::selectRaw("id, CONCAT(first_name, ' ', last_name) AS fullname")
+                ->orderBy('created_at', 'desc')
+                ->get(), // Fetch drivers with full name concatenation
         ]);
 
     }

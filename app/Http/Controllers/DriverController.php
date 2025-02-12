@@ -25,7 +25,7 @@ class DriverController extends Controller
         $drivers = DriverResource::collection(
             Driver::orderBy('created_at', 'desc')->get()
         );
-        
+
         return Inertia::render('Driver/Index',  ['drivers' => $drivers]);
     }
 

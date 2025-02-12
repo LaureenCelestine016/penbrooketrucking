@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Fuel_record;
+use App\Models\Vehicle;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
+use Carbon\Carbon;
 
 class FuelRecordController extends Controller
 {
@@ -12,7 +15,7 @@ class FuelRecordController extends Controller
      */
     public function index()
     {
-        //
+        return Inertia::render('Fuel/Index');
     }
 
     /**
@@ -20,7 +23,7 @@ class FuelRecordController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('Fuel/Create',["vehicles" => Vehicle::where('status', 'active')->orderBy('created_at', 'desc')->get(['id', 'name'])]);
     }
 
     /**
@@ -28,7 +31,28 @@ class FuelRecordController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+
+        $validatedData = $request->validate([
+            'vehicleId'         => 'required|integer|exists:vehicles,id',
+            'quantity'          => 'required|numeric|min:1',
+            'cost'              => 'required|numeric|min:0',
+            'type'              => 'required|string',
+            'refuelingDate'     => 'required|date',
+        ]);
+
+        $validatedData['cost'] = round($validatedData['cost'], 2);
+        $validatedData['refuelingDate'] = Carbon::parse($validatedData['refuelingDate'])->format('Y-m-d H:i:s');
+
+        Fuel_record::create([
+            'vehicle_id'           => $validatedData['vehicleId'],
+            'quantity'             => $validatedData['quantity'],
+            'cost'                 => $validatedData['cost'],
+            'refueling_date'       => $validatedData['refuelingDate'],
+            'fuel_type'            => $validatedData['type'],
+        ]);
+
+        return redirect()->route('fuel')->with('success', 'Fuel created successfully!');
     }
 
     /**

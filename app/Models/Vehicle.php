@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Fuel_record;
 
 class Vehicle extends Model
 {
@@ -36,7 +37,7 @@ class Vehicle extends Model
 
     public function fuelRecords()
     {
-        return $this->hasMany(Fuel_record::class);
+        return $this->hasMany(Fuel_Record::class, 'vehicle_id')->withTrashed();
     }
 
     public function maintenanceTasks()

@@ -1016,25 +1016,17 @@ import TabPanel from "primevue/tabpanel";
 import InputText from "primevue/inputtext";
 import AutoComplete from "primevue/autocomplete";
 import DatePicker from "primevue/datepicker";
-import Textarea from "primevue/textarea";
 import Button from "primevue/button";
-import Accordion from "primevue/accordion";
-import AccordionPanel from "primevue/accordionpanel";
-import AccordionHeader from "primevue/accordionheader";
-import AccordionContent from "primevue/accordioncontent";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import Message from "primevue/message";
 import { useToast } from "primevue/usetoast";
 import Toast from "primevue/toast";
-import Dialog from "primevue/dialog";
 import Badge from "primevue/badge";
-import OverlayBadge from "primevue/overlaybadge";
 
 const vehicleTypeArr = ref([]);
 const vehicleStatus = ref([]);
 const toast = useToast();
-const activeTab = ref("1");
 
 const props = defineProps({
     Vehicle: {
