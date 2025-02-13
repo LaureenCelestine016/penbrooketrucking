@@ -10,7 +10,7 @@
         </template>
         <div class="py-4">
             <div class="mx-12">
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-md">
                     <form @submit.prevent="submit" class="p-6">
                         <!-- Vehicle Infomation -->
                         <div class="">
@@ -43,11 +43,14 @@
                                             placeholder="Vehicle name"
                                         />
                                         <Message
+                                            v-if="form.errors.vehicleId"
                                             severity="error"
                                             size="small"
                                             variant="simple"
                                             >{{
-                                        }}</Message>
+                                                form.errors.vehicleId
+                                            }}</Message
+                                        >
                                     </FormField>
                                 </div>
                                 <div class="w-full">
@@ -74,10 +77,12 @@
                                             placeholder="Driver name"
                                         />
                                         <Message
+                                            v-if="form.errors.driverId"
                                             severity="error"
                                             size="small"
                                             variant="simple"
-                                        ></Message>
+                                            >{{ form.errors.driverId }}</Message
+                                        >
                                     </FormField>
                                 </div>
                             </div>
@@ -107,11 +112,14 @@
                                             placeholder="Location"
                                         />
                                         <Message
+                                            v-if="form.errors.startLocId"
                                             severity="error"
                                             size="small"
                                             variant="simple"
                                             >{{
-                                        }}</Message>
+                                                form.errors.startLocId
+                                            }}</Message
+                                        >
                                     </FormField>
                                 </div>
                                 <div class="w-full">
@@ -139,10 +147,12 @@
                                             placeholder="Location"
                                         />
                                         <Message
+                                            v-if="form.errors.endLocId"
                                             severity="error"
                                             size="small"
                                             variant="simple"
-                                        ></Message>
+                                            >{{ form.errors.endLocId }}</Message
+                                        >
                                     </FormField>
                                 </div>
                             </div>
@@ -164,7 +174,7 @@
                                         <div class="flex-auto">
                                             <DatePicker
                                                 id="registration_expired"
-                                                v-model="form.license_expired"
+                                                v-model="form.dateStart"
                                                 showIcon
                                                 fluid
                                                 :showOnFocus="false"
@@ -173,12 +183,12 @@
                                             />
                                         </div>
                                         <Message
-                                            v-if="form.errors.license_expired"
+                                            v-if="form.errors.dateStart"
                                             severity="error"
                                             size="small"
                                             variant="simple"
                                             >{{
-                                                form.errors.license_expired
+                                                form.errors.dateStart
                                             }}</Message
                                         >
                                     </FormField>
@@ -200,7 +210,7 @@
                                         <div class="flex-auto">
                                             <DatePicker
                                                 id="registration_expired"
-                                                v-model="form.license_expired"
+                                                v-model="form.dateEnd"
                                                 showIcon
                                                 fluid
                                                 :showOnFocus="false"
@@ -209,13 +219,11 @@
                                             />
                                         </div>
                                         <Message
-                                            v-if="form.errors.license_expired"
+                                            v-if="form.errors.dateEnd"
                                             severity="error"
                                             size="small"
                                             variant="simple"
-                                            >{{
-                                                form.errors.license_expired
-                                            }}</Message
+                                            >{{ form.errors.dateEnd }}</Message
                                         >
                                     </FormField>
                                 </div>
@@ -237,24 +245,22 @@
                                     >
                                         <InputText
                                             type="text"
-                                            v-model="form.firstName"
+                                            v-model="form.aproxKM"
                                             class="user--input firstName"
                                             placeholder="Kilometer"
                                         />
                                         <Message
-                                            v-if="form.errors.firstName"
+                                            v-if="form.errors.aproxKM"
                                             severity="error"
                                             size="small"
                                             variant="simple"
-                                            >{{
-                                                form.errors.firstName
-                                            }}</Message
+                                            >{{ form.errors.aproxKM }}</Message
                                         >
                                     </FormField>
                                 </div>
                                 <div class="w-full">
                                     <label
-                                        for="vehicle_name"
+                                        for="fuel"
                                         class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
                                         >Fuel amount<span
                                             class="ml-1 text-red-400"
@@ -262,8 +268,8 @@
                                         ></label
                                     >
                                     <FormField
-                                        id="vehicle_name"
-                                        name="vehicle_name"
+                                        id="fuel"
+                                        name="fuel"
                                         class="flex flex-col gap-1"
                                     >
                                         <AutoComplete
@@ -271,15 +277,39 @@
                                             class="w-full"
                                             :suggestions="fuelAmount"
                                             @complete="fuelAmountSearch"
+                                            @item-select="onFuelSelect"
                                             dropdown
-                                            placeholder="Vehicle name"
-                                        />
+                                            placeholder="Amount"
+                                            optionLabel="display"
+                                            :forceSelection="true"
+                                        >
+                                            <template #option="slotProps">
+                                                <div>
+                                                    <span
+                                                        >₱
+                                                        {{
+                                                            slotProps.option
+                                                                .cost
+                                                        }}</span
+                                                    >
+                                                    <span class="fuel-date">
+                                                        — Refuel Date:
+                                                        {{
+                                                            slotProps.option
+                                                                .date
+                                                        }}</span
+                                                    >
+                                                </div>
+                                            </template>
+                                        </AutoComplete>
+
                                         <Message
+                                            v-if="form.errors.fuelId"
                                             severity="error"
                                             size="small"
                                             variant="simple"
-                                            >{{
-                                        }}</Message>
+                                            >{{ form.errors.fuelId }}</Message
+                                        >
                                     </FormField>
                                 </div>
                             </div>
@@ -301,19 +331,18 @@
                                         <AutoComplete
                                             id="vehicle_name"
                                             class="w-full"
+                                            v-model="form.status"
                                             :suggestions="tripStatus"
                                             @complete="tripStatusSearch"
                                             dropdown
                                             placeholder="Status"
                                         />
                                         <Message
-                                            v-if="form.errors.firstName"
+                                            v-if="form.errors.status"
                                             severity="error"
                                             size="small"
                                             variant="simple"
-                                            >{{
-                                                form.errors.firstName
-                                            }}</Message
+                                            >{{ form.errors.status }}</Message
                                         >
                                     </FormField>
                                 </div>
@@ -343,6 +372,7 @@ import Button from "primevue/button";
 import InputText from "primevue/inputtext";
 import AutoComplete from "primevue/autocomplete";
 import DatePicker from "primevue/datepicker";
+import Message from "primevue/message";
 
 const vehicleName = ref([]);
 const driverName = ref([]);
@@ -350,6 +380,7 @@ const startLoc = ref([]);
 const endLoc = ref([]);
 const tripStatus = ref([]);
 const fuelAmount = ref([]);
+const toast = useToast();
 
 const props = defineProps({
     vehicles: {
@@ -369,8 +400,13 @@ const props = defineProps({
 const form = useForm({
     vehicleId: "",
     driverId: "",
-    startLoc: "",
-    endLoc: "",
+    startLocId: "",
+    endLocId: "",
+    fuelId: "",
+    dateStart: "",
+    dateEnd: "",
+    status: "",
+    aproxKM: "",
 });
 
 const submit = () => {
@@ -424,7 +460,7 @@ const startLocSearch = () => {
 };
 
 const onStLocSelect = (event) => {
-    form.startLoc = event.value.id;
+    form.startLocId = event.value.id;
 };
 
 const endLocSearch = () => {
@@ -435,7 +471,7 @@ const endLocSearch = () => {
 };
 
 const onEndLocSelect = (event) => {
-    form.endLoc = event.value.id;
+    form.endLocId = event.value.id;
 };
 
 const tripStatusSearch = () => {
@@ -443,14 +479,29 @@ const tripStatusSearch = () => {
 };
 
 const fuelAmountSearch = () => {
-    // for (let i = 0; i < props.vehicles.length; i++) {
-    //     const element = props.vehicles[i].fuel_records;
-    //     fuelAmount.value = element.map((fuel) => fuel);
-    //     console.log(fuelAmount.value.data);
-    // }
+    const selectedVehicle = props.vehicles.find((v) => v.id === form.vehicleId);
 
-    fuelAmount.value = props.vehicles.map((vehicle) => vehicle).fuel_record;
+    if (selectedVehicle) {
+        fuelAmount.value = selectedVehicle.fuel_records.map((record) => ({
+            id: record.id,
+            cost: record.cost,
+            date: record.refueling_date,
+            display: `₱ ${record.cost} -- Refuel Date: ${record.refueling_date}`, // UI display value
+        }));
+    } else {
+        fuelAmount.value = []; // Clear if no vehicle found
+    }
+};
 
-    console.log(fuelAmount.value);
+const onFuelSelect = (event) => {
+    form.fuelId = event.value.id;
 };
 </script>
+
+<style scoped>
+.fuel-date {
+    font-size: 12px; /* Small text */
+    color: red; /* Red color */
+    margin-left: 5px;
+}
+</style>

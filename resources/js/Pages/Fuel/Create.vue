@@ -10,7 +10,7 @@
         </template>
         <div class="py-4">
             <div class="mx-12">
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-md">
                     <form @submit.prevent="submit" class="p-6">
                         <!-- Vehicle Infomation -->
                         <div class="">

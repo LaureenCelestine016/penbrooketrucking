@@ -10,6 +10,12 @@ class Route extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $fillable = [
+        'gpstracker_id', 'vehicle_id', 'driver_id',
+        'start_location_id', 'end_location_id', 'fuel_id',
+        'start_date', 'end_date', 'distance_km', 'status'
+    ];
+
     public function startLocation()
     {
         return $this->belongsTo(Location::class, 'start_location_id');
@@ -35,6 +41,11 @@ class Route extends Model
     public function driver()
     {
         return $this->belongsTo(Driver::class);
+    }
+
+    public function fuelRecord()
+    {
+        return $this->belongsTo(Fuel_record::class, 'fuel_id');
     }
 
 }

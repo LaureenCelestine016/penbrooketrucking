@@ -22,4 +22,9 @@ class Fuel_record extends Model
     {
         return $this->belongsTo(Vehicle::class);
     }
+
+    public function routes()
+    {
+        return $this->hasMany(Route::class, 'fuel_id');
+    }
 }
