@@ -164,18 +164,18 @@
                         <Dialog
                             v-model:visible="routeDialog"
                             :style="{ width: '750px' }"
-                            header="Location Details"
+                            header="Route Details"
                             :modal="true"
                         >
                             <div class="flex flex-row gap-5 mb-4">
                                 <div class="w-full">
                                     <label
-                                        for="name"
+                                        for="vehicle"
                                         class="block font-bold mb-3"
-                                        >Landmark</label
+                                        >Vehicle</label
                                     >
                                     <InputText
-                                        id="name"
+                                        id="vehicle"
                                         required="true"
                                         v-model="form.name"
                                         fluid
@@ -188,177 +188,37 @@
                                 </div>
                                 <div class="w-full">
                                     <label
-                                        for="name"
-                                        class="block font-bold mb-3"
-                                        >Street</label
+                                        for="driver"
+                                        class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                        >Driver<span class="ml-1 text-red-400"
+                                            >*</span
+                                        ></label
                                     >
-                                    <InputText
-                                        id="name"
-                                        required="true"
-                                        v-model="form.street"
-                                        fluid
-                                    />
-                                    <small
-                                        v-if="submitted && !product.name"
-                                        class="text-red-500"
-                                        >Name is required.</small
+                                    <FormField
+                                        id="driver"
+                                        name="driver"
+                                        class="flex flex-col gap-1"
                                     >
+                                        <AutoComplete
+                                            id="driver"
+                                            class="w-full"
+                                            v-model="form.driver"
+                                            :suggestions="driverName"
+                                            @complete="driverNameSearch"
+                                            @item-select="onDriverSelect"
+                                            optionLabel="name"
+                                            dropdown
+                                            placeholder="Driver name"
+                                        />
+                                        <Message
+                                            v-if="form.errors.driverId"
+                                            severity="error"
+                                            size="small"
+                                            variant="simple"
+                                            >{{ form.errors.driverId }}</Message
+                                        >
+                                    </FormField>
                                 </div>
-                            </div>
-                            <div class="flex flex-row gap-5 mb-4">
-                                <div class="w-full">
-                                    <label
-                                        for="name"
-                                        class="block font-bold mb-3"
-                                        >Barangay</label
-                                    >
-                                    <InputText
-                                        id="name"
-                                        required="true"
-                                        v-model="form.barangay"
-                                        fluid
-                                    />
-                                    <small
-                                        v-if="submitted && !product.name"
-                                        class="text-red-500"
-                                        >Name is required.</small
-                                    >
-                                </div>
-                                <div class="w-full" v-if="form.municipality">
-                                    <label
-                                        for="name"
-                                        class="block font-bold mb-3"
-                                        >Municipality</label
-                                    >
-                                    <InputText
-                                        id="name"
-                                        required="true"
-                                        v-model="form.municipality"
-                                        fluid
-                                    />
-                                    <small
-                                        v-if="submitted && !product.name"
-                                        class="text-red-500"
-                                        >Name is required.</small
-                                    >
-                                </div>
-                                <div class="w-full" v-else>
-                                    <label
-                                        for="name"
-                                        class="block font-bold mb-3"
-                                        >City</label
-                                    >
-                                    <InputText
-                                        id="name"
-                                        required="true"
-                                        v-model="form.city"
-                                        fluid
-                                    />
-                                    <small
-                                        v-if="submitted && !product.name"
-                                        class="text-red-500"
-                                        >Name is required.</small
-                                    >
-                                </div>
-                            </div>
-
-                            <div class="flex flex-row gap-5 mb-4">
-                                <div class="w-full">
-                                    <label
-                                        for="name"
-                                        class="block font-bold mb-3"
-                                        >Province</label
-                                    >
-                                    <InputText
-                                        id="name"
-                                        required="true"
-                                        v-model="form.province"
-                                        fluid
-                                    />
-                                    <small
-                                        v-if="submitted && !product.name"
-                                        class="text-red-500"
-                                        >Name is required.</small
-                                    >
-                                </div>
-                                <div class="w-full">
-                                    <label
-                                        for="name"
-                                        class="block font-bold mb-3"
-                                        >Region</label
-                                    >
-                                    <InputText
-                                        id="name"
-                                        required="true"
-                                        v-model="form.region"
-                                        fluid
-                                    />
-                                    <small
-                                        v-if="submitted && !product.name"
-                                        class="text-red-500"
-                                        >Name is required.</small
-                                    >
-                                </div>
-                            </div>
-                            <div class="flex flex-row gap-5 mb-4">
-                                <div class="w-full">
-                                    <label
-                                        for="name"
-                                        class="block font-bold mb-3"
-                                        >Latitude</label
-                                    >
-                                    <InputText
-                                        id="name"
-                                        disabled=""
-                                        required="true"
-                                        v-model="form.latitude"
-                                        class="!bg-gray-50"
-                                        fluid
-                                    />
-                                    <small
-                                        v-if="submitted && !product.name"
-                                        class="text-red-500"
-                                        >Name is required.</small
-                                    >
-                                </div>
-                                <div class="w-full">
-                                    <label
-                                        for="name"
-                                        class="block font-bold mb-3"
-                                        >Longitude</label
-                                    >
-                                    <InputText
-                                        id="name"
-                                        required="true"
-                                        disabled=""
-                                        v-model="form.longitude"
-                                        class="!bg-gray-50"
-                                        fluid
-                                    />
-                                    <small
-                                        v-if="submitted && !product.name"
-                                        class="text-red-500"
-                                        >Name is required.</small
-                                    >
-                                </div>
-                            </div>
-                            <div class="w-full">
-                                <label for="name" class="block font-bold mb-3"
-                                    >Address</label
-                                >
-                                <InputText
-                                    id="name"
-                                    disabled=""
-                                    required="true"
-                                    v-model="form.address"
-                                    fluid
-                                    class="!bg-gray-50"
-                                />
-                                <small
-                                    v-if="submitted && !product.name"
-                                    class="text-red-500"
-                                    >Name is required.</small
-                                >
                             </div>
 
                             <template #footer>
@@ -441,6 +301,7 @@
 
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
+import { Head, useForm, router } from "@inertiajs/vue3";
 
 import Button from "primevue/button";
 import DataTable from "primevue/datatable";
@@ -452,7 +313,7 @@ import InputText from "primevue/inputtext";
 import Tag from "primevue/tag";
 import Dialog from "primevue/dialog";
 import { FilterMatchMode } from "@primevue/core/api";
-
+import AutoComplete from "primevue/autocomplete";
 import { useToast } from "primevue/usetoast";
 import { ref } from "vue";
 
@@ -461,16 +322,38 @@ const props = defineProps({
         type: Object,
         required: true,
     },
+    drivers: {
+        type: Object,
+        required: true,
+    },
 });
 
 const routeDialog = ref(false);
+const driverName = ref([]);
 const toast = useToast();
 
-const editRoute = (loc) => {
-    console.log(loc);
+const form = useForm({
+    name: "",
+    driver: "",
+    start_location: "",
+    end_location: "",
+    start_date: "",
+    end_date: "",
+    distance_km: "",
+    start_loc_latitude: "",
+    start_loc_longitude: "",
+    end_loc_latitude: "",
+    end_loc_longitude: "",
+});
 
-    // form.name = loc.name;
-    // form.street = loc.street;
+const editRoute = (route) => {
+    const driverName = props.drivers.find((v) => v.id === route.driver.id);
+    console.log(driverName.fullname);
+
+    form.name = route.vehicle.name;
+    form.driver = driverName.fullname;
+
+    routeDialog.value = true;
     // form.barangay = loc.barangay;
     // form.municipality = loc.municipality;
     // form.city = loc.city;
@@ -480,6 +363,17 @@ const editRoute = (loc) => {
     // form.longitude = loc.longitude;
 
     // routeDialog.value = true;
+};
+
+const driverNameSearch = () => {
+    driverName.value = props.drivers.map((driver) => ({
+        id: driver.id,
+        name: driver.fullname,
+    }));
+};
+
+const onDriverSelect = (event) => {
+    form.driverId = event.value.id;
 };
 
 const filters = ref({

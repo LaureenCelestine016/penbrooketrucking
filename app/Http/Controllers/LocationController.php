@@ -87,7 +87,24 @@ class LocationController extends Controller
      */
     public function update(Request $request, Location $location)
     {
-        //
+
+        $validatedData = $request->validate([
+            'address'          => 'nullable|string|max:255',
+            'region'           => 'required|string|max:255',
+            'province'         => 'required|string|max:255',
+            'city'             => 'nullable|string|max:255',
+            'municipality'     => 'nullable|string|max:255',
+            'barangay'         => 'required|string|max:255',
+            'street'           => 'required|string|max:255',
+            'name'             => 'required|string|max:255',
+            'latitude'         => 'required|numeric|min:-90|max:90',
+            'longitude'        => 'required|numeric|min:-180|max:180',
+        ]);
+
+        $location->update($validatedData);
+
+        return redirect()->route('location', $location);
+
     }
 
     /**

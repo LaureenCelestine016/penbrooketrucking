@@ -1,11 +1,11 @@
 <template>
     <Head title="Register" />
     <Toast />
-    <div class="w-full h-14 border-b bg-blue-800">
-        <div class="flex h-full max-w-89rem mx-auto">
+    <div class="w-full h-16 border-b bg-navyblue">
+        <div class="flex h-full mx-12">
             <div class="flex h-full items-center">
-                <h2 class="font-bold tracking-widest text-blue-100">
-                    LOGO HERE
+                <h2 class="text-2xl font-bold tracking-widest text-white">
+                    Penbrooke Inc.
                 </h2>
             </div>
             <div class="grow h-100"></div>
@@ -288,7 +288,8 @@ const location = () => {
                 const { latitude } = position.coords;
                 const { longitude } = position.coords;
 
-                const coords = [latitude, longitude];
+                // const coords = [latitude, longitude];
+                const coords = ["13.782294521077622", "122.9807388708657"];
 
                 // Initialize the map
                 map.value = L.map("map").setView(coords, 13);
@@ -343,7 +344,7 @@ onMounted(() => {
 }
 
 .btn-submit {
-    background-color: rgb(30, 64, 175);
+    background-color: #213555;
     border: none;
     margin-top: 14px;
     color: rgb(219 234 254);

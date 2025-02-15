@@ -154,7 +154,8 @@ const location = () => {
                 const { latitude } = position.coords;
                 const { longitude } = position.coords;
 
-                const coords = [latitude, longitude];
+                // const coords = [latitude, longitude];
+                const coords = ["13.782294521077622", "122.9807388708657"];
 
                 // Initialize the map
                 map.value = L.map("map").setView(coords, 13);

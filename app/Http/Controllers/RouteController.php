@@ -17,8 +17,14 @@ class RouteController extends Controller
      */
     public function index()
     {
-        $route = Route::with("vehicle","driver","startLocation", "endLocation")->get();
-        return Inertia::render('Route/Index',['route' => $route]);
+
+        return Inertia::render('Route/Index',[
+            "route" => Route::with("vehicle","driver","startLocation", "endLocation")->get(),
+            "drivers" => Driver::selectRaw("id, CONCAT(first_name, ' ', last_name) AS fullname")
+                ->orderBy('created_at', 'desc')
+                ->get(),
+
+            ]);
     }
 
     /**
