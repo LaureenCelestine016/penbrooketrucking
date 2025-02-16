@@ -163,15 +163,15 @@
 
                         <Dialog
                             v-model:visible="routeDialog"
-                            :style="{ width: '750px' }"
+                            :style="{ width: '970px' }"
                             header="Route Details"
                             :modal="true"
                         >
-                            <div class="flex flex-row gap-5 mb-4">
+                            <div class="grid grid-cols-3 gap-10 mb-4">
                                 <div class="w-full">
                                     <label
                                         for="vehicle"
-                                        class="block font-bold mb-3"
+                                        class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
                                         >Vehicle</label
                                     >
                                     <InputText
@@ -188,11 +188,9 @@
                                 </div>
                                 <div class="w-full">
                                     <label
-                                        for="driver"
+                                        for="vehicle"
                                         class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                        >Driver<span class="ml-1 text-red-400"
-                                            >*</span
-                                        ></label
+                                        >Driver</label
                                     >
                                     <FormField
                                         id="driver"
@@ -219,13 +217,170 @@
                                         >
                                     </FormField>
                                 </div>
+                                <div class="w-full">
+                                    <label
+                                        for="license_expired_date"
+                                        class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                        >Distance<span class="ml-1 text-red-400"
+                                            >*</span
+                                        >
+                                    </label>
+                                    <InputText
+                                        id="vehicle"
+                                        required="true"
+                                        v-model="form.distance_km"
+                                        fluid
+                                    />
+                                </div>
                             </div>
-
+                            <div class="grid grid-cols-3 gap-10 mb-4">
+                                <div class="w-full">
+                                    <label
+                                        for="license_expired_date"
+                                        class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                        >Trip Start Date<span
+                                            class="ml-1 text-red-400"
+                                            >*</span
+                                        >
+                                    </label>
+                                    <FormField
+                                        id="license_expired_date"
+                                        name="license_expired_date"
+                                        class="flex flex-col gap-1"
+                                    >
+                                        <div class="flex-auto">
+                                            <DatePicker
+                                                id="registration_expired"
+                                                v-model="form.dateStart"
+                                                showIcon
+                                                fluid
+                                                :showOnFocus="false"
+                                                inputId="license_expired"
+                                                placeholder="Start Date"
+                                            />
+                                        </div>
+                                        <Message
+                                            v-if="form.errors.dateStart"
+                                            severity="error"
+                                            size="small"
+                                            variant="simple"
+                                            >{{
+                                                form.errors.dateStart
+                                            }}</Message
+                                        >
+                                    </FormField>
+                                </div>
+                                <div class="w-full">
+                                    <label
+                                        for="license_expired_date"
+                                        class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                        >Trip End Date<span
+                                            class="ml-1 text-red-400"
+                                            >*</span
+                                        >
+                                    </label>
+                                    <FormField
+                                        id="license_expired_date"
+                                        name="license_expired_date"
+                                        class="flex flex-col gap-1"
+                                    >
+                                        <div class="flex-auto">
+                                            <DatePicker
+                                                id="registration_expired"
+                                                v-model="form.dateEnd"
+                                                showIcon
+                                                fluid
+                                                :showOnFocus="false"
+                                                inputId="license_expired"
+                                                placeholder="End Date"
+                                            />
+                                        </div>
+                                        <Message
+                                            v-if="form.errors.dateEnd"
+                                            severity="error"
+                                            size="small"
+                                            variant="simple"
+                                            >{{ form.errors.dateEnd }}</Message
+                                        >
+                                    </FormField>
+                                </div>
+                                <div class="w-full">
+                                    <label
+                                        for="First_name"
+                                        class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                        >Trip Status<span
+                                            class="ml-1 text-red-400"
+                                            >*</span
+                                        ></label
+                                    >
+                                    <FormField
+                                        id="First_name"
+                                        name="First_name"
+                                        class="flex flex-col gap-1"
+                                    >
+                                        <AutoComplete
+                                            id="vehicle_name"
+                                            class="w-full"
+                                            v-model="form.status"
+                                            :suggestions="tripStatus"
+                                            @complete="tripStatusSearch"
+                                            dropdown
+                                            placeholder="Status"
+                                        />
+                                        <Message
+                                            v-if="form.errors.status"
+                                            severity="error"
+                                            size="small"
+                                            variant="simple"
+                                            >{{ form.errors.status }}</Message
+                                        >
+                                    </FormField>
+                                </div>
+                            </div>
+                            <div>
+                                <label
+                                    for="vehicle"
+                                    class="block font-bold mb-3"
+                                    >Overview</label
+                                >
+                                <div
+                                    class="h-[400px] border-2 border-dashed border-surface p-2"
+                                >
+                                    <div
+                                        class="flex flex-rows items-center gap-3 mb-3"
+                                    >
+                                        <h2
+                                            class="font-bold text-lg text-center"
+                                        >
+                                            {{ form.start_location }}
+                                        </h2>
+                                        <span
+                                            class="font-semibold text-lg text-red-500"
+                                            >to</span
+                                        >
+                                        <h2
+                                            class="font-bold text-lg text-center"
+                                        >
+                                            {{ form.end_location }}
+                                        </h2>
+                                    </div>
+                                    <div class="border p-1">
+                                        <div
+                                            id="map"
+                                            style="
+                                                width: 100%;
+                                                height: 600px;
+                                                background: #eee;
+                                            "
+                                        ></div>
+                                    </div>
+                                </div>
+                            </div>
                             <template #footer>
                                 <Button
                                     label="UPDATE CHANGE"
                                     icon="pi pi-pencil"
-                                    @click="saveProduct"
+                                    @click="submit"
                                     class="w-full mt-4"
                                 />
                             </template>
@@ -302,6 +457,9 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head, useForm, router } from "@inertiajs/vue3";
+import { ref, watch, nextTick } from "vue";
+import L from "leaflet";
+import "leaflet-routing-machine";
 
 import Button from "primevue/button";
 import DataTable from "primevue/datatable";
@@ -310,12 +468,12 @@ import Toast from "primevue/toast";
 import IconField from "primevue/iconfield";
 import InputIcon from "primevue/inputicon";
 import InputText from "primevue/inputtext";
+import DatePicker from "primevue/datepicker";
 import Tag from "primevue/tag";
 import Dialog from "primevue/dialog";
 import { FilterMatchMode } from "@primevue/core/api";
 import AutoComplete from "primevue/autocomplete";
 import { useToast } from "primevue/usetoast";
-import { ref } from "vue";
 
 const props = defineProps({
     route: {
@@ -329,8 +487,16 @@ const props = defineProps({
 });
 
 const routeDialog = ref(false);
+const tripStatus = ref([]);
 const driverName = ref([]);
 const toast = useToast();
+const map = ref(null);
+const marker = ref(null);
+const routingControl = ref(null);
+const startLat = ref(null);
+const startLng = ref(null);
+const endLat = ref(null);
+const endLng = ref(null);
 
 const form = useForm({
     name: "",
@@ -340,6 +506,7 @@ const form = useForm({
     start_date: "",
     end_date: "",
     distance_km: "",
+    status: "",
     start_loc_latitude: "",
     start_loc_longitude: "",
     end_loc_latitude: "",
@@ -347,22 +514,22 @@ const form = useForm({
 });
 
 const editRoute = (route) => {
+    console.log(route);
+
     const driverName = props.drivers.find((v) => v.id === route.driver.id);
-    console.log(driverName.fullname);
 
     form.name = route.vehicle.name;
     form.driver = driverName.fullname;
+    form.start_location = route.start_location.address;
+    form.end_location = route.end_location.address;
+    form.distance_km = route.distance_km;
+    form.status = route.status;
+    startLat.value = route.start_location.latitude;
+    startLng.value = route.start_location.longitude;
+    endLat.value = route.end_location.latitude;
+    endLng.value = route.end_location.longitude;
 
     routeDialog.value = true;
-    // form.barangay = loc.barangay;
-    // form.municipality = loc.municipality;
-    // form.city = loc.city;
-    // form.province = loc.province;
-    // form.region = loc.region;
-    // form.latitude = loc.latitude;
-    // form.longitude = loc.longitude;
-
-    // routeDialog.value = true;
 };
 
 const driverNameSearch = () => {
@@ -380,6 +547,10 @@ const filters = ref({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
 });
 
+const tripStatusSearch = () => {
+    tripStatus.value = ["Yet to start", "Completed", "Ongoing", "Cancelled"];
+};
+
 const getStatusLabel = (status) => {
     switch (status) {
         case "Yet to start":
@@ -396,6 +567,63 @@ const getStatusLabel = (status) => {
 
         default:
             return null;
+    }
+};
+
+watch(routeDialog, async (newValue) => {
+    if (newValue) {
+        await nextTick(); // Ensure DOM updates before initializing
+        setTimeout(() => location(), 500); // Small delay for rendering
+    }
+});
+
+const location = async () => {
+    await nextTick(); // Ensure DOM updates before initializing the map
+
+    const mapContainer = document.getElementById("map");
+    if (!mapContainer) {
+        console.error("Map container not found!"); // Debugging log
+        return;
+    }
+
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const { latitude, longitude } = position.coords;
+                const coords = [latitude, longitude];
+
+                if (!map.value) {
+                    map.value = L.map("map").setView(coords, 13);
+                    L.tileLayer(
+                        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    ).addTo(map.value);
+                } else {
+                    map.value.setView(coords, 13);
+                }
+
+                if (!marker.value) {
+                    marker.value = L.marker(coords).addTo(map.value);
+                } else {
+                    marker.value.setLatLng(coords);
+                }
+
+                if (routingControl.value) {
+                    map.value.removeControl(routingControl.value); // Remove previous route
+                }
+
+                routingControl.value = L.Routing.control({
+                    waypoints: [
+                        L.latLng(startLat.value, startLng.value), // User's current location
+                        L.latLng(endLat.value, endLng.value), // Destination
+                    ],
+                    createMarker: () => null, // Prevent extra markers
+                    routeWhileDragging: true, // Allow dragging waypoints
+                }).addTo(map.value);
+            },
+            () => {
+                alert("Could not get your position");
+            }
+        );
     }
 };
 </script>

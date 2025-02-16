@@ -12,10 +12,12 @@ class Fuel_record extends Model
 
     protected $fillable = [
         'vehicle_id',
-        'quantity',
+        'liters',
         'cost',
         'refueling_date',
         'fuel_type',
+        'is_used',
+        'image'
     ];
 
     public function vehicle()

@@ -29,10 +29,16 @@
                         </h2>
 
                         <!-- Full Name -->
-                        <div class="flex flex-row gap-24">
-                            <div>
+                        <div class="grid grid-cols-2 gap-5">
+                            <div class="w-full">
                                 <!-- First Name -->
-
+                                <label
+                                    for="vehicle_name"
+                                    class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                    >First name<span class="ml-1 text-red-400"
+                                        >*</span
+                                    ></label
+                                >
                                 <FormField
                                     id="firstname"
                                     name="firstName"
@@ -55,7 +61,14 @@
                             </div>
 
                             <!-- Last Name -->
-                            <div>
+                            <div class="w-full">
+                                <label
+                                    for="vehicle_name"
+                                    class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                    >Last name<span class="ml-1 text-red-400"
+                                        >*</span
+                                    ></label
+                                >
                                 <FormField
                                     id="lastname"
                                     name="lastName"
@@ -335,13 +348,13 @@ onMounted(() => {
     margin-bottom: 8px !important;
 }
 
-.firstName {
+/* .firstName {
     width: 139% !important;
-}
+} */
 
-.lastName {
+/* .lastName {
     width: 139% !important;
-}
+} */
 
 .btn-submit {
     background-color: #213555;

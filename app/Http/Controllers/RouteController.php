@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Driver;
+use App\Models\Fuel_record;
 use App\Models\Location;
 use App\Models\Route;
 use App\Models\Vehicle;
@@ -35,7 +36,8 @@ class RouteController extends Controller
 
         return Inertia::render('Route/Create', [
             "vehicles" => Vehicle::with(['fuelRecords' => function ($query) {
-                $query->orderBy('created_at', 'desc');
+                $query->where('is_used', 0) // Filter only unused fuel records
+                      ->orderBy('created_at', 'desc');
             }])
             ->where('status', 'active')
             ->orderBy('created_at', 'desc')
@@ -57,15 +59,15 @@ class RouteController extends Controller
     {
 
         $validatedData = $request->validate([
-            'vehicleId'         => 'required|integer|exists:vehicles,id', // Ensure vehicleId is valid and exists in the vehicles table
-            'driverId'          => 'required|integer|exists:drivers,id', // Ensure driverId is valid and exists in the drivers table
-            'startLocId'        => 'required|integer|exists:locations,id', // Ensure start location exists
-            'endLocId'          => 'required|integer|exists:locations,id', // Ensure end location exists
-            'fuelId'            => 'required|integer|exists:fuel_records,id', // Ensure fuel type exists
-            'dateStart'         => 'required|date|after:today', // Ensure dateStart is a valid date and is after today
-            'dateEnd'           => 'required|date|after:dateStart', // Ensure dateEnd is a valid date and after dateStart
-            'status'            => 'required|string', // Ensure status is a string
-            'aproxKM'           => 'required|numeric|min:0', // Ensure aproxKM is a number and greater than or equal to 0
+            'vehicleId'         => 'required|integer|exists:vehicles,id',
+            'driverId'          => 'required|integer|exists:drivers,id',
+            'startLocId'        => 'required|integer|exists:locations,id',
+            'endLocId'          => 'required|integer|exists:locations,id',
+            'fuelId'            => 'required|integer|exists:fuel_records,id',
+            'dateStart'         => 'required|date|after:today',
+            'dateEnd'           => 'required|date|after:dateStart',
+            'status'            => 'required|string',
+            'aproxKM'           => 'required|numeric|min:0',
 
         ]);
 
@@ -84,6 +86,10 @@ class RouteController extends Controller
             'status'                     => $validatedData['status'],
 
         ]);
+
+        $fuel = Fuel_record::find($request->fuelId);
+        $fuel->is_used = 1;
+        $fuel->save();
 
         return redirect()->route('route')->with('success', 'Route created successfully!');
 

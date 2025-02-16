@@ -68,7 +68,7 @@
                                         <InputText
                                             id="engine_number"
                                             type="text"
-                                            v-model="form.quantity"
+                                            v-model="form.liters"
                                             placeholder="Quantity"
                                         />
                                         <Message
@@ -127,7 +127,7 @@
                                             class="w-full"
                                             :suggestions="fuelName"
                                             @complete="fuelNameSearch"
-                                            v-model="form.type"
+                                            v-model="form.fuel_type"
                                             dropdown
                                             placeholder="Type"
                                         />
@@ -140,7 +140,7 @@
                                     </FormField>
                                 </div>
                             </div>
-                            <div>
+                            <div class="grid grid-cols-2 gap-10 mb-5">
                                 <div class="w-full">
                                     <label
                                         for="birthday"
@@ -174,6 +174,60 @@
                                         }}</Message>
                                     </FormField>
                                 </div>
+                                <div class="w-full">
+                                    <label
+                                        for="vehicle_name"
+                                        class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                        >Type<span class="ml-1 text-red-400"
+                                            >*</span
+                                        ></label
+                                    >
+                                    <FormField
+                                        id="vehicle_name"
+                                        name="vehicle_name"
+                                        class="flex flex-col gap-1"
+                                    >
+                                        <AutoComplete
+                                            id="vehicle_name"
+                                            class="w-full"
+                                            :suggestions="type"
+                                            @complete="typeNameSearch"
+                                            v-model="form.type"
+                                            dropdown
+                                            placeholder="Type"
+                                        />
+                                        <Message
+                                            severity="error"
+                                            size="small"
+                                            variant="simple"
+                                            >{{
+                                        }}</Message>
+                                    </FormField>
+                                </div>
+                            </div>
+                            <div class="w-full">
+                                <label
+                                    for="image_upload"
+                                    class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                    >Purchase Order</label
+                                >
+                                <Toast />
+
+                                <FileUpload
+                                    for="image_upload"
+                                    url="/image/upload"
+                                    @upload="onAdvancedUpload($event)"
+                                    :multiple="true"
+                                    accept="image/*"
+                                    :maxFileSize="1000000"
+                                >
+                                    <template #empty>
+                                        <span
+                                            >Drag and drop files to here to
+                                            upload.</span
+                                        >
+                                    </template>
+                                </FileUpload>
                             </div>
                         </div>
                         <div>
@@ -201,9 +255,11 @@ import InputText from "primevue/inputtext";
 import AutoComplete from "primevue/autocomplete";
 import DatePicker from "primevue/datepicker";
 import Toast from "primevue/toast";
+import FileUpload from "primevue/fileupload";
 
 const toast = useToast();
 const fuelName = ref([]);
+const type = ref([]);
 const vehicleName = ref([]);
 
 const props = defineProps({
@@ -215,8 +271,9 @@ const props = defineProps({
 
 const form = useForm({
     vehicleId: "",
-    quantity: "",
+    liters: "",
     cost: "",
+    fuel_type: "",
     type: "",
     refuelingDate: "",
 });
@@ -252,6 +309,10 @@ const fuelNameSearch = () => {
         "Methanol",
         "Natural Gas",
     ];
+};
+
+const typeNameSearch = () => {
+    type.value = ["Sales", "Expenses"];
 };
 
 const vehicleNameSearch = () => {

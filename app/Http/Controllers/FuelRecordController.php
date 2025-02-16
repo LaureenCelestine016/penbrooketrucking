@@ -32,12 +32,13 @@ class FuelRecordController extends Controller
     public function store(Request $request)
     {
 
-
         $validatedData = $request->validate([
             'vehicleId'         => 'required|integer|exists:vehicles,id',
-            'quantity'          => 'required|numeric|min:1',
+            'liters'            => 'required|numeric|min:1',
             'cost'              => 'required|numeric|min:0',
+            'fuel_type'         => 'required|string',
             'type'              => 'required|string',
+            // 'image'             => 'required|string',
             'refuelingDate'     => 'required|date',
         ]);
 
@@ -46,10 +47,13 @@ class FuelRecordController extends Controller
 
         Fuel_record::create([
             'vehicle_id'           => $validatedData['vehicleId'],
-            'quantity'             => $validatedData['quantity'],
+            'liters'               => $validatedData['liters'],
             'cost'                 => $validatedData['cost'],
             'refueling_date'       => $validatedData['refuelingDate'],
-            'fuel_type'            => $validatedData['type'],
+            'fuel_type'            => $validatedData['fuel_type'],
+            // 'image'                => $validatedData['image'],
+            'type'                 => $validatedData['type'],
+
         ]);
 
         return redirect()->route('fuel')->with('success', 'Fuel created successfully!');
