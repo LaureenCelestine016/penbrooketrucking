@@ -69,6 +69,7 @@ Route::middleware('auth')->prefix('route')->group(function () {
     Route::get('/', [RouteController::class,'index'])->name('route');
     Route::get('/create', [RouteController::class,'create'])->name('route.create');
     Route::post('/store', [RouteController::class,'store'])->name('route.store');
+    Route::get('/detail/{route}', [RouteController::class, 'show'])->name('route.show');
 
 });
 

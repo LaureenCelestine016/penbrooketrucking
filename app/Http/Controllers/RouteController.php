@@ -100,7 +100,33 @@ class RouteController extends Controller
      */
     public function show(Route $route)
     {
-        //
+        // Load related models
+        $route->load(['vehicle', 'driver', 'startLocation', 'endLocation']);
+
+        // Format data (optional, based on what you need)
+        $routeData = [
+            'id' => $route->id,
+            'vehicle' => $route->vehicle,
+            'driver' => [
+                'id' => $route->driver->id,
+                'fullname' => $route->driver->first_name . ' ' . $route->driver->last_name
+            ],
+            'start_location' => $route->startLocation,
+            'end_location' => $route->endLocation,
+            'start_date' => $route->start_date,
+            'end_date' => $route->end_date,
+            'distance_km' => $route->distance_km,
+            'status' => $route->status,
+        ];
+
+        $driver = Driver::selectRaw("id, CONCAT(first_name, ' ', last_name) AS fullname")
+        ->orderBy('created_at', 'desc')
+        ->get();
+
+        return Inertia::render('Route/Show', [
+            "route" => $routeData,
+            "driver" => $driver,
+        ]);
     }
 
     /**

@@ -146,7 +146,7 @@
                                         outlined
                                         rounded
                                         class="mr-2"
-                                        @click="editRoute(slotProps.data)"
+                                        @click="showDetail(slotProps.data)"
                                     />
                                     <Button
                                         icon="pi pi-trash"
@@ -489,67 +489,14 @@ const props = defineProps({
 const routeDialog = ref(false);
 const tripStatus = ref([]);
 const driverName = ref([]);
-const toast = useToast();
-const map = ref(null);
-const marker = ref(null);
-const routingControl = ref(null);
-const startLat = ref(null);
-const startLng = ref(null);
-const endLat = ref(null);
-const endLng = ref(null);
 
-const form = useForm({
-    name: "",
-    driver: "",
-    start_location: "",
-    end_location: "",
-    start_date: "",
-    end_date: "",
-    distance_km: "",
-    status: "",
-    start_loc_latitude: "",
-    start_loc_longitude: "",
-    end_loc_latitude: "",
-    end_loc_longitude: "",
-});
-
-const editRoute = (route) => {
-    console.log(route);
-
-    const driverName = props.drivers.find((v) => v.id === route.driver.id);
-
-    form.name = route.vehicle.name;
-    form.driver = driverName.fullname;
-    form.start_location = route.start_location.address;
-    form.end_location = route.end_location.address;
-    form.distance_km = route.distance_km;
-    form.status = route.status;
-    startLat.value = route.start_location.latitude;
-    startLng.value = route.start_location.longitude;
-    endLat.value = route.end_location.latitude;
-    endLng.value = route.end_location.longitude;
-
-    routeDialog.value = true;
-};
-
-const driverNameSearch = () => {
-    driverName.value = props.drivers.map((driver) => ({
-        id: driver.id,
-        name: driver.fullname,
-    }));
-};
-
-const onDriverSelect = (event) => {
-    form.driverId = event.value.id;
+const showDetail = (id) => {
+    router.get(route("route.show", id));
 };
 
 const filters = ref({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
 });
-
-const tripStatusSearch = () => {
-    tripStatus.value = ["Yet to start", "Completed", "Ongoing", "Cancelled"];
-};
 
 const getStatusLabel = (status) => {
     switch (status) {
@@ -567,63 +514,6 @@ const getStatusLabel = (status) => {
 
         default:
             return null;
-    }
-};
-
-watch(routeDialog, async (newValue) => {
-    if (newValue) {
-        await nextTick(); // Ensure DOM updates before initializing
-        setTimeout(() => location(), 500); // Small delay for rendering
-    }
-});
-
-const location = async () => {
-    await nextTick(); // Ensure DOM updates before initializing the map
-
-    const mapContainer = document.getElementById("map");
-    if (!mapContainer) {
-        console.error("Map container not found!"); // Debugging log
-        return;
-    }
-
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                const { latitude, longitude } = position.coords;
-                const coords = [latitude, longitude];
-
-                if (!map.value) {
-                    map.value = L.map("map").setView(coords, 13);
-                    L.tileLayer(
-                        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    ).addTo(map.value);
-                } else {
-                    map.value.setView(coords, 13);
-                }
-
-                if (!marker.value) {
-                    marker.value = L.marker(coords).addTo(map.value);
-                } else {
-                    marker.value.setLatLng(coords);
-                }
-
-                if (routingControl.value) {
-                    map.value.removeControl(routingControl.value); // Remove previous route
-                }
-
-                routingControl.value = L.Routing.control({
-                    waypoints: [
-                        L.latLng(startLat.value, startLng.value), // User's current location
-                        L.latLng(endLat.value, endLng.value), // Destination
-                    ],
-                    createMarker: () => null, // Prevent extra markers
-                    routeWhileDragging: true, // Allow dragging waypoints
-                }).addTo(map.value);
-            },
-            () => {
-                alert("Could not get your position");
-            }
-        );
     }
 };
 </script>
