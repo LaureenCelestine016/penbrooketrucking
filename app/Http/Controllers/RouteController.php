@@ -20,7 +20,7 @@ class RouteController extends Controller
     {
 
         return Inertia::render('Route/Index',[
-            "route" => Route::with("vehicle","driver","startLocation", "endLocation")->get(),
+            "route" => Route::with("vehicle","driver","startLocation", "endLocation")->orderBy('created_at', 'desc')->get(),
             "drivers" => Driver::selectRaw("id, CONCAT(first_name, ' ', last_name) AS fullname")
                 ->orderBy('created_at', 'desc')
                 ->get(),
@@ -43,7 +43,7 @@ class RouteController extends Controller
             ->orderBy('created_at', 'desc')
             ->get(['id', 'name']),
 
-            "locations" => Location::get(['id', 'address']),
+            "locations" => Location::get(['id', 'address', 'latitude', 'longitude']),
 
             "drivers" => Driver::selectRaw("id, CONCAT(first_name, ' ', last_name) AS fullname")
                 ->orderBy('created_at', 'desc')
@@ -71,8 +71,8 @@ class RouteController extends Controller
 
         ]);
 
-        $validatedData['dateStart'] = Carbon::parse($validatedData['dateStart'])->format('Y-m-d H:i:s');
-        $validatedData['dateEnd'] = Carbon::parse($validatedData['dateEnd'])->format('Y-m-d H:i:s');
+        $validatedData['dateStart'] = Carbon::parse($validatedData['dateStart'])->format('m-d-Y H:i:s');
+        $validatedData['dateEnd'] = Carbon::parse($validatedData['dateEnd'])->format('m-d-Y H:i:s');
 
         Route::create([
             'vehicle_id'                 => $validatedData['vehicleId'],
@@ -142,7 +142,21 @@ class RouteController extends Controller
      */
     public function update(Request $request, Route $route)
     {
-        //
+
+        $validatedData = $request->validate([
+            'driver.id'   => 'required|integer|exists:drivers,id',
+            'start_date' => 'required|date',
+            'end_date'   => 'required|date',
+            'status'     => 'required|string',
+        ]);
+
+        $validatedData['driver_id'] = $validatedData['driver']['id'];
+        $validatedData['start_date'] = Carbon::parse($validatedData['start_date'])->format('Y-m-d  H:i:s' );
+        $validatedData['end_date'] = Carbon::parse($validatedData['end_date'])->format('Y-m-d  H:i:s');
+
+        $route->update($validatedData);
+
+        return redirect()->route('route.show', $route);
     }
 
     /**

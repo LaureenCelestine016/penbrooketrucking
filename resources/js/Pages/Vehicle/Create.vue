@@ -159,7 +159,7 @@
                             >
 
                             <div class="grid grid-cols-2 gap-10">
-                                <div class="w-100">
+                                <div class="w-full">
                                     <label
                                         for="registration_number"
                                         class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
@@ -192,7 +192,7 @@
                                         >
                                     </FormField>
                                 </div>
-                                <div class="w-100">
+                                <div class="w-full">
                                     <label
                                         for="license_number"
                                         class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
@@ -230,7 +230,7 @@
                                     form.hasErrors ? 'mt-3' : 'mt-6',
                                 ]"
                             >
-                                <div class="w-100">
+                                <div class="w-full">
                                     <label
                                         for="vehicle_name"
                                         class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
@@ -266,7 +266,7 @@
                                         >
                                     </FormField>
                                 </div>
-                                <div class="w-100">
+                                <div class="w-full">
                                     <label
                                         for="vehicle_type"
                                         class="text-gray-700 dark:text-surface-50 text-sm font-medium mb-2 block"

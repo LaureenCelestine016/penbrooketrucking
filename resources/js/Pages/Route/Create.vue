@@ -357,6 +357,15 @@
                             />
                         </div>
                     </form>
+                    <div
+                        id="map"
+                        style="
+                            width: 100%;
+                            height: 550px;
+                            background: #eee;
+                            display: none;
+                        "
+                    ></div>
                 </div>
             </div>
         </div>
@@ -366,7 +375,8 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head, useForm } from "@inertiajs/vue3";
-import { ref } from "vue";
+
+import { ref, onMounted, watch, nextTick } from "vue";
 
 import Button from "primevue/button";
 import InputText from "primevue/inputtext";
@@ -374,6 +384,8 @@ import AutoComplete from "primevue/autocomplete";
 import DatePicker from "primevue/datepicker";
 import { useToast } from "primevue/usetoast";
 import Message from "primevue/message";
+import L from "leaflet";
+import "leaflet-routing-machine";
 
 const vehicleName = ref([]);
 const driverName = ref([]);
@@ -382,6 +394,15 @@ const endLoc = ref([]);
 const tripStatus = ref([]);
 const fuelAmount = ref([]);
 const toast = useToast();
+const startLat = ref(null);
+const startLng = ref(null);
+const endLat = ref(null);
+const endLng = ref(null);
+const map = ref(null);
+const marker = ref(null);
+const secondMarker = ref(null);
+const routingControl = ref(null);
+const approx = ref(null);
 
 const props = defineProps({
     vehicles: {
@@ -457,22 +478,30 @@ const startLocSearch = () => {
     startLoc.value = props.locations.map((stLoc) => ({
         id: stLoc.id,
         address: stLoc.address,
+        latitude: stLoc.latitude,
+        longitude: stLoc.longitude,
     }));
 };
 
-const onStLocSelect = (event) => {
+const onStLocSelect = async (event) => {
     form.startLocId = event.value.id;
+    startLat.value = event.value.latitude;
+    startLng.value = event.value.longitude;
 };
 
 const endLocSearch = () => {
     endLoc.value = props.locations.map((endLoc) => ({
         id: endLoc.id,
         address: endLoc.address,
+        latitude: endLoc.latitude,
+        longitude: endLoc.longitude,
     }));
 };
 
 const onEndLocSelect = (event) => {
     form.endLocId = event.value.id;
+    endLat.value = event.value.latitude;
+    endLng.value = event.value.longitude;
 };
 
 const tripStatusSearch = () => {
@@ -497,6 +526,77 @@ const fuelAmountSearch = () => {
 const onFuelSelect = (event) => {
     form.fuelId = event.value.id;
 };
+
+const location = async () => {
+    await nextTick(); // Ensure DOM is ready
+
+    const mapContainer = document.getElementById("map");
+    if (!mapContainer) {
+        console.error("Map container not found!");
+        return;
+    }
+
+    // **Fix: Check if the map is already initialized**
+    if (!map.value) {
+        map.value = L.map("map").setView([startLat.value, startLng.value], 13);
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(
+            map.value
+        );
+    } else {
+        map.value.setView([startLat.value, startLng.value], 13); // Just update view
+    }
+
+    if (!marker.value) {
+        marker.value = L.marker([startLat.value, startLng.value]).addTo(
+            map.value
+        );
+    } else {
+        marker.value.setLatLng([startLat.value, startLng.value]);
+    }
+
+    if (endLat.value !== null && endLng.value !== null) {
+        if (!secondMarker.value) {
+            secondMarker.value = L.marker([endLat.value, endLng.value]).addTo(
+                map.value
+            );
+        } else {
+            secondMarker.value.setLatLng([endLat.value, endLng.value]);
+        }
+    }
+
+    // **Fix: Remove previous route before adding a new one**
+    if (routingControl.value) {
+        map.value.removeControl(routingControl.value);
+    }
+
+    if (endLat.value !== null && endLng.value !== null) {
+        routingControl.value = L.Routing.control({
+            waypoints: [
+                L.latLng(startLat.value, startLng.value),
+                L.latLng(endLat.value, endLng.value),
+            ],
+            createMarker: () => null, // Prevent extra markers
+            routeWhileDragging: true,
+        })
+            .on("routesfound", function (e) {
+                let distance = e.routes[0].summary.totalDistance;
+                form.aproxKM = distance / 1000;
+            })
+            .addTo(map.value);
+    }
+};
+
+// **Call location() when values change**
+watch(
+    [startLat, startLng, endLat, endLng],
+    ([newStartLat, newStartLng, newEndLat, newEndLng]) => {
+        if (newStartLat && newStartLng && newEndLat && newEndLng) {
+            location();
+        }
+    }
+);
+
+// **Initialize the map when the component is mounted**
 </script>
 
 <style scoped>

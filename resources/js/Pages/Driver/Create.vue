@@ -328,7 +328,7 @@
                             </div>
                             <div class="grid grid-cols-2 gap-10 mb-4">
                                 <!-- Contact number -->
-                                <div class="w-100">
+                                <div class="w-full">
                                     <label
                                         for="contact_number_person"
                                         class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
@@ -368,7 +368,7 @@
                                     </FormField>
                                 </div>
                                 <!-- Relation -->
-                                <div class="w-100">
+                                <div class="w-full">
                                     <label
                                         for="relation"
                                         class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
@@ -632,7 +632,7 @@
 
                             <div class="grid grid-cols-3 gap-10 mb-4">
                                 <!-- Username-->
-                                <div class="w-100">
+                                <div class="w-full">
                                     <label
                                         for="username"
                                         class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
@@ -661,7 +661,7 @@
                                     </FormField>
                                 </div>
                                 <!-- Password -->
-                                <div class="w-100">
+                                <div class="w-full">
                                     <label
                                         for="password"
                                         class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
@@ -695,7 +695,7 @@
                                     </FormField>
                                 </div>
                                 <!-- Confirm password -->
-                                <div class="w-100">
+                                <div class="w-full">
                                     <label
                                         for="confirm_password"
                                         class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
@@ -738,7 +738,7 @@
                         </div>
 
                         <div class="grid grid-cols-2 gap-10 items-center">
-                            <div class="w-100">
+                            <div class="w-full">
                                 <label
                                     for="email"
                                     class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
@@ -758,7 +758,7 @@
                                     />
                                 </FormField>
                             </div>
-                            <div class="w-100">
+                            <div class="w-full">
                                 <label
                                     for="status"
                                     class="text-gray-700 dark:text-surface-50 text-sm font-medium mb-2 block"
@@ -790,7 +790,7 @@
                                 </FormField>
                             </div>
                         </div>
-                        <div class="w-100 mt-8">
+                        <div class="w-full mt-8">
                             <label
                                 for="image_upload"
                                 class="text-slate-800 dark:text-surface-0 text-sm font-medium mb-2 block"

@@ -70,6 +70,7 @@ Route::middleware('auth')->prefix('route')->group(function () {
     Route::get('/create', [RouteController::class,'create'])->name('route.create');
     Route::post('/store', [RouteController::class,'store'])->name('route.store');
     Route::get('/detail/{route}', [RouteController::class, 'show'])->name('route.show');
+    Route::put('/{route}', [RouteController::class,'update'])->name('route.update');
 
 });
 

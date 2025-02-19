@@ -45,88 +45,90 @@
                             <div class="transparent-head">
                                 <h3></h3>
                             </div>
+                            <div>
+                                <Card class="accounts">
+                                    <template #content>
+                                        <label
+                                            class="text-gray-900 dark:text-surface-0 text-xl font-semibold mb-4 block"
+                                            >Account Information</label
+                                        >
+                                        <div class="p-1">
+                                            <div class="grid grid-cols-2 mb-4">
+                                                <label
+                                                    for=""
+                                                    class="font-semibold mr-5"
+                                                    >Username:</label
+                                                >
+                                                <span class="">{{
+                                                    User?.username
+                                                }}</span>
+                                            </div>
 
-                            <Card class="accounts">
-                                <template #content>
-                                    <label
-                                        class="text-gray-900 dark:text-surface-0 text-xl font-semibold mb-4 block"
-                                        >Account Information</label
-                                    >
-                                    <div class="p-1">
-                                        <div class="grid grid-cols-2 mb-4">
-                                            <label
-                                                for=""
-                                                class="font-semibold mr-5"
-                                                >Username:</label
-                                            >
-                                            <span class="">{{
-                                                User?.username
-                                            }}</span>
-                                        </div>
+                                            <div class="grid grid-cols-2 mb-4">
+                                                <label
+                                                    for=""
+                                                    class="font-semibold mr-5"
+                                                    >Fullname:</label
+                                                >
+                                                <span class=""
+                                                    >{{ Driver.first_name }}
+                                                    {{ Driver.middle_name }}
+                                                    {{ Driver.last_name }}</span
+                                                >
+                                            </div>
+                                            <div class="grid grid-cols-2 mb-4">
+                                                <label
+                                                    for=""
+                                                    class="font-semibold mr-5"
+                                                    >Contact:</label
+                                                >
+                                                <span
+                                                    >{{
+                                                        replaceFirstnum(
+                                                            Driver.contact_number
+                                                        )
+                                                    }}
+                                                </span>
+                                            </div>
 
-                                        <div class="grid grid-cols-2 mb-4">
-                                            <label
-                                                for=""
-                                                class="font-semibold mr-5"
-                                                >Fullname:</label
-                                            >
-                                            <span class=""
-                                                >{{ Driver.first_name }}
-                                                {{ Driver.middle_name }}
-                                                {{ Driver.last_name }}</span
-                                            >
-                                        </div>
-                                        <div class="grid grid-cols-2 mb-4">
-                                            <label
-                                                for=""
-                                                class="font-semibold mr-5"
-                                                >Contact:</label
-                                            >
-                                            <span
-                                                >{{
-                                                    replaceFirstnum(
-                                                        Driver.contact_number
-                                                    )
-                                                }}
-                                            </span>
-                                        </div>
+                                            <div class="grid grid-cols-2 mb-4">
+                                                <label
+                                                    for=""
+                                                    class="font-semibold mr-5"
+                                                    >Email Address:</label
+                                                >
+                                                <span class=""
+                                                    >{{ User?.email }}
+                                                </span>
+                                            </div>
 
-                                        <div class="grid grid-cols-2 mb-4">
-                                            <label
-                                                for=""
-                                                class="font-semibold mr-5"
-                                                >Email Address:</label
-                                            >
-                                            <span class=""
-                                                >{{ User?.email }}
-                                            </span>
+                                            <div class="grid grid-cols-2 mb-4">
+                                                <label
+                                                    for=""
+                                                    class="font-semibold mr-5"
+                                                    >Created Date:</label
+                                                >
+                                                <span class=""
+                                                    >{{
+                                                        formatDate(
+                                                            User?.created_at
+                                                        )
+                                                    }}
+                                                </span>
+                                            </div>
                                         </div>
-
-                                        <div class="grid grid-cols-2 mb-4">
-                                            <label
-                                                for=""
-                                                class="font-semibold mr-5"
-                                                >Created Date:</label
-                                            >
-                                            <span class=""
-                                                >{{
-                                                    formatDate(User?.created_at)
-                                                }}
-                                            </span>
-                                        </div>
-                                    </div>
-                                </template>
-                                <template #footer
-                                    ><Button
+                                    </template>
+                                </Card>
+                                <div>
+                                    <Button
                                         v-if="Driver.status === 'Active'"
                                         label="Active"
                                         severity="success"
                                         variant="outlined"
                                         icon="pi pi-unlock"
                                         class="btn-active"
-                                        @click="
-                                            status('Inactive', Driver.id)
-                                        " />
+                                        @click="status('Inactive', Driver.id)"
+                                    />
                                     <Button
                                         v-else
                                         label="Inactive"
@@ -135,8 +137,10 @@
                                         icon="pi pi-lock"
                                         class="btn-inactive"
                                         @click="status('Active', Driver.id)"
-                                /></template>
-                            </Card>
+                                    />
+                                </div>
+                            </div>
+
                             <Card class="card">
                                 <template #content>
                                     <Tabs value="0" class="tab-container">
@@ -1426,7 +1430,7 @@ const status = (status, id) => {
 
 .btn-active {
     width: 350px;
-    margin-left: -20px;
+    /* margin-left: -20px; */
     margin-top: 16px;
     border: #69db7c solid 1px !important;
 }
@@ -1438,7 +1442,7 @@ const status = (status, id) => {
 
 .btn-inactive {
     width: 350px;
-    margin-left: -20px;
+    /* margin-left: -20px; */
     margin-top: 16px;
     border: #ff6b6b solid 1px !important;
 }

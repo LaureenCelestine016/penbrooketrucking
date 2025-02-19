@@ -1,5 +1,5 @@
 <template>
-    <Head title="Route" />
+    <Head title="Route Detail " />
     <Toast />
 
     <AuthenticatedLayout>
@@ -47,7 +47,10 @@
                                         Information
                                     </h2>
                                     <div
-                                        class="grid grid-cols-2 gap-6 mb-6 mt-4"
+                                        :class="[
+                                            'grid grid-cols-2 gap-6 mt-4',
+                                            form.hasErrors ? 'mb-3' : 'mb-6',
+                                        ]"
                                     >
                                         <div class="w-full">
                                             <label
@@ -66,17 +69,10 @@
                                                 fluid
                                                 class="!bg-gray-50"
                                             />
-                                            <small
-                                                v-if="
-                                                    submitted && !product.name
-                                                "
-                                                class="text-red-500"
-                                                >Name is required.</small
-                                            >
                                         </div>
                                         <div class="w-full">
                                             <label
-                                                for="vehicle"
+                                                for="driver"
                                                 class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
                                                 >Driver<span
                                                     class="ml-1 text-red-400"
@@ -104,12 +100,26 @@
                                                     placeholder="Driver name"
                                                 />
                                             </FormField>
+                                            <Message
+                                                v-if="form.errors.driver_id"
+                                                severity="error"
+                                                size="small"
+                                                variant="simple"
+                                                >{{
+                                                    form.errors.driver_id
+                                                }}</Message
+                                            >
                                         </div>
                                     </div>
-                                    <div class="grid grid-cols-2 gap-6 mb-6">
+                                    <div
+                                        :class="[
+                                            'grid grid-cols-2 gap-6',
+                                            form.hasErrors ? 'mb-3' : 'mb-6',
+                                        ]"
+                                    >
                                         <div class="w-full">
                                             <label
-                                                for="license_expired_date"
+                                                for="start_date"
                                                 class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
                                                 >Trip Start Date<span
                                                     class="ml-1 text-red-400"
@@ -117,34 +127,39 @@
                                                 >
                                             </label>
                                             <FormField
-                                                id="license_expired_date"
-                                                name="license_expired_date"
+                                                id="start_date"
+                                                name="start_date"
                                                 class="flex flex-col gap-1"
                                             >
                                                 <div class="flex-auto">
                                                     <DatePicker
-                                                        id="registration_expired"
+                                                        id="start_date"
                                                         v-model="
                                                             form.start_date
                                                         "
                                                         showIcon
                                                         fluid
                                                         :showOnFocus="false"
-                                                        inputId="license_expired"
+                                                        inputId="start_date"
                                                         placeholder="Start Date"
                                                     />
                                                 </div>
                                                 <Message
+                                                    v-if="
+                                                        form.errors.start_date
+                                                    "
                                                     severity="error"
                                                     size="small"
                                                     variant="simple"
                                                     >{{
-                                                }}</Message>
+                                                        form.errors.start_date
+                                                    }}</Message
+                                                >
                                             </FormField>
                                         </div>
                                         <div class="w-full">
                                             <label
-                                                for="license_expired_date"
+                                                for="end_date"
                                                 class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
                                                 >Trip End Date<span
                                                     class="ml-1 text-red-400"
@@ -152,34 +167,42 @@
                                                 >
                                             </label>
                                             <FormField
-                                                id="license_expired_date"
-                                                name="license_expired_date"
+                                                id="end_date"
+                                                name="end_date"
                                                 class="flex flex-col gap-1"
                                             >
                                                 <div class="flex-auto">
                                                     <DatePicker
-                                                        id="registration_expired"
+                                                        id="end_date"
                                                         v-model="form.end_date"
                                                         showIcon
                                                         fluid
                                                         :showOnFocus="false"
-                                                        inputId="license_expired"
+                                                        inputId="end_date"
                                                         placeholder="End Date"
                                                     />
                                                 </div>
                                                 <Message
+                                                    v-if="form.errors.end_date"
                                                     severity="error"
                                                     size="small"
                                                     variant="simple"
                                                     >{{
-                                                }}</Message>
+                                                        form.errors.end_date
+                                                    }}</Message
+                                                >
                                             </FormField>
                                         </div>
                                     </div>
-                                    <div class="grid grid-cols-2 gap-6 mb-6">
+                                    <div
+                                        :class="[
+                                            'grid grid-cols-2 gap-6 mb-6',
+                                            form.hasErrors ? 'mt-3' : 'mt-6',
+                                        ]"
+                                    >
                                         <div class="w-full">
                                             <label
-                                                for="license_expired_date"
+                                                for="distance"
                                                 class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
                                                 >Distance KM.<span
                                                     class="ml-1 text-red-400"
@@ -187,29 +210,23 @@
                                                 >
                                             </label>
                                             <FormField
-                                                id="license_expired_date"
-                                                name="license_expired_date"
+                                                id="distance"
+                                                name="distance"
                                                 class="flex flex-col gap-1"
                                             >
                                                 <InputText
-                                                    id="vehicle"
+                                                    id="distance"
                                                     disabled=""
                                                     required="true"
                                                     v-model="form.distance_km"
                                                     fluid
                                                     class="!bg-gray-50"
                                                 />
-                                                <Message
-                                                    severity="error"
-                                                    size="small"
-                                                    variant="simple"
-                                                    >{{
-                                                }}</Message>
                                             </FormField>
                                         </div>
                                         <div class="w-full">
                                             <label
-                                                for="First_name"
+                                                for="status"
                                                 class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
                                                 >Trip Status<span
                                                     class="ml-1 text-red-400"
@@ -217,12 +234,12 @@
                                                 ></label
                                             >
                                             <FormField
-                                                id="First_name"
-                                                name="First_name"
+                                                id="status"
+                                                name="status"
                                                 class="flex flex-col gap-1"
                                             >
                                                 <AutoComplete
-                                                    id="vehicle_name"
+                                                    id="status"
                                                     class="w-full"
                                                     v-model="form.status"
                                                     :suggestions="tripStatus"
@@ -231,11 +248,14 @@
                                                     placeholder="Status"
                                                 />
                                                 <Message
+                                                    v-if="form.errors.status"
                                                     severity="error"
                                                     size="small"
                                                     variant="simple"
                                                     >{{
-                                                }}</Message>
+                                                        form.errors.status
+                                                    }}</Message
+                                                >
                                             </FormField>
                                         </div>
                                     </div>
@@ -298,12 +318,15 @@ import { Head, useForm, router } from "@inertiajs/vue3";
 import { ref, watch, nextTick, onMounted } from "vue";
 import L from "leaflet";
 import "leaflet-routing-machine";
+import dayjs from "dayjs";
 
 import AutoComplete from "primevue/autocomplete";
 import InputText from "primevue/inputtext";
 import DatePicker from "primevue/datepicker";
 import Button from "primevue/button";
 import { useToast } from "primevue/usetoast";
+import Toast from "primevue/toast";
+import Message from "primevue/message";
 
 const props = defineProps({
     route: {
@@ -394,6 +417,28 @@ const location = async () => {
         .addTo(map.value);
 };
 
+const submit = () => {
+    form.put(route("route.update", props.route.id), {
+        onSuccess: () => {
+            toast.add({
+                severity: "success",
+                summary: "Success",
+                detail: "Route updated successfully!",
+                life: 3000,
+            });
+        },
+        onError: (errors) => {
+            console.error(errors); // Debug server errors if necessary
+            toast.add({
+                severity: "error",
+                summary: "Error",
+                detail: "There were errors in your form submission.",
+                life: 3000,
+            });
+        },
+    });
+};
+
 const fullScreen = () => {
     const mapContainer = document.getElementById("map");
     if (mapContainer) {
@@ -417,6 +462,19 @@ const onDriverSelect = (event) => {
 onMounted(() => {
     location();
 });
+
+watch(
+    form,
+    function (old, newForm) {
+        form.start_date = form.start_date
+            ? dayjs(newForm.start_date).format("YYYY-MM-DD")
+            : "";
+        form.end_date = form.end_date
+            ? dayjs(newForm.end_date).format("YYYY-MM-DD")
+            : "";
+    },
+    { deep: true }
+);
 
 const tripStatusSearch = () => {
     tripStatus.value = ["Yet to start", "Completed", "Ongoing", "Cancelled"];
