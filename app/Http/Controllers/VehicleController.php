@@ -35,6 +35,7 @@ class VehicleController extends Controller
     public function store(Request $request)
     {
     // Validate the incoming request
+
     $validatedData = $request->validate([
         'registrationNumber'           => 'required|string|max:255',
         'vehicleName'                  => 'required|string|max:255',

@@ -209,7 +209,7 @@
                                         <InputText
                                             type="text"
                                             placeholder="License Plate no."
-                                            v-model="form.license_number"
+                                            v-model="form.plateNumber"
                                         />
                                         <Message
                                             v-if="form.errors.plateNumber"

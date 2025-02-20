@@ -75,7 +75,7 @@
                                 sortable
                                 style="min-width: 9rem"
                                 ><template #body="slotProps">
-                                    {{ slotProps.data.vehicle.name }}
+                                    {{ slotProps.data.vehicle?.name }}
                                 </template></Column
                             >
                             <Column
@@ -84,8 +84,8 @@
                                 sortable
                                 style="min-width: 8rem"
                                 ><template #body="slotProps">
-                                    {{ slotProps.data.driver.first_name }}
-                                    {{ slotProps.data.driver.last_name }}
+                                    {{ slotProps.data.driver?.first_name }}
+                                    {{ slotProps.data.driver?.last_name }}
                                 </template></Column
                             >
                             <Column
@@ -95,7 +95,7 @@
                                 style="min-width: 8rem"
                             >
                                 <template #body="slotProps">
-                                    {{ slotProps.data.start_location.address }}
+                                    {{ slotProps.data.start_location?.address }}
                                 </template>
                             </Column>
                             <Column
@@ -105,7 +105,7 @@
                                 style="min-width: 8rem"
                             >
                                 <template #body="slotProps">
-                                    {{ slotProps.data.end_location.address }}
+                                    {{ slotProps.data.end_location?.address }}
                                 </template>
                             </Column>
                             <Column
@@ -119,13 +119,13 @@
                                         class="status"
                                         :class="{
                                             'blinking-status':
-                                                slotProps.data.status ===
+                                                slotProps.data?.status ===
                                                 'Ongoing',
                                         }"
-                                        :value="slotProps.data.status"
+                                        :value="slotProps.data?.status"
                                         :severity="
                                             getStatusLabel(
-                                                slotProps.data.status
+                                                slotProps.data?.status
                                             )
                                         "
                                     />

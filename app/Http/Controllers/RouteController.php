@@ -71,8 +71,8 @@ class RouteController extends Controller
 
         ]);
 
-        $validatedData['dateStart'] = Carbon::parse($validatedData['dateStart'])->format('m-d-Y H:i:s');
-        $validatedData['dateEnd'] = Carbon::parse($validatedData['dateEnd'])->format('m-d-Y H:i:s');
+        $validatedData['dateStart'] = Carbon::parse($validatedData['dateStart'])->format('Y-m-d H:i:s');
+        $validatedData['dateEnd'] = Carbon::parse($validatedData['dateEnd'])->format('Y-m-d H:i:s');
 
         Route::create([
             'vehicle_id'                 => $validatedData['vehicleId'],
