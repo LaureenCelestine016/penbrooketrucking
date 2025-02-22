@@ -4,7 +4,7 @@
     <AuthenticatedLayout>
         <template #header>
             <h2 class="font-semibold text-2xl text-gray-800 leading-tight">
-                Add Vehicle
+                Add Truck
             </h2>
         </template>
 
@@ -16,7 +16,7 @@
                         <div class="mb-11">
                             <label
                                 class="text-gray-900 dark:text-surface-0 text-xl font-medium mb-4 block"
-                                >Vehicle Information</label
+                                >Truck Information</label
                             >
                             <div class="grid grid-cols-2 gap-10">
                                 <div class="w-full">
@@ -560,11 +560,11 @@ watch(
 );
 
 const vehicleTypeSearch = () => {
-    vehicleTypeArr.value = ["Truck", "Taxi", "Bus", "Taxi", "Jeep"];
+    vehicleTypeArr.value = ["Truck"];
 };
 
 const statusSearch = () => {
-    vehicleStatus.value = ["Active", "Inactive", "Maintenance"];
+    vehicleStatus.value = ["Operational", "Non-Operational", "Maintenance"];
 };
 
 const goBack = () => {

@@ -228,37 +228,34 @@
 
 <script setup>
 import { ref } from "vue";
-import ApplicationLogo from "@/Components/ApplicationLogo.vue";
 import Dropdown from "@/Components/Dropdown.vue";
 import DropdownLink from "@/Components/DropdownLink.vue";
-import NavLink from "@/Components/NavLink.vue";
-import Icon from "@/Components/Icon.vue";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink.vue";
-import Breadcrumb from "@/Components/Breadcrumb.vue";
-import { Link, router } from "@inertiajs/vue3";
-
+import { router } from "@inertiajs/vue3";
 import Menubar from "primevue/menubar";
 import Badge from "primevue/badge";
-import OverlayBadge from "primevue/overlaybadge";
 
 const items = ref([
     {
         label: "Dashboard",
         icon: "pi pi-chart-line",
+        command: () => {
+            router.get("/dashboard");
+        },
     },
     {
-        label: "Vehicle",
+        label: "Truck",
         icon: "pi pi-truck",
         items: [
             {
-                label: "Vehicle List",
+                label: "Truck List",
                 icon: "pi pi-list",
                 command: () => {
                     router.get("/vehicle");
                 },
             },
             {
-                label: "Add Vehicle",
+                label: "Add Truck",
                 icon: "pi pi-plus",
                 command: () => {
                     router.get("/vehicle/create");
@@ -367,34 +364,9 @@ const items = ref([
         ],
     },
     {
-        label: "Sale & Expenses",
+        label: "Expenses",
         icon: "pi pi-money-bill",
         items: [
-            {
-                label: "Sale",
-                icon: "pi pi-list",
-                command: () => {
-                    router.get("/location");
-                },
-                items: [
-                    {
-                        label: "Sale Record",
-                        icon: "pi pi-list",
-                        command: () => {
-                            router.get("/location");
-                        },
-                        items: [],
-                    },
-                    {
-                        label: "Add Sale",
-                        icon: "pi pi-list",
-                        command: () => {
-                            router.get("/location");
-                        },
-                        items: [],
-                    },
-                ],
-            },
             {
                 label: "Expenses",
                 icon: "pi pi-plus",

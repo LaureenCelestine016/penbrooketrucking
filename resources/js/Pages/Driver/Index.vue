@@ -150,9 +150,8 @@
                                 style="min-width: 8rem"
                             >
                                 <template #body="slotProps">
-                                    <Link> </Link>
                                     <Button
-                                        icon="pi pi-eye"
+                                        icon="pi pi-pencil"
                                         outlined
                                         rounded
                                         class="mr-2"

@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('last_name');
             $table->string('mobile_number')->unique();
             $table->string('username')->unique();
-            $table->string('email')->unique();
+            $table->string('email')->unique()->nullable();
             $table->unsignedTinyInteger('user_type')->default(0);
             $table->foreignId('driver_id')->nullable()->constrained('drivers')->onDelete('cascade');
             $table->timestamp('email_verified_at')->nullable();

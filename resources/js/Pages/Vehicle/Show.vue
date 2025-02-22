@@ -1063,7 +1063,7 @@ const submit = () => {
 };
 
 const statusSearch = () => {
-    vehicleStatus.value = ["Active", "Inactive", "Maintenance"];
+    vehicleStatus.value = ["Operational", "Non-Operational", "Maintenance"];
 };
 
 const vehicleTypeSearch = () => {

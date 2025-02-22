@@ -315,12 +315,12 @@
                                         />
 
                                         <Message
-                                            v-if="form.errors.contactPerson"
+                                            v-if="form.errors.contactNamePerson"
                                             severity="error"
                                             size="small"
                                             variant="simple"
                                             >{{
-                                                form.errors.contactPerson
+                                                form.errors.contactNamePerson
                                             }}</Message
                                         >
                                     </FormField>
@@ -393,13 +393,11 @@
                                         />
 
                                         <Message
-                                            v-if="form.errors.contactPerson"
+                                            v-if="form.errors.relation"
                                             severity="error"
                                             size="small"
                                             variant="simple"
-                                            >{{
-                                                form.errors.contactPerson
-                                            }}</Message
+                                            >{{ form.errors.relation }}</Message
                                         >
                                     </FormField>
                                 </div>

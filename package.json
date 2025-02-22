@@ -21,6 +21,7 @@
         "@ctrl/tinycolor": "^4.1.0",
         "@primevue/forms": "^4.2.5",
         "@primevue/themes": "^4.2.5",
+        "chart.js": "^4.4.8",
         "dayjs": "^1.11.13",
         "intl-tel-input": "^25.2.1",
         "leaflet": "^1.9.4",

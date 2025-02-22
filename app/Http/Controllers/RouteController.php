@@ -39,7 +39,7 @@ class RouteController extends Controller
                 $query->where('is_used', 0) // Filter only unused fuel records
                       ->orderBy('created_at', 'desc');
             }])
-            ->where('status', 'active')
+            ->where('status', 'Operational')
             ->orderBy('created_at', 'desc')
             ->get(['id', 'name']),
 

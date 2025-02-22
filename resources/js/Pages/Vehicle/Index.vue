@@ -133,7 +133,7 @@
                             >
                                 <template #body="slotProps">
                                     <Button
-                                        icon="pi pi-eye"
+                                        icon="pi pi-pencil"
                                         outlined
                                         rounded
                                         class="mr-2"
