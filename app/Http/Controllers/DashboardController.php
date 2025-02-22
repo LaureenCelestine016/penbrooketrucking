@@ -15,11 +15,24 @@ class DashboardController extends Controller
     {
 
         $operationalCount = Vehicle::where('status', 'Operational')->count();
-        $nonOperationalCount = Vehicle::where('status', '!=', 'Operational')->count();
+        $nonOperationalCount = Vehicle::where('status',  'Non-Operational')->count();
+        $maintenance = Vehicle::where('status', 'Maintenance')->count();
+
+        $fuelConsumption = Vehicle::with('fuelRecords')
+        ->get()
+        ->map(function ($vehicle) {
+            return [
+                'name' => $vehicle->name, // Change to your actual vehicle name column
+                'total_fuel' => $vehicle->fuelRecords->sum('liters'),
+                'total_cost' => $vehicle->fuelRecords->sum('cost'),
+            ];
+        });
 
         return Inertia::render('Dashboard', [
             'operationalCount' => $operationalCount,
-            'nonOperationalCount' => $nonOperationalCount
+            'nonOperationalCount' => $nonOperationalCount,
+            'maintenance' => $maintenance,
+            'fuelConsumption' => $fuelConsumption
         ]);
 
 

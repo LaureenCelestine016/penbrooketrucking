@@ -158,25 +158,44 @@
                     <div class="col-span-5">
                         <div class="grid grid-cols-3 gap-x-6">
                             <div
-                                class="bg-white shadow p-4 rounded-border h-64"
+                                class="bg-white shadow p-4 rounded-border h-80"
                             >
+                                <h2 class="text-lg font-semibold mb-4">
+                                    Truck Utilization
+                                </h2>
                                 <Chart
                                     type="bar"
-                                    :data="chartData"
+                                    :data="truckChartData"
                                     :options="chartOptions"
-                                    class=""
+                                    class="h-[20rem]"
                                 />
                             </div>
                             <div
-                                class="bg-white shadow p-4 rounded-border flex justify-center"
+                                class="bg-white shadow p-4 rounded-border h-80"
                             >
+                                <h2 class="text-lg font-semibold mb-4">
+                                    Fuel Consumption
+                                </h2>
                                 <Chart
-                                    type="pie"
-                                    :data="chartData"
+                                    type="line"
+                                    :data="fuelChartData"
                                     :options="chartOptions"
+                                    class="h-[20rem]"
                                 />
                             </div>
-                            <div class="p-2 bg-white"></div>
+                            <div
+                                class="bg-white shadow p-4 rounded-border h-80"
+                            >
+                                <h2 class="text-lg font-semibold">
+                                    Maintenance Trends
+                                </h2>
+                                <Chart
+                                    type="bar"
+                                    :data="maintenanceChartData"
+                                    :options="chartOptions"
+                                    class="h-[20rem]"
+                                />
+                            </div>
                         </div>
                     </div>
                     <div class="col-span-3 bg-blue-500">3</div>
@@ -193,6 +212,9 @@ import Toast from "primevue/toast";
 import Chart from "primevue/chart";
 import { ref, onMounted } from "vue";
 
+import Calendar from "primevue/calendar";
+import Button from "primevue/button";
+
 const props = defineProps({
     operationalCount: {
         type: Number,
@@ -202,54 +224,70 @@ const props = defineProps({
         type: Number,
         required: true,
     },
+    maintenance: {
+        type: Number,
+        required: true,
+    },
+    fuelConsumption: {
+        type: Array,
+        required: true,
+    },
 });
 
-onMounted(() => {
-    chartData.value = setChartData();
-    chartOptions.value = setChartOptions();
-});
+const truckChartData = ref(null);
+const fuelChartData = ref(null);
+const maintenanceChartData = ref(null);
+const chartOptions = ref({ responsive: true });
 
-const chartData = ref();
-const chartOptions = ref();
-
-const setChartData = () => {
-    try {
-        const documentStyle = getComputedStyle(document.documentElement);
-
-        return {
-            labels: ["Operational", "Non-Operational"],
-            datasets: [
-                {
-                    label: "Truck Status",
-                    backgroundColor: ["#4CAF50", "#FF5252"],
-                    borderColor: ["#4CAF50", "#FF5252"],
-                    data: [props.operationalCount, props.nonOperationalCount],
-                },
-            ],
-        };
-
-        setChartOptions();
-    } catch (error) {
-        console.error("Error fetching truck data:", error);
-    }
-};
-
-const setChartOptions = () => {
-    chartOptions.value = {
-        responsive: true,
-        plugins: {
-            legend: {
-                display: true,
-                position: "top",
+const updateCharts = () => {
+    truckChartData.value = {
+        labels: ["Operational", "Non-Operational", "Maintenance"],
+        datasets: [
+            {
+                label: "Trucks",
+                backgroundColor: ["#4CAF50", "#FF5252", "#fcc419"],
+                data: [
+                    props.operationalCount,
+                    props.nonOperationalCount,
+                    props.maintenance,
+                ],
             },
-        },
-        scales: {
-            y: {
-                beginAtZero: true,
+        ],
+    };
+
+    const fuelLabels = props.fuelConsumption.map((item) => item.name);
+    const fuelValues = props.fuelConsumption.map((item) => item.total_cost);
+
+    fuelChartData.value = {
+        labels: fuelLabels,
+        datasets: [
+            {
+                label: "Fuel Efficiency (L/km)",
+                borderColor: "#FFA500",
+                data: fuelValues,
+                fill: false,
             },
-        },
+        ],
+    };
+
+    maintenanceChartData.value = {
+        labels: maintenanceTrend.labels,
+        datasets: [
+            {
+                label: "Maintenance Count",
+                backgroundColor: "#3498db",
+                data: maintenanceTrend.values,
+            },
+        ],
     };
 };
+
+const getSpecFuel = () => {
+    fuellabel.value = props.fuelConsumption.map((item) => item.name);
+    fuelValues.value = props.fuelConsumption.map((item) => item.total_cost);
+};
+
+onMounted(updateCharts);
 </script>
 
 <style scoped>

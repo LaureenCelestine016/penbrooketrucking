@@ -336,13 +336,13 @@ const exportCSV = () => {
 
 const getStatusLabel = (status) => {
     switch (status) {
-        case "active":
+        case "Operational":
             return "success";
 
-        case "maintenance":
+        case "Non-Operational":
             return "warn";
 
-        case "inactive":
+        case "Maintenance":
             return "danger";
 
         default:
