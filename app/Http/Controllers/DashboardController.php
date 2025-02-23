@@ -14,6 +14,8 @@ class DashboardController extends Controller
     public function index()
     {
 
+        $truck = Vehicle::count();
+
         $operationalCount = Vehicle::where('status', 'Operational')->count();
         $nonOperationalCount = Vehicle::where('status',  'Non-Operational')->count();
         $maintenance = Vehicle::where('status', 'Maintenance')->count();
@@ -29,6 +31,7 @@ class DashboardController extends Controller
         });
 
         return Inertia::render('Dashboard', [
+            'truck' => $truck,
             'operationalCount' => $operationalCount,
             'nonOperationalCount' => $nonOperationalCount,
             'maintenance' => $maintenance,

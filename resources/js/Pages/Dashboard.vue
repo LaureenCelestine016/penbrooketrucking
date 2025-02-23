@@ -17,35 +17,36 @@
                                 class="col-span-12 md:col-span-6 lg:col-span-3"
                             >
                                 <div
-                                    class="bg-white dark:bg-surface-900 shadow p-4 rounded-border"
+                                    class="bg-white dark:bg-surface-900 shadow p-4 rounded-border rounded-md"
                                 >
                                     <div class="flex justify-between mb-4">
                                         <div>
                                             <span
-                                                class="block text-surface-500 dark:text-surface-300 font-medium mb-4"
-                                                >Truck</span
+                                                class="block text-surface-500 dark:text-surface-300 font-medium text-base"
+                                                >TRUCKS</span
                                             >
                                             <div
-                                                class="text-surface-900 dark:text-surface-0 font-medium !text-xl"
+                                                class="text-surface-900 dark:text-surface-0 font-medium !text-2xl"
                                             >
-                                                0
+                                                {{ props.truck }}
                                             </div>
                                         </div>
                                         <div
-                                            class="flex items-center justify-center bg-blue-100 dark:bg-blue-400/30 rounded-border w-10 h-10"
+                                            class="flex items-center justify-center bg-blue-100 dark:bg-blue-400/30 rounded-border rounded-md w-10 h-10"
                                         >
-                                            <i
-                                                class="pi pi-shopping-cart text-blue-500 dark:text-blue-200 !text-xl"
-                                            />
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="28"
+                                                height="28"
+                                                viewBox="0 0 24 24"
+                                            >
+                                                <path
+                                                    fill="#1054da"
+                                                    d="M7 20q-1.25 0-2.125-.875T4 17H2.725q-.425 0-.713-.288T1.725 16t.288-.712t.712-.288h2.05q.425-.475 1-.737T7 14t1.225.263t1 .737H13.4l2.1-9H5.75q-.425 0-.712-.288T4.75 5t.288-.712T5.75 4h11q.5 0 .8.375t.175.85L17.075 8H19q.475 0 .9.213t.7.587l1.875 2.475q.275.35.35.763t0 .837L22.15 16.2q-.075.35-.35.575t-.625.225H20q0 1.25-.875 2.125T17 20t-2.125-.875T14 17h-4q0 1.25-.875 2.125T7 20m8.925-7h4.825l.1-.525L19 10h-2.375zm-2.475 1.825l.163-.725q.162-.725.412-1.775q.075-.325.15-.6t.125-.55l.163-.725q.162-.725.412-1.775t.413-1.775l.162-.725L15.5 6l-2.1 9zm-11.7-1.5q-.425 0-.712-.287t-.288-.713t.288-.712t.712-.288h3.5q.425 0 .713.288t.287.712t-.288.713t-.712.287zm2-3.65q-.425 0-.712-.288t-.288-.712t.288-.712t.712-.288h4.5q.425 0 .713.288t.287.712t-.288.713t-.712.287zM7 18q.425 0 .713-.288T8 17t-.288-.712T7 16t-.712.288T6 17t.288.713T7 18m10 0q.425 0 .713-.288T18 17t-.288-.712T17 16t-.712.288T16 17t.288.713T17 18"
+                                                />
+                                            </svg>
                                         </div>
                                     </div>
-                                    <span class="text-green-500 font-medium"
-                                        >24 new
-                                    </span>
-                                    <span
-                                        class="text-surface-500 dark:text-surface-300"
-                                        >since last visit</span
-                                    >
                                 </div>
                             </div>
                             <div
@@ -210,12 +211,16 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head } from "@inertiajs/vue3";
 import Toast from "primevue/toast";
 import Chart from "primevue/chart";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watchEffect } from "vue";
 
 import Calendar from "primevue/calendar";
 import Button from "primevue/button";
 
 const props = defineProps({
+    truck: {
+        type: Number,
+        required: true,
+    },
     operationalCount: {
         type: Number,
         required: true,
@@ -270,24 +275,23 @@ const updateCharts = () => {
         ],
     };
 
-    maintenanceChartData.value = {
-        labels: maintenanceTrend.labels,
-        datasets: [
-            {
-                label: "Maintenance Count",
-                backgroundColor: "#3498db",
-                data: maintenanceTrend.values,
-            },
-        ],
-    };
-};
-
-const getSpecFuel = () => {
-    fuellabel.value = props.fuelConsumption.map((item) => item.name);
-    fuelValues.value = props.fuelConsumption.map((item) => item.total_cost);
+    // maintenanceChartData.value = {
+    //     labels: maintenanceTrend.labels,
+    //     datasets: [
+    //         {
+    //             label: "Maintenance Count",
+    //             backgroundColor: "#3498db",
+    //             data: maintenanceTrend.values,
+    //         },
+    //     ],
+    // };
 };
 
 onMounted(updateCharts);
+
+watchEffect(() => {
+    updateCharts();
+});
 </script>
 
 <style scoped>
