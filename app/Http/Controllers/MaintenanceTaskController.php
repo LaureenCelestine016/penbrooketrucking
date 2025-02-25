@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Maintenance_task;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class MaintenanceTaskController extends Controller
 {
@@ -12,7 +13,8 @@ class MaintenanceTaskController extends Controller
      */
     public function index()
     {
-        //
+
+        return Inertia::render('Maintenance/Index');
     }
 
     /**
@@ -20,7 +22,7 @@ class MaintenanceTaskController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('Maintenance/Create');
     }
 
     /**

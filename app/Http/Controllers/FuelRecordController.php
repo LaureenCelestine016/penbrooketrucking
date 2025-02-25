@@ -90,7 +90,9 @@ class FuelRecordController extends Controller
      */
     public function destroy(Fuel_record $fuel_record)
     {
-        //
+
+        $fuel_record->delete();
+        return redirect()->route('fuel');
     }
 
 

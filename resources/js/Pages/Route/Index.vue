@@ -14,7 +14,7 @@
                     <div class="card">
                         <DataTable
                             ref="dt"
-                            v-model:selection="selectedVehicle"
+                            v-model:selection="selectedRoute"
                             :value="route"
                             dataKey="id"
                             :paginator="true"
@@ -45,8 +45,8 @@
                                             outlined
                                             @click="confirmDeleteSelected"
                                             :disabled="
-                                                !selectedVehicle ||
-                                                !selectedVehicle.length
+                                                !selectedRoute ||
+                                                !selectedRoute.length
                                             "
                                         />
                                         <IconField>
@@ -152,7 +152,7 @@
                                         rounded
                                         severity="danger"
                                         @click="
-                                            confirmDeleteVehicle(slotProps.data)
+                                            confirmDeleteRoute(slotProps.data)
                                         "
                                     />
                                 </template>
@@ -160,7 +160,7 @@
                         </DataTable>
 
                         <Dialog
-                            v-model:visible="deleteVehicleDialog"
+                            v-model:visible="deleteRouteDialog"
                             :style="{ width: '450px' }"
                             header="Confirm"
                             :modal="true"
@@ -169,29 +169,27 @@
                                 <i
                                     class="pi pi-exclamation-triangle !text-3xl"
                                 />
-                                <span v-if="vehicles"
-                                    >Are you sure you want to delete
-                                    <b>{{ vehicleData.vehicle_name }}</b
-                                    >?</span
-                                >
+                                <span v-if="routeData"
+                                    >Are you sure you want to delete this route?
+                                </span>
                             </div>
                             <template #footer>
                                 <Button
                                     label="No"
                                     icon="pi pi-times"
                                     text
-                                    @click="deleteVehicleDialog = false"
+                                    @click="deleteRouteDialog = false"
                                 />
                                 <Button
                                     label="Yes"
                                     icon="pi pi-check"
-                                    @click="deleteVehicle(vehicleData.id)"
+                                    @click="deleteRoute(routeData.id)"
                                 />
                             </template>
                         </Dialog>
 
                         <Dialog
-                            v-model:visible="deleteVehiclesDialog"
+                            v-model:visible="deleteRoutesDialog"
                             :style="{ width: '450px' }"
                             header="Confirm"
                             :modal="true"
@@ -200,9 +198,9 @@
                                 <i
                                     class="pi pi-exclamation-triangle !text-3xl"
                                 />
-                                <span v-if="vehicles"
+                                <span v-if="selectedRoute"
                                     >Are you sure you want to delete the
-                                    selected vehicles?</span
+                                    selected routes?</span
                                 >
                             </div>
                             <template #footer>
@@ -210,13 +208,13 @@
                                     label="No"
                                     icon="pi pi-times"
                                     text
-                                    @click="deleteVehiclesDialog = false"
+                                    @click="deleteRoutesDialog = false"
                                 />
                                 <Button
                                     label="Yes"
                                     icon="pi pi-check"
                                     text
-                                    @click="deleteSelectedVehicles"
+                                    @click="deleteSelectedRoutes"
                                 />
                             </template>
                         </Dialog>
@@ -259,8 +257,87 @@ const props = defineProps({
     },
 });
 
+const toast = useToast();
+const selectedRoute = ref(0);
+const routeData = ref({});
+const deleteRoutesDialog = ref(false);
+const deleteRouteDialog = ref(false);
+
 const showDetail = (id) => {
     router.get(route("route.show", id));
+};
+
+const confirmDeleteRoute = (route) => {
+    console.log(route);
+
+    routeData.value = route;
+    deleteRouteDialog.value = true;
+};
+
+const confirmDeleteSelected = () => {
+    deleteRouteDialog.value = true;
+};
+
+const deleteRoute = (id) => {
+    router.delete(route("route.delete", id), {
+        onSuccess: () => {
+            deleteRouteDialog.value = false;
+            toast.add({
+                severity: "success",
+                summary: "Successful",
+                detail: "Route Deleted",
+                life: 3000,
+            });
+        },
+        onError: (errors) => {
+            console.error("Error deleting driver:", errors);
+            toast.add({
+                severity: "error",
+                summary: "Error",
+                detail: "Failed to delete driver",
+                life: 3000,
+            });
+        },
+    });
+};
+
+const deleteSelectedRoutes = () => {
+    const ids = selectedRoute.value.map((m) => m.id);
+
+    if (ids.length === 0) {
+        toast.add({
+            severity: "warn",
+            summary: "No Selection",
+            detail: "No vehicles selected for deletion",
+            life: 3000,
+        });
+        return;
+    }
+
+    router.post(
+        route("routes.delete"),
+        { ids },
+        {
+            onSuccess: () => {
+                deleteRoutesDialog.value = false;
+                toast.add({
+                    severity: "success",
+                    summary: "Successful",
+                    detail: "Routes Deleted",
+                    life: 3000,
+                });
+            },
+            onError: (errors) => {
+                console.error("Error deleting vehicles:", errors);
+                toast.add({
+                    severity: "error",
+                    summary: "Error",
+                    detail: "Failed to delete vehicles",
+                    life: 3000,
+                });
+            },
+        }
+    );
 };
 
 const filters = ref({

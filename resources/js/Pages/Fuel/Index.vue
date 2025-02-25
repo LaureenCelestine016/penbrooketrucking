@@ -141,7 +141,7 @@
                                             rounded
                                             severity="danger"
                                             @click="
-                                                confirmDeleteVehicle(
+                                                confirmDeleteFuel(
                                                     slotProps.data
                                                 )
                                             "
@@ -159,7 +159,7 @@
                         </DataTable>
 
                         <Dialog
-                            v-model:visible="deleteVehicleDialog"
+                            v-model:visible="deleteFuelDialog"
                             :style="{ width: '450px' }"
                             header="Confirm"
                             :modal="true"
@@ -168,9 +168,12 @@
                                 <i
                                     class="pi pi-exclamation-triangle !text-3xl"
                                 />
-                                <span v-if="vehicles"
-                                    >Are you sure you want to delete
-                                    <b>{{ vehicleData.vehicle_name }}</b
+                                <span v-if="fuelData"
+                                    >Are you sure you want to delete this fuel
+                                    with the cost and date is
+                                    <b class="text-red-700 text-sm"
+                                        >₱{{ fuelData.cost }} -
+                                        {{ fuelData.refueling_date }}</b
                                     >?</span
                                 >
                             </div>
@@ -179,12 +182,12 @@
                                     label="No"
                                     icon="pi pi-times"
                                     text
-                                    @click="deleteVehicleDialog = false"
+                                    @click="deleteFuelDialog = false"
                                 />
                                 <Button
                                     label="Yes"
                                     icon="pi pi-check"
-                                    @click="deleteVehicle(vehicleData.id)"
+                                    @click="deleteFuel(fuelData.id)"
                                 />
                             </template>
                         </Dialog>
@@ -230,7 +233,6 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head, router } from "@inertiajs/vue3";
 import { ref } from "vue";
-
 import Toast from "primevue/toast";
 import Button from "primevue/button";
 import DataTable from "primevue/datatable";
@@ -238,7 +240,6 @@ import Column from "primevue/column";
 import IconField from "primevue/iconfield";
 import InputIcon from "primevue/inputicon";
 import InputText from "primevue/inputtext";
-import Tag from "primevue/tag";
 import Dialog from "primevue/dialog";
 import { FilterMatchMode } from "@primevue/core/api";
 import { useToast } from "primevue/usetoast";
@@ -252,10 +253,17 @@ defineProps({
 
 const toast = useToast();
 const selectedFuels = ref(0);
+const fuelData = ref({});
 const deleteFuelsDialog = ref(false);
+const deleteFuelDialog = ref(false);
 
 const confirmDeleteSelected = () => {
     deleteFuelsDialog.value = true;
+};
+
+const confirmDeleteFuel = (fuel) => {
+    fuelData.value = fuel;
+    deleteFuelDialog.value = true;
 };
 
 const deleteSelectedFuels = () => {
@@ -295,6 +303,29 @@ const deleteSelectedFuels = () => {
             },
         }
     );
+};
+
+const deleteFuel = (id) => {
+    router.delete(route("fuel.delete", id), {
+        onSuccess: () => {
+            deleteFuelDialog.value = false;
+            toast.add({
+                severity: "success",
+                summary: "Successful",
+                detail: "Fuel Deleted",
+                life: 3000,
+            });
+        },
+        onError: (errors) => {
+            console.error("Error deleting driver:", errors);
+            toast.add({
+                severity: "error",
+                summary: "Error",
+                detail: "Failed to delete driver",
+                life: 3000,
+            });
+        },
+    });
 };
 
 const filters = ref({

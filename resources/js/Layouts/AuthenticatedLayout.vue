@@ -248,18 +248,44 @@ const items = ref([
         icon: "pi pi-truck",
         items: [
             {
-                label: "Truck List",
+                label: "Tractor Head",
                 icon: "pi pi-list",
-                command: () => {
-                    router.get("/vehicle");
-                },
+                items: [
+                    {
+                        label: "Tractor List",
+                        icon: "pi pi-list",
+                        command: () => {
+                            router.get("/vehicle");
+                        },
+                    },
+                    {
+                        label: "Add Tractor",
+                        icon: "pi pi-plus",
+                        command: () => {
+                            router.get("/vehicle/create");
+                        },
+                    },
+                ],
             },
             {
-                label: "Add Truck",
-                icon: "pi pi-plus",
-                command: () => {
-                    router.get("/vehicle/create");
-                },
+                label: "Trailer",
+                icon: "pi pi-list",
+                items: [
+                    {
+                        label: "Trailer List",
+                        icon: "pi pi-list",
+                        command: () => {
+                            router.get("/vehicle");
+                        },
+                    },
+                    {
+                        label: "Add Trailer",
+                        icon: "pi pi-plus",
+                        command: () => {
+                            router.get("/vehicle/create");
+                        },
+                    },
+                ],
             },
         ],
     },
@@ -348,17 +374,17 @@ const items = ref([
         icon: "pi pi-wrench",
         items: [
             {
-                label: "Vehicle Maintenance Record",
+                label: "Maintenance Record",
                 icon: "pi pi-list",
                 command: () => {
-                    router.get("/location");
+                    router.get("/maintenance");
                 },
             },
             {
-                label: "Add Vehicle Maintenance",
+                label: "Add Maintenance",
                 icon: "pi pi-plus",
                 command: () => {
-                    router.get("/location/create");
+                    router.get("/maintenance/create");
                 },
             },
         ],

@@ -5,6 +5,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\FuelRecordController;
 use App\Http\Controllers\LocationController;
+use App\Http\Controllers\MaintenanceTaskController;
 use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\RouteController;
 use Illuminate\Foundation\Application;
@@ -76,6 +77,8 @@ Route::middleware('auth')->prefix('route')->group(function () {
     Route::post('/store', [RouteController::class,'store'])->name('route.store');
     Route::get('/detail/{route}', [RouteController::class, 'show'])->name('route.show');
     Route::put('/{route}', [RouteController::class,'update'])->name('route.update');
+    Route::delete('/delete/{route}', [RouteController::class, 'destroy'])->name('route.delete');
+    Route::post('/delete-all', [RouteController::class, 'deletedAll'])->name('routes.delete');
 
 });
 
@@ -83,7 +86,16 @@ Route::middleware('auth')->prefix('fuel')->group(function () {
     Route::get('/', [FuelRecordController::class,'index'])->name('fuel');
     Route::get('/create', [FuelRecordController::class,'create'])->name('fuel.create');
     Route::post('/store', [FuelRecordController::class,'store'])->name('fuel.store');
+    Route::delete('/delete/{fuel_record}', [FuelRecordController::class, 'destroy'])->name('fuel.delete');
     Route::post('/delete-all', [FuelRecordController::class, 'deletedAll'])->name('fuels.delete');
+
+});
+
+Route::middleware('auth')->prefix('maintenance')->group(function () {
+    Route::get('/', [MaintenanceTaskController::class,'index'])->name('maintenance');
+    Route::get('/create', [MaintenanceTaskController::class,'create'])->name('maintenance.create');
+
+
 
 });
 

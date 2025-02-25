@@ -5,7 +5,7 @@
     <AuthenticatedLayout>
         <template #header>
             <h2 class="font-semibold text-2xl text-gray-800 leading-tight">
-                Add Route
+                Add Fuel
             </h2>
         </template>
         <div class="py-4">

@@ -35,36 +35,46 @@ class VehicleController extends Controller
     public function store(Request $request)
     {
     // Validate the incoming request
-
+    dd($request);
     $validatedData = $request->validate([
-        'registrationNumber'           => 'required|string|max:255',
-        'vehicleName'                  => 'required|string|max:255',
-        'vehicleType'                  => 'required|string|max:255',
-        'model'                        => 'required|string|max:255',
-        'plateNumber'                  => 'required|string|max:10',
-        'chassisNumber'                => 'required|string|max:255',
-        'engineNumber'                 => 'required|string|max:15',
-        'manufacture'                  => 'required|string|max:255',
-        'manufactureYear'              => 'required|string|max:10',
-        'status'                       => 'required|string|max:15',
-        'registrationDate'             => 'required|string|max:10',
-        'registrationExp'              => 'required|string|max:10',
+        'plateNumber'         => 'required|string|max:10',
+        'model'              => 'required|string|max:255',
+        'capacity'           => 'required|integer',
+        'status'             => 'required|string|max:50',
+        'calibrationDate'    => 'nullable|date',
+        'calibrationExpDate' => 'nullable|date',
+        'LTOregDate'         => 'nullable|date',
+        'LTOExpDate'         => 'nullable|date',
+        'conveyanceDate'     => 'nullable|date',
+        'conveyanceExpDate'  => 'nullable|date',
+        'filcomFabDate'      => 'nullable|date',
+        'filconExpDate'      => 'nullable|date',
+        'LTFRBRegDate'       => 'nullable|date',
+        'LTFRBExpDate'       => 'nullable|date',
+        'engineNumber'       => 'required|string|max:20',
+        'PMSRegDate'         => 'nullable|date',
+        'PMSLastMileAge'     => 'required|integer',
+        'PMSCurrentReading'  => 'required|integer',
+        'consumeMileage'     => 'required|integer',
+        'nextPMSMileage'     => 'required|integer',
     ]);
 
     // Create and save a new vehicle record
     Vehicle::create([
-        'name'                         => $validatedData['vehicleName'],
-        'type'                         => $validatedData['vehicleType'],
-        'model'                        => $validatedData['model'],
-        'status'                       => $validatedData['status'],
-        'chassis_number'               => $validatedData['chassisNumber'],
         'license_plate'                => $validatedData['plateNumber'],
-        'engine_number'                => $validatedData['engineNumber'],
-        'manufacturer'                 => $validatedData['manufacture'],
-        'manufacture_year'             => $validatedData['manufactureYear'],
-        'registration_number'          => $validatedData['registrationNumber'],
-        'registration_date'            => $validatedData['registrationDate'],
-        'registration_expiration_date' => $validatedData['registrationExp'],
+        'model'                        => $validatedData['model'],
+        'capacity'                     => $validatedData['capacity'],
+        'status'                       => $validatedData['status'],
+        'calibration_date'             => $validatedData['calibrationDate'],
+        'calibration_exp_date'         => $validatedData['calibrationExpDate'],
+        'lto_reg_date'                 => $validatedData['LTOregDate'],
+        'lto_exp_date'                 => $validatedData['LTOExpDate'],
+        'conveyance_date'              => $validatedData['conveyanceDate'],
+        'conveyance_exp_date'          => $validatedData['conveyanceExpDate'],
+        'filcom_fab_date'              => $validatedData['filcomFabDate'],
+        'filcon_exp_date'              => $validatedData['filconExpDate'],
+        'conveyance_exp_date'          => $validatedData['conveyanceExpDate'],
+        'conveyance_exp_date'          => $validatedData['conveyanceExpDate'],
     ]);
 
     // Redirect to the vehicle route

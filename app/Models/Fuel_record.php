@@ -10,6 +10,11 @@ class Fuel_record extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $dates = ['deleted_at'];
+
+
+    protected $table = 'fuel_records';
+
     protected $fillable = [
         'vehicle_id',
         'liters',
@@ -17,7 +22,8 @@ class Fuel_record extends Model
         'refueling_date',
         'fuel_type',
         'is_used',
-        'image'
+        'image',
+        'type'
     ];
 
     public function vehicle()

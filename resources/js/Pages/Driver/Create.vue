@@ -830,7 +830,6 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head, useForm } from "@inertiajs/vue3";
 import { ref, onMounted, onBeforeUnmount, watch } from "vue";
 
-import Toolbar from "primevue/toolbar";
 import InputMask from "primevue/inputmask";
 import Password from "primevue/password";
 import Button from "primevue/button";

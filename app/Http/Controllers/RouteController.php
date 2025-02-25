@@ -164,6 +164,15 @@ class RouteController extends Controller
      */
     public function destroy(Route $route)
     {
-        //
+        $route->delete();
+        return redirect()->route('route');
+    }
+
+    public function deletedAll(Request $request)
+    {
+        $ids = $request->ids;
+        Route::whereIn('id', $ids)->delete();
+
+        return redirect()->route('route');
     }
 }

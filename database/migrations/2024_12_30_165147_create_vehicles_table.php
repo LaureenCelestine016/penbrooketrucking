@@ -13,19 +13,27 @@ return new class extends Migration
     {
         Schema::create('vehicles', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('type');
-            $table->string('model');
-            $table->string('chassis_number')->unique();
-            $table->string('engine_number')->unique();
-            $table->string('manufacturer');
-            $table->string('registration_number')->unique();
-            $table->date('registration_date');
-            $table->date('registration_expiration_date');
             $table->string('license_plate')->unique();
-            $table->year('manufacture_year');
-            $table->string('image')->nullable();
+            $table->string('model');
+            $table->integer('capacity');
             $table->enum('status', ['Operational', 'Non-Operational', 'Maintenance'])->default('Operational');
+            $table->date('calibration_date')->nullable();
+            $table->date('calibration_exp_date')->nullable();
+            $table->date('lto_reg_date')->nullable();
+            $table->date('lto_exp_date')->nullable();
+            $table->date('conveyance_date')->nullable();
+            $table->date('conveyance_exp_date')->nullable();
+            $table->date('filcom_fab_date')->nullable();
+            $table->date('filcon_exp_date')->nullable();
+            $table->date('ltfrb_reg_date')->nullable();
+            $table->date('ltfrb_exp_date')->nullable();
+            $table->string('engine_number')->unique();
+            $table->date('pms_reg_date')->nullable();
+            $table->integer('pms_last_mileage');
+            $table->integer('pms_current_reading');
+            $table->integer('consume_mileage');
+            $table->integer('next_pms_mileage');
+            $table->string('image')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
