@@ -83,6 +83,7 @@ Route::middleware('auth')->prefix('fuel')->group(function () {
     Route::get('/', [FuelRecordController::class,'index'])->name('fuel');
     Route::get('/create', [FuelRecordController::class,'create'])->name('fuel.create');
     Route::post('/store', [FuelRecordController::class,'store'])->name('fuel.store');
+    Route::post('/delete-all', [FuelRecordController::class, 'deletedAll'])->name('fuels.delete');
 
 });
 

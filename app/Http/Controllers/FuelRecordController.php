@@ -15,7 +15,9 @@ class FuelRecordController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Fuel/Index');
+
+        $fuel = Fuel_record::with('vehicle')->orderBy('created_at','desc')->get();
+        return Inertia::render('Fuel/Index', ['fuels' => $fuel]);
     }
 
     /**
@@ -89,5 +91,14 @@ class FuelRecordController extends Controller
     public function destroy(Fuel_record $fuel_record)
     {
         //
+    }
+
+
+    public function deletedAll(Request $request)
+    {
+        $ids = $request->ids;
+        Fuel_record::whereIn('id', $ids)->delete();
+
+        return redirect()->route('fuel');
     }
 }
