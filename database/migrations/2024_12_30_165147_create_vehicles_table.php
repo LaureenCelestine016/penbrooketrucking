@@ -29,8 +29,8 @@ return new class extends Migration
             $table->date('ltfrb_exp_date')->nullable();
             $table->string('engine_number')->unique();
             $table->date('pms_reg_date')->nullable();
-            $table->integer('pms_last_mileage');
-            $table->integer('pms_current_reading');
+            $table->string('pms_last_mileage')->nullable();
+            $table->string('pms_current_reading')->nullable();
             $table->integer('consume_mileage');
             $table->integer('next_pms_mileage');
             $table->string('image')->nullable();

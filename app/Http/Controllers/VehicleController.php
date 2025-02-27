@@ -6,6 +6,7 @@ use App\Models\Vehicle;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Http\Resources\VehicleResource;
+use Carbon\Carbon;
 
 class VehicleController extends Controller
 {
@@ -17,6 +18,7 @@ class VehicleController extends Controller
         $vehicles = VehicleResource::collection(
             Vehicle::orderBy('created_at', 'desc')->get()
         );
+        // $vehicles = Vehicle::orderBy('created_at', 'desc')->get();
 
         return Inertia::render('Vehicle/Index', ['vehicles' => $vehicles]);
     }
@@ -35,7 +37,7 @@ class VehicleController extends Controller
     public function store(Request $request)
     {
     // Validate the incoming request
-    dd($request);
+
     $validatedData = $request->validate([
         'plateNumber'         => 'required|string|max:10',
         'model'              => 'required|string|max:255',
@@ -53,11 +55,24 @@ class VehicleController extends Controller
         'LTFRBExpDate'       => 'nullable|date',
         'engineNumber'       => 'required|string|max:20',
         'PMSRegDate'         => 'nullable|date',
-        'PMSLastMileAge'     => 'required|integer',
-        'PMSCurrentReading'  => 'required|integer',
+        'PMSLastMileAge'     => 'required|string|max:255',
+        'PMSCurrentReading'  => 'required|string|max:255',
         'consumeMileage'     => 'required|integer',
         'nextPMSMileage'     => 'required|integer',
     ]);
+
+        $validatedData['calibrationDate'] = Carbon::parse($validatedData['calibrationDate'])->format('Y-m-d H:i:s');
+        $validatedData['calibrationExpDate'] = Carbon::parse($validatedData['calibrationExpDate'])->format('Y-m-d H:i:s');
+        $validatedData['LTOregDate'] = Carbon::parse($validatedData['LTOregDate'])->format('Y-m-d H:i:s');
+        $validatedData['LTOExpDate'] = Carbon::parse($validatedData['LTOExpDate'])->format('Y-m-d H:i:s');
+        $validatedData['conveyanceDate'] = Carbon::parse($validatedData['conveyanceDate'])->format('Y-m-d H:i:s');
+        $validatedData['conveyanceExpDate'] = Carbon::parse($validatedData['conveyanceExpDate'])->format('Y-m-d H:i:s');
+        $validatedData['filcomFabDate'] = Carbon::parse($validatedData['filcomFabDate'])->format('Y-m-d H:i:s');
+        $validatedData['filconExpDate'] = Carbon::parse($validatedData['filconExpDate'])->format('Y-m-d H:i:s');
+        $validatedData['LTFRBRegDate'] = Carbon::parse($validatedData['LTFRBRegDate'])->format('Y-m-d H:i:s');
+        $validatedData['LTFRBExpDate'] = Carbon::parse($validatedData['LTFRBExpDate'])->format('Y-m-d H:i:s');
+        $validatedData['PMSRegDate'] = Carbon::parse($validatedData['PMSRegDate'])->format('Y-m-d H:i:s');
+
 
     // Create and save a new vehicle record
     Vehicle::create([
@@ -73,8 +88,15 @@ class VehicleController extends Controller
         'conveyance_exp_date'          => $validatedData['conveyanceExpDate'],
         'filcom_fab_date'              => $validatedData['filcomFabDate'],
         'filcon_exp_date'              => $validatedData['filconExpDate'],
-        'conveyance_exp_date'          => $validatedData['conveyanceExpDate'],
-        'conveyance_exp_date'          => $validatedData['conveyanceExpDate'],
+        'ltfrb_reg_date'               => $validatedData['LTFRBRegDate'],
+        'ltfrb_exp_date'               => $validatedData['LTFRBExpDate'],
+        'engine_number'                => $validatedData['engineNumber'],
+        'pms_reg_date'                 => $validatedData['PMSRegDate'],
+        'pms_last_mileage'             => $validatedData['PMSLastMileAge'],
+        'pms_current_reading'          => $validatedData['PMSCurrentReading'],
+        'consume_mileage'              => $validatedData['consumeMileage'],
+        'next_pms_mileage'             => $validatedData['nextPMSMileage'],
+
     ]);
 
     // Redirect to the vehicle route

@@ -796,14 +796,14 @@
                                                     <Message
                                                         v-if="
                                                             form.errors
-                                                                .manufacture
+                                                                .PMSLastMileAge
                                                         "
                                                         severity="error"
                                                         size="small"
                                                         variant="simple"
                                                         >{{
                                                             form.errors
-                                                                .manufacture
+                                                                .PMSLastMileAge
                                                         }}</Message
                                                     >
                                                 </FormField>
@@ -836,14 +836,14 @@
                                                     <Message
                                                         v-if="
                                                             form.errors
-                                                                .manufactureYear
+                                                                .PMSCurrentReading
                                                         "
                                                         severity="error"
                                                         size="small"
                                                         variant="simple"
                                                         >{{
                                                             form.errors
-                                                                .manufactureYear
+                                                                .PMSCurrentReading
                                                         }}</Message
                                                     >
                                                 </FormField>

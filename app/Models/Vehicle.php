@@ -14,19 +14,26 @@ class Vehicle extends Model
     protected $dates = ['deleted_at'];
 
     protected $fillable = [
-        'name',
-        'type',
-        'model',
-        'status',
-        'chassis_number',
-        'engine_number',
-        'manufacturer',
-        'manufacture_year',
-        'registration_number',
-        'registration_date',
-        'registration_expiration_date',
-        'license_plate',
-        'image',
+       'license_plate',
+       'model',
+       'capacity',
+       'status',
+       'calibration_date',
+       'calibration_exp_date',
+       'lto_reg_date',
+       'lto_exp_date',
+       'conveyance_date',
+       'conveyance_exp_date',
+       'filcom_fab_date',
+       'filcon_exp_date',
+       'ltfrb_reg_date',
+       'ltfrb_exp_date',
+       'engine_number',
+       'pms_reg_date',
+       'pms_current_reading',
+       'consume_mileage',
+       'next_pms_mileage',
+       'image'
     ];
 
 

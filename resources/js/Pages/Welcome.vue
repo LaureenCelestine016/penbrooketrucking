@@ -40,7 +40,7 @@
                 >
                     <Button label="Log in" type="button" @click="Login" />
                     <Button
-                        label="Live Demo"
+                        label="Register"
                         type="button"
                         outlined
                         @click="Register"
@@ -112,6 +112,10 @@ defineProps({
 
 const Login = () => {
     router.get(route("login"));
+};
+
+const Register = () => {
+    router.get(route("register"));
 };
 </script>
 

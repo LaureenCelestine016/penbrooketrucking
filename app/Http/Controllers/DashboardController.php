@@ -15,7 +15,6 @@ class DashboardController extends Controller
     {
 
         $truck = Vehicle::count();
-
         $operationalCount = Vehicle::where('status', 'Operational')->count();
         $nonOperationalCount = Vehicle::where('status',  'Non-Operational')->count();
         $maintenance = Vehicle::where('status', 'Maintenance')->count();
