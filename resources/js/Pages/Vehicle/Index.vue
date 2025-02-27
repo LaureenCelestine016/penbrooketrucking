@@ -16,7 +16,7 @@
                         <DataTable
                             ref="dt"
                             v-model:selection="selectedVehicle"
-                            :value="vehicles.data"
+                            :value="Vehicles"
                             dataKey="id"
                             :paginator="true"
                             :rows="5"
@@ -73,45 +73,39 @@
                                 :exportable="false"
                             ></Column>
                             <Column
-                                field="vehicle_name"
-                                header="Vehicle Name"
-                                sortable
-                                style="min-width: 5rem"
-                            ></Column>
-                            <Column
-                                field="vehicle_type"
-                                header="Vehicle type"
-                                sortable
-                                style="min-width: 5rem"
-                            ></Column>
-                            <Column
                                 field="license_plate"
                                 header="Plate number"
                                 sortable
-                                style="min-width: 8rem"
+                                style="min-width: 10rem"
+                            ></Column>
+                            <Column
+                                field="model"
+                                header="Model"
+                                sortable
+                                style="min-width: 10rem"
+                            ></Column>
+                            <Column
+                                field="engine_number"
+                                header="Engine number"
+                                sortable
+                                style="min-width: 10rem"
                             >
                                 <!-- <template #body="slotProps">
                                     {{ formatCurrency(slotProps.data.price) }}
                                 </template> -->
                             </Column>
                             <Column
-                                field="registration_no."
-                                header="Registration number"
+                                field="capacity"
+                                header="Capacity"
                                 sortable
                                 style="min-width: 10rem"
                             ></Column>
-                            <Column
-                                field="engine_no."
-                                header="Engine number"
-                                sortable
-                                style="min-width: 12rem"
-                            >
-                            </Column>
+
                             <Column
                                 field="status"
                                 header="Status"
                                 sortable
-                                style="min-width: 8rem"
+                                style="min-width: 10rem"
                             >
                                 <template #body="slotProps">
                                     <Tag
@@ -129,7 +123,7 @@
                                 header="Action"
                                 sortable=""
                                 :exportable="false"
-                                style="min-width: 8rem"
+                                style="min-width: 10rem"
                             >
                                 <template #body="slotProps">
                                     <Button
@@ -244,7 +238,7 @@ const deleteVehicleDialog = ref(false);
 const deleteVehiclesDialog = ref(false);
 
 defineProps({
-    vehicles: {
+    Vehicles: {
         type: Object,
         required: true,
     },

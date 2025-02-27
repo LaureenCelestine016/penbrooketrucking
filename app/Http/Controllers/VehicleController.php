@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Vehicle;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use App\Http\Resources\VehicleResource;
 use Carbon\Carbon;
 
 class VehicleController extends Controller
@@ -15,12 +14,10 @@ class VehicleController extends Controller
      */
     public function index()
     {
-        $vehicles = VehicleResource::collection(
-            Vehicle::orderBy('created_at', 'desc')->get()
-        );
-        // $vehicles = Vehicle::orderBy('created_at', 'desc')->get();
 
-        return Inertia::render('Vehicle/Index', ['vehicles' => $vehicles]);
+        $vehicles = Vehicle::orderBy('created_at', 'desc')->get();
+
+        return Inertia::render('Vehicle/Index', ['Vehicles' => $vehicles]);
     }
 
     /**

@@ -24,7 +24,7 @@
                                         <h1
                                             class="text-white text-3xl font-black tracking-wider"
                                         >
-                                            {{ Vehicle.name }}
+                                            {{ Vehicle.model }}
                                         </h1>
                                         <span
                                             class="text-white text-xl font-medium tracking-widest"
@@ -195,217 +195,216 @@
                                                 >
                                                     <div class="mb-6">
                                                         <label
-                                                            class="text-gray-900 dark:text-surface-0 text-xl font-bold my-4 block"
-                                                            >Vehicle
+                                                            class="text-gray-900 dark:text-surface-0 text-xl font-bold my-4 mb-6 block"
+                                                            >Tructor
                                                             Information</label
                                                         >
-                                                        <!-- Vehicle name -->
-                                                        <div
-                                                            :class="[
-                                                                'w-100',
-                                                                form.hasErrors
-                                                                    ? 'mb-4'
-                                                                    : 'mb-6',
-                                                            ]"
-                                                        >
-                                                            <label
-                                                                for="vehicle_name"
-                                                                class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                                                >Vehicle
-                                                                Name<span
-                                                                    class="ml-1 text-red-400"
-                                                                    >*</span
-                                                                ></label
-                                                            >
-                                                            <FormField
-                                                                id="vehicle_name"
-                                                                name="vehicle_name"
-                                                                class="flex flex-col gap-1"
-                                                            >
-                                                                <InputText
-                                                                    type="text"
-                                                                    placeholder="Vehicle Name"
-                                                                    class="user--input firstName"
-                                                                    v-model="
-                                                                        form.name
-                                                                    "
-                                                                />
-                                                                <Message
-                                                                    v-if="
-                                                                        form
-                                                                            .errors
-                                                                            .name
-                                                                    "
-                                                                    severity="error"
-                                                                    size="small"
-                                                                    variant="simple"
-                                                                    >{{
-                                                                        form
-                                                                            .errors
-                                                                            .name
-                                                                    }}</Message
-                                                                >
-                                                            </FormField>
-                                                        </div>
                                                         <!-- Model -->
                                                         <div
-                                                            :class="[
-                                                                'w-100',
-                                                                form.hasErrors
-                                                                    ? 'mb-4'
-                                                                    : 'mb-6',
-                                                            ]"
+                                                            class="grid grid-cols-2 gap-8 mb-1"
                                                         >
-                                                            <label
-                                                                for="model"
-                                                                class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                                                >Model<span
-                                                                    class="ml-1 text-red-400"
-                                                                    >*</span
-                                                                ></label
+                                                            <div
+                                                                :class="[
+                                                                    'w-100',
+                                                                    form.hasErrors
+                                                                        ? 'mb-4'
+                                                                        : 'mb-6',
+                                                                ]"
                                                             >
-                                                            <FormField
-                                                                id="model"
-                                                                name="model"
-                                                                class="flex flex-col gap-1"
-                                                            >
-                                                                <InputText
-                                                                    type="text"
-                                                                    placeholder="Model"
-                                                                    v-model="
-                                                                        form.model
-                                                                    "
-                                                                />
-                                                                <Message
-                                                                    v-if="
-                                                                        form
-                                                                            .errors
-                                                                            .model
-                                                                    "
-                                                                    severity="error"
-                                                                    size="small"
-                                                                    variant="simple"
-                                                                    >{{
-                                                                        form
-                                                                            .errors
-                                                                            .model
-                                                                    }}</Message
+                                                                <label
+                                                                    for="Model"
+                                                                    class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                                                    >Model<span
+                                                                        class="ml-1 text-red-400"
+                                                                        >*</span
+                                                                    ></label
                                                                 >
-                                                            </FormField>
-                                                        </div>
-                                                        <!-- Vehicle type -->
-                                                        <div
-                                                            :class="[
-                                                                form.hasErrors
-                                                                    ? 'mt-3'
-                                                                    : 'mt-6',
-                                                            ]"
-                                                        >
-                                                            <label
-                                                                for="vehicle_name"
-                                                                class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                                                >Vehicle
-                                                                Type<span
-                                                                    class="ml-1 text-red-400"
-                                                                    >*</span
-                                                                ></label
-                                                            >
-                                                            <FormField
-                                                                id="vehicle_name"
-                                                                name="vehicle_name"
-                                                                class="flex flex-col gap-1"
-                                                            >
-                                                                <AutoComplete
-                                                                    id="vehicle_type"
-                                                                    class="w-full"
-                                                                    v-model="
-                                                                        form.type
-                                                                    "
-                                                                    :suggestions="
-                                                                        vehicleTypeArr
-                                                                    "
-                                                                    @complete="
-                                                                        vehicleTypeSearch
-                                                                    "
-                                                                    dropdown
-                                                                    placeholder="Vehicle Type"
-                                                                />
-                                                                <Message
-                                                                    v-if="
-                                                                        form
-                                                                            .errors
-                                                                            .type
-                                                                    "
-                                                                    severity="error"
-                                                                    size="small"
-                                                                    variant="simple"
-                                                                    >{{
-                                                                        form
-                                                                            .errors
-                                                                            .type
-                                                                    }}</Message
+                                                                <FormField
+                                                                    id="Model"
+                                                                    name="Model"
+                                                                    class="flex flex-col gap-1"
                                                                 >
-                                                            </FormField>
+                                                                    <InputText
+                                                                        type="text"
+                                                                        placeholder="Model"
+                                                                        class="user--input firstName"
+                                                                        v-model="
+                                                                            form.model
+                                                                        "
+                                                                    />
+                                                                    <Message
+                                                                        v-if="
+                                                                            form
+                                                                                .errors
+                                                                                .model
+                                                                        "
+                                                                        severity="error"
+                                                                        size="small"
+                                                                        variant="simple"
+                                                                        >{{
+                                                                            form
+                                                                                .errors
+                                                                                .model
+                                                                        }}</Message
+                                                                    >
+                                                                </FormField>
+                                                            </div>
+                                                            <!-- platenumber -->
+                                                            <div
+                                                                :class="[
+                                                                    'w-100',
+                                                                    form.hasErrors
+                                                                        ? 'mb-4'
+                                                                        : 'mb-6',
+                                                                ]"
+                                                            >
+                                                                <label
+                                                                    for="platenumber"
+                                                                    class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                                                    >Plate
+                                                                    number<span
+                                                                        class="ml-1 text-red-400"
+                                                                        >*</span
+                                                                    ></label
+                                                                >
+                                                                <FormField
+                                                                    id="platenumber"
+                                                                    name="platenumber"
+                                                                    class="flex flex-col gap-1"
+                                                                >
+                                                                    <InputText
+                                                                        type="text"
+                                                                        placeholder="Plate number"
+                                                                        v-model="
+                                                                            form.license_plate
+                                                                        "
+                                                                    />
+                                                                    <Message
+                                                                        v-if="
+                                                                            form
+                                                                                .errors
+                                                                                .license_plate
+                                                                        "
+                                                                        severity="error"
+                                                                        size="small"
+                                                                        variant="simple"
+                                                                        >{{
+                                                                            form
+                                                                                .errors
+                                                                                .license_plate
+                                                                        }}</Message
+                                                                    >
+                                                                </FormField>
+                                                            </div>
                                                         </div>
-                                                        <!-- Status -->
                                                         <div
-                                                            :class="[
-                                                                form.hasErrors
-                                                                    ? 'mt-3'
-                                                                    : 'mt-6',
-                                                            ]"
+                                                            class="grid grid-cols-2 gap-8 mb-1"
                                                         >
-                                                            <label
-                                                                for="status"
-                                                                class="text-gray-700 dark:text-surface-50 text-sm font-medium mb-2 block"
-                                                                >Status<span
-                                                                    class="ml-1 text-red-400"
-                                                                    >*</span
-                                                                ></label
+                                                            <div
+                                                                :class="[
+                                                                    form.hasErrors
+                                                                        ? 'mb-3'
+                                                                        : 'mb-6',
+                                                                ]"
                                                             >
-                                                            <FormField
-                                                                id="status"
-                                                                name="status"
-                                                                class="flex flex-col gap-1"
+                                                                <label
+                                                                    for="capacity"
+                                                                    class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                                                    >Capacity<span
+                                                                        class="ml-1 text-red-400"
+                                                                        >*</span
+                                                                    ></label
+                                                                >
+                                                                <FormField
+                                                                    id="capacity"
+                                                                    name="capacity"
+                                                                    class="flex flex-col gap-1"
+                                                                >
+                                                                    <InputText
+                                                                        type="text"
+                                                                        placeholder="Capacity"
+                                                                        v-model="
+                                                                            form.capacity
+                                                                        "
+                                                                    />
+                                                                    <Message
+                                                                        v-if="
+                                                                            form
+                                                                                .errors
+                                                                                .capacity
+                                                                        "
+                                                                        severity="error"
+                                                                        size="small"
+                                                                        variant="simple"
+                                                                        >{{
+                                                                            form
+                                                                                .errors
+                                                                                .capacity
+                                                                        }}</Message
+                                                                    >
+                                                                </FormField>
+                                                            </div>
+                                                            <!-- Status -->
+                                                            <div
+                                                                :class="[
+                                                                    form.hasErrors
+                                                                        ? 'mb-3'
+                                                                        : 'mb-6',
+                                                                ]"
                                                             >
-                                                                <AutoComplete
+                                                                <label
+                                                                    for="status"
+                                                                    class="text-gray-700 dark:text-surface-50 text-sm font-medium mb-2 block"
+                                                                    >Status<span
+                                                                        class="ml-1 text-red-400"
+                                                                        >*</span
+                                                                    ></label
+                                                                >
+                                                                <FormField
                                                                     id="status"
-                                                                    class="drop-status"
-                                                                    v-model="
-                                                                        form.status
-                                                                    "
-                                                                    :suggestions="
-                                                                        vehicleStatus
-                                                                    "
-                                                                    @complete="
-                                                                        statusSearch
-                                                                    "
-                                                                    dropdown
-                                                                    placeholder="Status"
-                                                                />
-                                                                <Message
-                                                                    v-if="
-                                                                        form
-                                                                            .errors
-                                                                            .status
-                                                                    "
-                                                                    severity="error"
-                                                                    size="small"
-                                                                    variant="simple"
-                                                                    >{{
-                                                                        form
-                                                                            .errors
-                                                                            .status
-                                                                    }}</Message
+                                                                    name="status"
+                                                                    class="flex flex-col gap-1"
                                                                 >
-                                                            </FormField>
+                                                                    <AutoComplete
+                                                                        id="status"
+                                                                        class="drop-status"
+                                                                        v-model="
+                                                                            form.status
+                                                                        "
+                                                                        :suggestions="
+                                                                            vehicleStatus
+                                                                        "
+                                                                        @complete="
+                                                                            statusSearch
+                                                                        "
+                                                                        dropdown
+                                                                        placeholder="Status"
+                                                                    />
+                                                                    <Message
+                                                                        v-if="
+                                                                            form
+                                                                                .errors
+                                                                                .status
+                                                                        "
+                                                                        severity="error"
+                                                                        size="small"
+                                                                        variant="simple"
+                                                                        >{{
+                                                                            form
+                                                                                .errors
+                                                                                .status
+                                                                        }}</Message
+                                                                    >
+                                                                </FormField>
+                                                            </div>
                                                         </div>
+                                                        <!-- capacity -->
                                                     </div>
                                                     <Button
                                                         label="UPDATE CHANGE"
                                                         type="submit"
                                                         icon="pi pi-pencil"
-                                                        class="w-full"
+                                                        class="w-full mt-10"
                                                     />
                                                 </TabPanel>
                                                 <!-- Registration Details -->
@@ -416,134 +415,41 @@
                                                 >
                                                     <div class="mb-6">
                                                         <label
-                                                            class="text-gray-900 dark:text-surface-0 text-xl font-bold my-4 block"
+                                                            class="text-gray-900 dark:text-surface-0 text-xl font-bold my-4 mb-6 block"
                                                             >Registration
                                                         </label>
-                                                        <!-- Registration Number -->
+                                                        <!-- LTO -->
                                                         <div
-                                                            :class="[
-                                                                'w-100',
-                                                                form.hasErrors
-                                                                    ? 'mb-4'
-                                                                    : 'mb-6',
-                                                            ]"
+                                                            class="grid grid-cols-2 gap-8 mb-1"
                                                         >
-                                                            <label
-                                                                for="registration_number"
-                                                                class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                                                >Registration
-                                                                Number<span
-                                                                    class="ml-1 text-red-400"
-                                                                    >*</span
-                                                                ></label
+                                                            <!-- LTO Reg date -->
+                                                            <div
+                                                                :class="[
+                                                                    'w-100',
+                                                                    form.hasErrors
+                                                                        ? 'mb-4'
+                                                                        : 'mb-6',
+                                                                ]"
                                                             >
-                                                            <FormField
-                                                                id="registration_number"
-                                                                name="registration_number"
-                                                                class="flex flex-col gap-1"
-                                                            >
-                                                                <InputText
-                                                                    type="text"
-                                                                    placeholder="Registration no."
-                                                                    class="user--input firstName"
-                                                                    v-model="
-                                                                        form.registration_number
-                                                                    "
-                                                                />
-                                                                <Message
-                                                                    v-if="
-                                                                        form
-                                                                            .errors
-                                                                            .registration_number
-                                                                    "
-                                                                    severity="error"
-                                                                    size="small"
-                                                                    variant="simple"
-                                                                    >{{
-                                                                        form
-                                                                            .errors
-                                                                            .registration_number
-                                                                    }}</Message
+                                                                <label
+                                                                    for="ltoRegDate"
+                                                                    class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                                                    >LTO
+                                                                    Registered
+                                                                    Date<span
+                                                                        class="ml-1 text-red-400"
+                                                                        >*</span
+                                                                    ></label
                                                                 >
-                                                            </FormField>
-                                                        </div>
-                                                        <!-- License Plate Number -->
-                                                        <div
-                                                            :class="[
-                                                                'w-100',
-                                                                form.hasErrors
-                                                                    ? 'mb-4'
-                                                                    : 'mb-6',
-                                                            ]"
-                                                        >
-                                                            <label
-                                                                for="license_number"
-                                                                class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                                                >License Plate
-                                                                Number<span
-                                                                    class="ml-1 text-red-400"
-                                                                    >*</span
-                                                                ></label
-                                                            >
-                                                            <FormField
-                                                                id="license_number"
-                                                                name="license_number"
-                                                                class="flex flex-col gap-1"
-                                                            >
-                                                                <InputText
-                                                                    type="text"
-                                                                    placeholder="License Plate no."
-                                                                    v-model="
-                                                                        form.license_plate
-                                                                    "
-                                                                />
-                                                                <Message
-                                                                    v-if="
-                                                                        form
-                                                                            .errors
-                                                                            .license_plate
-                                                                    "
-                                                                    severity="error"
-                                                                    size="small"
-                                                                    variant="simple"
-                                                                    >{{
-                                                                        form
-                                                                            .errors
-                                                                            .license_plate
-                                                                    }}</Message
-                                                                >
-                                                            </FormField>
-                                                        </div>
-                                                        <!-- Registration Date -->
-                                                        <div
-                                                            :class="[
-                                                                'w-100',
-                                                                form.hasErrors
-                                                                    ? 'mb-4'
-                                                                    : 'mb-6',
-                                                            ]"
-                                                        >
-                                                            <label
-                                                                for="registration_date"
-                                                                class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                                                >Registration
-                                                                Date<span
-                                                                    class="ml-1 text-red-400"
-                                                                    >*</span
-                                                                ></label
-                                                            >
-                                                            <FormField
-                                                                id="registration_date"
-                                                                name="registration_date"
-                                                                class="flex flex-col gap-1"
-                                                            >
-                                                                <div
-                                                                    class="flex-auto"
+                                                                <FormField
+                                                                    id="ltoRegDate"
+                                                                    name="ltoRegDate"
+                                                                    class="flex flex-col gap-1"
                                                                 >
                                                                     <DatePicker
-                                                                        id="registration_expired"
+                                                                        id="calibDate"
                                                                         v-model="
-                                                                            form.registration_date
+                                                                            form.lto_reg_date
                                                                         "
                                                                         showIcon
                                                                         fluid
@@ -551,83 +457,554 @@
                                                                             false
                                                                         "
                                                                         inputId="registrationExp"
-                                                                        placeholder="Registration Expired Date"
+                                                                        placeholder="Calibration Date"
                                                                     />
-                                                                </div>
-                                                                <Message
-                                                                    v-if="
-                                                                        form
-                                                                            .errors
-                                                                            .registration_date
-                                                                    "
-                                                                    severity="error"
-                                                                    size="small"
-                                                                    variant="simple"
-                                                                    >{{
-                                                                        form
-                                                                            .errors
-                                                                            .registration_date
-                                                                    }}</Message
+                                                                    <Message
+                                                                        v-if="
+                                                                            form
+                                                                                .errors
+                                                                                .lto_reg_date
+                                                                        "
+                                                                        severity="error"
+                                                                        size="small"
+                                                                        variant="simple"
+                                                                        >{{
+                                                                            form
+                                                                                .errors
+                                                                                .lto_reg_date
+                                                                        }}</Message
+                                                                    >
+                                                                </FormField>
+                                                            </div>
+                                                            <!-- LTO Expired date -->
+                                                            <div
+                                                                :class="[
+                                                                    'w-100',
+                                                                    form.hasErrors
+                                                                        ? 'mb-4'
+                                                                        : 'mb-6',
+                                                                ]"
+                                                            >
+                                                                <label
+                                                                    for="LTOExpDate"
+                                                                    class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                                                    >LTO Expired
+                                                                    Date<span
+                                                                        class="ml-1 text-red-400"
+                                                                        >*</span
+                                                                    ></label
                                                                 >
-                                                            </FormField>
-                                                        </div>
-                                                        <!-- Registration Exp Date -->
-                                                        <div
-                                                            :class="[
-                                                                'w-100',
-                                                                form.hasErrors
-                                                                    ? 'mb-4'
-                                                                    : 'mb-6',
-                                                            ]"
-                                                        >
-                                                            <label
-                                                                for="registration_expired"
-                                                                class="text-gray-700 dark:text-surface-50 text-sm font-medium mb-2 block"
-                                                                >Registration
-                                                                Expiration
-                                                                Date<span
-                                                                    class="ml-1 text-red-400"
-                                                                    >*</span
-                                                                ></label
-                                                            >
-                                                            <FormField
-                                                                id="registration_expired"
-                                                                name="registration_expired"
-                                                                class="flex flex-col gap-1"
-                                                            >
-                                                                <div
-                                                                    class="flex-auto"
+                                                                <FormField
+                                                                    id="LTOExpDate"
+                                                                    name="LTOExpDate"
+                                                                    class="flex flex-col gap-1"
                                                                 >
                                                                     <DatePicker
-                                                                        id="registration_expired"
+                                                                        id="LTOExpDate"
                                                                         v-model="
-                                                                            form.registration_expiration_date
+                                                                            form.lto_exp_date
                                                                         "
                                                                         showIcon
                                                                         fluid
                                                                         :showOnFocus="
                                                                             false
                                                                         "
-                                                                        inputId="registrationExp"
-                                                                        placeholder="Registration Expired Date"
+                                                                        inputId="LTOExpDate"
+                                                                        placeholder="LTO Expired Date"
                                                                     />
-                                                                </div>
-                                                                <Message
-                                                                    v-if="
-                                                                        form
-                                                                            .errors
-                                                                            .registration_expiration_date
-                                                                    "
-                                                                    severity="error"
-                                                                    size="small"
-                                                                    variant="simple"
-                                                                    >{{
-                                                                        form
-                                                                            .errors
-                                                                            .registration_expiration_date
-                                                                    }}</Message
+                                                                    <Message
+                                                                        v-if="
+                                                                            form
+                                                                                .errors
+                                                                                .license_plate
+                                                                        "
+                                                                        severity="error"
+                                                                        size="small"
+                                                                        variant="simple"
+                                                                        >{{
+                                                                            form
+                                                                                .errors
+                                                                                .license_plate
+                                                                        }}</Message
+                                                                    >
+                                                                </FormField>
+                                                            </div>
+                                                        </div>
+                                                        <!-- Calibration -->
+                                                        <div
+                                                            class="grid grid-cols-2 gap-8 mb-1"
+                                                        >
+                                                            <div
+                                                                :class="[
+                                                                    'w-100',
+                                                                    form.hasErrors
+                                                                        ? 'mb-4'
+                                                                        : 'mb-6',
+                                                                ]"
+                                                            >
+                                                                <label
+                                                                    for="calibDate"
+                                                                    class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                                                    >Calibration
+                                                                    Registered
+                                                                    Date<span
+                                                                        class="ml-1 text-red-400"
+                                                                        >*</span
+                                                                    ></label
                                                                 >
-                                                            </FormField>
+                                                                <FormField
+                                                                    id="calibDate"
+                                                                    name="calibDate"
+                                                                    class="flex flex-col gap-1"
+                                                                >
+                                                                    <div
+                                                                        class="flex-auto"
+                                                                    >
+                                                                        <DatePicker
+                                                                            id="calibDate"
+                                                                            v-model="
+                                                                                form.calibration_date
+                                                                            "
+                                                                            showIcon
+                                                                            fluid
+                                                                            :showOnFocus="
+                                                                                false
+                                                                            "
+                                                                            inputId="registrationExp"
+                                                                            placeholder="Calibration Date"
+                                                                        />
+                                                                    </div>
+                                                                    <Message
+                                                                        v-if="
+                                                                            form
+                                                                                .errors
+                                                                                .calibration_date
+                                                                        "
+                                                                        severity="error"
+                                                                        size="small"
+                                                                        variant="simple"
+                                                                        >{{
+                                                                            form
+                                                                                .errors
+                                                                                .calibration_date
+                                                                        }}</Message
+                                                                    >
+                                                                </FormField>
+                                                            </div>
+                                                            <div
+                                                                :class="[
+                                                                    'w-100',
+                                                                    form.hasErrors
+                                                                        ? 'mb-4'
+                                                                        : 'mb-6',
+                                                                ]"
+                                                            >
+                                                                <label
+                                                                    for="calibExpDate"
+                                                                    class="text-gray-700 dark:text-surface-50 text-sm font-medium mb-2 block"
+                                                                    >Calibration
+                                                                    Expired
+                                                                    Date<span
+                                                                        class="ml-1 text-red-400"
+                                                                        >*</span
+                                                                    ></label
+                                                                >
+                                                                <FormField
+                                                                    id="calibExpDate"
+                                                                    name="calibExpDate"
+                                                                    class="flex flex-col gap-1"
+                                                                >
+                                                                    <div
+                                                                        class="flex-auto"
+                                                                    >
+                                                                        <DatePicker
+                                                                            id="calibExpDate"
+                                                                            v-model="
+                                                                                form.calibration_exp_date
+                                                                            "
+                                                                            showIcon
+                                                                            fluid
+                                                                            :showOnFocus="
+                                                                                false
+                                                                            "
+                                                                            inputId="calibExpDate"
+                                                                            placeholder="Calibration Expired Date"
+                                                                        />
+                                                                    </div>
+                                                                    <Message
+                                                                        v-if="
+                                                                            form
+                                                                                .errors
+                                                                                .registration_expiration_date
+                                                                        "
+                                                                        severity="error"
+                                                                        size="small"
+                                                                        variant="simple"
+                                                                        >{{
+                                                                            form
+                                                                                .errors
+                                                                                .registration_expiration_date
+                                                                        }}</Message
+                                                                    >
+                                                                </FormField>
+                                                            </div>
+                                                        </div>
+                                                        <!-- Conveyance -->
+                                                        <div
+                                                            class="grid grid-cols-2 gap-8 mb-1"
+                                                        >
+                                                            <div
+                                                                :class="[
+                                                                    'w-100',
+                                                                    form.hasErrors
+                                                                        ? 'mb-4'
+                                                                        : 'mb-6',
+                                                                ]"
+                                                            >
+                                                                <label
+                                                                    for="conveyDate"
+                                                                    class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                                                    >Conveyance
+                                                                    Registered
+                                                                    Date<span
+                                                                        class="ml-1 text-red-400"
+                                                                        >*</span
+                                                                    ></label
+                                                                >
+                                                                <FormField
+                                                                    id="conveyDate"
+                                                                    name="conveyDate"
+                                                                    class="flex flex-col gap-1"
+                                                                >
+                                                                    <div
+                                                                        class="flex-auto"
+                                                                    >
+                                                                        <DatePicker
+                                                                            id="conveyDate"
+                                                                            v-model="
+                                                                                form.conveyance_date
+                                                                            "
+                                                                            showIcon
+                                                                            fluid
+                                                                            :showOnFocus="
+                                                                                false
+                                                                            "
+                                                                            inputId="conveyDate"
+                                                                            placeholder="Conveyance Date"
+                                                                        />
+                                                                    </div>
+                                                                    <Message
+                                                                        v-if="
+                                                                            form
+                                                                                .errors
+                                                                                .conveyance_date
+                                                                        "
+                                                                        severity="error"
+                                                                        size="small"
+                                                                        variant="simple"
+                                                                        >{{
+                                                                            form
+                                                                                .errors
+                                                                                .conveyance_date
+                                                                        }}</Message
+                                                                    >
+                                                                </FormField>
+                                                            </div>
+                                                            <div
+                                                                :class="[
+                                                                    'w-100',
+                                                                    form.hasErrors
+                                                                        ? 'mb-4'
+                                                                        : 'mb-6',
+                                                                ]"
+                                                            >
+                                                                <label
+                                                                    for="conExpdate"
+                                                                    class="text-gray-700 dark:text-surface-50 text-sm font-medium mb-2 block"
+                                                                    >Conveyance
+                                                                    Expired
+                                                                    Date<span
+                                                                        class="ml-1 text-red-400"
+                                                                        >*</span
+                                                                    ></label
+                                                                >
+                                                                <FormField
+                                                                    id="conExpdate"
+                                                                    name="conExpdate"
+                                                                    class="flex flex-col gap-1"
+                                                                >
+                                                                    <div
+                                                                        class="flex-auto"
+                                                                    >
+                                                                        <DatePicker
+                                                                            id="conExpdate"
+                                                                            v-model="
+                                                                                form.conveyance_exp_date
+                                                                            "
+                                                                            showIcon
+                                                                            fluid
+                                                                            :showOnFocus="
+                                                                                false
+                                                                            "
+                                                                            inputId="conExpdate"
+                                                                            placeholder="Conveyance Expired Date"
+                                                                        />
+                                                                    </div>
+                                                                    <Message
+                                                                        v-if="
+                                                                            form
+                                                                                .errors
+                                                                                .conveyance_exp_date
+                                                                        "
+                                                                        severity="error"
+                                                                        size="small"
+                                                                        variant="simple"
+                                                                        >{{
+                                                                            form
+                                                                                .errors
+                                                                                .conveyance_exp_date
+                                                                        }}</Message
+                                                                    >
+                                                                </FormField>
+                                                            </div>
+                                                        </div>
+                                                        <!-- Filcom Fab -->
+                                                        <div
+                                                            class="grid grid-cols-2 gap-8 mb-1"
+                                                        >
+                                                            <div
+                                                                :class="[
+                                                                    'w-100',
+                                                                    form.hasErrors
+                                                                        ? 'mb-4'
+                                                                        : 'mb-6',
+                                                                ]"
+                                                            >
+                                                                <label
+                                                                    for="filcomFab"
+                                                                    class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                                                    >Filcom Fab
+                                                                    Registered
+                                                                    Date<span
+                                                                        class="ml-1 text-red-400"
+                                                                        >*</span
+                                                                    ></label
+                                                                >
+                                                                <FormField
+                                                                    id="filcomFab"
+                                                                    name="filcomFab"
+                                                                    class="flex flex-col gap-1"
+                                                                >
+                                                                    <div
+                                                                        class="flex-auto"
+                                                                    >
+                                                                        <DatePicker
+                                                                            id="filcomFab"
+                                                                            v-model="
+                                                                                form.filcom_fab_date
+                                                                            "
+                                                                            showIcon
+                                                                            fluid
+                                                                            :showOnFocus="
+                                                                                false
+                                                                            "
+                                                                            inputId="filcomFab"
+                                                                            placeholder="Filcom Fab Date"
+                                                                        />
+                                                                    </div>
+                                                                    <Message
+                                                                        v-if="
+                                                                            form
+                                                                                .errors
+                                                                                .conveyance_date
+                                                                        "
+                                                                        severity="error"
+                                                                        size="small"
+                                                                        variant="simple"
+                                                                        >{{
+                                                                            form
+                                                                                .errors
+                                                                                .conveyance_date
+                                                                        }}</Message
+                                                                    >
+                                                                </FormField>
+                                                            </div>
+                                                            <div
+                                                                :class="[
+                                                                    'w-100',
+                                                                    form.hasErrors
+                                                                        ? 'mb-4'
+                                                                        : 'mb-6',
+                                                                ]"
+                                                            >
+                                                                <label
+                                                                    for="filcomFab"
+                                                                    class="text-gray-700 dark:text-surface-50 text-sm font-medium mb-2 block"
+                                                                    >Filcom Fab
+                                                                    Expired
+                                                                    Date<span
+                                                                        class="ml-1 text-red-400"
+                                                                        >*</span
+                                                                    ></label
+                                                                >
+                                                                <FormField
+                                                                    id="filcomFab"
+                                                                    name="filcomFab"
+                                                                    class="flex flex-col gap-1"
+                                                                >
+                                                                    <div
+                                                                        class="flex-auto"
+                                                                    >
+                                                                        <DatePicker
+                                                                            id="filcomFab"
+                                                                            v-model="
+                                                                                form.filcon_exp_date
+                                                                            "
+                                                                            showIcon
+                                                                            fluid
+                                                                            :showOnFocus="
+                                                                                false
+                                                                            "
+                                                                            inputId="filcomFab"
+                                                                            placeholder="Filcom Fab Expired Date"
+                                                                        />
+                                                                    </div>
+                                                                    <Message
+                                                                        v-if="
+                                                                            form
+                                                                                .errors
+                                                                                .filcon_exp_date
+                                                                        "
+                                                                        severity="error"
+                                                                        size="small"
+                                                                        variant="simple"
+                                                                        >{{
+                                                                            form
+                                                                                .errors
+                                                                                .filcon_exp_date
+                                                                        }}</Message
+                                                                    >
+                                                                </FormField>
+                                                            </div>
+                                                        </div>
+                                                        <!-- LTFRB -->
+                                                        <div
+                                                            class="grid grid-cols-2 gap-8 mb-1"
+                                                        >
+                                                            <div
+                                                                :class="[
+                                                                    'w-100',
+                                                                    form.hasErrors
+                                                                        ? 'mb-4'
+                                                                        : 'mb-6',
+                                                                ]"
+                                                            >
+                                                                <label
+                                                                    for="LTFRBReg"
+                                                                    class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                                                    >LTFRB
+                                                                    Registered
+                                                                    Date<span
+                                                                        class="ml-1 text-red-400"
+                                                                        >*</span
+                                                                    ></label
+                                                                >
+                                                                <FormField
+                                                                    id="LTFRBReg"
+                                                                    name="LTFRBReg"
+                                                                    class="flex flex-col gap-1"
+                                                                >
+                                                                    <div
+                                                                        class="flex-auto"
+                                                                    >
+                                                                        <DatePicker
+                                                                            id="LTFRBReg"
+                                                                            v-model="
+                                                                                form.ltfrb_reg_date
+                                                                            "
+                                                                            showIcon
+                                                                            fluid
+                                                                            :showOnFocus="
+                                                                                false
+                                                                            "
+                                                                            inputId="LTFRBReg"
+                                                                            placeholder="LTFRB Date"
+                                                                        />
+                                                                    </div>
+                                                                    <Message
+                                                                        v-if="
+                                                                            form
+                                                                                .errors
+                                                                                .ltfrb_reg_date
+                                                                        "
+                                                                        severity="error"
+                                                                        size="small"
+                                                                        variant="simple"
+                                                                        >{{
+                                                                            form
+                                                                                .errors
+                                                                                .ltfrb_reg_date
+                                                                        }}</Message
+                                                                    >
+                                                                </FormField>
+                                                            </div>
+                                                            <div
+                                                                :class="[
+                                                                    'w-100',
+                                                                    form.hasErrors
+                                                                        ? 'mb-4'
+                                                                        : 'mb-6',
+                                                                ]"
+                                                            >
+                                                                <label
+                                                                    for="LTFRBExp"
+                                                                    class="text-gray-700 dark:text-surface-50 text-sm font-medium mb-2 block"
+                                                                    >LTFRB
+                                                                    Expired
+                                                                    Date<span
+                                                                        class="ml-1 text-red-400"
+                                                                        >*</span
+                                                                    ></label
+                                                                >
+                                                                <FormField
+                                                                    id="LTFRBExp"
+                                                                    name="LTFRBExp"
+                                                                    class="flex flex-col gap-1"
+                                                                >
+                                                                    <div
+                                                                        class="flex-auto"
+                                                                    >
+                                                                        <DatePicker
+                                                                            id="LTFRBExp"
+                                                                            v-model="
+                                                                                form.ltfrb_exp_date
+                                                                            "
+                                                                            showIcon
+                                                                            fluid
+                                                                            :showOnFocus="
+                                                                                false
+                                                                            "
+                                                                            inputId="LTFRBExp"
+                                                                            placeholder="LTFRB Expired Date"
+                                                                        />
+                                                                    </div>
+                                                                    <Message
+                                                                        v-if="
+                                                                            form
+                                                                                .errors
+                                                                                .ltfrb_exp_date
+                                                                        "
+                                                                        severity="error"
+                                                                        size="small"
+                                                                        variant="simple"
+                                                                        >{{
+                                                                            form
+                                                                                .errors
+                                                                                .ltfrb_exp_date
+                                                                        }}</Message
+                                                                    >
+                                                                </FormField>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                     <Button

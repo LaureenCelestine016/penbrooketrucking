@@ -250,14 +250,10 @@ const items = ref([
             {
                 label: "Tractor Head",
                 icon: "pi pi-list",
+                command: () => {
+                    router.get("/vehicle");
+                },
                 items: [
-                    {
-                        label: "Tractor List",
-                        icon: "pi pi-list",
-                        command: () => {
-                            router.get("/vehicle");
-                        },
-                    },
                     {
                         label: "Add Tractor",
                         icon: "pi pi-plus",
@@ -270,14 +266,10 @@ const items = ref([
             {
                 label: "Trailer",
                 icon: "pi pi-list",
+                command: () => {
+                    router.get("/vehicle");
+                },
                 items: [
-                    {
-                        label: "Trailer List",
-                        icon: "pi pi-list",
-                        command: () => {
-                            router.get("/vehicle");
-                        },
-                    },
                     {
                         label: "Add Trailer",
                         icon: "pi pi-plus",
