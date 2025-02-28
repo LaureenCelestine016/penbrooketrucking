@@ -227,10 +227,11 @@
                                                                     <InputText
                                                                         type="text"
                                                                         placeholder="Model"
-                                                                        class="user--input firstName"
+                                                                        class="!bg-gray-100"
                                                                         v-model="
                                                                             form.model
                                                                         "
+                                                                        disabled=""
                                                                     />
                                                                     <Message
                                                                         v-if="
@@ -511,6 +512,7 @@
                                                                         "
                                                                         inputId="LTOExpDate"
                                                                         placeholder="LTO Expired Date"
+                                                                        disabled="true"
                                                                     />
                                                                     <Message
                                                                         v-if="
@@ -629,6 +631,7 @@
                                                                             "
                                                                             inputId="calibExpDate"
                                                                             placeholder="Calibration Expired Date"
+                                                                            disabled=""
                                                                         />
                                                                     </div>
                                                                     <Message
@@ -748,6 +751,7 @@
                                                                             "
                                                                             inputId="conExpdate"
                                                                             placeholder="Conveyance Expired Date"
+                                                                            disabled=""
                                                                         />
                                                                     </div>
                                                                     <Message
@@ -867,6 +871,7 @@
                                                                             "
                                                                             inputId="filcomFab"
                                                                             placeholder="Filcom Fab Expired Date"
+                                                                            disabled=""
                                                                         />
                                                                     </div>
                                                                     <Message
@@ -986,6 +991,7 @@
                                                                             "
                                                                             inputId="LTFRBExp"
                                                                             placeholder="LTFRB Expired Date"
+                                                                            disabled=""
                                                                         />
                                                                     </div>
                                                                     <Message
@@ -1026,194 +1032,311 @@
                                                         </label>
                                                         <!-- Engine number -->
                                                         <div
-                                                            :class="[
-                                                                'w-100',
-                                                                form.hasErrors
-                                                                    ? 'mb-4'
-                                                                    : 'mb-6',
-                                                            ]"
+                                                            class="grid grid-cols-2 gap-8 mb-1"
                                                         >
-                                                            <label
-                                                                for="engine_number"
-                                                                class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                                                >Engine
-                                                                Number<span
-                                                                    class="ml-1 text-red-400"
-                                                                    >*</span
-                                                                ></label
+                                                            <div
+                                                                :class="[
+                                                                    'w-100',
+                                                                    form.hasErrors
+                                                                        ? 'mb-4'
+                                                                        : 'mb-6',
+                                                                ]"
                                                             >
-                                                            <FormField
-                                                                id="engine_number"
-                                                                name="engine_number"
-                                                                class="flex flex-col gap-1"
-                                                            >
-                                                                <InputText
+                                                                <label
+                                                                    for="engine_number"
+                                                                    class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                                                    >Engine
+                                                                    Number<span
+                                                                        class="ml-1 text-red-400"
+                                                                        >*</span
+                                                                    ></label
+                                                                >
+                                                                <FormField
                                                                     id="engine_number"
-                                                                    type="text"
-                                                                    placeholder="Engine No."
-                                                                    v-model="
-                                                                        form.engine_number
-                                                                    "
-                                                                />
-                                                                <Message
-                                                                    v-if="
-                                                                        form
-                                                                            .errors
-                                                                            .engine_number
-                                                                    "
-                                                                    severity="error"
-                                                                    size="small"
-                                                                    variant="simple"
-                                                                    >{{
-                                                                        form
-                                                                            .errors
-                                                                            .engine_number
-                                                                    }}</Message
+                                                                    name="engine_number"
+                                                                    class="flex flex-col gap-1"
                                                                 >
-                                                            </FormField>
+                                                                    <InputText
+                                                                        id="engine_number"
+                                                                        type="text"
+                                                                        placeholder="Engine No."
+                                                                        v-model="
+                                                                            form.engine_number
+                                                                        "
+                                                                    />
+                                                                    <Message
+                                                                        v-if="
+                                                                            form
+                                                                                .errors
+                                                                                .engine_number
+                                                                        "
+                                                                        severity="error"
+                                                                        size="small"
+                                                                        variant="simple"
+                                                                        >{{
+                                                                            form
+                                                                                .errors
+                                                                                .engine_number
+                                                                        }}</Message
+                                                                    >
+                                                                </FormField>
+                                                            </div>
+                                                            <!-- PMS Reg Date -->
+                                                            <div
+                                                                :class="[
+                                                                    'w-100',
+                                                                    form.hasErrors
+                                                                        ? 'mb-4'
+                                                                        : 'mb-6',
+                                                                ]"
+                                                            >
+                                                                <label
+                                                                    for="PMSRegDate"
+                                                                    class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                                                    >PMS
+                                                                    Registered
+                                                                    Date<span
+                                                                        class="ml-1 text-red-400"
+                                                                        >*</span
+                                                                    ></label
+                                                                >
+                                                                <FormField
+                                                                    id="PMSRegDate"
+                                                                    name="PMSRegDate"
+                                                                    class="flex flex-col gap-1"
+                                                                >
+                                                                    <DatePicker
+                                                                        id="PMSRegDate"
+                                                                        v-model="
+                                                                            form.pms_reg_date
+                                                                        "
+                                                                        showIcon
+                                                                        fluid
+                                                                        :showOnFocus="
+                                                                            false
+                                                                        "
+                                                                        inputId="PMSRegDate"
+                                                                        placeholder="PMS Registered Date"
+                                                                    />
+                                                                    <Message
+                                                                        v-if="
+                                                                            form
+                                                                                .errors
+                                                                                .pms_reg_date
+                                                                        "
+                                                                        severity="error"
+                                                                        size="small"
+                                                                        variant="simple"
+                                                                        >{{
+                                                                            form
+                                                                                .errors
+                                                                                .pms_reg_date
+                                                                        }}</Message
+                                                                    >
+                                                                </FormField>
+                                                            </div>
                                                         </div>
-                                                        <!-- Chassis number -->
+
+                                                        <!-- PMSLastMileage -->
                                                         <div
-                                                            :class="[
-                                                                'w-100',
-                                                                form.hasErrors
-                                                                    ? 'mb-4'
-                                                                    : 'mb-6',
-                                                            ]"
+                                                            class="grid grid-cols-2 gap-8 mb-1"
                                                         >
-                                                            <label
-                                                                for="chassis_number"
-                                                                class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                                                >Chassis
-                                                                Number<span
-                                                                    class="ml-1 text-red-400"
-                                                                    >*</span
-                                                                ></label
+                                                            <div
+                                                                :class="[
+                                                                    'w-100',
+                                                                    form.hasErrors
+                                                                        ? 'mb-4'
+                                                                        : 'mb-6',
+                                                                ]"
                                                             >
-                                                            <FormField
-                                                                id="chassis_number"
-                                                                name="chassis_number"
-                                                                class="flex flex-col gap-1"
-                                                            >
-                                                                <InputText
-                                                                    id="chassis_number"
-                                                                    type="text"
-                                                                    placeholder="Chassis No."
-                                                                    v-model="
-                                                                        form.chassis_number
-                                                                    "
-                                                                />
-                                                                <Message
-                                                                    v-if="
-                                                                        form
-                                                                            .errors
-                                                                            .chassis_number
-                                                                    "
-                                                                    severity="error"
-                                                                    size="small"
-                                                                    variant="simple"
-                                                                    >{{
-                                                                        form
-                                                                            .errors
-                                                                            .chassis_number
-                                                                    }}</Message
+                                                                <label
+                                                                    for="PMSLastMileage"
+                                                                    class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                                                    >PMS Last
+                                                                    Mileage
+                                                                    <span
+                                                                        class="ml-1 text-red-400"
+                                                                        >*</span
+                                                                    ></label
                                                                 >
-                                                            </FormField>
+                                                                <FormField
+                                                                    id="PMSLastMileage"
+                                                                    name="PMSLastMileage"
+                                                                    class="flex flex-col gap-1"
+                                                                >
+                                                                    <InputText
+                                                                        id="PMSLastMileagecturer"
+                                                                        type="text"
+                                                                        placeholder="PMS Last mileage"
+                                                                        v-model="
+                                                                            form.pms_last_mileage
+                                                                        "
+                                                                    />
+                                                                    <Message
+                                                                        v-if="
+                                                                            form
+                                                                                .errors
+                                                                                .pms_last_mileage
+                                                                        "
+                                                                        severity="error"
+                                                                        size="small"
+                                                                        variant="simple"
+                                                                        >{{
+                                                                            form
+                                                                                .errors
+                                                                                .pms_last_mileage
+                                                                        }}</Message
+                                                                    >
+                                                                </FormField>
+                                                            </div>
+                                                            <!-- Current Mileage -->
+                                                            <div
+                                                                :class="[
+                                                                    'w-100',
+                                                                    form.hasErrors
+                                                                        ? 'mb-4'
+                                                                        : 'mb-6',
+                                                                ]"
+                                                            >
+                                                                <label
+                                                                    for="currentmileages"
+                                                                    class="text-gray-700 dark:text-surface-50 text-sm font-medium mb-2 block"
+                                                                    >PMS Current
+                                                                    Mileage<span
+                                                                        class="ml-1 text-red-400"
+                                                                        >*</span
+                                                                    ></label
+                                                                >
+                                                                <FormField
+                                                                    id="currentmileages"
+                                                                    name="currentmileages"
+                                                                    class="flex flex-col gap-1"
+                                                                >
+                                                                    <InputText
+                                                                        id="currentmileages"
+                                                                        type="text"
+                                                                        placeholder="Current mileages"
+                                                                        v-model="
+                                                                            form.pms_current_reading
+                                                                        "
+                                                                    />
+                                                                    <Message
+                                                                        v-if="
+                                                                            form
+                                                                                .errors
+                                                                                .pms_current_reading
+                                                                        "
+                                                                        severity="error"
+                                                                        size="small"
+                                                                        variant="simple"
+                                                                        >{{
+                                                                            form
+                                                                                .errors
+                                                                                .pms_current_reading
+                                                                        }}</Message
+                                                                    >
+                                                                </FormField>
+                                                            </div>
                                                         </div>
-                                                        <!-- Manufacturer -->
                                                         <div
-                                                            :class="[
-                                                                'w-100',
-                                                                form.hasErrors
-                                                                    ? 'mb-4'
-                                                                    : 'mb-6',
-                                                            ]"
+                                                            class="grid grid-cols-2 gap-8 mb-1"
                                                         >
-                                                            <label
-                                                                for="manufacturer"
-                                                                class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                                                >Manufacturer<span
-                                                                    class="ml-1 text-red-400"
-                                                                    >*</span
-                                                                ></label
+                                                            <div
+                                                                :class="[
+                                                                    'w-100',
+                                                                    form.hasErrors
+                                                                        ? 'mb-4'
+                                                                        : 'mb-6',
+                                                                ]"
                                                             >
-                                                            <FormField
-                                                                id="manufacturer"
-                                                                name="manufacturer"
-                                                                class="flex flex-col gap-1"
-                                                            >
-                                                                <InputText
-                                                                    id="manufacturer"
-                                                                    type="text"
-                                                                    placeholder="Manufacture"
-                                                                    v-model="
-                                                                        form.manufacturer
-                                                                    "
-                                                                />
-                                                                <Message
-                                                                    v-if="
-                                                                        form
-                                                                            .errors
-                                                                            .manufacturer
-                                                                    "
-                                                                    severity="error"
-                                                                    size="small"
-                                                                    variant="simple"
-                                                                    >{{
-                                                                        form
-                                                                            .errors
-                                                                            .manufacturer
-                                                                    }}</Message
+                                                                <label
+                                                                    for="consumeMileage"
+                                                                    class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                                                    >Consume
+                                                                    Mileage
+                                                                    <span
+                                                                        class="ml-1 text-red-400"
+                                                                        >*</span
+                                                                    ></label
                                                                 >
-                                                            </FormField>
-                                                        </div>
-                                                        <!-- Manufacturer year -->
-                                                        <div
-                                                            :class="[
-                                                                'w-100',
-                                                                form.hasErrors
-                                                                    ? 'mb-4'
-                                                                    : 'mb-6',
-                                                            ]"
-                                                        >
-                                                            <label
-                                                                for="manufacturer_year"
-                                                                class="text-gray-700 dark:text-surface-50 text-sm font-medium mb-2 block"
-                                                                >Manufacture
-                                                                Year<span
-                                                                    class="ml-1 text-red-400"
-                                                                    >*</span
-                                                                ></label
-                                                            >
-                                                            <FormField
-                                                                id="manufacturer_year"
-                                                                name="manufacturer_year"
-                                                                class="flex flex-col gap-1"
-                                                            >
-                                                                <InputText
-                                                                    id="manufacturer_year"
-                                                                    type="number"
-                                                                    placeholder="Manufacture Year"
-                                                                    v-model="
-                                                                        form.manufacture_year
-                                                                    "
-                                                                />
-                                                                <Message
-                                                                    v-if="
-                                                                        form
-                                                                            .errors
-                                                                            .manufacture_year
-                                                                    "
-                                                                    severity="error"
-                                                                    size="small"
-                                                                    variant="simple"
-                                                                    >{{
-                                                                        form
-                                                                            .errors
-                                                                            .manufacture_year
-                                                                    }}</Message
+                                                                <FormField
+                                                                    id="consumeMileage"
+                                                                    name="consumeMileage"
+                                                                    class="flex flex-col gap-1"
                                                                 >
-                                                            </FormField>
+                                                                    <InputText
+                                                                        id="consumeMileage"
+                                                                        type="text"
+                                                                        placeholder="Consume mileage"
+                                                                        v-model="
+                                                                            form.consume_mileage
+                                                                        "
+                                                                    />
+                                                                    <Message
+                                                                        v-if="
+                                                                            form
+                                                                                .errors
+                                                                                .consume_mileage
+                                                                        "
+                                                                        severity="error"
+                                                                        size="small"
+                                                                        variant="simple"
+                                                                        >{{
+                                                                            form
+                                                                                .errors
+                                                                                .consume_mileage
+                                                                        }}</Message
+                                                                    >
+                                                                </FormField>
+                                                            </div>
+                                                            <!-- Next PMS Mileage -->
+                                                            <div
+                                                                :class="[
+                                                                    'w-100',
+                                                                    form.hasErrors
+                                                                        ? 'mb-4'
+                                                                        : 'mb-6',
+                                                                ]"
+                                                            >
+                                                                <label
+                                                                    for="nextmileage"
+                                                                    class="text-gray-700 dark:text-surface-50 text-sm font-medium mb-2 block"
+                                                                    >Next PMS
+                                                                    Mileage<span
+                                                                        class="ml-1 text-red-400"
+                                                                        >*</span
+                                                                    ></label
+                                                                >
+                                                                <FormField
+                                                                    id="nextmileage"
+                                                                    name="nextmileage"
+                                                                    class="flex flex-col gap-1"
+                                                                >
+                                                                    <InputText
+                                                                        id="nextmileage"
+                                                                        type="text"
+                                                                        placeholder="Next mileage"
+                                                                        v-model="
+                                                                            form.next_pms_mileage
+                                                                        "
+                                                                    />
+                                                                    <Message
+                                                                        v-if="
+                                                                            form
+                                                                                .errors
+                                                                                .next_pms_mileage
+                                                                        "
+                                                                        severity="error"
+                                                                        size="small"
+                                                                        variant="simple"
+                                                                        >{{
+                                                                            form
+                                                                                .errors
+                                                                                .next_pms_mileage
+                                                                        }}</Message
+                                                                    >
+                                                                </FormField>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                     <Button
@@ -1379,7 +1502,7 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head, useForm, router } from "@inertiajs/vue3";
-import { ref, onMounted } from "vue";
+import { ref, watch } from "vue";
 // import { CustomerService } from "@/service/CustomerService";
 
 import dayjs from "dayjs";
@@ -1401,8 +1524,6 @@ import { useToast } from "primevue/usetoast";
 import Toast from "primevue/toast";
 import Badge from "primevue/badge";
 
-const vehicleTypeArr = ref([]);
-const vehicleStatus = ref([]);
 const toast = useToast();
 
 const props = defineProps({
@@ -1443,9 +1564,80 @@ const statusSearch = () => {
     vehicleStatus.value = ["Operational", "Non-Operational", "Maintenance"];
 };
 
-const vehicleTypeSearch = () => {
-    vehicleTypeArr.value = ["Truck", "Taxi", "Bus", "Taxi", "Jeep"];
-};
+watch(
+    () => form.lto_reg_date, // Only watch this field
+    (newValue) => {
+        if (newValue) {
+            form.lto_reg_date = dayjs(newValue).format("YYYY-MM-DD");
+            form.lto_exp_date = dayjs(newValue)
+                .add(1, "year")
+                .format("YYYY-MM-DD");
+        }
+    }
+);
+
+watch(
+    () => form.calibration_date,
+    (newValue) => {
+        if (newValue) {
+            form.calibration_date = dayjs(newValue).format("YYYY-MM-DD");
+            form.calibration_exp_date = dayjs(newValue)
+                .add(1, "year")
+                .format("YYYY-MM-DD");
+        }
+    }
+);
+
+watch(
+    () => form.conveyance_date,
+    (newValue) => {
+        if (newValue) {
+            form.conveyance_date = dayjs(newValue).format("YYYY-MM-DD");
+            form.conveyance_exp_date = dayjs(newValue)
+                .add(1, "year")
+                .format("YYYY-MM-DD");
+        }
+    }
+);
+
+watch(
+    () => form.filcom_fab_date,
+    (newValue) => {
+        if (newValue) {
+            form.filcom_fab_date = dayjs(newValue).format("YYYY-MM-DD");
+            form.filcon_exp_date = dayjs(newValue)
+                .add(1, "year")
+                .format("YYYY-MM-DD");
+        }
+    }
+);
+
+watch(
+    () => form.ltfrb_reg_date,
+    (newValue) => {
+        if (newValue) {
+            form.ltfrb_reg_date = dayjs(newValue).format("YYYY-MM-DD");
+            form.ltfrb_exp_date = dayjs(newValue)
+                .add(1, "year")
+                .format("YYYY-MM-DD");
+        }
+    }
+);
+
+watch(
+    () => form.pms_current_reading,
+    () => {
+        form.consume_mileage = form.pms_current_reading - form.pms_last_mileage;
+    }
+);
+
+watch(
+    () => form.pms_last_mileage,
+    () => {
+        form.consume_mileage = form.pms_current_reading - form.pms_last_mileage;
+        form.next_pms_mileage = Number(form.pms_last_mileage) + 10000;
+    }
+);
 </script>
 
 <style scoped>
@@ -1544,5 +1736,9 @@ const vehicleTypeSearch = () => {
 .btn-inactive:hover {
     background-color: #ff8787 !important;
     color: #fff5f5 !important;
+}
+
+.class {
+    background-color: whitesmoke !important;
 }
 </style>

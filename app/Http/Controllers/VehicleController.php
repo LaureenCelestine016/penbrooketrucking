@@ -36,7 +36,7 @@ class VehicleController extends Controller
     // Validate the incoming request
 
     $validatedData = $request->validate([
-        'plateNumber'         => 'required|string|max:10',
+        'plateNumber'        => 'required|string|max:10|unique:vehicles,license_plate',
         'model'              => 'required|string|max:255',
         'capacity'           => 'required|integer',
         'status'             => 'required|string|max:50',
@@ -50,26 +50,13 @@ class VehicleController extends Controller
         'filconExpDate'      => 'nullable|date',
         'LTFRBRegDate'       => 'nullable|date',
         'LTFRBExpDate'       => 'nullable|date',
-        'engineNumber'       => 'required|string|max:20',
-        'PMSRegDate'         => 'nullable|date',
+        'engineNumber'       => 'required|string|max:20|unique:vehicles,engine_number',
+        'PMSRegDate'         => 'required|date',
         'PMSLastMileAge'     => 'required|string|max:255',
         'PMSCurrentReading'  => 'required|string|max:255',
         'consumeMileage'     => 'required|integer',
         'nextPMSMileage'     => 'required|integer',
     ]);
-
-        $validatedData['calibrationDate'] = Carbon::parse($validatedData['calibrationDate'])->format('Y-m-d H:i:s');
-        $validatedData['calibrationExpDate'] = Carbon::parse($validatedData['calibrationExpDate'])->format('Y-m-d H:i:s');
-        $validatedData['LTOregDate'] = Carbon::parse($validatedData['LTOregDate'])->format('Y-m-d H:i:s');
-        $validatedData['LTOExpDate'] = Carbon::parse($validatedData['LTOExpDate'])->format('Y-m-d H:i:s');
-        $validatedData['conveyanceDate'] = Carbon::parse($validatedData['conveyanceDate'])->format('Y-m-d H:i:s');
-        $validatedData['conveyanceExpDate'] = Carbon::parse($validatedData['conveyanceExpDate'])->format('Y-m-d H:i:s');
-        $validatedData['filcomFabDate'] = Carbon::parse($validatedData['filcomFabDate'])->format('Y-m-d H:i:s');
-        $validatedData['filconExpDate'] = Carbon::parse($validatedData['filconExpDate'])->format('Y-m-d H:i:s');
-        $validatedData['LTFRBRegDate'] = Carbon::parse($validatedData['LTFRBRegDate'])->format('Y-m-d H:i:s');
-        $validatedData['LTFRBExpDate'] = Carbon::parse($validatedData['LTFRBExpDate'])->format('Y-m-d H:i:s');
-        $validatedData['PMSRegDate'] = Carbon::parse($validatedData['PMSRegDate'])->format('Y-m-d H:i:s');
-
 
     // Create and save a new vehicle record
     Vehicle::create([
@@ -136,18 +123,26 @@ class VehicleController extends Controller
     {
 
         $validatedData = $request->validate([
-            'registration_number'           => 'required|string|max:255',
-            'name'                          => 'required|string|max:255',
-            'type'                          => 'required|string|max:255',
-            'model'                         => 'required|string|max:255',
-            'license_plate'                 => 'required|string|max:10',
-            'chassis_number'                => 'required|string|max:255',
-            'engine_number'                 => 'required|string|max:15',
-            'manufacturer'                  => 'required|string|max:255',
-            'manufacture_year'              => 'required|string|max:10',
-            'status'                        => 'required|string|max:15',
-            'registration_date'             => 'required|string|max:10',
-            'registration_expiration_date'  => 'required|string|max:10',
+            'license_plate'         => 'required|string|max:10|unique:vehicles,license_plate,' . $vehicle->id,
+            'model'                 => 'required|string|max:255',
+            'capacity'              => 'required|integer',
+            'status'                => 'required|string|max:50',
+            'calibration_date'      => 'nullable|date',
+            'calibration_exp_date'  => 'nullable|date',
+            'lto_reg_date'          => 'nullable|date',
+            'lto_exp_date'          => 'nullable|date',
+            'conveyance_date'       => 'nullable|date',
+            'conveyance_exp_date'   => 'nullable|date',
+            'filcom_fab_date'       => 'nullable|date',
+            'filcon_exp_date'       => 'nullable|date',
+            'ltfrb_reg_date'        => 'nullable|date',
+            'ltfrb_exp_date'        => 'nullable|date',
+            'engine_number'         => 'required|string|max:20|unique:vehicles,engine_number,' . $vehicle->id,
+            'pms_reg_date'          => 'required|date',
+            'pms_last_mileage'      => 'required|string|max:255',
+            'pms_current_reading'   => 'required|string|max:255',
+            'consume_mileage'       => 'required|integer',
+            'next_pms_mileage'      => 'required|integer',
         ]);
 
         $vehicle->update($validatedData);

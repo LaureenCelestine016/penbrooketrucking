@@ -30,6 +30,7 @@ class Vehicle extends Model
        'ltfrb_exp_date',
        'engine_number',
        'pms_reg_date',
+       'pms_last_mileage',
        'pms_current_reading',
        'consume_mileage',
        'next_pms_mileage',

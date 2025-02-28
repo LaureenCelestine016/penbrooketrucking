@@ -787,7 +787,7 @@
                                                 >
                                                     <InputText
                                                         id="PMSMileage"
-                                                        type="text"
+                                                        type="number"
                                                         placeholder="Last PMS"
                                                         v-model="
                                                             form.PMSLastMileAge
@@ -827,7 +827,7 @@
                                                 >
                                                     <InputText
                                                         id="manufacturer_year"
-                                                        type="text"
+                                                        type="number"
                                                         placeholder="Current Reading"
                                                         v-model="
                                                             form.PMSCurrentReading
@@ -1059,30 +1059,6 @@ const submit = () => {
 watch(
     form,
     function (old, newForm) {
-        form.calibrationDate = form.calibrationDate
-            ? dayjs(newForm.calibrationDate).format("YYYY-MM-DD")
-            : "";
-        form.calibrationExpDate = form.calibrationDate
-            ? dayjs(form.calibrationDate).add(1, "year").format("YYYY-MM-DD")
-            : old.calibrationExpDate;
-        form.LTOregDate = form.LTOregDate
-            ? dayjs(newForm.LTOregDate).format("YYYY-MM-DD")
-            : "";
-        form.LTOExpDate = form.LTOregDate
-            ? dayjs(form.LTOregDate).add(1, "year").format("YYYY-MM-DD")
-            : old.LTOExpDate;
-        form.conveyanceDate = form.conveyanceDate
-            ? dayjs(newForm.conveyanceDate).format("YYYY-MM-DD")
-            : "";
-        form.conveyanceExpDate = form.conveyanceDate
-            ? dayjs(form.conveyanceDate).add(1, "year").format("YYYY-MM-DD")
-            : old.conveyanceExpDate;
-        form.filcomFabDate = form.filcomFabDate
-            ? dayjs(newForm.filcomFabDate).format("YYYY-MM-DD")
-            : "";
-        form.filconExpDate = form.filcomFabDate
-            ? dayjs(form.filcomFabDate).add(1, "year").format("YYYY-MM-DD")
-            : old.filconExpDate;
         form.LTFRBRegDate = form.LTFRBRegDate
             ? dayjs(newForm.LTFRBRegDate).format("YYYY-MM-DD")
             : "";
@@ -1090,10 +1066,89 @@ watch(
             ? dayjs(form.LTFRBRegDate).add(1, "year").format("YYYY-MM-DD")
             : old.LTFRBExpDate;
 
+        form.PMSRegDate = form.PMSRegDate
+            ? dayjs(newForm.PMSRegDate).format("YYYY-MM-DD")
+            : "";
+
         form.consumeMileage = form.PMSCurrentReading - form.PMSLastMileAge;
         form.nextPMSMileage = Number(form.PMSLastMileAge) + 10000;
     },
     { deep: true }
+);
+
+watch(
+    () => form.LTOregDate, // Only watch this field
+    (newValue) => {
+        if (newValue) {
+            form.LTOregDate = dayjs(newValue).format("YYYY-MM-DD");
+            form.LTOExpDate = dayjs(newValue)
+                .add(1, "year")
+                .format("YYYY-MM-DD");
+        }
+    }
+);
+
+watch(
+    () => form.calibrationDate,
+    (newValue) => {
+        if (newValue) {
+            form.calibrationDate = dayjs(newValue).format("YYYY-MM-DD");
+            form.calibrationExpDate = dayjs(newValue)
+                .add(1, "year")
+                .format("YYYY-MM-DD");
+        }
+    }
+);
+
+watch(
+    () => form.conveyanceDate,
+    (newValue) => {
+        if (newValue) {
+            form.conveyanceDate = dayjs(newValue).format("YYYY-MM-DD");
+            form.conveyanceExpDate = dayjs(newValue)
+                .add(1, "year")
+                .format("YYYY-MM-DD");
+        }
+    }
+);
+
+watch(
+    () => form.filcomFabDate,
+    (newValue) => {
+        if (newValue) {
+            form.filcomFabDate = dayjs(newValue).format("YYYY-MM-DD");
+            form.filconExpDate = dayjs(newValue)
+                .add(1, "year")
+                .format("YYYY-MM-DD");
+        }
+    }
+);
+
+watch(
+    () => form.LTFRBRegDate,
+    (newValue) => {
+        if (newValue) {
+            form.LTFRBRegDate = dayjs(newValue).format("YYYY-MM-DD");
+            form.LTFRBExpDate = dayjs(newValue)
+                .add(1, "year")
+                .format("YYYY-MM-DD");
+        }
+    }
+);
+
+watch(
+    () => form.PMSCurrentReading,
+    () => {
+        form.consumeMileage = form.PMSCurrentReading - form.PMSLastMileAge;
+    }
+);
+
+watch(
+    () => form.PMSLastMileAge,
+    () => {
+        form.consumeMileage = form.PMSCurrentReading - form.PMSLastMileAge;
+        form.nextPMSMileage = Number(form.PMSLastMileAge) + 10000;
+    }
 );
 
 const vehicleTypeSearch = () => {
