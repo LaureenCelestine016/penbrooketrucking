@@ -3,15 +3,16 @@
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DriverController;
+use App\Http\Controllers\ExpensesController;
 use App\Http\Controllers\FuelRecordController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\MaintenanceTaskController;
 use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\RouteController;
+use App\Http\Controllers\TrailerController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-
 
 //User
 Route::get('/', function () {
@@ -22,10 +23,6 @@ Route::get('/', function () {
         'phpVersion' => PHP_VERSION,
     ]);
 })->middleware('user');
-
-// Route::get('dashboard', function () {
-//     return Inertia::render('Dashboard');
-// })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware(['auth','verified'])->group(function( ) {
     Route::get('dashboard',[DashboardController::class, 'index'])->name('dashboard');
@@ -47,6 +44,17 @@ Route::middleware('auth')->prefix('vehicle')->group(function () {
     Route::get('/detail/{vehicle}', [VehicleController::class, 'show'])->name('vehicle.show');
     Route::post('/delete-all', [VehicleController::class, 'deletedAll'])->name('vehicles.delete');
     Route::post('/image/upload', [VehicleController::class, 'upload'])->name('vehicles.upload');
+});
+
+Route::middleware('auth')->prefix('trailer')->group(function () {
+    Route::get('/', [TrailerController::class, 'index'])->name('trailer');
+    Route::get('/create', [TrailerController::class, 'create'])->name('trailer.create');
+    Route::post('/store', [TrailerController::class, 'store'])->name('trailer.store');
+    Route::post('/delete-all', [TrailerController::class, 'deletedAll'])->name('trailers.delete');
+    Route::delete('/delete/{trailer}', [TrailerController::class, 'destroy'])->name('trailer.delete');
+    Route::get('/detail/{trailer}', [TrailerController::class, 'show'])->name('trailer.show');
+    Route::put('/{trailer}', [TrailerController::class, 'update'])->name('trailer.update');
+
 });
 
 Route::middleware('auth')->prefix('driver')->group(function () {
@@ -94,9 +102,13 @@ Route::middleware('auth')->prefix('fuel')->group(function () {
 Route::middleware('auth')->prefix('maintenance')->group(function () {
     Route::get('/', [MaintenanceTaskController::class,'index'])->name('maintenance');
     Route::get('/create', [MaintenanceTaskController::class,'create'])->name('maintenance.create');
-
-
-
 });
+
+Route::middleware('auth')->prefix('expenses')->group(function () {
+    Route::get('/', [ExpensesController::class,'index'])->name('expenses');
+    Route::get('/create', [ExpensesController::class,'create'])->name('expenses.create');
+    Route::post('/store', [ExpensesController::class,'store'])->name('expenses.store');
+});
+
 
 require __DIR__.'/auth.php';

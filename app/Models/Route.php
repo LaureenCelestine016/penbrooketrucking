@@ -11,7 +11,7 @@ class Route extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'gpstracker_id', 'vehicle_id', 'driver_id',
+        'gpstracker_id', 'vehicle_id', 'driver_id', 'trailer_id',
         'start_location_id', 'end_location_id', 'fuel_id',
         'start_date', 'end_date', 'distance_km', 'status'
     ];
@@ -46,6 +46,11 @@ class Route extends Model
     public function fuelRecord()
     {
         return $this->belongsTo(Fuel_record::class, 'fuel_id');
+    }
+
+    public function trailer()
+    {
+        return $this->belongsTo(Trailer::class);
     }
 
 }

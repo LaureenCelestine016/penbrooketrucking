@@ -4,7 +4,7 @@
     <AuthenticatedLayout>
         <template #header>
             <h2 class="font-semibold text-2xl text-gray-800 leading-tight">
-                Add Truck
+                Add Tructor
             </h2>
         </template>
 
@@ -1057,26 +1057,6 @@ const submit = () => {
 };
 
 watch(
-    form,
-    function (old, newForm) {
-        form.LTFRBRegDate = form.LTFRBRegDate
-            ? dayjs(newForm.LTFRBRegDate).format("YYYY-MM-DD")
-            : "";
-        form.LTFRBExpDate = form.LTFRBRegDate
-            ? dayjs(form.LTFRBRegDate).add(1, "year").format("YYYY-MM-DD")
-            : old.LTFRBExpDate;
-
-        form.PMSRegDate = form.PMSRegDate
-            ? dayjs(newForm.PMSRegDate).format("YYYY-MM-DD")
-            : "";
-
-        form.consumeMileage = form.PMSCurrentReading - form.PMSLastMileAge;
-        form.nextPMSMileage = Number(form.PMSLastMileAge) + 10000;
-    },
-    { deep: true }
-);
-
-watch(
     () => form.LTOregDate, // Only watch this field
     (newValue) => {
         if (newValue) {
@@ -1177,7 +1157,7 @@ const goBack = () => {
 }
 
 .title {
-    font-size: 22px;
+    font-size: 20px;
     color: #213555;
 }
 </style>

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->engine = 'InnoDB';
             $table->id();
             $table->foreignId('vehicle_id')->constrained('vehicles')->onDelete('cascade'); // Start location
+            $table->foreignId('trailer_id')->constrained('trailers')->onDelete('cascade');
             $table->foreignId('driver_id')->constrained('drivers')->onDelete('cascade'); // Start location
             $table->foreignId('start_location_id')->constrained('locations')->onDelete('cascade'); // Start location
             $table->foreignId('end_location_id')->constrained('locations')->onDelete('cascade'); // End location

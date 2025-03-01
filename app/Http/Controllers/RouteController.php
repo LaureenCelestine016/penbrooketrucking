@@ -6,6 +6,7 @@ use App\Models\Driver;
 use App\Models\Fuel_record;
 use App\Models\Location;
 use App\Models\Route;
+use App\Models\Trailer;
 use App\Models\Vehicle;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -35,13 +36,15 @@ class RouteController extends Controller
     {
 
         return Inertia::render('Route/Create', [
-            "vehicles" => Vehicle::with(['fuelRecords' => function ($query) {
+            "tructor" => Vehicle::with(['fuelRecords' => function ($query) {
                 $query->where('is_used', 0) // Filter only unused fuel records
                       ->orderBy('created_at', 'desc');
             }])
             ->where('status', 'Operational')
             ->orderBy('created_at', 'desc')
-            ->get(['id', 'name']),
+            ->get(['id', 'license_plate']),
+
+            "trailer" =>  Trailer::where('status','Operational')->orderBy('created_at', 'desc')->get(),
 
             "locations" => Location::get(['id', 'address', 'latitude', 'longitude']),
 
@@ -61,21 +64,20 @@ class RouteController extends Controller
         $validatedData = $request->validate([
             'vehicleId'         => 'required|integer|exists:vehicles,id',
             'driverId'          => 'required|integer|exists:drivers,id',
+            'trailerId'          => 'required|integer|exists:trailers,id',
             'startLocId'        => 'required|integer|exists:locations,id',
             'endLocId'          => 'required|integer|exists:locations,id',
             'fuelId'            => 'required|integer|exists:fuel_records,id',
-            'dateStart'         => 'required|date|after:today',
-            'dateEnd'           => 'required|date|after:dateStart',
+            'dateStart'         => 'required|date',
+            'dateEnd'           => 'required|date',
             'status'            => 'required|string',
             'aproxKM'           => 'required|numeric|min:0',
 
         ]);
 
-        $validatedData['dateStart'] = Carbon::parse($validatedData['dateStart'])->format('Y-m-d H:i:s');
-        $validatedData['dateEnd'] = Carbon::parse($validatedData['dateEnd'])->format('Y-m-d H:i:s');
-
         Route::create([
             'vehicle_id'                 => $validatedData['vehicleId'],
+            'trailer_id'                  => $validatedData['trailerId'],
             'driver_id'                  => $validatedData['driverId'],
             'start_location_id'          => $validatedData['startLocId'],
             'end_location_id'            => $validatedData['endLocId'],

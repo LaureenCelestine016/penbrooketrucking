@@ -25,7 +25,7 @@ class FuelRecordController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Fuel/Create',["vehicles" => Vehicle::where('status', 'Operational')->orderBy('created_at', 'desc')->get(['id', 'name'])]);
+        return Inertia::render('Fuel/Create',["tractor" => Vehicle::where('status', 'Operational')->orderBy('created_at', 'desc')->get(['id', 'license_plate'])]);
     }
 
     /**

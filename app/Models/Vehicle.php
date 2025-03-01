@@ -62,4 +62,10 @@ class Vehicle extends Model
     {
         return $this->hasMany(Route::class);
     }
+
+    public function expenses()
+    {
+        return $this->hasMany(Expenses::class, 'vehicle_id');
+    }
+
 }

@@ -21,26 +21,27 @@
                             <div class="grid grid-cols-2 gap-10 mb-5">
                                 <div class="w-full">
                                     <label
-                                        for="vehicle_name"
+                                        for="tructor"
                                         class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                        >Vehicle<span class="ml-1 text-red-400"
+                                        >Tructor Truck<span
+                                            class="ml-1 text-red-400"
                                             >*</span
                                         ></label
                                     >
                                     <FormField
-                                        id="vehicle_name"
-                                        name="vehicle_name"
+                                        id="tructor"
+                                        name="tructor"
                                         class="flex flex-col gap-1"
                                     >
                                         <AutoComplete
-                                            id="vehicle_name"
+                                            id="tructor"
                                             class="w-full"
-                                            :suggestions="vehicleName"
-                                            @complete="vehicleNameSearch"
-                                            @item-select="onVehicleSelect"
+                                            :suggestions="tructors"
+                                            @complete="tructorNameSearch"
+                                            @item-select="onTructorSelect"
                                             optionLabel="name"
                                             dropdown
-                                            placeholder="Vehicle name"
+                                            placeholder="Plate no."
                                         />
                                         <Message
                                             v-if="form.errors.vehicleId"
@@ -53,6 +54,43 @@
                                         >
                                     </FormField>
                                 </div>
+                                <div class="w-full">
+                                    <label
+                                        for="trailer"
+                                        class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                        >Trailer Truck<span
+                                            class="ml-1 text-red-400"
+                                            >*</span
+                                        ></label
+                                    >
+                                    <FormField
+                                        id="trailer"
+                                        name="trailer"
+                                        class="flex flex-col gap-1"
+                                    >
+                                        <AutoComplete
+                                            id="trailer"
+                                            class="w-full"
+                                            :suggestions="trailers"
+                                            @complete="trailerNameSearch"
+                                            @item-select="onTrailerSelect"
+                                            optionLabel="name"
+                                            dropdown
+                                            placeholder="Plate no."
+                                        />
+                                        <Message
+                                            v-if="form.errors.vehicleId"
+                                            severity="error"
+                                            size="small"
+                                            variant="simple"
+                                            >{{
+                                                form.errors.vehicleId
+                                            }}</Message
+                                        >
+                                    </FormField>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-10 mb-5">
                                 <div class="w-full">
                                     <label
                                         for="driver"
@@ -82,6 +120,38 @@
                                             size="small"
                                             variant="simple"
                                             >{{ form.errors.driverId }}</Message
+                                        >
+                                    </FormField>
+                                </div>
+                                <div class="w-full">
+                                    <label
+                                        for="First_name"
+                                        class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                        >Trip Status<span
+                                            class="ml-1 text-red-400"
+                                            >*</span
+                                        ></label
+                                    >
+                                    <FormField
+                                        id="First_name"
+                                        name="First_name"
+                                        class="flex flex-col gap-1"
+                                    >
+                                        <AutoComplete
+                                            id="vehicle_name"
+                                            class="w-full"
+                                            v-model="form.status"
+                                            :suggestions="tripStatus"
+                                            @complete="tripStatusSearch"
+                                            dropdown
+                                            placeholder="Status"
+                                        />
+                                        <Message
+                                            v-if="form.errors.status"
+                                            severity="error"
+                                            size="small"
+                                            variant="simple"
+                                            >{{ form.errors.status }}</Message
                                         >
                                     </FormField>
                                 </div>
@@ -313,40 +383,6 @@
                                     </FormField>
                                 </div>
                             </div>
-                            <div>
-                                <div class="w-full">
-                                    <label
-                                        for="First_name"
-                                        class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                        >Trip Status<span
-                                            class="ml-1 text-red-400"
-                                            >*</span
-                                        ></label
-                                    >
-                                    <FormField
-                                        id="First_name"
-                                        name="First_name"
-                                        class="flex flex-col gap-1"
-                                    >
-                                        <AutoComplete
-                                            id="vehicle_name"
-                                            class="w-full"
-                                            v-model="form.status"
-                                            :suggestions="tripStatus"
-                                            @complete="tripStatusSearch"
-                                            dropdown
-                                            placeholder="Status"
-                                        />
-                                        <Message
-                                            v-if="form.errors.status"
-                                            severity="error"
-                                            size="small"
-                                            variant="simple"
-                                            >{{ form.errors.status }}</Message
-                                        >
-                                    </FormField>
-                                </div>
-                            </div>
                         </div>
                         <div>
                             <Button
@@ -375,8 +411,8 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head, useForm } from "@inertiajs/vue3";
-
-import { ref, onMounted, watch, nextTick } from "vue";
+import dayjs from "dayjs";
+import { ref, watch, nextTick } from "vue";
 
 import Button from "primevue/button";
 import InputText from "primevue/inputtext";
@@ -387,7 +423,8 @@ import Message from "primevue/message";
 import L from "leaflet";
 import "leaflet-routing-machine";
 
-const vehicleName = ref([]);
+const tructors = ref([]);
+const trailers = ref([]);
 const driverName = ref([]);
 const startLoc = ref([]);
 const endLoc = ref([]);
@@ -405,7 +442,11 @@ const routingControl = ref(null);
 const approx = ref(null);
 
 const props = defineProps({
-    vehicles: {
+    tructor: {
+        type: Array,
+        required: true,
+    },
+    trailer: {
         type: Array,
         required: true,
     },
@@ -420,7 +461,8 @@ const props = defineProps({
 });
 
 const form = useForm({
-    vehicleId: "",
+    tructorId: "",
+    trailerId: "",
     driverId: "",
     startLocId: "",
     endLocId: "",
@@ -452,15 +494,26 @@ const submit = () => {
     });
 };
 
-const vehicleNameSearch = () => {
-    vehicleName.value = props.vehicles.map((vehicle) => ({
-        id: vehicle.id,
-        name: vehicle.name,
+const tructorNameSearch = () => {
+    tructors.value = props.tructor.map((tructor) => ({
+        id: tructor.id,
+        name: tructor.license_plate,
     }));
 };
 
-const onVehicleSelect = (event) => {
-    form.vehicleId = event.value.id;
+const onTructorSelect = (event) => {
+    form.tructorId = event.value.id;
+};
+
+const trailerNameSearch = () => {
+    trailers.value = props.trailer.map((trailer) => ({
+        id: trailer.id,
+        name: trailer.license_plate,
+    }));
+};
+
+const onTrailerSelect = (event) => {
+    form.trailerId = event.value.id;
 };
 
 const driverNameSearch = () => {
@@ -592,6 +645,24 @@ watch(
     ([newStartLat, newStartLng, newEndLat, newEndLng]) => {
         if (newStartLat && newStartLng && newEndLat && newEndLng) {
             location();
+        }
+    }
+);
+
+watch(
+    () => form.dateStart,
+    (newValue) => {
+        if (newValue) {
+            form.dateStart = dayjs(newValue).format("YYYY-MM-DD");
+        }
+    }
+);
+
+watch(
+    () => form.dateEnd,
+    (newValue) => {
+        if (newValue) {
+            form.dateEnd = dayjs(newValue).format("YYYY-MM-DD");
         }
     }
 );

@@ -35,4 +35,9 @@ class Fuel_record extends Model
     {
         return $this->hasMany(Route::class, 'fuel_id');
     }
+
+    public function expense()
+    {
+        return $this->belongsTo(Expenses::class, 'expense_id');
+    }
 }

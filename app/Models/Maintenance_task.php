@@ -14,4 +14,14 @@ class Maintenance_task extends Model
     {
         return $this->belongsTo(Vehicle::class);
     }
+
+    public function trailer()
+    {
+        return $this->belongsTo(Trailer::class);
+    }
+
+    public function expense()
+    {
+        return $this->belongsTo(Expenses::class, 'expense_id');
+    }
 }

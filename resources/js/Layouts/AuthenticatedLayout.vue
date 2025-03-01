@@ -267,14 +267,14 @@ const items = ref([
                 label: "Trailer",
                 icon: "pi pi-list",
                 command: () => {
-                    router.get("/vehicle");
+                    router.get("/trailer");
                 },
                 items: [
                     {
                         label: "Add Trailer",
                         icon: "pi pi-plus",
                         command: () => {
-                            router.get("/vehicle/create");
+                            router.get("/trailer/create");
                         },
                     },
                 ],
@@ -387,28 +387,17 @@ const items = ref([
         items: [
             {
                 label: "Expenses",
+                icon: "pi pi-list",
+                command: () => {
+                    router.get("/expenses");
+                },
+            },
+            {
+                label: "Add Expenses",
                 icon: "pi pi-plus",
                 command: () => {
-                    router.get("/location/create");
+                    router.get("/expenses/create");
                 },
-                items: [
-                    {
-                        label: "Sale Record",
-                        icon: "pi pi-list",
-                        command: () => {
-                            router.get("/location");
-                        },
-                        items: [],
-                    },
-                    {
-                        label: "Add Sale",
-                        icon: "pi pi-list",
-                        command: () => {
-                            router.get("/location");
-                        },
-                        items: [],
-                    },
-                ],
             },
         ],
     },

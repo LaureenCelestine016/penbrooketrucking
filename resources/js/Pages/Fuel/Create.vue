@@ -21,26 +21,27 @@
                             <div class="grid grid-cols-2 gap-10 mb-5">
                                 <div class="w-full">
                                     <label
-                                        for="vehicle_name"
+                                        for="tractor"
                                         class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                        >Vehicle<span class="ml-1 text-red-400"
+                                        >Tractor Head<span
+                                            class="ml-1 text-red-400"
                                             >*</span
                                         ></label
                                     >
                                     <FormField
-                                        id="vehicle_name"
-                                        name="vehicle_name"
+                                        id="tractor"
+                                        name="tractor"
                                         class="flex flex-col gap-1"
                                     >
                                         <AutoComplete
-                                            id="vehicle_name"
+                                            id="tractor"
                                             class="w-full"
-                                            :suggestions="vehicleName"
-                                            @complete="vehicleNameSearch"
-                                            @item-select="onVehicleSelect"
+                                            :suggestions="tractorName"
+                                            @complete="tractorNameSearch"
+                                            @item-select="onTractorSelect"
                                             optionLabel="name"
                                             dropdown
-                                            placeholder="Vehicle name"
+                                            placeholder="Tractor name"
                                         />
                                         <Message
                                             severity="error"
@@ -140,7 +141,7 @@
                                     </FormField>
                                 </div>
                             </div>
-                            <div class="grid grid-cols-2 gap-10 mb-5">
+                            <div class="mb-5">
                                 <div class="w-full">
                                     <label
                                         for="birthday"
@@ -166,36 +167,6 @@
                                                 placeholder="Refueling Date"
                                             />
                                         </div>
-                                        <Message
-                                            severity="error"
-                                            size="small"
-                                            variant="simple"
-                                            >{{
-                                        }}</Message>
-                                    </FormField>
-                                </div>
-                                <div class="w-full">
-                                    <label
-                                        for="vehicle_name"
-                                        class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                        >Type<span class="ml-1 text-red-400"
-                                            >*</span
-                                        ></label
-                                    >
-                                    <FormField
-                                        id="vehicle_name"
-                                        name="vehicle_name"
-                                        class="flex flex-col gap-1"
-                                    >
-                                        <AutoComplete
-                                            id="vehicle_name"
-                                            class="w-full"
-                                            :suggestions="type"
-                                            @complete="typeNameSearch"
-                                            v-model="form.type"
-                                            dropdown
-                                            placeholder="Type"
-                                        />
                                         <Message
                                             severity="error"
                                             size="small"
@@ -248,6 +219,7 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head, useForm } from "@inertiajs/vue3";
 import { ref, watch } from "vue";
+import dayjs from "dayjs";
 
 import { useToast } from "primevue/usetoast";
 import Button from "primevue/button";
@@ -259,11 +231,10 @@ import FileUpload from "primevue/fileupload";
 
 const toast = useToast();
 const fuelName = ref([]);
-const type = ref([]);
-const vehicleName = ref([]);
+const tractorName = ref([]);
 
 const props = defineProps({
-    vehicles: {
+    tractor: {
         type: Object,
         required: true,
     },
@@ -274,7 +245,6 @@ const form = useForm({
     liters: "",
     cost: "",
     fuel_type: "",
-    type: "",
     refuelingDate: "",
 });
 
@@ -311,18 +281,23 @@ const fuelNameSearch = () => {
     ];
 };
 
-const typeNameSearch = () => {
-    type.value = ["Sales", "Expenses"];
-};
-
-const vehicleNameSearch = () => {
-    vehicleName.value = props.vehicles.map((vehicle) => ({
-        id: vehicle.id,
-        name: vehicle.name,
+const tractorNameSearch = () => {
+    tractorName.value = props.tractor.map((tractor) => ({
+        id: tractor.id,
+        name: tractor.license_plate,
     }));
 };
 
-const onVehicleSelect = (event) => {
+const onTractorSelect = (event) => {
     form.vehicleId = event.value.id;
 };
+
+watch(
+    () => form.refuelingDate,
+    (newValue) => {
+        if (newValue) {
+            form.refuelingDate = dayjs(newValue).format("YYYY-MM-DD");
+        }
+    }
+);
 </script>
