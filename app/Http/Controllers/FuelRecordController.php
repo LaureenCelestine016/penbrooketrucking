@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Expenses;
 use App\Models\Fuel_record;
 use App\Models\Vehicle;
 use Illuminate\Http\Request;
@@ -25,7 +26,16 @@ class FuelRecordController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Fuel/Create',["tractor" => Vehicle::where('status', 'Operational')->orderBy('created_at', 'desc')->get(['id', 'license_plate'])]);
+
+        return Inertia::render('Fuel/Create',["tructor" => Expenses::whereHas('tructor', function ($query) {
+            $query->where('status', 'Operational');
+        })
+        ->with(['tructor' => function ($query) {
+            $query->orderBy('created_at', 'desc');
+        }])
+        ->where('category_id', 3)
+        ->orderBy('created_at', 'desc')
+        ->get()]);
     }
 
     /**

@@ -1525,6 +1525,7 @@ import Toast from "primevue/toast";
 import Badge from "primevue/badge";
 
 const toast = useToast();
+const vehicleStatus = ref([]);
 
 const props = defineProps({
     Vehicle: {
