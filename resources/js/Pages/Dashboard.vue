@@ -28,7 +28,7 @@
                                             <div
                                                 class="text-surface-900 dark:text-surface-0 font-medium !text-2xl"
                                             >
-                                                {{ props.truck }}
+                                                {{ props.truck || 0 }}
                                             </div>
                                         </div>
                                         <div
@@ -64,7 +64,7 @@
                                             <div
                                                 class="text-surface-900 dark:text-surface-0 font-medium !text-2xl"
                                             >
-                                                {{ props.truck }}
+                                                {{ props.driver || 0 }}
                                             </div>
                                         </div>
                                         <div
@@ -100,7 +100,7 @@
                                             <div
                                                 class="text-surface-900 dark:text-surface-0 font-medium !text-2xl"
                                             >
-                                                {{ props.truck }}
+                                                {{ props.fuelTotal }}
                                             </div>
                                         </div>
                                         <div
@@ -136,7 +136,10 @@
                                             <div
                                                 class="text-surface-900 dark:text-surface-0 font-medium !text-2xl"
                                             >
-                                                {{ props.truck }}
+                                                {{
+                                                    props.maintenanceTotal ||
+                                                    0.0
+                                                }}
                                             </div>
                                         </div>
                                         <div
@@ -192,8 +195,8 @@
                             <div
                                 class="bg-white shadow p-4 rounded-border h-80"
                             >
-                                <h2 class="text-lg font-semibold">
-                                    Maintenance Trends
+                                <h2 class="text-lg font-semibold mb-4">
+                                    Truck Maintenance
                                 </h2>
                                 <Chart
                                     type="bar"
@@ -204,7 +207,16 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-span-3 bg-blue-500">3</div>
+                    <div class="col-span-2">
+                        <div class="card">
+                            <Chart
+                                type="bar"
+                                :data="chartData"
+                                :options="chartOptions"
+                                class="h-[30rem]"
+                            />
+                        </div>
+                    </div>
                     <div class="bg-pink-500">4</div>
                 </div>
             </div>
@@ -226,6 +238,18 @@ const props = defineProps({
         type: Number,
         required: true,
     },
+    driver: {
+        type: Number,
+        required: true,
+    },
+    fuelTotal: {
+        type: Number,
+        required: true,
+    },
+    maintenanceTotal: {
+        type: Number,
+        required: true,
+    },
     operationalCount: {
         type: Number,
         required: true,
@@ -239,6 +263,10 @@ const props = defineProps({
         required: true,
     },
     fuelConsumption: {
+        type: Array,
+        required: true,
+    },
+    vehicleMaintenanceCosts: {
         type: Array,
         required: true,
     },
@@ -280,16 +308,34 @@ const updateCharts = () => {
         ],
     };
 
-    // maintenanceChartData.value = {
-    //     labels: maintenanceTrend.labels,
-    //     datasets: [
-    //         {
-    //             label: "Maintenance Count",
-    //             backgroundColor: "#3498db",
-    //             data: maintenanceTrend.values,
-    //         },
-    //     ],
-    // };
+    const tructorLabel = props.vehicleMaintenanceCosts.vehicles.map(
+        (item) => item.name
+    );
+    const costTructorValue = props.vehicleMaintenanceCosts.vehicles.map(
+        (item) => item.total_cost
+    );
+
+    const trailerLabel = props.vehicleMaintenanceCosts.trailers.map(
+        (item) => item.name
+    );
+
+    const costTrailerValue = props.vehicleMaintenanceCosts.trailers.map(
+        (item) => item.total_cost
+    );
+
+    const tructLabel = [...tructorLabel, ...trailerLabel];
+    const cost = [...costTructorValue, ...costTrailerValue];
+    maintenanceChartData.value = {
+        labels: tructLabel,
+        datasets: [
+            {
+                label: "Maintenance Count",
+                backgroundColor: "#3498db",
+                data: cost,
+                fill: false,
+            },
+        ],
+    };
 };
 
 onMounted(updateCharts);
