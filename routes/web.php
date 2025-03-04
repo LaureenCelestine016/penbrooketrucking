@@ -102,6 +102,7 @@ Route::middleware('auth')->prefix('fuel')->group(function () {
 Route::middleware('auth')->prefix('maintenance')->group(function () {
     Route::get('/', [MaintenanceTaskController::class,'index'])->name('maintenance');
     Route::get('/create', [MaintenanceTaskController::class,'create'])->name('maintenance.create');
+    Route::post('/store', [MaintenanceTaskController::class,'store'])->name('maintenance.store');
 });
 
 Route::middleware('auth')->prefix('expenses')->group(function () {

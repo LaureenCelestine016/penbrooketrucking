@@ -18,6 +18,7 @@
                                 class="text-gray-900 dark:text-surface-0 text-xl font-medium mb-4 block"
                                 >Add Fuel</label
                             >
+
                             <div class="grid grid-cols-2 gap-10 mb-5">
                                 <div class="w-full">
                                     <label
@@ -39,7 +40,7 @@
                                             :suggestions="tractorName"
                                             @complete="tractorNameSearch"
                                             @item-select="onTractorSelect"
-                                            optionLabel="name"
+                                            optionLabel="license_plate"
                                             dropdown
                                             placeholder="Tractor name"
                                         />
@@ -84,22 +85,23 @@
                             <div class="grid grid-cols-2 gap-10 mb-5">
                                 <div class="w-full">
                                     <label
-                                        for="engine_number"
+                                        for="tractor"
                                         class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
                                         >Cost<span class="ml-1 text-red-400"
                                             >*</span
                                         ></label
                                     >
                                     <FormField
-                                        id="engine_number"
-                                        name="engine_number"
+                                        id="tractor"
+                                        name="tractor"
                                         class="flex flex-col gap-1"
                                     >
                                         <InputText
                                             id="engine_number"
                                             type="text"
                                             v-model="form.cost"
-                                            placeholder="0.00"
+                                            @focus="costInput"
+                                            placeholder="Quantity"
                                         />
                                         <Message
                                             severity="error"
@@ -232,10 +234,11 @@ import FileUpload from "primevue/fileupload";
 const toast = useToast();
 const fuelName = ref([]);
 const tractorName = ref([]);
+const costArray = ref("");
 
 const props = defineProps({
-    tractor: {
-        type: Object,
+    tructor: {
+        type: Array,
         required: true,
     },
 });
@@ -282,14 +285,26 @@ const fuelNameSearch = () => {
 };
 
 const tractorNameSearch = () => {
-    tractorName.value = props.tractor.map((tractor) => ({
-        id: tractor.id,
-        name: tractor.license_plate,
-    }));
+    tractorName.value = props.tructor
+        .sort((a, b) => new Date(b.created_at) - new Date(a.created_at)) // Sort by created_at (descending)
+        .map((tr) => ({
+            id: tr.tructor.id,
+            license_plate: tr.tructor.license_plate,
+        }));
 };
 
 const onTractorSelect = (event) => {
     form.vehicleId = event.value.id;
+};
+
+const costInput = () => {
+    const selectedVehicle = props.tructor
+        .filter((v) => v.vehicle_id === form.vehicleId)
+        .sort((a, b) => new Date(b.expense_date) - new Date(a.expense_date))[0]; // Get latest
+
+    if (selectedVehicle) {
+        form.cost = selectedVehicle.amount;
+    }
 };
 
 watch(

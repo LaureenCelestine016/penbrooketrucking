@@ -22,7 +22,6 @@ return new class extends Migration
             $table->string('fuel_type')->nullable();
             $table->string('is_used')->default(0);
             $table->string('image')->nullable();
-            $table->enum('type', ['Sales', 'Expenses']);
             $table->timestamps();
             $table->softDeletes();
         });

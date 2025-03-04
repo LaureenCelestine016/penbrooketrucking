@@ -13,10 +13,10 @@
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-md">
                     <form @submit.prevent="submit" class="p-6">
                         <div class="">
-                            <label
+                            <!-- <label
                                 class="text-gray-900 dark:text-surface-0 text-xl font-medium mb-6 block"
                                 >Add Expenses</label
-                            >
+                            > -->
                             <div class="flex flex-row gap-x-8 mb-6">
                                 <div class="flex items-center gap-2">
                                     <RadioButton

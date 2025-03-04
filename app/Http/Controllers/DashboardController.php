@@ -23,11 +23,13 @@ class DashboardController extends Controller
         ->get()
         ->map(function ($vehicle) {
             return [
-                'name' => $vehicle->name, // Change to your actual vehicle name column
+                'name' => $vehicle->model, // Change to your actual vehicle name column
                 'total_fuel' => $vehicle->fuelRecords->sum('liters'),
                 'total_cost' => $vehicle->fuelRecords->sum('cost'),
             ];
         });
+
+
 
         return Inertia::render('Dashboard', [
             'truck' => $truck,

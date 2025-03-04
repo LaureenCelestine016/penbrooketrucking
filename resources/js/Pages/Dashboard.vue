@@ -36,13 +36,13 @@
                                         >
                                             <svg
                                                 xmlns="http://www.w3.org/2000/svg"
-                                                width="28"
-                                                height="28"
-                                                viewBox="0 0 24 24"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 256 256"
                                             >
                                                 <path
-                                                    fill="#1054da"
-                                                    d="M7 20q-1.25 0-2.125-.875T4 17H2.725q-.425 0-.713-.288T1.725 16t.288-.712t.712-.288h2.05q.425-.475 1-.737T7 14t1.225.263t1 .737H13.4l2.1-9H5.75q-.425 0-.712-.288T4.75 5t.288-.712T5.75 4h11q.5 0 .8.375t.175.85L17.075 8H19q.475 0 .9.213t.7.587l1.875 2.475q.275.35.35.763t0 .837L22.15 16.2q-.075.35-.35.575t-.625.225H20q0 1.25-.875 2.125T17 20t-2.125-.875T14 17h-4q0 1.25-.875 2.125T7 20m8.925-7h4.825l.1-.525L19 10h-2.375zm-2.475 1.825l.163-.725q.162-.725.412-1.775q.075-.325.15-.6t.125-.55l.163-.725q.162-.725.412-1.775t.413-1.775l.162-.725L15.5 6l-2.1 9zm-11.7-1.5q-.425 0-.712-.287t-.288-.713t.288-.712t.712-.288h3.5q.425 0 .713.288t.287.712t-.288.713t-.712.287zm2-3.65q-.425 0-.712-.288t-.288-.712t.288-.712t.712-.288h4.5q.425 0 .713.288t.287.712t-.288.713t-.712.287zM7 18q.425 0 .713-.288T8 17t-.288-.712T7 16t-.712.288T6 17t.288.713T7 18m10 0q.425 0 .713-.288T18 17t-.288-.712T17 16t-.712.288T16 17t.288.713T17 18"
+                                                    fill="currentColor"
+                                                    d="M224 96.8V96a56.06 56.06 0 0 0-56-56h-8a16 16 0 0 0-16 16v120h-16V72a8 8 0 0 0-8-8H16A16 16 0 0 0 0 80v104a32 32 0 0 0 56 21.13A32 32 0 0 0 111 192h82a32 32 0 0 0 63-8v-48a40.07 40.07 0 0 0-32-39.2M32 200a16 16 0 1 1 16-16a16 16 0 0 1-16 16m48 0a16 16 0 1 1 16-16a16 16 0 0 1-16 16m144 0a16 16 0 1 1 16-16a16 16 0 0 1-16 16"
                                                 />
                                             </svg>
                                         </div>
@@ -53,105 +53,110 @@
                                 class="col-span-12 md:col-span-6 lg:col-span-3"
                             >
                                 <div
-                                    class="bg-white dark:bg-surface-900 shadow p-4 rounded-border"
+                                    class="bg-white dark:bg-surface-900 shadow p-4 rounded-border rounded-md"
                                 >
                                     <div class="flex justify-between mb-4">
                                         <div>
                                             <span
-                                                class="block text-surface-500 dark:text-surface-300 font-medium mb-4"
-                                                >Driver</span
+                                                class="block text-surface-500 dark:text-surface-300 font-medium text-base"
+                                                >DRIVER</span
                                             >
                                             <div
-                                                class="text-surface-900 dark:text-surface-0 font-medium !text-xl"
+                                                class="text-surface-900 dark:text-surface-0 font-medium !text-2xl"
                                             >
-                                                0
+                                                {{ props.truck }}
                                             </div>
                                         </div>
                                         <div
-                                            class="flex items-center justify-center bg-orange-100 dark:bg-orange-400/30 rounded-border w-10 h-10"
+                                            class="flex items-center justify-center bg-orange-100 dark:bg-orange-400/30 rounded-border rounded-md w-10 h-10"
                                         >
-                                            <i
-                                                class="pi pi-map-marker text-orange-500 dark:text-orange-200 !text-xl"
-                                            />
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 24 24"
+                                            >
+                                                <path
+                                                    fill="currentColor"
+                                                    d="M12 22q-2.05 0-3.875-.788t-3.187-2.15t-2.15-3.187T2 12q0-2.075.788-3.887t2.15-3.175t3.187-2.15T12 2q2.075 0 3.888.788t3.174 2.15t2.15 3.175T22 12q0 2.05-.788 3.875t-2.15 3.188t-3.175 2.15T12 22M7 11q.425 0 .713-.288T8 10t-.288-.712T7 9t-.712.288T6 10t.288.713T7 11m3-3q.425 0 .713-.288T11 7t-.288-.712T10 6t-.712.288T9 7t.288.713T10 8m7 3q.425 0 .713-.288T18 10t-.288-.712T17 9t-.712.288T16 10t.288.713T17 11m-5 3q.825 0 1.413-.587T14 12q0-.325-.1-.638t-.3-.562l1.75-4.35l-1.875-.825L11.75 10q-.75.125-1.25.688T10 12q0 .825.588 1.413T12 14m5.6 3.7q-1.25-.825-2.675-1.263T12 16t-2.925.438T6.4 17.7L8.15 19q.875-.5 1.85-.75t2-.25t2 .25t1.85.75z"
+                                                />
+                                            </svg>
                                         </div>
                                     </div>
-                                    <span class="text-green-500 font-medium"
-                                        >%52+
-                                    </span>
-                                    <span
-                                        class="text-surface-500 dark:text-surface-300"
-                                        >since last week</span
-                                    >
                                 </div>
                             </div>
                             <div
                                 class="col-span-12 md:col-span-6 lg:col-span-3"
                             >
                                 <div
-                                    class="bg-white dark:bg-surface-900 shadow p-4 rounded-border"
+                                    class="bg-white dark:bg-surface-900 shadow p-4 rounded-border rounded-md"
                                 >
                                     <div class="flex justify-between mb-4">
                                         <div>
                                             <span
-                                                class="block text-surface-500 dark:text-surface-300 font-medium mb-4"
-                                                >Fuel</span
+                                                class="block text-surface-500 dark:text-surface-300 font-medium text-base"
+                                                >FUEL</span
                                             >
                                             <div
-                                                class="text-surface-900 dark:text-surface-0 font-medium !text-xl"
+                                                class="text-surface-900 dark:text-surface-0 font-medium !text-2xl"
                                             >
-                                                0.00
+                                                {{ props.truck }}
                                             </div>
                                         </div>
                                         <div
-                                            class="w-10 h-10 flex items-center justify-center bg-cyan-100 dark:bg-cyan-400/30 rounded-border"
+                                            class="flex items-center justify-center bg-green-100 dark:bg-green-400/30 rounded-border rounded-md w-10 h-10"
                                         >
-                                            <i
-                                                class="pi pi-inbox text-cyan-500 dark:text-cyan-200 !text-xl"
-                                            />
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 15 15"
+                                            >
+                                                <path
+                                                    fill="currentColor"
+                                                    d="M14 6v5.5a.5.5 0 0 1-1 0v-2A1.5 1.5 0 0 0 11.5 8H10V2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V9h1.5a.5.5 0 0 1 .5.5v2a1.5 1.5 0 0 0 3 0V5a1 1 0 0 0-1-1V2.49a.5.5 0 0 0-.5-.49a.51.51 0 0 0-.5.55V5a1 1 0 1 0 1-1zm-5 .5a.5.5 0 0 1-.5.5h-5a.5.5 0 0 1-.5-.5v-3a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 .5.5z"
+                                                />
+                                            </svg>
                                         </div>
                                     </div>
-                                    <span class="text-green-500 font-medium"
-                                        >520
-                                    </span>
-                                    <span
-                                        class="text-surface-500 dark:text-surface-300"
-                                        >newly registered</span
-                                    >
                                 </div>
                             </div>
                             <div
                                 class="col-span-12 md:col-span-6 lg:col-span-3"
                             >
                                 <div
-                                    class="bg-white dark:bg-surface-900 shadow p-4 rounded-border"
+                                    class="bg-white dark:bg-surface-900 shadow p-4 rounded-border rounded-md"
                                 >
                                     <div class="flex justify-between mb-4">
                                         <div>
                                             <span
-                                                class="block text-surface-500 dark:text-surface-300 font-medium mb-4"
+                                                class="block text-surface-500 dark:text-surface-300 font-medium text-base"
                                                 >Maintenance</span
                                             >
                                             <div
-                                                class="text-surface-900 dark:text-surface-0 font-medium !text-xl"
+                                                class="text-surface-900 dark:text-surface-0 font-medium !text-2xl"
                                             >
-                                                0.00
+                                                {{ props.truck }}
                                             </div>
                                         </div>
                                         <div
-                                            class="w-10 h-10 flex items-center justify-center bg-purple-100 dark:bg-purple-400/30 rounded-border"
+                                            class="flex items-center justify-center bg-yellow-100 dark:bg-yellow-400/30 rounded-border rounded-md w-10 h-10"
                                         >
-                                            <i
-                                                class="pi pi-comment text-purple-500 dark:text-purple-200 !text-xl"
-                                            />
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="32"
+                                                height="32"
+                                                viewBox="0 0 24 24"
+                                            >
+                                                <path
+                                                    fill="currentColor"
+                                                    fill-rule="evenodd"
+                                                    d="M6.377 4.72a7 7 0 0 0-1.62 1.209a1 1 0 1 1-1.414-1.414a9 9 0 0 1 12.728 0l5.94 5.94a2.6 2.6 0 0 1 0 3.676l-1.273 1.273a2.6 2.6 0 0 1-3.677 0L14.657 13L5.89 21.768a2.6 2.6 0 0 1-3.677 0l-.566-.566a2.6 2.6 0 0 1 0-3.677l8.769-8.768zm13.937 6.866l-2.121 2.121l.282.283a.6.6 0 0 0 .849 0l1.273-1.273a.6.6 0 0 0 0-.848zm-9.192 2.121l-1.415-1.414L3.06 18.94a.6.6 0 0 0 0 .848l.566.566a.6.6 0 0 0 .849 0z"
+                                                    clip-rule="evenodd"
+                                                />
+                                            </svg>
                                         </div>
                                     </div>
-                                    <span class="text-green-500 font-medium"
-                                        >85
-                                    </span>
-                                    <span
-                                        class="text-surface-500 dark:text-surface-300"
-                                        >responded</span
-                                    >
                                 </div>
                             </div>
                         </div>

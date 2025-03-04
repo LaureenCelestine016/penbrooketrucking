@@ -18,6 +18,7 @@ class FuelRecordController extends Controller
     {
 
         $fuel = Fuel_record::with('vehicle')->orderBy('created_at','desc')->get();
+
         return Inertia::render('Fuel/Index', ['fuels' => $fuel]);
     }
 
@@ -49,8 +50,6 @@ class FuelRecordController extends Controller
             'liters'            => 'required|numeric|min:1',
             'cost'              => 'required|numeric|min:0',
             'fuel_type'         => 'required|string',
-            'type'              => 'required|string',
-            // 'image'             => 'required|string',
             'refuelingDate'     => 'required|date',
         ]);
 
@@ -63,8 +62,7 @@ class FuelRecordController extends Controller
             'cost'                 => $validatedData['cost'],
             'refueling_date'       => $validatedData['refuelingDate'],
             'fuel_type'            => $validatedData['fuel_type'],
-            // 'image'                => $validatedData['image'],
-            'type'                 => $validatedData['type'],
+
 
         ]);
 
