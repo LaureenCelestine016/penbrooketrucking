@@ -5,6 +5,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\ExpensesController;
 use App\Http\Controllers\FuelRecordController;
+use App\Http\Controllers\GPSController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\MaintenanceTaskController;
 use App\Http\Controllers\VehicleController;
@@ -112,5 +113,7 @@ Route::middleware('auth')->prefix('expenses')->group(function () {
     Route::post('/store', [ExpensesController::class,'store'])->name('expenses.store');
 });
 
+
+Route::get('/api/gps-data', [GPSController::class,'store']);
 
 require __DIR__.'/auth.php';

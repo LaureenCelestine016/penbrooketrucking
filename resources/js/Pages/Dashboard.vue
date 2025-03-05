@@ -200,6 +200,7 @@
                             </div>
                         </div>
                     </div>
+<<<<<<< Updated upstream
                     <div class="col-span-3 bg-blue-500">3</div>
                     <div class="bg-pink-500">4</div>
                 </div>
@@ -248,6 +249,97 @@
                         <h3 class="text-lg font-medium mb-2">Pending Notifications</h3>
                         <p class="text-2xl font-bold">{{ props.pendingNotifications }}</p>
                     </div>
+=======
+<<<<<<< HEAD
+                    <div class="col-span-2">
+                        <div class="bg-white shadow p-4 rounded-border h-100">
+                            <h2 class="text-lg font-semibold mb-4">Expenses</h2>
+                            <Chart
+                                type="bar"
+                                :data="expensesChartData"
+                                :options="chartOptions"
+                                class="h-[20rem]"
+                            />
+                        </div>
+                    </div>
+                    <div class="col-span-2">
+                        <div class="bg-white shadow p-4 rounded-border h-100">
+                            <h2 class="text-lg font-semibold mb-4">Reminder</h2>
+                            <DataTable
+                                v-model:selection="selectedProduct"
+                                :value="reminder"
+                                dataKey="id"
+                                tableStyle="min-width: 50rem"
+                                class="h-[20rem]"
+                            >
+                                <!-- <Column
+                                    selectionMode="single"
+                                    headerStyle="width: 3rem"
+                                ></Column> -->
+                                <Column field="code" header="Topic"></Column>
+                                <Column
+                                    field="name"
+                                    header="Description"
+                                ></Column>
+                            </DataTable>
+                        </div>
+                    </div>
+                    <div class="col-span-5">
+                        <div class="bg-white shadow p-4 rounded-border h-100">
+                            <h2 class="text-lg font-semibold mb-4">Map</h2>
+                            <div id="map" class="w-full"></div>
+                        </div>
+=======
+                    <div class="col-span-3 bg-blue-500">3</div>
+                    <div class="bg-pink-500">4</div>
+>>>>>>> Stashed changes
+                </div>
+            </div>
+        </div>
+
+        <!-- Driver Dashboard -->
+        <div v-else class="py-8">
+            <div class="mx-12">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+
+                    <div class="bg-white shadow p-4 rounded">
+                        <h3 class="text-lg font-medium mb-2">Assigned Rides</h3>
+                        <p class="text-2xl font-bold">{{ props.assignedRides }}</p>
+                    </div>
+
+                    <div class="bg-white shadow p-4 rounded">
+                        <h3 class="text-lg font-medium mb-2">Ongoing Rides</h3>
+                        <p class="text-2xl font-bold">{{ props.ongoingRides }}</p>
+                    </div>
+
+                    <div class="bg-white shadow p-4 rounded">
+                        <h3 class="text-lg font-medium mb-2">Completed Rides</h3>
+                        <p class="text-2xl font-bold">{{ props.completedRides }}</p>
+                    </div>
+
+                    <div class="bg-white shadow p-4 rounded">
+                        <h3 class="text-lg font-medium mb-2">Next Scheduled Ride</h3>
+                        <div v-if="props.nextRide">
+                            <p class="text-lg">
+                                Date: <span class="font-bold">{{ props.nextRide.start_date }}</span>
+                            </p>
+                            <p class="text-sm">
+                                From: <span class="font-medium">{{ props.nextRide.start_location }}</span>
+                            </p>
+                            <p class="text-sm">
+                                To: <span class="font-medium">{{ props.nextRide.end_location }}</span>
+                            </p>
+                        </div>
+                        <div v-else>
+                            <p class="text-lg font-bold">None</p>
+                        </div>
+                    </div>
+                    <!-- Pending Notifications -->
+                    <div class="bg-white shadow p-4 rounded">
+                        <h3 class="text-lg font-medium mb-2">Pending Notifications</h3>
+                        <p class="text-2xl font-bold">{{ props.pendingNotifications }}</p>
+>>>>>>> 2da5e3395642724680a6da5025c4bde0126dd5c9
+                    </div>
                 </div>
             </div>
         </div>
@@ -259,17 +351,83 @@ import { ref, onMounted, watchEffect } from "vue";
 import { Head, usePage } from "@inertiajs/vue3";
 import Toast from "primevue/toast";
 import Chart from "primevue/chart";
+<<<<<<< Updated upstream
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 
 const { props } = usePage();
 const user = props.auth.user;
 const isAdmin = user.user_type === 1;
 
+=======
+<<<<<<< HEAD
+import { ref, onMounted, watchEffect, computed } from "vue";
+import DataTable from "primevue/datatable";
+import Column from "primevue/column";
+import L from "leaflet";
+
+const props = defineProps({
+    truck: {
+        type: Number,
+        required: true,
+    },
+    driver: {
+        type: Number,
+        required: true,
+    },
+    fuelTotal: {
+        type: Number,
+        required: true,
+    },
+    maintenanceTotal: {
+        type: Number,
+        required: true,
+    },
+    operationalCount: {
+        type: Number,
+        required: true,
+    },
+    nonOperationalCount: {
+        type: Number,
+        required: true,
+    },
+    maintenance: {
+        type: Number,
+        required: true,
+    },
+    fuelConsumption: {
+        type: Array,
+        required: true,
+    },
+    vehicleMaintenanceCosts: {
+        type: Array,
+        required: true,
+    },
+    monthlyExpenses: {
+        type: Array,
+        required: true,
+    },
+});
+=======
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
+
+const { props } = usePage();
+const user = props.auth.user;
+const isAdmin = user.user_type === 1;
+>>>>>>> 2da5e3395642724680a6da5025c4bde0126dd5c9
+
+>>>>>>> Stashed changes
 // Admin dashboard chart data props
 const truckChartData = ref(null);
 const fuelChartData = ref(null);
 const maintenanceChartData = ref(null);
+const expensesChartData = ref(null);
 const chartOptions = ref({ responsive: true });
+const reminder = ref([
+    { id: 1, code: "MT-001", name: "Oil Change Reminder" },
+    { id: 2, code: "MT-002", name: "Tire Rotation Reminder" },
+    { id: 3, code: "MT-003", name: "Brake Inspection Reminder" },
+    { id: 4, code: "MT-004", name: "Engine Check Reminder" },
+]);
 
 // Only update charts if admin data exists
 if (isAdmin) {
@@ -316,11 +474,131 @@ if (isAdmin) {
         // };
     };
 
+<<<<<<< Updated upstream
+=======
+<<<<<<< HEAD
+    const fuelLabels = props.fuelConsumption.map((item) => item.name);
+    const fuelValues = props.fuelConsumption.map((item) => item.total_cost);
+
+    fuelChartData.value = {
+        labels: fuelLabels,
+        datasets: [
+            {
+                label: "Fuel Efficiency (L/km)",
+                borderColor: "#FFA500",
+                data: fuelValues,
+                fill: false,
+            },
+        ],
+    };
+
+    const tructorLabel = props.vehicleMaintenanceCosts.vehicles.map(
+        (item) => item.name
+    );
+    const costTructorValue = props.vehicleMaintenanceCosts.vehicles.map(
+        (item) => item.total_cost
+    );
+
+    const trailerLabel = props.vehicleMaintenanceCosts.trailers.map(
+        (item) => item.name
+    );
+
+    const costTrailerValue = props.vehicleMaintenanceCosts.trailers.map(
+        (item) => item.total_cost
+    );
+
+    const tructLabel = [...tructorLabel, ...trailerLabel];
+    const cost = [...costTructorValue, ...costTrailerValue];
+    maintenanceChartData.value = {
+        labels: tructLabel,
+        datasets: [
+            {
+                label: "Maintenance Count",
+                backgroundColor: "#3498db",
+                data: cost,
+                fill: false,
+            },
+        ],
+    };
+
+    const labels = computed(() => [
+        ...new Set(props.monthlyExpenses.map((expense) => expense.month)),
+    ]);
+
+    const categoryNames = computed(() => [
+        ...new Set(
+            props.monthlyExpenses.map((expense) => expense.category_name)
+        ),
+    ]);
+
+    expensesChartData.value = {
+        labels: labels.value,
+        datasets: categoryNames.value.map((category) => ({
+            label: category,
+            backgroundColor: category === "Fuel" ? "#66a80f" : "#ffa94d", // Add more colors if needed
+            data: labels.value.map((month) => {
+                const expense = props.monthlyExpenses.find(
+                    (e) => e.month === month && e.category_name === category
+                );
+                return expense ? expense.total_cost : 0;
+            }),
+        })),
+    };
+};
+
+onMounted(updateCharts);
+
+watchEffect(() => {
+    updateCharts();
+});
+
+const location = () => {
+    const map = ref(null);
+
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            function (position) {
+                const { latitude } = position.coords;
+                const { longitude } = position.coords;
+
+                // const coords = [latitude, longitude];
+                const coords = [latitude, longitude];
+
+                // Initialize the map
+                map.value = L.map("map").setView(coords, 13);
+
+                // Add a tile layer to the map
+                L.tileLayer(
+                    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                ).addTo(map.value);
+
+                // Add a marker to the map
+                L.marker(coords)
+                    .addTo(map.value)
+                    .bindPopup("You are here!")
+                    .openPopup();
+            },
+            function () {
+                alert(`Could not get your position`);
+            }
+        );
+    }
+};
+
+onMounted(() => {
+    location();
+});
+=======
+>>>>>>> Stashed changes
     onMounted(updateCharts);
     watchEffect(() => {
         updateCharts();
     });
 }
+<<<<<<< Updated upstream
+=======
+>>>>>>> 2da5e3395642724680a6da5025c4bde0126dd5c9
+>>>>>>> Stashed changes
 </script>
 
 <style scoped>

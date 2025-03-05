@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Maintenance_task;
 use App\Models\Vehicle;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -102,9 +103,11 @@ class VehicleController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Vehicle $vehicle)
+    public function show($id)
     {
-
+        dd($id);
+        $maintenance = Vehicle::with('maintenanceTasks')->get();
+        dd($maintenance);
         return Inertia::render('Vehicle/Show', ["Vehicle" => $vehicle]);
     }
 

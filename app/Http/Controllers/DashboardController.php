@@ -35,6 +35,54 @@ class DashboardController extends Controller
                     ];
                 });
 
+<<<<<<< Updated upstream
+=======
+<<<<<<< HEAD
+            'trailers' => Trailer::with('maintenanceTasks')
+                ->get()
+                ->map(function ($trailer) {
+                    return [
+                        'name' => $trailer->license_plate,
+                        'total_cost' => $trailer->maintenanceTasks->sum('total'),
+                    ];
+                }),
+        ];
+
+        $monthlyExpenses = Expenses::with('category') // Load category relationship
+        ->select(
+            DB::raw("DATE_FORMAT(expense_date, '%Y-%m') as month"),
+            'category_id',
+            DB::raw("SUM(amount) as total_cost")
+        )
+        ->groupBy('month', 'category_id')
+        ->orderBy('month', 'ASC')
+        ->get()
+        ->map(function ($expense) {
+            return [
+                'month' => $expense->month,
+                'category_id' => $expense->category_id,
+                'category_name' => $expense->category->name, // Get category name from relationship
+                'total_cost' => $expense->total_cost,
+            ];
+        });
+
+
+
+
+        return Inertia::render('Dashboard', [
+            'truck' => $truck,
+            'driver' => $driver,
+            'fuelTotal' => $fuelTotal,
+            'maintenanceTotal' => $maintenanceTotal,
+            'operationalCount' => $operationalCount,
+            'nonOperationalCount' => $nonOperationalCount,
+            'maintenance' => $maintenance,
+            'fuelConsumption' => $fuelConsumption,
+            'vehicleMaintenanceCosts' => $maintenanceCosts,
+            'monthlyExpenses' => $monthlyExpenses
+        ]);
+=======
+>>>>>>> Stashed changes
             return Inertia::render('Dashboard', [
                 'truck'              => $truck,
                 'operationalCount'   => $operationalCount,
@@ -45,6 +93,10 @@ class DashboardController extends Controller
         } else {
             // Driver dashboard data
             $driverId = $user->driver_id; // Ensure your users table holds the driver_id for drivers
+<<<<<<< Updated upstream
+=======
+>>>>>>> 2da5e3395642724680a6da5025c4bde0126dd5c9
+>>>>>>> Stashed changes
 
             $assignedRides = Route::where('driver_id', $driverId)->count();
             $ongoingRides = Route::where('driver_id', $driverId)
