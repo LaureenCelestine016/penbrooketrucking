@@ -201,6 +201,7 @@
                         </div>
                     </div>
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
                     <div class="col-span-3 bg-blue-500">3</div>
                     <div class="bg-pink-500">4</div>
                 </div>
@@ -250,6 +251,8 @@
                         <p class="text-2xl font-bold">{{ props.pendingNotifications }}</p>
                     </div>
 =======
+=======
+>>>>>>> Stashed changes
 <<<<<<< HEAD
                     <div class="col-span-2">
                         <div class="bg-white shadow p-4 rounded-border h-100">
@@ -343,6 +346,53 @@
                 </div>
             </div>
         </div>
+
+        <!-- Driver Dashboard -->
+        <div v-else class="py-8">
+            <div class="mx-12">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+
+                    <div class="bg-white shadow p-4 rounded">
+                        <h3 class="text-lg font-medium mb-2">Assigned Rides</h3>
+                        <p class="text-2xl font-bold">{{ props.assignedRides }}</p>
+                    </div>
+
+                    <div class="bg-white shadow p-4 rounded">
+                        <h3 class="text-lg font-medium mb-2">Ongoing Rides</h3>
+                        <p class="text-2xl font-bold">{{ props.ongoingRides }}</p>
+                    </div>
+
+                    <div class="bg-white shadow p-4 rounded">
+                        <h3 class="text-lg font-medium mb-2">Completed Rides</h3>
+                        <p class="text-2xl font-bold">{{ props.completedRides }}</p>
+                    </div>
+
+                    <div class="bg-white shadow p-4 rounded">
+                        <h3 class="text-lg font-medium mb-2">Next Scheduled Ride</h3>
+                        <div v-if="props.nextRide">
+                            <p class="text-lg">
+                                Date: <span class="font-bold">{{ props.nextRide.start_date }}</span>
+                            </p>
+                            <p class="text-sm">
+                                From: <span class="font-medium">{{ props.nextRide.start_location }}</span>
+                            </p>
+                            <p class="text-sm">
+                                To: <span class="font-medium">{{ props.nextRide.end_location }}</span>
+                            </p>
+                        </div>
+                        <div v-else>
+                            <p class="text-lg font-bold">None</p>
+                        </div>
+                    </div>
+                    <!-- Pending Notifications -->
+                    <div class="bg-white shadow p-4 rounded">
+                        <h3 class="text-lg font-medium mb-2">Pending Notifications</h3>
+                        <p class="text-2xl font-bold">{{ props.pendingNotifications }}</p>
+>>>>>>> 2da5e3395642724680a6da5025c4bde0126dd5c9
+                    </div>
+                </div>
+            </div>
+        </div>
     </AuthenticatedLayout>
 </template>
 
@@ -352,6 +402,7 @@ import { Head, usePage } from "@inertiajs/vue3";
 import Toast from "primevue/toast";
 import Chart from "primevue/chart";
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 
 const { props } = usePage();
@@ -359,6 +410,8 @@ const user = props.auth.user;
 const isAdmin = user.user_type === 1;
 
 =======
+=======
+>>>>>>> Stashed changes
 <<<<<<< HEAD
 import { ref, onMounted, watchEffect, computed } from "vue";
 import DataTable from "primevue/datatable";
@@ -415,6 +468,9 @@ const user = props.auth.user;
 const isAdmin = user.user_type === 1;
 >>>>>>> 2da5e3395642724680a6da5025c4bde0126dd5c9
 
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 // Admin dashboard chart data props
 const truckChartData = ref(null);
@@ -475,7 +531,10 @@ if (isAdmin) {
     };
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 =======
+=======
+>>>>>>> Stashed changes
 <<<<<<< HEAD
     const fuelLabels = props.fuelConsumption.map((item) => item.name);
     const fuelValues = props.fuelConsumption.map((item) => item.total_cost);
@@ -589,6 +648,9 @@ onMounted(() => {
     location();
 });
 =======
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     onMounted(updateCharts);
     watchEffect(() => {
@@ -596,6 +658,10 @@ onMounted(() => {
     });
 }
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+>>>>>>> 2da5e3395642724680a6da5025c4bde0126dd5c9
+>>>>>>> Stashed changes
 =======
 >>>>>>> 2da5e3395642724680a6da5025c4bde0126dd5c9
 >>>>>>> Stashed changes

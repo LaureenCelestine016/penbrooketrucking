@@ -36,7 +36,10 @@ class DashboardController extends Controller
                 });
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 =======
+=======
+>>>>>>> Stashed changes
 <<<<<<< HEAD
             'trailers' => Trailer::with('maintenanceTasks')
                 ->get()
@@ -82,6 +85,9 @@ class DashboardController extends Controller
             'monthlyExpenses' => $monthlyExpenses
         ]);
 =======
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
             return Inertia::render('Dashboard', [
                 'truck'              => $truck,
@@ -94,6 +100,10 @@ class DashboardController extends Controller
             // Driver dashboard data
             $driverId = $user->driver_id; // Ensure your users table holds the driver_id for drivers
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+>>>>>>> 2da5e3395642724680a6da5025c4bde0126dd5c9
+>>>>>>> Stashed changes
 =======
 >>>>>>> 2da5e3395642724680a6da5025c4bde0126dd5c9
 >>>>>>> Stashed changes
