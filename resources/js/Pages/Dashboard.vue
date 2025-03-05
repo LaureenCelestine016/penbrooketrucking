@@ -4,7 +4,7 @@
     <AuthenticatedLayout>
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ user === isAdmin ? 'Admin' : 'Driver' }} Dashboard
+                {{ isAdmin ? 'Admin' : 'Driver' }} Dashboard
             </h2>
         </template>
 
