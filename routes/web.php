@@ -66,7 +66,8 @@ Route::middleware('auth')->prefix('driver')->group(function () {
     Route::get('/detail/{driver}', [DriverController::class, 'show'])->name('driver.show');
     Route::post('/delete-all', [DriverController::class, 'deletedAll'])->name('drivers.delete');
     Route::post('/status', [DriverController::class, 'status'])->name('driver.status');
-
+    Route::get('/rides', [DriverController::class, 'rides'])->name('driver.rides');
+    Route::get('/routes', [DriverController::class, 'routes'])->name('driver.routes');
 });
 
 Route::middleware('auth')->prefix('location')->group(function () {

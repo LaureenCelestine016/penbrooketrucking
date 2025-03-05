@@ -227,15 +227,19 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import {computed, ref} from "vue";
 import Dropdown from "@/Components/Dropdown.vue";
 import DropdownLink from "@/Components/DropdownLink.vue";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink.vue";
-import { router } from "@inertiajs/vue3";
+import {router, usePage} from "@inertiajs/vue3";
 import Menubar from "primevue/menubar";
 import Badge from "primevue/badge";
 
-const items = ref([
+// Get the current authenticated user
+const user = usePage().props.auth.user;
+
+// Define menu items for Admin (user_type === 1)
+const adminItems = ref([
     {
         label: "Dashboard",
         icon: "pi pi-chart-line",
@@ -406,6 +410,33 @@ const items = ref([
         icon: "pi pi-book",
     },
 ]);
+
+const driverItems = ref([
+    {
+        label: "Dashboard",
+        icon: "pi pi-chart-line",
+        command: () => router.get("/dashboard"),
+    },
+    {
+        label: "My Rides",
+        icon: "pi pi-car",
+        command: () => router.get("/driver/rides"),
+    },
+    {
+        label: "My Routes",
+        icon: "pi pi-car",
+        command: () => router.get("/driver/routes"),
+    },
+    {
+        label: "My Profile",
+        icon: "pi pi-user",
+        command: () => router.get("/profile/edit"),
+    },
+]);
+
+const items = computed(() => {
+    return user.user_type === 1 ? adminItems.value : driverItems.value;
+});
 
 const showingNavigationDropdown = ref(false);
 </script>

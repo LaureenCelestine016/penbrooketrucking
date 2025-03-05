@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\DriverResource;
 use App\Models\Driver;
+use App\Models\Route;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Rules\AgeValidation;
@@ -192,5 +193,31 @@ class DriverController extends Controller
 
         $region = 'https://psgc.cloud/api/regions';
 
+    }
+
+    public function rides() {
+        $user = Auth::user();
+        $driverId = $user->driver_id;
+
+        // For demonstration, assume "rides" are the routes with status 'Ongoing' or 'Yet to start'
+        $rides = Route::where('driver_id', $driverId)
+            ->whereIn('status', ['Ongoing', 'Yet to start'])
+            ->get();
+
+        return Inertia::render('Driver/Rides', [
+            'rides' => $rides,
+        ]);
+    }
+
+    public function routes() {
+        $user = Auth::user();
+        $driverId = $user->driver_id;
+
+        // Fetch all routes for this driver
+        $routes = Route::where('driver_id', $driverId)->get();
+
+        return Inertia::render('Driver/Routes', [
+            'routes' => $routes,
+        ]);
     }
 }
