@@ -37,6 +37,7 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware('auth')->prefix('vehicle')->group(function () {
     Route::get('/', [VehicleController::class, 'index'])->name('vehicle');
+    Route::get('/getstatus', [VehicleController::class, 'filter'])->name('vehicle.filter');
     Route::get('/create', [VehicleController::class, 'create'])->name('vehicle.create');
     Route::post('/store', [VehicleController::class, 'store'])->name('vehicle.store');
     Route::get('/edit', [VehicleController::class, 'edit'])->name('vehicle.edit');

@@ -62,7 +62,7 @@ class RouteController extends Controller
     {
 
         $validatedData = $request->validate([
-            'vehicleId'         => 'required|integer|exists:vehicles,id',
+            'tructorId'         => 'required|integer|exists:vehicles,id',
             'driverId'          => 'required|integer|exists:drivers,id',
             'trailerId'          => 'required|integer|exists:trailers,id',
             'startLocId'        => 'required|integer|exists:locations,id',
@@ -76,7 +76,7 @@ class RouteController extends Controller
         ]);
 
         Route::create([
-            'vehicle_id'                 => $validatedData['vehicleId'],
+            'vehicle_id'                 => $validatedData['tructorId'],
             'trailer_id'                  => $validatedData['trailerId'],
             'driver_id'                  => $validatedData['driverId'],
             'start_location_id'          => $validatedData['startLocId'],

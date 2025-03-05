@@ -44,12 +44,12 @@
                                             placeholder="Plate no."
                                         />
                                         <Message
-                                            v-if="form.errors.vehicleId"
+                                            v-if="form.errors.tructorId"
                                             severity="error"
                                             size="small"
                                             variant="simple"
                                             >{{
-                                                form.errors.vehicleId
+                                                form.errors.tructorId
                                             }}</Message
                                         >
                                     </FormField>
@@ -495,10 +495,20 @@ const submit = () => {
 };
 
 const tructorNameSearch = () => {
-    tructors.value = props.tructor.map((tructor) => ({
-        id: tructor.id,
-        name: tructor.license_plate,
-    }));
+    // Ensure props.tructor is an array and has elements
+    if (Array.isArray(props.tructor) && props.tructor.length > 0) {
+        // Filter based on fuel_records.length >= 1
+        tructors.value = props.tructor
+            .filter(
+                (tructor) =>
+                    Array.isArray(tructor.fuel_records) &&
+                    tructor.fuel_records.length >= 1
+            )
+            .map((tructor) => ({
+                id: tructor.id,
+                name: tructor.license_plate,
+            }));
+    }
 };
 
 const onTructorSelect = (event) => {
@@ -562,7 +572,7 @@ const tripStatusSearch = () => {
 };
 
 const fuelAmountSearch = () => {
-    const selectedVehicle = props.vehicles.find((v) => v.id === form.vehicleId);
+    const selectedVehicle = props.tructor.find((v) => v.id === form.tructorId);
 
     if (selectedVehicle) {
         fuelAmount.value = selectedVehicle.fuel_records.map((record) => ({

@@ -75,7 +75,7 @@
                                 sortable
                                 style="min-width: 9rem"
                                 ><template #body="slotProps">
-                                    {{ slotProps.data.vehicle?.name }}
+                                    {{ slotProps.data.vehicle?.license_plate }}
                                 </template></Column
                             >
                             <Column

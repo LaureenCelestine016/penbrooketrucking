@@ -64,7 +64,9 @@
                                             <InputText
                                                 id="vehicle"
                                                 disabled=""
-                                                v-model="form.vehicle.name"
+                                                v-model="
+                                                    form.vehicle.license_plate
+                                                "
                                                 required="true"
                                                 fluid
                                                 class="!bg-gray-50"

@@ -1117,6 +1117,24 @@ watch(
 );
 
 watch(
+    () => form.PMSRegDate,
+    (newValue) => {
+        if (newValue) {
+            form.PMSRegDate = dayjs(newValue).format("YYYY-MM-DD");
+        }
+    }
+);
+
+watch(
+    () => form.capacity,
+    (newValue) => {
+        if (newValue) {
+            form.capacity = parseInt(newValue, 10);
+        }
+    }
+);
+
+watch(
     () => form.PMSCurrentReading,
     () => {
         form.consumeMileage = form.PMSCurrentReading - form.PMSLastMileAge;

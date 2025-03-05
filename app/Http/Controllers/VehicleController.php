@@ -15,10 +15,21 @@ class VehicleController extends Controller
      */
     public function index()
     {
-
         $vehicles = Vehicle::orderBy('created_at', 'desc')->get();
 
         return Inertia::render('Vehicle/Index', ['Vehicles' => $vehicles]);
+    }
+
+    public function filter(Request $request)
+    {
+        $status = $request->query('status');
+
+        $vehicles = Vehicle::when($status, function ($query) use ($status) {
+            return $query->where('status', $status);
+        })->get();
+
+        return Inertia::render('Vehicle/Index', ['Vehicles' => $vehicles]);
+
     }
 
     /**
@@ -103,11 +114,9 @@ class VehicleController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($id)
+    public function show(Vehicle $vehicle)
     {
-        dd($id);
-        $maintenance = Vehicle::with('maintenanceTasks')->get();
-        dd($maintenance);
+
         return Inertia::render('Vehicle/Show', ["Vehicle" => $vehicle]);
     }
 

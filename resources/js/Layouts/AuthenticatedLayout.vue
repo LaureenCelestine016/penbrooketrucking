@@ -86,7 +86,7 @@
                                                 >
                                                 <span
                                                     v-else
-                                                    class="text-sm text- cursor-pointer"
+                                                    class="text-sm text-white cursor-pointer"
                                                     >Driver</span
                                                 >
                                             </span>
@@ -227,11 +227,11 @@
 </template>
 
 <script setup>
-import {computed, ref} from "vue";
+import { computed, ref } from "vue";
 import Dropdown from "@/Components/Dropdown.vue";
 import DropdownLink from "@/Components/DropdownLink.vue";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink.vue";
-import {router, usePage} from "@inertiajs/vue3";
+import { router, usePage } from "@inertiajs/vue3";
 import Menubar from "primevue/menubar";
 import Badge from "primevue/badge";
 
@@ -405,10 +405,23 @@ const adminItems = ref([
             },
         ],
     },
-    {
-        label: "Report",
-        icon: "pi pi-book",
-    },
+    // {
+    //     label: "Report",
+    //     icon: "pi pi-book",
+    //     items: [
+    //         {
+    //             label: "Route Report ",
+    //             icon: "pi pi-list",
+    //             command: () => {
+    //                 router.get("/report");
+    //             },
+    //         },
+    //         {
+    //             label: "Driver Report",
+    //             icon: "pi pi-plus",
+    //         },
+    //     ],
+    // },
 ]);
 
 const driverItems = ref([
