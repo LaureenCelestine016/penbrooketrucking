@@ -8,22 +8,30 @@ use App\Http\Controllers\FuelRecordController;
 use App\Http\Controllers\GPSController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\MaintenanceTaskController;
+use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\RouteController;
 use App\Http\Controllers\TrailerController;
+use App\Http\Controllers\TruckRegistrationController;
+use App\Http\Controllers\ChatController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-//User
 Route::get('/', function () {
-    return Inertia::render('Welcome', [
+    return redirect()->route('login');
+});
+
+//User
+Route::get('/login', function () {
+    return Inertia::render('Login', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
     ]);
-})->middleware('user');
+})->name('login');
 
 Route::middleware(['auth','verified'])->group(function( ) {
     Route::get('dashboard',[DashboardController::class, 'index'])->name('dashboard');
@@ -35,7 +43,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::middleware('auth')->prefix('vehicle')->group(function () {
+Route::middleware('auth', 'check.vehicle.expiration')->prefix('vehicle')->group(function () {
     Route::get('/', [VehicleController::class, 'index'])->name('vehicle');
     Route::get('/getstatus', [VehicleController::class, 'filter'])->name('vehicle.filter');
     Route::get('/create', [VehicleController::class, 'create'])->name('vehicle.create');
@@ -48,7 +56,7 @@ Route::middleware('auth')->prefix('vehicle')->group(function () {
     Route::post('/image/upload', [VehicleController::class, 'upload'])->name('vehicles.upload');
 });
 
-Route::middleware('auth')->prefix('trailer')->group(function () {
+Route::middleware('auth', 'check.trailer.expiration')->prefix('trailer')->group(function () {
     Route::get('/', [TrailerController::class, 'index'])->name('trailer');
     Route::get('/create', [TrailerController::class, 'create'])->name('trailer.create');
     Route::post('/store', [TrailerController::class, 'store'])->name('trailer.store');
@@ -70,6 +78,8 @@ Route::middleware('auth')->prefix('driver')->group(function () {
     Route::post('/status', [DriverController::class, 'status'])->name('driver.status');
     Route::get('/rides', [DriverController::class, 'rides'])->name('driver.rides');
     Route::get('/routes', [DriverController::class, 'routes'])->name('driver.routes');
+    Route::get('/profile', [DriverController::class, 'profile'])->name('driver.profile');
+    Route::post('/userupdate', [DriverController::class, 'userupdate'])->name('driver.userupdate');
 });
 
 Route::middleware('auth')->prefix('location')->group(function () {
@@ -106,13 +116,47 @@ Route::middleware('auth')->prefix('maintenance')->group(function () {
     Route::get('/', [MaintenanceTaskController::class,'index'])->name('maintenance');
     Route::get('/create', [MaintenanceTaskController::class,'create'])->name('maintenance.create');
     Route::post('/store', [MaintenanceTaskController::class,'store'])->name('maintenance.store');
+    Route::delete('/delete/{maintenance_task}', [MaintenanceTaskController::class, 'destroy'])->name('maintenance.delete');
+    Route::post('/delete-all', [MaintenanceTaskController::class, 'deletedAll'])->name('maintenances.delete');
 });
 
 Route::middleware('auth')->prefix('expenses')->group(function () {
     Route::get('/', [ExpensesController::class,'index'])->name('expenses');
     Route::get('/create', [ExpensesController::class,'create'])->name('expenses.create');
     Route::post('/store', [ExpensesController::class,'store'])->name('expenses.store');
+    Route::delete('/delete/{expenses}', [ExpensesController::class, 'destroy'])->name('expenses.delete');
+    Route::post('/delete-all', [ExpensesController::class, 'deletedAll'])->name('expensess.delete');
 });
+
+Route::middleware('auth')->prefix('registration')->group(function () {
+    Route::get('/', [TruckRegistrationController::class,'index'])->name('registration');
+    Route::get('/create', [TruckRegistrationController::class,'create'])->name('registration.create');
+    Route::post('/store', [TruckRegistrationController::class,'store'])->name('registration.store');
+});
+
+
+Route::middleware('auth')->prefix('notification')->group(function () {
+    Route::patch('/notification/update/{id}', [NotificationController::class, 'updateStatus'])
+    ->name('notification.update');
+});
+
+Route::middleware('auth')->prefix('reports')->group(function () {
+    Route::get('/route', [ReportController::class,'index'])->name('reports.route');
+    Route::get('/routefilter', [ReportController::class,'routefilter'])->name('reports.routesfilter');
+    Route::get('/fuel', [ReportController::class,'reportfuel'])->name('reports.fuel');
+    Route::get('/fuelFilter', [ReportController::class,'filterFuelReports'])->name('reports.fuelfilter');
+    Route::get('/maintenance', [ReportController::class,'reportmaintenance'])->name('reports.maintenance');
+    Route::get('/maintenanceFilter', [ReportController::class,'filterMaintenanceReports'])->name('reports.maintenancefilter');
+    Route::get('/expenses', [ReportController::class,'reportexpenses'])->name('reports.expenses');
+    Route::get('/expensesFilter', [ReportController::class,'filterExpensesReports'])->name('reports.expensesfilter');
+});
+
+Route::middleware('auth')->group(function () {
+    Route::get('/chat/{receiverId}', [ChatController::class, 'index'])->name('chat.index');
+    Route::post('/chat/send', [ChatController::class, 'sendMessage'])->name('chat.send');
+    Route::get('/chat/messages/{receiverId}', [ChatController::class, 'fetchMessages'])->name('chat.fetch');
+});
+
 
 
 Route::get('/api/gps-data', [GPSController::class,'store']);

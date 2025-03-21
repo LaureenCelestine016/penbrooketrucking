@@ -36,7 +36,7 @@ class RegisteredUserController extends Controller
         $request->validate([
             'firstName' => ['required', 'string', 'max:255'],
             'lastName' => ['required', 'string', 'max:255'],
-            'mobileNumber' => ['nullable', 'string', 'regex:/^\+63\d{10}$/'], // Example: +639123456789
+            'mobileNumber' => ['nullable', 'string', 'regex:/^\+63\d{10}$/', 'unique:users,mobile_number'], // Ensure uniqueness
             'username' => ['nullable', 'string', 'max:255', 'unique:'.User::class],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Password::min(8)],

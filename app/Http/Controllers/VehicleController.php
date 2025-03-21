@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Fuel_record;
 use App\Models\Maintenance_task;
+use App\Models\Notification;
 use App\Models\Vehicle;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -52,8 +54,6 @@ class VehicleController extends Controller
         'model'              => 'required|string|max:255',
         'capacity'           => 'required|integer',
         'status'             => 'required|string|max:50',
-        'calibrationDate'    => 'nullable|date',
-        'calibrationExpDate' => 'nullable|date',
         'LTOregDate'         => 'nullable|date',
         'LTOExpDate'         => 'nullable|date',
         'conveyanceDate'     => 'nullable|date',
@@ -76,8 +76,6 @@ class VehicleController extends Controller
         'model'                        => $validatedData['model'],
         'capacity'                     => $validatedData['capacity'],
         'status'                       => $validatedData['status'],
-        'calibration_date'             => $validatedData['calibrationDate'],
-        'calibration_exp_date'         => $validatedData['calibrationExpDate'],
         'lto_reg_date'                 => $validatedData['LTOregDate'],
         'lto_exp_date'                 => $validatedData['LTOExpDate'],
         'conveyance_date'              => $validatedData['conveyanceDate'],
@@ -114,10 +112,22 @@ class VehicleController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Vehicle $vehicle)
+    public function show($id)
     {
+        $vehicle = Vehicle::findOrFail($id);
 
-        return Inertia::render('Vehicle/Show', ["Vehicle" => $vehicle]);
+        $maintenance = Maintenance_task::where('vehicle_id', $id)->get();
+
+        $notification = Notification::where('vehicle_id', $id)->where('status', 'pending')->count();
+
+        $fuel = Fuel_record::where('vehicle_id', $id)->get();
+
+        return Inertia::render('Vehicle/Show', [
+            "Vehicle" => $vehicle,
+            "Maintenance" => $maintenance,
+            "fuel" => $fuel,
+            "notification" => $notification,]
+        );
     }
 
     /**
@@ -139,8 +149,6 @@ class VehicleController extends Controller
             'model'                 => 'required|string|max:255',
             'capacity'              => 'required|integer',
             'status'                => 'required|string|max:50',
-            'calibration_date'      => 'nullable|date',
-            'calibration_exp_date'  => 'nullable|date',
             'lto_reg_date'          => 'nullable|date',
             'lto_exp_date'          => 'nullable|date',
             'conveyance_date'       => 'nullable|date',

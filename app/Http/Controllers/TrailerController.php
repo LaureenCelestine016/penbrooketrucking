@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Trailer;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Models\Maintenance_task;
+use App\Models\Notification;
 
 class TrailerController extends Controller
 {
@@ -38,12 +40,7 @@ class TrailerController extends Controller
             'calibrationExpDate' => 'nullable|date',
             'LTOregDate'         => 'nullable|date',
             'LTOExpDate'         => 'nullable|date',
-            'conveyanceDate'     => 'nullable|date',
-            'conveyanceExpDate'  => 'nullable|date',
-            'filcomFabDate'      => 'nullable|date',
-            'filconExpDate'      => 'nullable|date',
-            'LTFRBRegDate'       => 'nullable|date',
-            'LTFRBExpDate'       => 'nullable|date',
+
         ]);
 
         Trailer::create([
@@ -54,12 +51,6 @@ class TrailerController extends Controller
             'calibration_exp_date'         => $validatedData['calibrationExpDate'],
             'lto_reg_date'                 => $validatedData['LTOregDate'],
             'lto_exp_date'                 => $validatedData['LTOExpDate'],
-            'conveyance_date'              => $validatedData['conveyanceDate'],
-            'conveyance_exp_date'          => $validatedData['conveyanceExpDate'],
-            'filcom_fab_date'              => $validatedData['filcomFabDate'],
-            'filcon_exp_date'              => $validatedData['filconExpDate'],
-            'ltfrb_reg_date'               => $validatedData['LTFRBRegDate'],
-            'ltfrb_exp_date'               => $validatedData['LTFRBExpDate'],
         ]);
 
         return redirect()->route('trailer')->with('success', 'Trailer truck created successfully!');
@@ -69,9 +60,20 @@ class TrailerController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Trailer $trailer)
+    public function show($id)
     {
-        return Inertia::render('Trailer/Show', ["trailer" => $trailer]);
+
+        $trailer = Trailer::findOrFail($id);
+
+        $maintenance = Maintenance_task::where('trailer_id', $id)->get();
+
+        $notification = Notification::where('trailer_id', $id)->where('status', 'pending')->count();
+
+        return Inertia::render('Trailer/Show', [
+            "trailer" => $trailer,
+            "maintenance" => $maintenance,
+            "notification" => $notification
+    ]);
     }
 
     /**
@@ -92,16 +94,11 @@ class TrailerController extends Controller
             'license_plate'      => 'required|string|max:10|unique:trailers,license_plate,'. $trailer->id,
             'body_number'        => 'required|string|max:20|unique:trailers,body_number,'. $trailer->id,
             'status'             => 'required|string|max:50',
-            'calibrationDate'    => 'nullable|date',
-            'calibrationExpDate' => 'nullable|date',
-            'LTOregDate'         => 'nullable|date',
-            'LTOExpDate'         => 'nullable|date',
-            'conveyanceDate'     => 'nullable|date',
-            'conveyanceExpDate'  => 'nullable|date',
-            'filcomFabDate'      => 'nullable|date',
-            'filconExpDate'      => 'nullable|date',
-            'LTFRBRegDate'       => 'nullable|date',
-            'LTFRBExpDate'       => 'nullable|date',
+            'calibration_date'    => 'nullable|date',
+            'calibration_exp_date' => 'nullable|date',
+            'lto_reg_date'         => 'nullable|date',
+            'lto_exp_date'         => 'nullable|date',
+
         ]);
 
         $trailer->update($validatedData);

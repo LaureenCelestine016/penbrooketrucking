@@ -20,6 +20,13 @@
                             :paginator="true"
                             :rows="5"
                             :filters="filters"
+                            :globalFilterFields="[
+                                'name.first',
+                                'name.middle',
+                                'name.last',
+                                'license_details.license_number',
+                                'status',
+                            ]"
                             paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                             :rowsPerPageOptions="[5, 10, 25]"
                             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} vehicles"
@@ -262,6 +269,7 @@ const selectedRoute = ref(0);
 const routeData = ref({});
 const deleteRoutesDialog = ref(false);
 const deleteRouteDialog = ref(false);
+const dt = ref();
 
 const showDetail = (id) => {
     router.get(route("route.show", id));
@@ -275,7 +283,7 @@ const confirmDeleteRoute = (route) => {
 };
 
 const confirmDeleteSelected = () => {
-    deleteRouteDialog.value = true;
+    deleteRoutesDialog.value = true;
 };
 
 const deleteRoute = (id) => {
@@ -338,6 +346,10 @@ const deleteSelectedRoutes = () => {
             },
         }
     );
+};
+
+const exportCSV = () => {
+    dt.value.exportCSV();
 };
 
 const filters = ref({

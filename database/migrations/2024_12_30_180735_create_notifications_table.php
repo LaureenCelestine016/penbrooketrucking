@@ -14,12 +14,11 @@ return new class extends Migration
         Schema::create('notifications', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->id();
-            $table->foreignId('vehicle_id')->constrained('vehicles')->onDelete('cascade');
-            $table->foreignId('driver_id')->nullable()->constrained()->onDelete('cascade'); // Nullable if the notification may not always be linked to a driver
+            $table->unsignedBigInteger('vehicle_id')->nullable();
+            $table->unsignedBigInteger('trailer_id')->nullable();
             $table->text('message');
             $table->enum('status', ['pending', 'resolved', 'acknowledged'])->default('pending'); // Enum for status with a default
             $table->datetime('reported_at');
-            $table->datetime('resolved_at')->nullable();  // Allow for null resolved_at if not yet resolved
             $table->timestamps();
             $table->softDeletes();
         });

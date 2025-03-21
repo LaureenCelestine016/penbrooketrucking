@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Notification;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class NotificationController extends Controller
 {
@@ -52,7 +53,7 @@ class NotificationController extends Controller
      */
     public function update(Request $request, Notification $notification)
     {
-        //
+
     }
 
     /**
@@ -62,4 +63,20 @@ class NotificationController extends Controller
     {
         //
     }
+
+    public function updateStatus(Request $request, $id)
+    {
+
+        $notification = $notification = Notification::findOrFail($id);
+
+        if (!$notification) {
+            return response()->json(['error' => 'Notification not found'], 404);
+        }
+
+        $notification->status = $request->input('status');
+        $notification->save();
+
+        return back(); // Return to the same page
+    }
+
 }

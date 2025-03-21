@@ -95,11 +95,11 @@
                                                 </svg>
                                                 <span
                                                     class="font-bold whitespace-nowrap"
-                                                    >Registration Details</span
-                                                >
+                                                    >Registration Details
+                                                </span>
                                                 <Badge
                                                     class="absolute right-1 top-2"
-                                                    value="3"
+                                                    :value="props.notification"
                                                     severity="danger"
                                                 ></Badge>
                                             </Tab>
@@ -157,7 +157,7 @@
                                                     >
                                                 </div>
                                             </Tab>
-                                            <!-- <Tab v-slot="slotProps" value="4">
+                                            <Tab v-slot="slotProps" value="4">
                                                 <div
                                                     :class="[
                                                         'flex items-center gap-2',
@@ -168,22 +168,26 @@
                                                 >
                                                     <svg
                                                         xmlns="http://www.w3.org/2000/svg"
-                                                        width="32"
-                                                        height="32"
-                                                        viewBox="0 0 24 24"
+                                                        width="24"
+                                                        height="24"
+                                                        viewBox="0 0 16 16"
                                                     >
-                                                        <path
-                                                            fill="#8c8c8c"
-                                                            d="m5 8.75l-2.75-3.1q-.425-.5-.162-1.075Q2.35 4 3 4h17q.825 0 1.413.588Q22 5.175 22 6v12q0 .825-.587 1.413Q20.825 20 20 20H7q-.825 0-1.412-.587Q5 18.825 5 18ZM5.225 6ZM9 13h9q.425 0 .712-.288Q19 12.425 19 12t-.288-.713Q18.425 11 18 11H9q-.425 0-.712.287Q8 11.575 8 12t.288.712Q8.575 13 9 13Zm0 3h6q.425 0 .713-.288Q16 15.425 16 15t-.287-.713Q15.425 14 15 14H9q-.425 0-.712.287Q8 14.575 8 15t.288.712Q8.575 16 9 16Zm0-6h9q.425 0 .712-.288Q19 9.425 19 9t-.288-.713Q18.425 8 18 8H9q-.425 0-.712.287Q8 8.575 8 9t.288.712Q8.575 10 9 10ZM7 8v10h13V6H5.225Z"
-                                                        />
+                                                        <!-- Icon from All by undefined - undefined -->
+                                                        <g fill="#8c8c8c">
+                                                            <path
+                                                                d="M3 2.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 .5.5v5a.5.5 0 0 1-.5.5h-5a.5.5 0 0 1-.5-.5z"
+                                                            />
+                                                            <path
+                                                                d="M1 2a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v8a2 2 0 0 1 2 2v.5a.5.5 0 0 0 1 0V8h-.5a.5.5 0 0 1-.5-.5V4.375a.5.5 0 0 1 .5-.5h1.495c-.011-.476-.053-.894-.201-1.222a.97.97 0 0 0-.394-.458c-.184-.11-.464-.195-.9-.195a.5.5 0 0 1 0-1q.846-.002 1.412.336c.383.228.634.551.794.907c.295.655.294 1.465.294 2.081v3.175a.5.5 0 0 1-.5.501H15v4.5a1.5 1.5 0 0 1-3 0V12a1 1 0 0 0-1-1v4h.5a.5.5 0 0 1 0 1H.5a.5.5 0 0 1 0-1H1zm9 0a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v13h8z"
+                                                            />
+                                                        </g>
                                                     </svg>
                                                     <span
                                                         class="font-bold whitespace-nowrap"
-                                                        >Tracking</span
+                                                        >Fuel History</span
                                                     >
-                                                    <Badge value="2" />
                                                 </div>
-                                            </Tab> -->
+                                            </Tab>
                                         </TabList>
                                         <form @submit.prevent="submit" class="">
                                             <TabPanels>
@@ -532,126 +536,7 @@
                                                                 </FormField>
                                                             </div>
                                                         </div>
-                                                        <!-- Calibration -->
-                                                        <div
-                                                            class="grid grid-cols-2 gap-8 mb-1"
-                                                        >
-                                                            <div
-                                                                :class="[
-                                                                    'w-100',
-                                                                    form.hasErrors
-                                                                        ? 'mb-4'
-                                                                        : 'mb-6',
-                                                                ]"
-                                                            >
-                                                                <label
-                                                                    for="calibDate"
-                                                                    class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                                                    >Calibration
-                                                                    Registered
-                                                                    Date<span
-                                                                        class="ml-1 text-red-400"
-                                                                        >*</span
-                                                                    ></label
-                                                                >
-                                                                <FormField
-                                                                    id="calibDate"
-                                                                    name="calibDate"
-                                                                    class="flex flex-col gap-1"
-                                                                >
-                                                                    <div
-                                                                        class="flex-auto"
-                                                                    >
-                                                                        <DatePicker
-                                                                            id="calibDate"
-                                                                            v-model="
-                                                                                form.calibration_date
-                                                                            "
-                                                                            showIcon
-                                                                            fluid
-                                                                            :showOnFocus="
-                                                                                false
-                                                                            "
-                                                                            inputId="registrationExp"
-                                                                            placeholder="Calibration Date"
-                                                                        />
-                                                                    </div>
-                                                                    <Message
-                                                                        v-if="
-                                                                            form
-                                                                                .errors
-                                                                                .calibration_date
-                                                                        "
-                                                                        severity="error"
-                                                                        size="small"
-                                                                        variant="simple"
-                                                                        >{{
-                                                                            form
-                                                                                .errors
-                                                                                .calibration_date
-                                                                        }}</Message
-                                                                    >
-                                                                </FormField>
-                                                            </div>
-                                                            <div
-                                                                :class="[
-                                                                    'w-100',
-                                                                    form.hasErrors
-                                                                        ? 'mb-4'
-                                                                        : 'mb-6',
-                                                                ]"
-                                                            >
-                                                                <label
-                                                                    for="calibExpDate"
-                                                                    class="text-gray-700 dark:text-surface-50 text-sm font-medium mb-2 block"
-                                                                    >Calibration
-                                                                    Expired
-                                                                    Date<span
-                                                                        class="ml-1 text-red-400"
-                                                                        >*</span
-                                                                    ></label
-                                                                >
-                                                                <FormField
-                                                                    id="calibExpDate"
-                                                                    name="calibExpDate"
-                                                                    class="flex flex-col gap-1"
-                                                                >
-                                                                    <div
-                                                                        class="flex-auto"
-                                                                    >
-                                                                        <DatePicker
-                                                                            id="calibExpDate"
-                                                                            v-model="
-                                                                                form.calibration_exp_date
-                                                                            "
-                                                                            showIcon
-                                                                            fluid
-                                                                            :showOnFocus="
-                                                                                false
-                                                                            "
-                                                                            inputId="calibExpDate"
-                                                                            placeholder="Calibration Expired Date"
-                                                                            disabled=""
-                                                                        />
-                                                                    </div>
-                                                                    <Message
-                                                                        v-if="
-                                                                            form
-                                                                                .errors
-                                                                                .registration_expiration_date
-                                                                        "
-                                                                        severity="error"
-                                                                        size="small"
-                                                                        variant="simple"
-                                                                        >{{
-                                                                            form
-                                                                                .errors
-                                                                                .registration_expiration_date
-                                                                        }}</Message
-                                                                    >
-                                                                </FormField>
-                                                            </div>
-                                                        </div>
+
                                                         <!-- Conveyance -->
                                                         <div
                                                             class="grid grid-cols-2 gap-8 mb-1"
@@ -1348,116 +1233,76 @@
                                                 </TabPanel>
                                                 <!-- Maintenance History -->
                                                 <TabPanel value="3">
-                                                    <div class="cards">
+                                                    <div class="border mt-5">
                                                         <DataTable
-                                                            :value="customers"
-                                                            paginator
-                                                            :rows="5"
-                                                            :rowsPerPageOptions="[
-                                                                5, 10, 20, 50,
-                                                            ]"
+                                                            v-model:selection="
+                                                                selectedProduct
+                                                            "
+                                                            :value="Maintenance"
+                                                            dataKey="id"
                                                             tableStyle="min-width: 50rem"
+                                                            class="h-[20rem]"
                                                         >
                                                             <Column
-                                                                field="name"
-                                                                header="Name"
-                                                                style="
-                                                                    width: 25%;
-                                                                "
+                                                                field="item_description"
+                                                                header="Item and Description"
                                                             ></Column>
                                                             <Column
-                                                                field="country.name"
-                                                                header="Country"
-                                                                style="
-                                                                    width: 25%;
-                                                                "
+                                                                field="quantity"
+                                                                header="Quantity"
                                                             ></Column>
                                                             <Column
-                                                                field="company"
-                                                                header="Company"
-                                                                style="
-                                                                    width: 25%;
-                                                                "
+                                                                field="price"
+                                                                header="Price"
                                                             ></Column>
                                                             <Column
-                                                                field="representative.name"
-                                                                header="Representative"
-                                                                style="
-                                                                    width: 25%;
-                                                                "
+                                                                field="total"
+                                                                header="Total"
                                                             ></Column>
-                                                            <template
-                                                                #paginatorcontainer="{
-                                                                    first,
-                                                                    last,
-                                                                    page,
-                                                                    pageCount,
-                                                                    prevPageCallback,
-                                                                    nextPageCallback,
-                                                                    totalRecords,
-                                                                }"
-                                                            >
-                                                                <div
-                                                                    class="flex items-center gap-4 border border-primary bg-transparent rounded-full w-full py-1 px-2 justify-between"
-                                                                >
-                                                                    <Button
-                                                                        icon="pi pi-chevron-left"
-                                                                        rounded
-                                                                        text
-                                                                        @click="
-                                                                            prevPageCallback
-                                                                        "
-                                                                        :disabled="
-                                                                            page ===
-                                                                            0
-                                                                        "
-                                                                    />
-                                                                    <div
-                                                                        class="text-color font-medium"
-                                                                    >
-                                                                        <span
-                                                                            class="hidden sm:block"
-                                                                            >Showing
-                                                                            {{
-                                                                                first
-                                                                            }}
-                                                                            to
-                                                                            {{
-                                                                                last
-                                                                            }}
-                                                                            of
-                                                                            {{
-                                                                                totalRecords
-                                                                            }}</span
-                                                                        >
-                                                                        <span
-                                                                            class="block sm:hidden"
-                                                                            >Page
-                                                                            {{
-                                                                                page +
-                                                                                1
-                                                                            }}
-                                                                            of
-                                                                            {{
-                                                                                pageCount
-                                                                            }}</span
-                                                                        >
-                                                                    </div>
-                                                                    <Button
-                                                                        icon="pi pi-chevron-right"
-                                                                        rounded
-                                                                        text
-                                                                        @click="
-                                                                            nextPageCallback
-                                                                        "
-                                                                        :disabled="
-                                                                            page ===
-                                                                            pageCount -
-                                                                                1
-                                                                        "
-                                                                    />
-                                                                </div>
-                                                            </template>
+                                                            <Column
+                                                                field="odometer"
+                                                                header="Odometer"
+                                                            ></Column>
+                                                            <Column
+                                                                field="supplier"
+                                                                header="Supplier"
+                                                            ></Column>
+                                                            <Column
+                                                                field="breakdown_date"
+                                                                header="Breakdown Date"
+                                                            ></Column>
+                                                            <Column
+                                                                field="up_date"
+                                                                header="Up Date"
+                                                            ></Column>
+                                                        </DataTable>
+                                                    </div>
+                                                </TabPanel>
+                                                <!-- Fuel History -->
+                                                <TabPanel value="4">
+                                                    <div class="border mt-5">
+                                                        <DataTable
+                                                            :value="fuel"
+                                                            dataKey="id"
+                                                            tableStyle="min-width: 50rem"
+                                                            class="h-[20rem]"
+                                                        >
+                                                            <Column
+                                                                field="fuel_type"
+                                                                header="Fuel Type"
+                                                            ></Column>
+                                                            <Column
+                                                                field="liters"
+                                                                header="Liters"
+                                                            ></Column>
+                                                            <Column
+                                                                field="cost"
+                                                                header="Cost"
+                                                            ></Column>
+                                                            <Column
+                                                                field="refueling_date"
+                                                                header="Date Refilled"
+                                                            ></Column>
                                                         </DataTable>
                                                     </div>
                                                 </TabPanel>
@@ -1466,7 +1311,7 @@
                                     </Tabs>
                                 </template>
                             </Card>
-                            <Card class="card">
+                            <!-- <Card class="card">
                                 <template #content>
                                     <div class="flex flex-col gap-4">
                                         <h2
@@ -1491,12 +1336,13 @@
                                         </div>
                                     </div>
                                 </template>
-                            </Card>
+                            </Card> -->
                         </div>
                     </div>
                 </div>
-            </div> </template
-    ></AuthenticatedLayout>
+            </div>
+        </template></AuthenticatedLayout
+    >
 </template>
 
 <script setup>
@@ -1532,6 +1378,19 @@ const props = defineProps({
         type: Object,
         required: true,
     },
+
+    Maintenance: {
+        type: Array,
+        required: true,
+    },
+    fuel: {
+        type: Array,
+        required: true,
+    },
+    notification: {
+        type: Number,
+        required: true,
+    },
 });
 
 const form = useForm({
@@ -1545,7 +1404,7 @@ const submit = () => {
             toast.add({
                 severity: "success",
                 summary: "Success",
-                detail: "Vehicle updated successfully!",
+                detail: "Tractor updated successfully!",
                 life: 3000,
             });
         },
@@ -1571,18 +1430,6 @@ watch(
         if (newValue) {
             form.lto_reg_date = dayjs(newValue).format("YYYY-MM-DD");
             form.lto_exp_date = dayjs(newValue)
-                .add(1, "year")
-                .format("YYYY-MM-DD");
-        }
-    }
-);
-
-watch(
-    () => form.calibration_date,
-    (newValue) => {
-        if (newValue) {
-            form.calibration_date = dayjs(newValue).format("YYYY-MM-DD");
-            form.calibration_exp_date = dayjs(newValue)
                 .add(1, "year")
                 .format("YYYY-MM-DD");
         }
@@ -1671,6 +1518,7 @@ watch(
     width: 97%;
     z-index: 15;
     column-gap: 24px;
+    row-gap: 24px;
 }
 
 .transparent-head {
@@ -1684,11 +1532,13 @@ watch(
 
 .accounts {
     border-radius: 4px;
+    grid-column: 1 / span 3;
 }
 
 .card {
     border-radius: 4px;
     height: 500px;
+    grid-column: 1 / span 3;
 }
 
 .card .p-card-body {

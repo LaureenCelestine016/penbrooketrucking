@@ -15,9 +15,7 @@ class LocationController extends Controller
     public function index()
     {
 
-        $location = LocationResource::collection(
-            Location::orderBy('created_at', 'desc')->get()
-        );
+        $location = Location::orderBy('created_at', 'desc')->get();
 
         return Inertia::render('Location/Index',['location' => $location]);
     }
@@ -39,25 +37,11 @@ class LocationController extends Controller
 
         $validatedData = $request->validate([
             'address'          => 'nullable|string|max:255',
-            'region'           => 'required|string|max:255',
-            'province'         => 'required|string|max:255',
-            'city'             => 'nullable|string|max:255',
-            'municipality'     => 'nullable|string|max:255',
-            'barangay'         => 'required|string|max:255',
-            'street'           => 'required|string|max:255',
-            'name'             => 'required|string|max:255',
             'latitude'         => 'required|numeric|min:-90|max:90',
             'longitude'        => 'required|numeric|min:-180|max:180',
         ]);
 
         Location::create([
-            'name'               => $validatedData['name'],
-            'street'             => $validatedData['street'],
-            'barangay'           => $validatedData['barangay'],
-            'municipality'       => $validatedData['municipality'],
-            'city'               => $validatedData['city'],
-            'province'           => $validatedData['province'],
-            'region'             => $validatedData['region'],
             'address'            => $validatedData['address'],
             'latitude'           => $validatedData['latitude'],
             'longitude'          => $validatedData['longitude'],

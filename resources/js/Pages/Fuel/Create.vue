@@ -85,23 +85,22 @@
                             <div class="grid grid-cols-2 gap-10 mb-5">
                                 <div class="w-full">
                                     <label
-                                        for="tractor"
+                                        for="cost"
                                         class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
                                         >Cost<span class="ml-1 text-red-400"
                                             >*</span
                                         ></label
                                     >
                                     <FormField
-                                        id="tractor"
-                                        name="tractor"
+                                        id="cost"
+                                        name="cost"
                                         class="flex flex-col gap-1"
                                     >
                                         <InputText
-                                            id="engine_number"
+                                            id="cost"
                                             type="text"
                                             v-model="form.cost"
-                                            @focus="costInput"
-                                            placeholder="Quantity"
+                                            placeholder="Cost"
                                         />
                                         <Message
                                             severity="error"
@@ -143,7 +142,7 @@
                                     </FormField>
                                 </div>
                             </div>
-                            <div class="mb-5">
+                            <div class="mb-2">
                                 <div class="w-full">
                                     <label
                                         for="birthday"
@@ -178,7 +177,7 @@
                                     </FormField>
                                 </div>
                             </div>
-                            <div class="w-full">
+                            <!-- <div class="w-full">
                                 <label
                                     for="image_upload"
                                     class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
@@ -201,7 +200,7 @@
                                         >
                                     </template>
                                 </FileUpload>
-                            </div>
+                            </div> -->
                         </div>
                         <div>
                             <Button
@@ -234,10 +233,9 @@ import FileUpload from "primevue/fileupload";
 const toast = useToast();
 const fuelName = ref([]);
 const tractorName = ref([]);
-const costArray = ref("");
 
 const props = defineProps({
-    tructor: {
+    tractor: {
         type: Array,
         required: true,
     },
@@ -285,26 +283,16 @@ const fuelNameSearch = () => {
 };
 
 const tractorNameSearch = () => {
-    tractorName.value = props.tructor
-        .sort((a, b) => new Date(b.created_at) - new Date(a.created_at)) // Sort by created_at (descending)
-        .map((tr) => ({
-            id: tr.tructor.id,
-            license_plate: tr.tructor.license_plate,
-        }));
+    tractorName.value = props.tractor.map((tr) => ({
+        id: tr.id,
+        license_plate: tr.license_plate,
+    }));
+
+    console.log(tractorName.value);
 };
 
 const onTractorSelect = (event) => {
     form.vehicleId = event.value.id;
-};
-
-const costInput = () => {
-    const selectedVehicle = props.tructor
-        .filter((v) => v.vehicle_id === form.vehicleId)
-        .sort((a, b) => new Date(b.expense_date) - new Date(a.expense_date))[0]; // Get latest
-
-    if (selectedVehicle) {
-        form.cost = selectedVehicle.amount;
-    }
 };
 
 watch(

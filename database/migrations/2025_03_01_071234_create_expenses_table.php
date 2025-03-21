@@ -15,6 +15,9 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('vehicle_id')->nullable();
             $table->unsignedBigInteger('trailer_id')->nullable();
+            $table->unsignedBigInteger('registration_id')->nullable();
+            $table->unsignedBigInteger('maintenance_id')->nullable();
+            $table->unsignedBigInteger('fuel_id')->nullable();
             $table->foreignId('category_id')->constrained('expenses__caterogries')->onDelete('cascade');
             $table->decimal('amount', 10, 2);
             $table->string('description')->nullable();

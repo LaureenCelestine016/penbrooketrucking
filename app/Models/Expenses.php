@@ -15,11 +15,13 @@ class Expenses extends Model
     protected $fillable = [
        'vehicle_id',
        'trailer_id',
+       'maintenance_id',
+       'fuel_id',
+       'registration_id',
        'category_id',
        'amount',
        'description',
        'expense_date',
-
     ];
 
     public function category()
@@ -37,7 +39,7 @@ class Expenses extends Model
         return $this->hasOne(Fuel_record::class, 'expense_id');
     }
 
-    public function tructor()
+    public function tractor()
     {
         return $this->belongsTo(Vehicle::class, 'vehicle_id');
     }

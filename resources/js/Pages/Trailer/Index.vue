@@ -85,15 +85,15 @@
                                 style="min-width: 10rem"
                             ></Column>
                             <Column
-                                field="lto_reg_date"
-                                header="LTO Registered Date"
+                                field="lto_exp_date"
+                                header="LTO Expired Date"
                                 sortable
                                 style="min-width: 10rem"
                             >
                             </Column>
                             <Column
-                                field="lto_exp_date"
-                                header="LTO Expired Date"
+                                field="calibration_exp_date"
+                                header="Calibration Expired Date"
                                 sortable
                                 style="min-width: 10rem"
                             ></Column>

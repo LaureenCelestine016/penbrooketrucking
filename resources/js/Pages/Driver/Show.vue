@@ -214,7 +214,7 @@
                                                     <Badge value="2" />
                                                 </div>
                                             </Tab>
-                                            <Tab v-slot="slotProps" value="3">
+                                            <!-- <Tab v-slot="slotProps" value="3">
                                                 <div
                                                     :class="[
                                                         'flex items-center gap-2',
@@ -240,7 +240,7 @@
                                                     >
                                                     <Badge value="2" />
                                                 </div>
-                                            </Tab>
+                                            </Tab> -->
                                         </TabList>
                                         <form @submit.prevent="submit" class="">
                                             <TabPanels>
@@ -1092,116 +1092,63 @@
                                                     v-slot="slotProps"
                                                     value="2"
                                                 >
-                                                    <div class="card">
+                                                    <div
+                                                        class="border mt-5 overflow-x-auto"
+                                                    >
                                                         <DataTable
-                                                            :value="customers"
-                                                            paginator
-                                                            :rows="5"
-                                                            :rowsPerPageOptions="[
-                                                                5, 10, 20, 50,
-                                                            ]"
+                                                            v-model:selection="
+                                                                selectedProduct
+                                                            "
+                                                            :value="
+                                                                driverTruckUsed
+                                                            "
+                                                            scrollable
+                                                            scrollHeight="200px"
+                                                            dataKey="id"
                                                             tableStyle="min-width: 50rem"
+                                                            class="h-[20rem]"
                                                         >
                                                             <Column
-                                                                field="name"
-                                                                header="Name"
+                                                                header="Tractor / Trailer"
                                                                 style="
-                                                                    width: 25%;
+                                                                    min-width: 12rem;
                                                                 "
-                                                            ></Column>
-                                                            <Column
-                                                                field="country.name"
-                                                                header="Country"
-                                                                style="
-                                                                    width: 25%;
-                                                                "
-                                                            ></Column>
-                                                            <Column
-                                                                field="company"
-                                                                header="Company"
-                                                                style="
-                                                                    width: 25%;
-                                                                "
-                                                            ></Column>
-                                                            <Column
-                                                                field="representative.name"
-                                                                header="Representative"
-                                                                style="
-                                                                    width: 25%;
-                                                                "
-                                                            ></Column>
-                                                            <template
-                                                                #paginatorcontainer="{
-                                                                    first,
-                                                                    last,
-                                                                    page,
-                                                                    pageCount,
-                                                                    prevPageCallback,
-                                                                    nextPageCallback,
-                                                                    totalRecords,
-                                                                }"
                                                             >
-                                                                <div
-                                                                    class="flex items-center gap-4 border border-primary bg-transparent rounded-full w-full py-1 px-2 justify-between"
+                                                                <template
+                                                                    #body="slotProps"
                                                                 >
-                                                                    <Button
-                                                                        icon="pi pi-chevron-left"
-                                                                        rounded
-                                                                        text
-                                                                        @click="
-                                                                            prevPageCallback
-                                                                        "
-                                                                        :disabled="
-                                                                            page ===
-                                                                            0
-                                                                        "
-                                                                    />
-                                                                    <div
-                                                                        class="text-color font-medium"
-                                                                    >
-                                                                        <span
-                                                                            class="hidden sm:block"
-                                                                            >Showing
-                                                                            {{
-                                                                                first
-                                                                            }}
-                                                                            to
-                                                                            {{
-                                                                                last
-                                                                            }}
-                                                                            of
-                                                                            {{
-                                                                                totalRecords
-                                                                            }}</span
-                                                                        >
-                                                                        <span
-                                                                            class="block sm:hidden"
-                                                                            >Page
-                                                                            {{
-                                                                                page +
-                                                                                1
-                                                                            }}
-                                                                            of
-                                                                            {{
-                                                                                pageCount
-                                                                            }}</span
-                                                                        >
-                                                                    </div>
-                                                                    <Button
-                                                                        icon="pi pi-chevron-right"
-                                                                        rounded
-                                                                        text
-                                                                        @click="
-                                                                            nextPageCallback
-                                                                        "
-                                                                        :disabled="
-                                                                            page ===
-                                                                            pageCount -
-                                                                                1
-                                                                        "
-                                                                    />
-                                                                </div>
-                                                            </template>
+                                                                    {{
+                                                                        slotProps
+                                                                            .data
+                                                                            .vehicle
+                                                                            .license_plate
+                                                                    }}
+                                                                    /
+                                                                    {{
+                                                                        slotProps
+                                                                            .data
+                                                                            .trailer
+                                                                            .license_plate
+                                                                    }}
+                                                                </template>
+                                                            </Column>
+                                                            <Column
+                                                                field="start_date"
+                                                                header="Delivered Location"
+                                                                style="
+                                                                    min-width: 10rem;
+                                                                "
+                                                                ><template
+                                                                    #body="slotProps"
+                                                                >
+                                                                    {{
+                                                                        slotProps
+                                                                            .data
+                                                                            .end_location
+                                                                            .address
+                                                                    }}
+                                                                </template></Column
+                                                            >
                                                         </DataTable>
                                                     </div>
                                                 </TabPanel>
@@ -1273,6 +1220,10 @@ const props = defineProps({
         type: Object,
         required: true,
     },
+    driverTruckUsed: {
+        type: Object,
+        required: true,
+    },
 });
 
 const form = useForm({
@@ -1305,7 +1256,7 @@ const submit = () => {
 };
 
 const toUpperCase = (name) => {
-    return name.toUpperCase();
+    return name ? name.toUpperCase() : "";
 };
 
 const formatDate = (createDate) => {

@@ -17,7 +17,7 @@ class ExpensesController extends Controller
     public function index()
     {
 
-        return Inertia::render('Expenses/Index',['expenses' => Expenses::with('tructor','trailer','category')->orderBy('created_at', 'desc')->get()]);
+        return Inertia::render('Expenses/Index',['expenses' => Expenses::with('tractor','trailer','category')->orderBy('created_at', 'desc')->get()]);
     }
 
     /**
@@ -93,6 +93,15 @@ class ExpensesController extends Controller
      */
     public function destroy(Expenses $expenses)
     {
-        //
+        $expenses->delete();
+        return redirect()->route('expenses');
+    }
+
+    public function deletedAll(Request $request)
+    {
+        $ids = $request->ids;
+        Expenses::whereIn('id', $ids)->delete();
+
+        return redirect()->route('expenses');
     }
 }

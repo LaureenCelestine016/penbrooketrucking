@@ -255,6 +255,7 @@ import Tag from "primevue/tag";
 import Dialog from "primevue/dialog";
 import { FilterMatchMode } from "@primevue/core/api";
 import { useToast } from "primevue/usetoast";
+import Toast from "primevue/toast";
 
 const selectedDriver = ref(0);
 const toast = useToast();
@@ -352,8 +353,6 @@ const deleteSelectedDrivers = () => {
 const filters = ref({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
 });
-
-console.log(filters);
 
 const getStatusLabel = (status) => {
     switch (status) {

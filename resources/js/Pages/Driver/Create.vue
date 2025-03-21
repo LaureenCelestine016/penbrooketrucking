@@ -788,7 +788,7 @@
                                 </FormField>
                             </div>
                         </div>
-                        <div class="w-full mt-8">
+                        <!-- <div class="w-full mt-8">
                             <label
                                 for="image_upload"
                                 class="text-slate-800 dark:text-surface-0 text-sm font-medium mb-2 block"
@@ -811,7 +811,7 @@
                                     >
                                 </template>
                             </FileUpload>
-                        </div>
+                        </div> -->
                         <Button
                             label="SUBMIT"
                             type="submit"

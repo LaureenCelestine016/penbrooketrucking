@@ -265,32 +265,30 @@ const trimFormFields = () => {
     }
 };
 
-const submit = () => {
-    trimFormFields();
+// const submit = () => {
+//     trimFormFields();
 
-    form.post(route("register"), {
-        onSuccess: () => {
-            toast.add({
-                severity: "success",
-                summary: "Success",
-                detail: "Account created successfully!",
-                life: 3000,
-            });
-            form.reset("password", "password_confirmation");
-        },
-        onError: () => {
-            toast.add({
-                severity: "error",
-                summary: "Error",
-                detail: "There were errors in your form submission.",
-                life: 3000,
-            });
-        },
-        onFinish: () => {
-            // This can handle additional cleanup if needed
-        },
-    });
-};
+//     form.post(route("register"), {
+//         onSuccess: () => {
+//             toast.add({
+//                 severity: "success",
+//                 summary: "Success",
+//                 detail: "Account created successfully!",
+//                 life: 3000,
+//             });
+//             form.reset("password", "password_confirmation");
+//         },
+//         onError: () => {
+//             toast.add({
+//                 severity: "error",
+//                 summary: "Error",
+//                 detail: "There were errors in your form submission.",
+//                 life: 3000,
+//             });
+//         },
+//         onFinish: () => {},
+//     });
+// };
 
 const location = () => {
     const map = ref(null);

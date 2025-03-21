@@ -113,9 +113,14 @@ class DriverController extends Controller
     {
         $driver = Driver::with('user')->findOrFail($id);
 
+        $driverTruckUsed = Route::with('vehicle', 'trailer', 'startLocation', 'endLocation')
+        ->where('driver_id', $id) // Filter by driver_id
+        ->get();
+
         return Inertia::render('Driver/Show', [
             'Driver' => $driver,            // The driver data
-            'User' => $driver->user // The related user data
+            'User' => $driver->user, // The related user data
+            'driverTruckUsed' => $driverTruckUsed
         ]);
     }
 
@@ -195,7 +200,8 @@ class DriverController extends Controller
 
     }
 
-    public function rides() {
+    public function rides()
+    {
         $user = Auth::user();
         $driverId = $user->driver_id;
 
@@ -209,15 +215,75 @@ class DriverController extends Controller
         ]);
     }
 
-    public function routes() {
-        $user = Auth::user();
-        $driverId = $user->driver_id;
+    public function routes()
+    {
 
-        // Fetch all routes for this driver
-        $routes = Route::where('driver_id', $driverId)->get();
+        $user = Auth::user();
+        $driverId = $user->driver_id; // Directly get authenticated user ID
+
+
+        $routes = Route::with(['vehicle', 'trailer', 'startLocation', 'endLocation'])
+                ->where('driver_id', $driverId)
+                ->whereIn('status', ['Yet to start', 'Ongoing', 'Cancelled']) // Use whereIn for multiple status values
+                ->get();
 
         return Inertia::render('Driver/Routes', [
             'routes' => $routes,
         ]);
+
+    }
+
+    public function profile()
+    {
+
+        $driverId = Auth::user()->driver_id; // Get the authenticated user's driver ID
+
+        $driverProfile = Driver::with('user')->where('id', $driverId)->first(); // Fetch single record
+
+        return Inertia::render('Driver/UserProfile', [
+            'driverProfile' => $driverProfile, // Pass data to Inertia
+        ]);
+
+    }
+
+    public function userupdate(Request $request)
+    {
+    // Validate the request
+    $validatedData = $request->validate([
+        'username' => 'sometimes|required|string|max:255',
+        'password' => 'nullable|string|min:8|confirmed',
+        'license_number' => 'sometimes|required|string|max:255',
+        'license_expired' => 'sometimes|required|date',
+    ]);
+
+    // Get the authenticated user
+    $user = Auth::user();
+    $driver = $user->driver; // Assuming user has a related driver profile
+
+    // Update username if provided
+    if ($request->has('username')) {
+        $user->username = $request->username;
+    }
+
+    // Only update password if provided
+    if ($request->filled('password')) {
+        $user->password = Hash::make($request->password);
+    }
+
+    $user->save();
+
+    // Update driver's license details if provided
+    if ($driver) {
+        if ($request->has('license_number')) {
+            $driver->license_number = $request->license_number;
+        }
+        if ($request->has('license_expired')) {
+            $driver->license_expired = $request->license_expired;
+        }
+        $driver->save();
+    }
+
+    // Return success message with Inertia redirect
+    return redirect()->route('driver.profile')->with('success', 'Profile updated successfully.');
     }
 }

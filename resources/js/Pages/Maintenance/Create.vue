@@ -13,16 +13,12 @@
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <form @submit.prevent="submit" class="p-6">
                         <div class="">
-                            <!-- <label
-                                class="text-gray-900 dark:text-surface-0 text-xl font-medium mb-6 block"
-                                >Add Expenses</label
-                            > -->
                             <div class="flex flex-row gap-x-8 mb-6">
                                 <div class="flex items-center gap-2">
                                     <RadioButton
                                         v-model="truck"
                                         inputId="ingredient1"
-                                        name="pizza"
+                                        name="truck"
                                         value="1"
                                     />
                                     <label for="ingredient1"
@@ -33,7 +29,7 @@
                                     <RadioButton
                                         v-model="truck"
                                         inputId="ingredient2"
-                                        name="pizza"
+                                        name="truck"
                                         value="2"
                                     />
                                     <label for="ingredient2">TRAILER</label>
@@ -216,11 +212,12 @@
                                         name="price"
                                         class="flex flex-col gap-1"
                                     >
-                                        <InputText
-                                            id="price"
-                                            type="text"
-                                            placeholder="Price"
+                                        <InputNumber
                                             v-model="form.price"
+                                            placeholder="Price"
+                                            mode="currency"
+                                            currency="PHP"
+                                            class="w-full"
                                         />
                                         <Message
                                             v-if="form.errors.price"
@@ -277,7 +274,7 @@
                                         <InputText
                                             id="odometer"
                                             type="text"
-                                            placeholder="Price"
+                                            placeholder="Odometer"
                                             v-model="form.odometer"
                                         />
                                         <Message
@@ -307,7 +304,7 @@
                                         <InputText
                                             id="suplier"
                                             type="text"
-                                            placeholder="Total"
+                                            placeholder="Supplier"
                                             v-model="form.supplier"
                                         />
                                         <Message
@@ -336,7 +333,7 @@
                                         <InputText
                                             id="ref_no"
                                             type="text"
-                                            placeholder="Total"
+                                            placeholder="Reference no."
                                             v-model="form.ref_no"
                                         />
                                         <Message
@@ -365,7 +362,7 @@
                                         <InputText
                                             id="remarks"
                                             type="text"
-                                            placeholder="Total"
+                                            placeholder="Remarks"
                                             v-model="form.remarks"
                                         />
                                         <Message
@@ -482,8 +479,10 @@ import "primeicons/primeicons.css";
 import intlTelInput from "intl-tel-input";
 import "intl-tel-input/build/css/intlTelInput.css";
 import RadioButton from "primevue/radiobutton";
+import InputNumber from "primevue/inputnumber";
 
 const truck = ref("");
+const optionLabel = ref("name");
 const tructors = ref([]);
 const trailers = ref([]);
 
@@ -580,4 +579,20 @@ watch(
         }
     }
 );
+
+watch(truck, (newVal) => {
+    if (newVal !== "1") {
+        form.tructorId = "";
+
+        if (tructors.value.length > 0) {
+            tructors.value[0].name = "";
+        }
+    } else if (newVal !== "2") {
+        form.trailerId = "";
+
+        if (trailers.value.length > 0) {
+            trailers.value[0].name = "";
+        }
+    }
+});
 </script>

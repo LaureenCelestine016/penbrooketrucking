@@ -7,11 +7,25 @@ use Illuminate\Database\Eloquent\Model;
 
 class Notification extends Model
 {
+
     use HasFactory;
+
+    protected $fillable = [
+        'vehicle_id',
+        'trailer_id',
+        'message',
+        'status',
+        'reported_at'
+     ];
 
     public function vehicle()
     {
         return $this->belongsTo(Vehicle::class);
+    }
+
+    public function trailer()
+    {
+        return $this->belongsTo(Trailer::class);
     }
 
     // A notification may belong to a driver

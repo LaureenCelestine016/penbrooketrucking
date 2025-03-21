@@ -14,7 +14,7 @@
                     <div class="card">
                         <DataTable
                             ref="dt"
-                            v-model:selection="selectedFuels"
+                            v-model:selection="selectedMaintenance"
                             :value="maintenance"
                             dataKey="id"
                             :paginator="true"
@@ -46,8 +46,8 @@
                                             outlined
                                             @click="confirmDeleteSelected"
                                             :disabled="
-                                                !selectedFuels ||
-                                                !selectedFuels.length
+                                                !selectedMaintenance ||
+                                                !selectedMaintenance.length
                                             "
                                         />
                                         <IconField>
@@ -133,7 +133,9 @@
                                         rounded
                                         severity="danger"
                                         @click="
-                                            confirmDeleteVehicle(slotProps.data)
+                                            confirmDeleteMaintenance(
+                                                slotProps.data
+                                            )
                                         "
                                     />
                                 </template>
@@ -141,7 +143,7 @@
                         </DataTable>
 
                         <Dialog
-                            v-model:visible="deleteFuelDialog"
+                            v-model:visible="deleteMaintenanceDialog"
                             :style="{ width: '450px' }"
                             header="Confirm"
                             :modal="true"
@@ -150,13 +152,9 @@
                                 <i
                                     class="pi pi-exclamation-triangle !text-3xl"
                                 />
-                                <span v-if="fuelData"
-                                    >Are you sure you want to delete this fuel
-                                    with the cost and date is
-                                    <b class="text-red-700 text-sm"
-                                        >₱{{ fuelData.cost }} -
-                                        {{ fuelData.refueling_date }}</b
-                                    >?</span
+                                <span v-if="maintenanceData"
+                                    >Are you sure you want to delete this
+                                    maintenance?</span
                                 >
                             </div>
                             <template #footer>
@@ -164,18 +162,20 @@
                                     label="No"
                                     icon="pi pi-times"
                                     text
-                                    @click="deleteFuelDialog = false"
+                                    @click="deleteMaintenanceDialog = false"
                                 />
                                 <Button
                                     label="Yes"
                                     icon="pi pi-check"
-                                    @click="deleteFuel(fuelData.id)"
+                                    @click="
+                                        deleteMaintenance(maintenanceData.id)
+                                    "
                                 />
                             </template>
                         </Dialog>
 
                         <Dialog
-                            v-model:visible="deleteFuelsDialog"
+                            v-model:visible="deleteMaintenancesDialog"
                             :style="{ width: '450px' }"
                             header="Confirm"
                             :modal="true"
@@ -184,9 +184,9 @@
                                 <i
                                     class="pi pi-exclamation-triangle !text-3xl"
                                 />
-                                <span v-if="fuels"
+                                <span v-if="maintenance"
                                     >Are you sure you want to delete the
-                                    selected fuels?</span
+                                    selected maintenance?</span
                                 >
                             </div>
                             <template #footer>
@@ -194,13 +194,13 @@
                                     label="No"
                                     icon="pi pi-times"
                                     text
-                                    @click="deleteFuelsDialog = false"
+                                    @click="deleteMaintenancesDialog = false"
                                 />
                                 <Button
                                     label="Yes"
                                     icon="pi pi-check"
                                     text
-                                    @click="deleteSelectedFuels"
+                                    @click="deleteSelectedMaintenance"
                                 />
                             </template>
                         </Dialog>
@@ -232,6 +232,83 @@ const props = defineProps({
         required: true,
     },
 });
+
+const toast = useToast();
+const selectedMaintenance = ref(0);
+const deleteMaintenancesDialog = ref(false);
+const deleteMaintenanceDialog = ref(false);
+const maintenanceData = ref({});
+
+const confirmDeleteSelected = () => {
+    deleteMaintenancesDialog.value = true;
+};
+
+const deleteSelectedMaintenance = () => {
+    const ids = selectedMaintenance.value.map((m) => m.id);
+
+    if (ids.length === 0) {
+        toast.add({
+            severity: "warn",
+            summary: "No Selection",
+            detail: "No Maintenance selected for deletion",
+            life: 3000,
+        });
+        return;
+    }
+
+    router.post(
+        route("maintenances.delete"),
+        { ids },
+        {
+            onSuccess: () => {
+                deleteMaintenancesDialog.value = false;
+                toast.add({
+                    severity: "success",
+                    summary: "Successful",
+                    detail: "Maintenance Deleted",
+                    life: 3000,
+                });
+            },
+            onError: (errors) => {
+                console.error("Error deleting vehicles:", errors);
+                toast.add({
+                    severity: "error",
+                    summary: "Error",
+                    detail: "Failed to delete vehicles",
+                    life: 3000,
+                });
+            },
+        }
+    );
+};
+
+const deleteMaintenance = (id) => {
+    router.delete(route("maintenance.delete", id), {
+        onSuccess: () => {
+            deleteMaintenanceDialog.value = false;
+            toast.add({
+                severity: "success",
+                summary: "Successful",
+                detail: "Maintenance Deleted",
+                life: 3000,
+            });
+        },
+        onError: (errors) => {
+            console.error("Error deleting driver:", errors);
+            toast.add({
+                severity: "error",
+                summary: "Error",
+                detail: "Failed to delete maintenance",
+                life: 3000,
+            });
+        },
+    });
+};
+
+const confirmDeleteMaintenance = (maintenance) => {
+    maintenanceData.value = maintenance;
+    deleteMaintenanceDialog.value = true;
+};
 
 const filters = ref({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },

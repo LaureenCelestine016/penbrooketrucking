@@ -1,94 +1,102 @@
 <template>
-    <Head title="Log in" />
+    <div class="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+        <div
+            class="flex flex-col md:flex-row bg-white shadow-xl rounded-3xl overflow-hidden w-full max-w-5xl"
+        >
+            <!-- Left Section -->
+            <div class="w-full md:w-1/2 p-8 md:p-12">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-2">
+                        Penbrooke Trucking Inc.
+                    </h2>
+                    <p class="text-gray-500">
+                        Log in to your account to continue
+                    </p>
+                </div>
 
-    <Toast />
-    <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
-        {{ status }}
-    </div>
-    <div class="w-full h-16 border-b bg-navyblue">
-        <div class="flex h-full mx-12">
-            <div class="flex h-full items-center">
-                <h2 class="text-2xl font-bold tracking-widest text-white">
-                    Penbrooke Inc.
-                </h2>
-            </div>
-            <div class="grow h-100"></div>
-            <div class="flex gap-3 items-center flex-none h-full">
-                <Link
-                    v-if="$page.component === 'Auth/Login'"
-                    :href="route('register')"
-                    class="font-sans font-semibold hover:text-blue-50 text-blue-100"
-                    >Register</Link
-                >
-            </div>
-        </div>
-    </div>
-    <div>
-        <div class="grid grid-cols-2 h-screen">
-            <div class="flex flex-col items-center justify-center">
-                <div class="card flex justify-center w-3/4">
-                    <!-- class="flex flex-col gap-4 w-full sm:w-60" -->
-                    <form @submit.prevent="submit" class="form">
-                        <h2 class="font-semibold text-2xl text-slate-600 mb-6">
-                            Login to Truck Management System
-                        </h2>
-                        <div class="flex flex-col gap-1">
-                            <label for="email" class="label"
-                                >Email Address or Username</label
-                            >
-                            <InputText
-                                id="email"
-                                name="username"
-                                type="text"
-                                v-model="form.login"
-                                placeholder="johndoe@example.com"
-                                class="user--input"
-                            />
-                            <Message
-                                v-if="form.errors.login"
-                                severity="error"
-                                size="small"
-                                variant="simple"
-                                >{{ form.errors.login }}</Message
-                            >
-                        </div>
-                        <div class="flex flex-col gap-1">
-                            <label for="password" class="label">Password</label>
-                            <Password
-                                id="password"
-                                name="password"
-                                placeholder="••••••••••"
-                                v-model="form.password"
-                                :feedback="false"
-                                toggleMask
-                                fluid
-                                class="user--input"
-                            />
-                            <Message
-                                v-if="form.errors.password"
-                                severity="error"
-                                size="small"
-                                variant="simple"
-                            >
-                                {{ form.errors.password }}
-                            </Message>
-                            <Link
-                                :href="route('password.request')"
-                                class="text-blue-600 hover:text-gray-900 self-end"
-                            >
-                                Forgot your password?
-                            </Link>
-                        </div>
+                <form @submit.prevent="submit">
+                    <label class="block mb-2 text-gray-700"
+                        >Email or Username</label
+                    >
+                    <InputText
+                        v-model="form.login"
+                        placeholder="Enter your email or username"
+                        class="w-full mb-4"
+                    />
+                    <Message
+                        v-if="form.errors.login"
+                        severity="error"
+                        size="small"
+                        variant="simple"
+                        >{{ form.errors.login }}</Message
+                    >
 
-                        <Button
-                            type="submit"
-                            label="Log in"
-                            class="btn-submit"
-                        />
-                    </form>
+                    <label class="block mb-2 text-gray-700">Password</label>
+                    <InputText
+                        v-model="form.password"
+                        type="password"
+                        placeholder="Enter your password"
+                        class="w-full mb-4"
+                    />
+                    <Message
+                        v-if="form.errors.password"
+                        severity="error"
+                        size="small"
+                        variant="simple"
+                        >{{ form.errors.password }}</Message
+                    >
+
+                    <div class="flex justify-between items-center mb-4">
+                        <div class="flex items-center">
+                            <Checkbox
+                                v-model="checked1"
+                                :binary="true"
+                                class="mr-2"
+                            />
+                            <label class="text-gray-600">Remember me</label>
+                        </div>
+                        <a href="#" class="text-primary font-semibold"
+                            >Forgot Password?</a
+                        >
+                    </div>
+
+                    <Button
+                        label="Log In"
+                        type="submit"
+                        class="w-full py-3 text-lg"
+                    />
+                </form>
+
+                <p class="text-center mt-4 text-gray-600">
+                    Don't have an account?
+                    <a href="#" class="text-primary font-semibold"
+                        >Create one</a
+                    >
+                </p>
+            </div>
+
+            <!-- Right Section with Gradient Animation -->
+            <div
+                class="hidden md:flex w-1/2 relative items-center justify-center gradient-section"
+            >
+                <img
+                    src="/blog-02-01-22.jpg"
+                    alt="Truck Fleet"
+                    class="absolute inset-0 w-full h-full object-cover"
+                />
+                <div class="absolute inset-0 animated-gradient"></div>
+
+                <div class="text-center text-white z-10 max-w-xs">
+                    <h3 class="text-3xl font-semibold mb-4">
+                        Streamline Your Fleet Operations
+                    </h3>
+                    <p class="text-lg">
+                        Effortlessly track your trucks, manage routes, and
+                        ensure on-time deliveries with our customizable
+                        dashboard.
+                    </p>
                 </div>
             </div>
-            <div id="map" class="w-full"></div>
         </div>
     </div>
 </template>
@@ -215,5 +223,31 @@ onMounted(() => {
 .btn-submit:hover {
     background-color: rgb(41, 71, 167) !important;
     border: none !important;
+}
+
+/* graident right section */
+.animated-gradient {
+    background: linear-gradient(
+        to right,
+        rgba(0, 102, 204, 0.8),
+        /* Bright Blue */ rgba(0, 76, 153, 0.8),
+        /* Deep Blue */ rgba(0, 51, 102, 0.8),
+        /* Darker Navy Blue */ rgba(0, 153, 255, 0.8) /* Sky Blue */
+    );
+    background-size: 200% 100%; /* Double width for smooth animation */
+    animation: gradientBG 6s ease infinite;
+    border-radius: 0;
+}
+
+@keyframes gradientBG {
+    0% {
+        background-position: 0% 0;
+    }
+    50% {
+        background-position: 100% 0;
+    }
+    100% {
+        background-position: 0% 0;
+    }
 }
 </style>

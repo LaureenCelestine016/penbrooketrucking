@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Expenses;
 use App\Models\Maintenance_task;
 use Illuminate\Http\Request;
 use App\Models\Trailer;
 use App\Models\Vehicle;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 
 class MaintenanceTaskController extends Controller
 {
@@ -25,10 +28,10 @@ class MaintenanceTaskController extends Controller
     public function create()
     {
 
-
+        $trailer = Trailer::where('status','Operational')->orderBy('created_at', 'desc')->get(['id', 'license_plate']);
         return Inertia::render('Maintenance/Create' ,[
-            "trailer" =>  Trailer::where('status','Operational')->orderBy('created_at', 'desc')->get(['id', 'license_plate']),
-            "tructor" =>  Vehicle::where('status','Operational')->orderBy('created_at', 'desc')->get(['id', 'license_plate']),
+            "trailer" =>  Trailer::orderBy('created_at', 'desc')->get(['id', 'license_plate']),
+            "tructor" =>  Vehicle::orderBy('created_at', 'desc')->get(['id', 'license_plate']),
         ]);
     }
 
@@ -51,24 +54,42 @@ class MaintenanceTaskController extends Controller
             'ref_no'        => 'required|string',
             'remarks'       => 'nullable|string',
             'breakdown'     => 'required|date', // Adjusted for timestamp format
-            'up'            => 'required|date', // Adjusted for timestamp format
+            'up'            => 'nullable|date|after_or_equal:breakdown', // Adjusted for timestamp format
         ]);
 
-        Maintenance_task::create([
-            'vehicle_id'                => $validatedData['tructorId'],
-            'trailer_id'                => $validatedData['trailerId'],
-            'item_description'          => $validatedData['description'],
-            'quantity'                  => $validatedData['quantity'],
-            'unit'                      => $validatedData['unit'],
-            'price'                     => $validatedData['price'],
-            'total'                     => $validatedData['total'],
-            'odometer'                  => $validatedData['odometer'],
-            'supplier'                  => $validatedData['supplier'],
-            'ref_no'                    => $validatedData['ref_no'],
-            'remarks'                   => $validatedData['remarks'],
-            'breakdown_date'            => $validatedData['breakdown'],
-            'up_date'                   => $validatedData['up'],
-        ]);
+
+        try{
+            DB::transaction(function () use ($validatedData, $request) {
+                $maintenance = Maintenance_task::create([
+                    'vehicle_id'                => $validatedData['tructorId'],
+                    'trailer_id'                => $validatedData['trailerId'],
+                    'item_description'          => $validatedData['description'],
+                    'quantity'                  => $validatedData['quantity'],
+                    'unit'                      => $validatedData['unit'],
+                    'price'                     => $validatedData['price'],
+                    'total'                     => $validatedData['total'],
+                    'odometer'                  => $validatedData['odometer'],
+                    'supplier'                  => $validatedData['supplier'],
+                    'ref_no'                    => $validatedData['ref_no'],
+                    'remarks'                   => $validatedData['remarks'],
+                    'breakdown_date'            => $validatedData['breakdown'],
+                    'up_date'                   => $validatedData['up'],
+                ]);
+
+                Expenses::create([
+                    'maintenance_id'            => $maintenance->id,
+                    'vehicle_id'                => $validatedData['tructorId'],
+                    'trailer_id'                => $validatedData['trailerId'],
+                    'category_id'               => 2,
+                    'amount'                    => $validatedData['total'],
+                    'description'               => $validatedData['description'],
+                    'expense_date'              => $maintenance->created_at,
+
+                ]);
+            });
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+        }
 
         return redirect()->route('maintenance')->with('success', 'Maintenance created successfully!');
     }
@@ -78,7 +99,7 @@ class MaintenanceTaskController extends Controller
      */
     public function show(Maintenance_task $maintenance_task)
     {
-        //
+
     }
 
     /**
@@ -102,6 +123,15 @@ class MaintenanceTaskController extends Controller
      */
     public function destroy(Maintenance_task $maintenance_task)
     {
-        //
+        $maintenance_task->delete();
+        return redirect()->route('maintenance');
+    }
+
+    public function deletedAll(Request $request)
+    {
+        $ids = $request->ids;
+        Maintenance_task::whereIn('id', $ids)->delete();
+
+        return redirect()->route('maintenance');
     }
 }

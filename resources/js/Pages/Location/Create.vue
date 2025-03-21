@@ -16,8 +16,11 @@
                                 class="text-gray-900 dark:text-surface-0 text-xl font-medium mb-4 block"
                                 >Address Information</label
                             >
-                            <div class="grid grid-cols-2 gap-10 mb-4">
-                                <!-- region -->
+                            <!---
+
+
+                            -->
+                            <!-- <div class="grid grid-cols-2 gap-10 mb-4">
                                 <div class="w-full">
                                     <label
                                         for="region"
@@ -49,7 +52,7 @@
                                         >
                                     </FormField>
                                 </div>
-                                <!-- province -->
+
                                 <div class="w-full">
                                     <label
                                         for="province"
@@ -82,7 +85,7 @@
                                 </div>
                             </div>
                             <div class="grid grid-cols-2 gap-10 mb-4">
-                                <!-- municipality -->
+
                                 <div class="w-full">
                                     <label
                                         for="municipality"
@@ -110,7 +113,7 @@
                                         ></Message>
                                     </FormField>
                                 </div>
-                                <!-- city -->
+
                                 <div class="w-full">
                                     <label
                                         for="city"
@@ -141,7 +144,7 @@
                                 </div>
                             </div>
                             <div class="grid grid-cols-2 gap-10 mb-4">
-                                <!-- barangay -->
+
                                 <div class="w-full">
                                     <label
                                         for="barangay"
@@ -172,7 +175,7 @@
                                         >
                                     </FormField>
                                 </div>
-                                <!-- street -->
+
                                 <div class="w-full">
                                     <label
                                         for="street"
@@ -203,14 +206,15 @@
                                         >
                                     </FormField>
                                 </div>
-                            </div>
+                            </div> -->
+
                             <!-- landmark -->
                             <div>
-                                <div class="w-full">
+                                <div class="w-full mb-5">
                                     <label
                                         for="landmark"
                                         class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                        >Landmark<span class="ml-1 text-red-400"
+                                        >Address<span class="ml-1 text-red-400"
                                             >*</span
                                         ></label
                                     >
@@ -223,8 +227,8 @@
                                             id="landmark"
                                             type="text"
                                             class="user--input firstName"
-                                            placeholder="Landmark"
-                                            v-model="form.name"
+                                            placeholder="Address"
+                                            v-model="form.address"
                                         />
                                         <Message
                                             v-if="form.errors.name"
@@ -236,7 +240,7 @@
                                     </FormField>
                                 </div>
                             </div>
-                            <div class="flex items-center gap-2 mt-3">
+                            <!-- <div class="flex items-center gap-2 mt-3">
                                 <label
                                     class="text-gray-900 dark:text-surface-0 text-xl font-medium my-4 block"
                                     >Coordinates</label
@@ -261,9 +265,8 @@
                                         >Get Coordinates here</span
                                     >
                                 </div>
-                            </div>
-                            <div class="grid grid-cols-2 gap-10 mb-4">
-                                <!-- latitude -->
+                            </div> -->
+                            <!-- <div class="grid grid-cols-2 gap-10 mb-4">
                                 <div class="w-full">
                                     <label
                                         for="latitude"
@@ -293,7 +296,6 @@
                                         >
                                     </FormField>
                                 </div>
-                                <!-- longitude -->
                                 <div class="w-full">
                                     <label
                                         for="longitude"
@@ -328,7 +330,16 @@
                                         >
                                     </FormField>
                                 </div>
-                            </div>
+                            </div> -->
+
+                            <div
+                                id="map"
+                                style="
+                                    width: 100%;
+                                    height: 450px;
+                                    background: #eee;
+                                "
+                            ></div>
                             <Button
                                 label="SUBMIT"
                                 type="submit"
@@ -337,19 +348,6 @@
                             />
                         </div>
                     </form>
-                    <Dialog
-                        v-model:visible="latitudeModal"
-                        maximizable
-                        modal
-                        header="Location"
-                        :style="{ width: '70rem', height: '50rem' }"
-                        :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
-                    >
-                        <div
-                            id="map"
-                            style="width: 100%; height: 600px; background: #eee"
-                        ></div>
-                    </Dialog>
                 </div>
             </div>
         </div>
@@ -371,46 +369,16 @@ import Toast from "primevue/toast";
 import Message from "primevue/message";
 
 const toast = useToast();
-const regions = ref([]);
-const provinces = ref([]);
-const municipalities = ref([]);
-const cities = ref([]);
-const barangays = ref([]);
-const latitudeModal = ref(false);
 const map = ref(null);
 const marker = ref(null);
 
 const form = useForm({
-    region: "",
-    province: "",
-    city: "",
-    municipality: "",
-    barangay: "",
-    street: "",
-    name: "",
     latitude: "",
     longitude: "",
     address: "",
 });
 
-const updateAddress = () => {
-    form.address = `${form.street}, ${form.barangay} ${form.municipality} ${form.province}, ${form.region}`;
-};
-
-watch(
-    [
-        () => form.street,
-        () => form.barangay,
-        () => form.municipality,
-        () => form.province,
-        () => form.region,
-    ],
-    updateAddress
-);
-
 const submit = () => {
-    updateAddress();
-
     form.post(route("location.store"), {
         onSuccess: () => {
             toast.add({
@@ -433,88 +401,88 @@ const submit = () => {
 };
 
 // ✅ Fetch regions on component mount
-const fetchRegions = async () => {
-    try {
-        const response = await fetch("https://psgc.cloud/api/regions");
-        const data = await response.json();
-        regions.value = data.map((region) => region.name);
-    } catch (error) {
-        console.error("Error fetching regions:", error);
-    }
-};
+// const fetchRegions = async () => {
+//     try {
+//         const response = await fetch("https://psgc.cloud/api/regions");
+//         const data = await response.json();
+//         regions.value = data.map((region) => region.name);
+//     } catch (error) {
+//         console.error("Error fetching regions:", error);
+//     }
+// };
 
-// ✅ Fetch provinces when user selects a region
-const fetchProvinces = async () => {
-    if (!form.region) return;
-    try {
-        const response = await fetch(
-            `https://psgc.cloud/api/regions/${form.region}/provinces`
-        );
-        const data = await response.json();
-        provinces.value = data.map((province) => province.name);
-    } catch (error) {
-        console.error("Error fetching provinces:", error);
-    }
-};
+// // ✅ Fetch provinces when user selects a region
+// const fetchProvinces = async () => {
+//     if (!form.region) return;
+//     try {
+//         const response = await fetch(
+//             `https://psgc.cloud/api/regions/${form.region}/provinces`
+//         );
+//         const data = await response.json();
+//         provinces.value = data.map((province) => province.name);
+//     } catch (error) {
+//         console.error("Error fetching provinces:", error);
+//     }
+// };
 
-// ✅ Fetch municipalities when user selects a province
-const fetchMunicipalities = async () => {
-    if (!form.province) return;
-    try {
-        const response = await fetch(
-            `https://psgc.cloud/api/provinces/${form.province}/municipalities`
-        );
-        const data = await response.json();
-        municipalities.value = data.map((municipality) => municipality.name);
-    } catch (error) {
-        console.error("Error fetching municipalities:", error);
-    }
-};
+// // ✅ Fetch municipalities when user selects a province
+// const fetchMunicipalities = async () => {
+//     if (!form.province) return;
+//     try {
+//         const response = await fetch(
+//             `https://psgc.cloud/api/provinces/${form.province}/municipalities`
+//         );
+//         const data = await response.json();
+//         municipalities.value = data.map((municipality) => municipality.name);
+//     } catch (error) {
+//         console.error("Error fetching municipalities:", error);
+//     }
+// };
 
-const fetchCities = async () => {
-    if (!form.province) return;
-    try {
-        const response = await fetch(
-            `https://psgc.cloud/api/provinces/${form.province}/cities`
-        );
-        const data = await response.json();
-        cities.value = data.map((city) => city.name);
-    } catch (error) {
-        console.error("Error fetching municipalities:", error);
-    }
-};
+// const fetchCities = async () => {
+//     if (!form.province) return;
+//     try {
+//         const response = await fetch(
+//             `https://psgc.cloud/api/provinces/${form.province}/cities`
+//         );
+//         const data = await response.json();
+//         cities.value = data.map((city) => city.name);
+//     } catch (error) {
+//         console.error("Error fetching municipalities:", error);
+//     }
+// };
 
-// ✅ Fetch barangays when user selects a municipality
-const fetchBarangays = async () => {
-    if (form.municipality) {
-        try {
-            const response = await fetch(
-                `https://psgc.cloud/api/municipalities/${form.municipality}/barangays`
-            );
+// // ✅ Fetch barangays when user selects a municipality
+// const fetchBarangays = async () => {
+//     if (form.municipality) {
+//         try {
+//             const response = await fetch(
+//                 `https://psgc.cloud/api/municipalities/${form.municipality}/barangays`
+//             );
 
-            const data = await response.json();
+//             const data = await response.json();
 
-            barangays.value = data.map((brgy) => brgy.name);
-        } catch (error) {
-            console.error("Error fetching barangays:", error);
-        }
-    }
-    if (form.city) {
-        try {
-            const response = await fetch(
-                `https://psgc.cloud/api/municipalities/${form.city}/barangays`
-            );
+//             barangays.value = data.map((brgy) => brgy.name);
+//         } catch (error) {
+//             console.error("Error fetching barangays:", error);
+//         }
+//     }
+//     if (form.city) {
+//         try {
+//             const response = await fetch(
+//                 `https://psgc.cloud/api/municipalities/${form.city}/barangays`
+//             );
 
-            const data = await response.json();
+//             const data = await response.json();
 
-            barangays.value = data.map((brgy) => brgy.name);
-        } catch (error) {
-            console.error("Error fetching barangays:", error);
-        }
-    } else {
-        return;
-    }
-};
+//             barangays.value = data.map((brgy) => brgy.name);
+//         } catch (error) {
+//             console.error("Error fetching barangays:", error);
+//         }
+//     } else {
+//         return;
+//     }
+// };
 
 const location = async () => {
     await nextTick(); // Ensure DOM updates before initializing the map
@@ -542,7 +510,9 @@ const location = async () => {
                     "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 ).addTo(map.value);
 
-                map.value.on("click", function (e) {
+                map.value.on("click", async (e) => {
+                    // ✅ Make this function async
+
                     const { lat, lng } = e.latlng;
                     form.latitude = lat;
                     form.longitude = lng;
@@ -552,6 +522,22 @@ const location = async () => {
                     }
 
                     marker.value = L.marker([lat, lng]).addTo(map.value);
+
+                    try {
+                        const response = await fetch(
+                            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`
+                        );
+                        const data = await response.json();
+
+                        if (data && data.display_name) {
+                            form.address = data.display_name;
+                        } else {
+                            alert("Address not found.");
+                        }
+                    } catch (error) {
+                        console.error("Error fetching address:", error);
+                        alert("Failed to get address.");
+                    }
                 });
             },
             () => {
@@ -561,15 +547,8 @@ const location = async () => {
     }
 };
 
-watch(latitudeModal, async (newValue) => {
-    if (newValue) {
-        await nextTick(); // Ensure DOM updates before initializing
-        setTimeout(() => location(), 500); // Small delay for rendering
-    }
-});
-
 onMounted(() => {
-    fetchRegions();
+    location();
 });
 </script>
 

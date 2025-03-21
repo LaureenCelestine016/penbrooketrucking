@@ -1,10 +1,10 @@
 <template>
-    <Head title="Vehicle" />
+    <Head title="Add Tractor" />
 
     <AuthenticatedLayout>
         <template #header>
             <h2 class="font-semibold text-2xl text-gray-800 leading-tight">
-                Add Tructor
+                Add Tractor
             </h2>
         </template>
 
@@ -16,14 +16,10 @@
                         <Accordion :value="['0']" multiple="">
                             <AccordionPanel value="0">
                                 <AccordionHeader class="title"
-                                    >Tructor Information</AccordionHeader
+                                    >Tractor Information</AccordionHeader
                                 >
                                 <AccordionContent>
                                     <div class="mb-4">
-                                        <!-- <label
-                                            class="text-gray-900 dark:text-surface-0 text-xl font-medium mb-4 block"
-                                            >Tructor Information</label
-                                        > -->
                                         <div class="grid grid-cols-2 gap-10">
                                             <!-- Plate no -->
                                             <div class="w-full">
@@ -187,99 +183,6 @@
                                 <AccordionContent>
                                     <!-- Registration Details -->
                                     <div class="mb-11">
-                                        <!-- <label
-                                            class="text-gray-900 dark:text-surface-0 text-xl font-medium mb-4 block"
-                                            >Registration Details</label
-                                        > -->
-                                        <div class="grid grid-cols-2 gap-10">
-                                            <!-- Calibration -->
-                                            <div class="w-full">
-                                                <label
-                                                    for="calibrationDate"
-                                                    class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                                    >Calibration Registered
-                                                    Date<span
-                                                        class="ml-1 text-red-400"
-                                                        >*</span
-                                                    ></label
-                                                >
-                                                <FormField
-                                                    id="calibrationDate"
-                                                    name="calibrationDate"
-                                                    class="flex flex-col gap-1"
-                                                >
-                                                    <div class="flex-auto">
-                                                        <DatePicker
-                                                            id="calibrationDate"
-                                                            v-model="
-                                                                form.calibrationDate
-                                                            "
-                                                            showIcon
-                                                            fluid
-                                                            :showOnFocus="false"
-                                                            inputId="calibrationDate"
-                                                            placeholder="Calibration Date"
-                                                        />
-                                                    </div>
-                                                    <Message
-                                                        v-if="
-                                                            form.errors
-                                                                .calibrationDate
-                                                        "
-                                                        severity="error"
-                                                        size="small"
-                                                        variant="simple"
-                                                        >{{
-                                                            form.errors
-                                                                .calibrationDate
-                                                        }}</Message
-                                                    >
-                                                </FormField>
-                                            </div>
-                                            <div class="w-full">
-                                                <label
-                                                    for="calibExpDate"
-                                                    class="text-gray-700 dark:text-surface-50 text-sm font-medium mb-2 block"
-                                                    >Calibration Expiration
-                                                    Date<span
-                                                        class="ml-1 text-red-400"
-                                                        >*</span
-                                                    ></label
-                                                >
-                                                <FormField
-                                                    id="calibExpDate"
-                                                    name="calibExpDate"
-                                                    class="flex flex-col gap-1"
-                                                >
-                                                    <div class="flex-auto">
-                                                        <DatePicker
-                                                            id="calibExpDate"
-                                                            v-model="
-                                                                form.calibrationExpDate
-                                                            "
-                                                            showIcon
-                                                            fluid
-                                                            :showOnFocus="false"
-                                                            inputId="calibExpDate"
-                                                            placeholder="Calibration Expired Date"
-                                                        />
-                                                    </div>
-                                                    <Message
-                                                        v-if="
-                                                            form.errors
-                                                                .registrationExp
-                                                        "
-                                                        severity="error"
-                                                        size="small"
-                                                        variant="simple"
-                                                        >{{
-                                                            form.errors
-                                                                .registrationExp
-                                                        }}</Message
-                                                    >
-                                                </FormField>
-                                            </div>
-                                        </div>
                                         <div
                                             :class="[
                                                 'grid grid-cols-2 gap-10 ',
@@ -674,11 +577,6 @@
                                 <AccordionContent>
                                     <!-- Technical Specifications -->
                                     <div class="mb-4">
-                                        <!-- <label
-                                            class="text-gray-900 dark:text-surface-0 text-xl font-medium mb-4 block"
-                                            >Technical Specifications</label
-                                        > -->
-
                                         <div class="grid grid-cols-2 gap-10">
                                             <div class="w-full">
                                                 <label
@@ -987,7 +885,6 @@ import { Head, useForm } from "@inertiajs/vue3";
 import { watch, ref } from "vue";
 import dayjs from "dayjs";
 
-import Toolbar from "primevue/toolbar";
 import Button from "primevue/button";
 import InputText from "primevue/inputtext";
 import AutoComplete from "primevue/autocomplete";
@@ -1017,8 +914,6 @@ const form = useForm({
     model: "",
     capacity: "",
     status: "",
-    calibrationDate: "",
-    calibrationExpDate: "",
     LTOregDate: "",
     LTOExpDate: "",
     conveyanceDate: "",
@@ -1062,18 +957,6 @@ watch(
         if (newValue) {
             form.LTOregDate = dayjs(newValue).format("YYYY-MM-DD");
             form.LTOExpDate = dayjs(newValue)
-                .add(1, "year")
-                .format("YYYY-MM-DD");
-        }
-    }
-);
-
-watch(
-    () => form.calibrationDate,
-    (newValue) => {
-        if (newValue) {
-            form.calibrationDate = dayjs(newValue).format("YYYY-MM-DD");
-            form.calibrationExpDate = dayjs(newValue)
                 .add(1, "year")
                 .format("YYYY-MM-DD");
         }
@@ -1149,16 +1032,8 @@ watch(
     }
 );
 
-const vehicleTypeSearch = () => {
-    vehicleTypeArr.value = ["Truck"];
-};
-
 const statusSearch = () => {
     vehicleStatus.value = ["Operational", "Non-Operational", "Maintenance"];
-};
-
-const goBack = () => {
-    history.back();
 };
 </script>
 
@@ -1179,13 +1054,3 @@ const goBack = () => {
     color: #213555;
 }
 </style>
-
-<!-- Registration number: HR26DQ5551
-Vehicle Name : Truck
-Vehicle Type : Truck
-Model : 2016 GMC Canyon
-Plate no. PAQ323
-Chassis no. WDB1290601F012345
-Engine no. 52WVC10338
-Manufacture : Western Star Trucks
-Manufacture Year: 1990 -->

@@ -1,5 +1,6 @@
 <template>
     <Head title="Expenses" />
+    <Toast />
 
     <AuthenticatedLayout>
         <template #header>
@@ -14,7 +15,7 @@
                     <div class="card">
                         <DataTable
                             ref="dt"
-                            v-model:selection="selectedVehicle"
+                            v-model:selection="selectedExpenses"
                             :value="expenses"
                             dataKey="id"
                             :paginator="true"
@@ -45,8 +46,8 @@
                                             outlined
                                             @click="confirmDeleteSelected"
                                             :disabled="
-                                                !selectedVehicle ||
-                                                !selectedVehicle.length
+                                                !selectedExpenses ||
+                                                !selectedExpenses.length
                                             "
                                         />
                                         <IconField>
@@ -72,12 +73,12 @@
                                 :exportable="false"
                             ></Column>
                             <Column
-                                header="Tructor / Trailer"
+                                header="Tractor / Trailer"
                                 sortable
                                 style="min-width: 10rem"
                                 ><template #body="slotProps">
-                                    {{ slotProps.data.tructor?.model }}
-                                    {{ slotProps.data.tructor?.license_plate }}
+                                    {{ slotProps.data.tractor?.model }}
+                                    {{ slotProps.data.tractor?.license_plate }}
                                     {{ slotProps.data.trailer?.license_plate }}
                                 </template></Column
                             >
@@ -123,7 +124,9 @@
                                         rounded
                                         severity="danger"
                                         @click="
-                                            confirmDeleteVehicle(slotProps.data)
+                                            confirmDeleteExpenses(
+                                                slotProps.data
+                                            )
                                         "
                                     />
                                 </template>
@@ -131,7 +134,7 @@
                         </DataTable>
 
                         <Dialog
-                            v-model:visible="deleteVehicleDialog"
+                            v-model:visible="deleteExpensesDialog"
                             :style="{ width: '450px' }"
                             header="Confirm"
                             :modal="true"
@@ -140,10 +143,9 @@
                                 <i
                                     class="pi pi-exclamation-triangle !text-3xl"
                                 />
-                                <span v-if="vehicles"
+                                <span v-if="expensesData"
                                     >Are you sure you want to delete
-                                    <b>{{ vehicleData.vehicle_name }}</b
-                                    >?</span
+                                    expenses?</span
                                 >
                             </div>
                             <template #footer>
@@ -151,18 +153,18 @@
                                     label="No"
                                     icon="pi pi-times"
                                     text
-                                    @click="deleteVehicleDialog = false"
+                                    @click="deleteExpensesDialog = false"
                                 />
                                 <Button
                                     label="Yes"
                                     icon="pi pi-check"
-                                    @click="deleteVehicle(vehicleData.id)"
+                                    @click="deleteExpenses(expensesData.id)"
                                 />
                             </template>
                         </Dialog>
 
                         <Dialog
-                            v-model:visible="deleteVehiclesDialog"
+                            v-model:visible="deleteExpensessDialog"
                             :style="{ width: '450px' }"
                             header="Confirm"
                             :modal="true"
@@ -171,9 +173,9 @@
                                 <i
                                     class="pi pi-exclamation-triangle !text-3xl"
                                 />
-                                <span v-if="vehicles"
+                                <span v-if="expenses"
                                     >Are you sure you want to delete the
-                                    selected vehicles?</span
+                                    selected expenses?</span
                                 >
                             </div>
                             <template #footer>
@@ -181,13 +183,13 @@
                                     label="No"
                                     icon="pi pi-times"
                                     text
-                                    @click="deleteVehiclesDialog = false"
+                                    @click="deleteExpensessDialog = false"
                                 />
                                 <Button
                                     label="Yes"
                                     icon="pi pi-check"
                                     text
-                                    @click="deleteSelectedVehicles"
+                                    @click="deleteSelectedMaintenance"
                                 />
                             </template>
                         </Dialog>
@@ -198,7 +200,7 @@
 </template>
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { Head, useForm } from "@inertiajs/vue3";
+import { Head, router } from "@inertiajs/vue3";
 import { ref, watch } from "vue";
 import dayjs from "dayjs";
 
@@ -220,6 +222,83 @@ const props = defineProps({
         required: true,
     },
 });
+
+const toast = useToast();
+const selectedExpenses = ref(0);
+const expensesData = ref({});
+const deleteExpensessDialog = ref(false);
+const deleteExpensesDialog = ref(false);
+
+const confirmDeleteSelected = () => {
+    deleteExpensessDialog.value = true;
+};
+
+const deleteSelectedMaintenance = () => {
+    const ids = selectedExpenses.value.map((m) => m.id);
+
+    if (ids.length === 0) {
+        toast.add({
+            severity: "warn",
+            summary: "No Selection",
+            detail: "No Expenses selected for deletion",
+            life: 3000,
+        });
+        return;
+    }
+
+    router.post(
+        route("expensess.delete"),
+        { ids },
+        {
+            onSuccess: () => {
+                deleteExpensessDialog.value = false;
+                toast.add({
+                    severity: "success",
+                    summary: "Successful",
+                    detail: "Expenses Deleted",
+                    life: 3000,
+                });
+            },
+            onError: (errors) => {
+                console.error("Error deleting vehicles:", errors);
+                toast.add({
+                    severity: "error",
+                    summary: "Error",
+                    detail: "Failed to delete vehicles",
+                    life: 3000,
+                });
+            },
+        }
+    );
+};
+
+const confirmDeleteExpenses = (expenses) => {
+    expensesData.value = expenses;
+    deleteExpensesDialog.value = true;
+};
+
+const deleteExpenses = (id) => {
+    router.delete(route("expenses.delete", id), {
+        onSuccess: () => {
+            deleteExpensesDialog.value = false;
+            toast.add({
+                severity: "success",
+                summary: "Successful",
+                detail: "Expenses Deleted",
+                life: 3000,
+            });
+        },
+        onError: (errors) => {
+            console.error("Error deleting driver:", errors);
+            toast.add({
+                severity: "error",
+                summary: "Error",
+                detail: "Failed to delete driver",
+                life: 3000,
+            });
+        },
+    });
+};
 
 const filters = ref({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },

@@ -18,14 +18,10 @@ return new class extends Migration
             $table->enum('status', ['Operational', 'Non-Operational', 'Maintenance'])->default('Operational');
             $table->date('calibration_date')->nullable();
             $table->date('calibration_exp_date')->nullable();
+            $table->integer('calibration_is_Expired')->default(0);
             $table->date('lto_reg_date')->nullable();
             $table->date('lto_exp_date')->nullable();
-            $table->date('conveyance_date')->nullable();
-            $table->date('conveyance_exp_date')->nullable();
-            $table->date('filcom_fab_date')->nullable();
-            $table->date('filcon_exp_date')->nullable();
-            $table->date('ltfrb_reg_date')->nullable();
-            $table->date('ltfrb_exp_date')->nullable();
+            $table->integer('lto_is_Expired')->default(0);
             $table->string('image')->nullable();
             $table->timestamps();
             $table->softDeletes();

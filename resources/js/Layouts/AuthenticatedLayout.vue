@@ -21,7 +21,7 @@
                             <div
                                 class="ms-3 relative flex flex-row items-center gap-4"
                             >
-                                <div class="relative">
+                                <!-- <div class="relative">
                                     <Badge
                                         value="1"
                                         severity="info"
@@ -39,7 +39,7 @@
                                             d="M5 18.77v-1h1.616V9.845q0-1.96 1.24-3.447T11 4.546V3h2v1.546q1.904.366 3.144 1.853t1.24 3.447v7.923H19v1zm6.997 2.615q-.668 0-1.14-.475t-.472-1.14h3.23q0 .67-.475 1.142q-.476.472-1.143.472M7.616 17.77h8.769V9.846q0-1.823-1.281-3.104T12 5.462t-3.104 1.28t-1.28 3.104z"
                                         />
                                     </svg>
-                                </div>
+                                </div> -->
 
                                 <Dropdown align="right" width="48">
                                     <template #trigger>
@@ -230,14 +230,17 @@
 import { computed, ref } from "vue";
 import Dropdown from "@/Components/Dropdown.vue";
 import DropdownLink from "@/Components/DropdownLink.vue";
+import Chat from "@/Pages/Chat.vue";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink.vue";
 import { router, usePage } from "@inertiajs/vue3";
 import Menubar from "primevue/menubar";
 import Badge from "primevue/badge";
+import Button from "primevue/button";
+import Dialog from "primevue/dialog";
 
 // Get the current authenticated user
 const user = usePage().props.auth.user;
-
+const isChatOpen = ref(false); // Controls the popup visibility
 // Define menu items for Admin (user_type === 1)
 const adminItems = ref([
     {
@@ -385,6 +388,27 @@ const adminItems = ref([
             },
         ],
     },
+
+    // {
+    //     label: "Truck Registration",
+    //     icon: "pi pi-book",
+    //     items: [
+    //         {
+    //             label: "Registration",
+    //             icon: "pi pi-list",
+    //             command: () => {
+    //                 router.get("/expenses");
+    //             },
+    //         },
+    //         {
+    //             label: "Add Registration",
+    //             icon: "pi pi-plus",
+    //             command: () => {
+    //                 router.get("/registration/create");
+    //             },
+    //         },
+    //     ],
+    // },
     {
         label: "Expenses",
         icon: "pi pi-money-bill",
@@ -405,23 +429,41 @@ const adminItems = ref([
             },
         ],
     },
-    // {
-    //     label: "Report",
-    //     icon: "pi pi-book",
-    //     items: [
-    //         {
-    //             label: "Route Report ",
-    //             icon: "pi pi-list",
-    //             command: () => {
-    //                 router.get("/report");
-    //             },
-    //         },
-    //         {
-    //             label: "Driver Report",
-    //             icon: "pi pi-plus",
-    //         },
-    //     ],
-    // },
+    {
+        label: "Report",
+        icon: "pi pi-book",
+
+        items: [
+            {
+                label: "Route ",
+                icon: "pi pi-folder",
+                command: () => {
+                    router.get("/reports/route");
+                },
+            },
+            {
+                label: "Fuel ",
+                icon: "pi pi-folder",
+                command: () => {
+                    router.get("/reports/fuel");
+                },
+            },
+            {
+                label: "Maintenance ",
+                icon: "pi pi-folder",
+                command: () => {
+                    router.get("/reports/maintenance");
+                },
+            },
+            {
+                label: "Expenses ",
+                icon: "pi pi-folder",
+                command: () => {
+                    router.get("/reports/expenses");
+                },
+            },
+        ],
+    },
 ]);
 
 const driverItems = ref([
@@ -431,11 +473,6 @@ const driverItems = ref([
         command: () => router.get("/dashboard"),
     },
     {
-        label: "My Rides",
-        icon: "pi pi-car",
-        command: () => router.get("/driver/rides"),
-    },
-    {
         label: "My Routes",
         icon: "pi pi-car",
         command: () => router.get("/driver/routes"),
@@ -443,7 +480,7 @@ const driverItems = ref([
     {
         label: "My Profile",
         icon: "pi pi-user",
-        command: () => router.get("/profile/edit"),
+        command: () => router.get("/driver/profile"),
     },
 ]);
 

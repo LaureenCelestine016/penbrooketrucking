@@ -105,28 +105,6 @@
                                 sortable
                                 style="min-width: 8rem"
                             ></Column>
-                            <!-- <Column
-                                field="status"
-                                header="Status"
-                                sortable
-                                style="min-width: 10rem"
-                            >
-                                <template #body="slotProps">
-                                    <Tag
-                                        class="status"
-                                        :value="
-                                            slotProps.data.is_used === '1'
-                                                ? 'Used'
-                                                : 'Unused'
-                                        "
-                                        :severity="
-                                            getStatusLabel(
-                                                slotProps.data.is_used
-                                            )
-                                        "
-                                    />
-                                </template>
-                            </Column> -->
                             <Column
                                 header="Action"
                                 sortable=""

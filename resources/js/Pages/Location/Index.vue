@@ -15,7 +15,7 @@
                         <DataTable
                             ref="dt"
                             v-model:selection="selectedLocation"
-                            :value="location.data"
+                            :value="location"
                             dataKey="id"
                             :paginator="true"
                             :rows="5"
@@ -70,40 +70,11 @@
                                 :exportable="false"
                             ></Column>
                             <Column
-                                field="street"
-                                header="Street"
+                                field="address"
+                                header="Adress"
                                 sortable
                                 style="min-width: 7rem"
                             ></Column>
-                            <Column
-                                field="barangay"
-                                header="Barangay"
-                                sortable
-                                style="min-width: 10rem"
-                            ></Column>
-                            <Column
-                                header="Municipality (City)"
-                                sortable
-                                style="min-width: 10rem"
-                                ><template #body="slotProps">
-                                    {{ slotProps.data.municipality }}
-                                    {{ slotProps.data.city }}
-                                </template>
-                            </Column>
-                            <Column
-                                field="province"
-                                header="Province
-"
-                                sortable
-                                style="min-width: 10rem"
-                            ></Column>
-                            <Column
-                                field="region"
-                                header="Region"
-                                sortable
-                                style="min-width: 10rem"
-                            >
-                            </Column>
 
                             <Column
                                 header="Action"
@@ -112,18 +83,18 @@
                                 style="min-width: 5rem"
                             >
                                 <template #body="slotProps">
-                                    <Link> </Link>
-                                    <Button
+                                    <!-- <Button
                                         icon="pi pi-pencil"
                                         outlined
                                         rounded
                                         class="mr-2"
                                         @click="editLocation(slotProps.data)"
-                                    />
+                                    /> -->
                                     <Button
                                         icon="pi pi-trash"
                                         outlined
                                         rounded
+                                        class="ml-2"
                                         severity="danger"
                                         @click="
                                             confirmDeleteLocation(

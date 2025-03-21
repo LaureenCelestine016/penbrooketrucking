@@ -8,6 +8,8 @@ use App\Models\Vehicle;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+
 
 class FuelRecordController extends Controller
 {
@@ -20,6 +22,8 @@ class FuelRecordController extends Controller
         $fuel = Fuel_record::with('vehicle')->orderBy('created_at','desc')->get();
 
         return Inertia::render('Fuel/Index', ['fuels' => $fuel]);
+
+
     }
 
     /**
@@ -28,15 +32,7 @@ class FuelRecordController extends Controller
     public function create()
     {
 
-        return Inertia::render('Fuel/Create',["tructor" => Expenses::whereHas('tructor', function ($query) {
-            $query->where('status', 'Operational');
-        })
-        ->with(['tructor' => function ($query) {
-            $query->orderBy('created_at', 'desc');
-        }])
-        ->where('category_id', 3)
-        ->orderBy('created_at', 'desc')
-        ->get()]);
+        return Inertia::render('Fuel/Create',["tractor" => Vehicle::where('status', 'Operational')->get(['id','license_plate'])]);
     }
 
     /**
@@ -44,7 +40,6 @@ class FuelRecordController extends Controller
      */
     public function store(Request $request)
     {
-
         $validatedData = $request->validate([
             'vehicleId'         => 'required|integer|exists:vehicles,id',
             'liters'            => 'required|numeric|min:1',
@@ -54,17 +49,33 @@ class FuelRecordController extends Controller
         ]);
 
         $validatedData['cost'] = round($validatedData['cost'], 2);
-        $validatedData['refuelingDate'] = Carbon::parse($validatedData['refuelingDate'])->format('Y-m-d H:i:s');
 
-        Fuel_record::create([
-            'vehicle_id'           => $validatedData['vehicleId'],
-            'liters'               => $validatedData['liters'],
-            'cost'                 => $validatedData['cost'],
-            'refueling_date'       => $validatedData['refuelingDate'],
-            'fuel_type'            => $validatedData['fuel_type'],
+        try{
+            DB::transaction(function () use ($validatedData, $request) {
+                $fuel = Fuel_record::create([
+                    'vehicle_id'           => $validatedData['vehicleId'],
+                    'liters'               => $validatedData['liters'],
+                    'cost'                 => $validatedData['cost'],
+                    'refueling_date'       => $validatedData['refuelingDate'],
+                    'fuel_type'            => $validatedData['fuel_type'],
+                ]);
+
+                Expenses::create([
+                    'fuel_id'                   => $fuel->id,
+                    'vehicle_id'                => $validatedData['vehicleId'],
+                    'category_id'               => 3,
+                    'amount'                    => $validatedData['cost'],
+                    'description'               => $validatedData['fuel_type'],
+                    'expense_date'              => $validatedData['refuelingDate'],
+
+                ]);
+            });
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+        }
 
 
-        ]);
+
 
         return redirect()->route('fuel')->with('success', 'Fuel created successfully!');
     }

@@ -3,9 +3,12 @@
     <div class="w-full h-16 border-b bg-navyblue">
         <div v-if="canLogin" class="flex h-full mx-12">
             <div class="flex h-full items-center">
-                <h2 class="text-2xl font-bold tracking-widest text-blue-100">
+                <Link
+                    :href="route('welcome')"
+                    class="text-2xl font-bold tracking-widest text-blue-100"
+                >
                     Penbrooke Inc.
-                </h2>
+                </Link>
             </div>
             <div class="grow h-100"></div>
             <div class="flex gap-3 items-center flex-none h-full">
@@ -24,26 +27,24 @@
                 <h1
                     class="text-3xl lg:text-5xl font-bold text-surface-900 dark:text-surface-0 mb-4 lg:leading-normal text-center lg:text-left"
                 >
-                    Create the screens your <br /><span class="text-primary"
-                        >visitors deserve to see</span
-                    >
+                    Welcome to Penbrooke Inc. <br /><span
+                        class="text-primary"
+                    ></span>
                 </h1>
                 <p
                     class="text-surface-700 dark:text-surface-200 leading-normal mb-8 text-center lg:text-left"
                 >
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    do eiusmod tempor incididunt ut labore et dolore magna
-                    aliqua.
+                    Your trusted partner in efficient truck fleet management. We
+                    provide real-time tracking, seemless maintenance management.
                 </p>
                 <div
                     class="flex items-center justify-center lg:justify-start gap-6"
                 >
-                    <Button label="Log in" type="button" @click="Login" />
                     <Button
-                        label="Register"
+                        label="Let's Started"
                         type="button"
-                        outlined
-                        @click="Register"
+                        @click="Login"
+                        class="w-[200px]"
                     />
                 </div>
             </div>
@@ -113,19 +114,12 @@ defineProps({
 const Login = () => {
     router.get(route("login"));
 };
-
-const Register = () => {
-    router.get(route("register"));
-};
 </script>
 
 <style scoped>
 .img {
     width: 80px;
     background: none;
-}
-
-.form--container {
 }
 </style>
 

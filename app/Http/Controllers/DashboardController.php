@@ -8,6 +8,7 @@ use App\Models\Notification;
 use App\Models\Maintenance_task;
 use App\Models\Fuel_record;
 use App\Models\Trailer;
+use App\Models\User;
 use App\Models\Driver;
 use App\Models\Expenses;
 use Illuminate\Http\Request;
@@ -24,19 +25,23 @@ class DashboardController extends Controller
         $user = Auth::user();
 
             if($user->user_type == 1) {
-                $truck = Vehicle::count();
+                $trucks = collect([Vehicle::class, Trailer::class])
+                ->sum(fn($model) => $model::count());
+
+                $operationalCount = collect([Vehicle::class, Trailer::class])
+                ->sum(fn($model) => $model::where('status', 'Operational')->count());
+
+                $nonOperationalCount = collect([Vehicle::class, Trailer::class])
+                ->sum(fn($model) => $model::where('status', 'Non-Operational')->count());
+
+                $maintenance = collect([Vehicle::class, Trailer::class])
+                ->sum(fn($model) => $model::where('status', 'Maintenance')->count());
 
                 $driver = Driver::count();
 
                 $fuelTotal = Fuel_record::sum('cost');
 
                 $maintenanceTotal = Maintenance_task::sum('total');
-
-                $operationalCount = Vehicle::where('status', 'Operational')->count();
-
-                $nonOperationalCount = Vehicle::where('status',  'Non-Operational')->count();
-
-                $maintenance = Vehicle::where('status', 'Maintenance')->count();
 
                 $fuelConsumption = Vehicle::with('fuelRecords')
                 ->get()
@@ -47,6 +52,7 @@ class DashboardController extends Controller
                         'total_cost' => $vehicle->fuelRecords->sum('cost'),
                     ];
                 });
+
 
                 $maintenanceCosts = [
                     'vehicles' => Vehicle::with('maintenanceTasks')
@@ -86,8 +92,12 @@ class DashboardController extends Controller
                     ];
                 });
 
+                $notifications = Notification::with('vehicle','trailer' )->where('status', 'pending')->orderBy('reported_at', 'desc')->get();
+
+                $drivers = User::where('user_type', 0)->get();
+
                 return Inertia::render('Dashboard', [
-                    'truck' => $truck,
+                    'truck' => $trucks,
                     'driver' => $driver,
                     'fuelTotal' => $fuelTotal,
                     'maintenanceTotal' => $maintenanceTotal,
@@ -96,41 +106,43 @@ class DashboardController extends Controller
                     'maintenance' => $maintenance,
                     'fuelConsumption' => $fuelConsumption,
                     'vehicleMaintenanceCosts' => $maintenanceCosts,
-                    'monthlyExpenses' => $monthlyExpenses
+                    'monthlyExpenses' => $monthlyExpenses,
+                    'notification' => $notifications,
+                    'drivers'  => $drivers
                 ]);
 
             } else {
                 $driverId = $user->driver_id;
 
-                $assignedRides = Route::where('driver_id', $driverId)->count();
+                $assignedRides = Route::where('driver_id', $driverId)->where('status', 'Yet to start')->count();
                 $ongoingRides = Route::where('driver_id', $driverId)
                     ->where('status', 'Ongoing')
                     ->count();
                 $completedRides = Route::where('driver_id', $driverId)
                     ->where('status', 'Completed')
                     ->count();
-                $nextRide = Route::with('startLocation','endLocation')->where('driver_id', $driverId)
-                    ->where('status', 'Yet to start')
-                    ->orderBy('start_date', 'asc')
-                    ->first();
+                $cancelledRide = Route::with('startLocation','endLocation')->where('driver_id', $driverId)
+                    ->where('status', 'Cancelled')->count();
 
+                $driverTruckUsed = Route::with('vehicle', 'trailer', 'startLocation', 'endLocation')
+                    ->where('driver_id', $driverId)->where('status','Completed') // Filter by driver_id
+                    ->get();
 
-
-                $pendingNotifications = Notification::where('driver_id', $driverId)
-                    ->where('status', 'pending')
-                    ->count();
+                // $pendingNotifications = Notification::where('driver_id', $driverId)
+                //     ->where('status', 'pending')
+                //     ->count();
 
                 return Inertia::render('Dashboard', [
                     'assignedRides'       => $assignedRides,
                     'ongoingRides'        => $ongoingRides,
                     'completedRides'      => $completedRides,
-                    'nextRide'            => $nextRide ,
-                    'pendingNotifications'=> $pendingNotifications,
+                    'cancelledRide'       => $cancelledRide ,
+                    'driverTruckUsed'     => $driverTruckUsed
+                    // 'pendingNotifications'=> $pendingNotifications,
                 ]);
 
             }
         }
 
+    }
 
-
-}

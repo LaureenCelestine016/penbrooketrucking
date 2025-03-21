@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Carbon\Carbon;
 
 class Trailer extends Model
 {
@@ -18,16 +19,27 @@ class Trailer extends Model
         'status',
         'calibration_date',
         'calibration_exp_date',
+        'calibration_is_Expired',
         'lto_reg_date',
         'lto_exp_date',
-        'conveyance_date',
-        'conveyance_exp_date',
-        'filcom_fab_date',
-        'filcon_exp_date',
-        'ltfrb_reg_date',
-        'ltfrb_exp_date',
+        'lto_is_Expired',
         'image'
      ];
+
+     protected static function boot()
+     {
+         parent::boot();
+
+         static::updating(function ($trailer) {
+             // Get current date
+             $now = Carbon::now();
+
+             // Update expiration statuses based on current date
+             $trailer->lto_is_Expired = $now->gt($trailer->lto_exp_date) ? 1 : 0;
+             $trailer->calibration_is_Expired = $now->gt($trailer->calibration_exp_date) ? 1 : 0;
+
+         });
+     }
 
     public function routes()
     {
