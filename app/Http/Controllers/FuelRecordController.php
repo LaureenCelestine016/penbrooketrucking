@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Driver;
 use App\Models\Expenses;
 use App\Models\Fuel_record;
 use App\Models\Vehicle;
@@ -32,7 +33,9 @@ class FuelRecordController extends Controller
     public function create()
     {
 
-        return Inertia::render('Fuel/Create',["tractor" => Vehicle::where('status', 'Operational')->get(['id','license_plate'])]);
+        return Inertia::render('Fuel/Create',["tractor" => Vehicle::where('status', 'Operational')->get(['id','license_plate']),
+        "driver" => Driver::where('status','active')->get(),
+        ]);
     }
 
     /**

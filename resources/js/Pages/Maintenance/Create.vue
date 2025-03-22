@@ -241,11 +241,12 @@
                                         name="total"
                                         class="flex flex-col gap-1"
                                     >
-                                        <InputText
-                                            id="total"
-                                            type="text"
-                                            placeholder="Total"
+                                        <InputNumber
                                             v-model="form.total"
+                                            placeholder="Total"
+                                            mode="currency"
+                                            currency="PHP"
+                                            class="w-full"
                                         />
                                         <Message
                                             v-if="form.errors.vehicleId"

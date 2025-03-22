@@ -24,8 +24,8 @@
                                     <label
                                         for="tractor"
                                         class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                        >Tractor Head<span
-                                            class="ml-1 text-red-400"
+                                        >Truck
+                                        <span class="ml-1 text-red-400"
                                             >*</span
                                         ></label
                                     >
@@ -42,7 +42,7 @@
                                             @item-select="onTractorSelect"
                                             optionLabel="license_plate"
                                             dropdown
-                                            placeholder="Tractor name"
+                                            placeholder="Truck name"
                                         />
                                         <Message
                                             severity="error"
@@ -54,24 +54,26 @@
                                 </div>
                                 <div class="w-full">
                                     <label
-                                        for="address"
+                                        for="driver"
                                         class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                        >Quantity<span class="ml-1 text-red-400"
+                                        >Driver<span class="ml-1 text-red-400"
                                             >*</span
-                                        ><span class="text-xs font-thin"
-                                            >(Liters)</span
                                         ></label
                                     >
                                     <FormField
-                                        id="engine_number"
-                                        name="engine_number"
+                                        id="driver"
+                                        name="driver"
                                         class="flex flex-col gap-1"
                                     >
-                                        <InputText
-                                            id="engine_number"
-                                            type="text"
-                                            v-model="form.liters"
-                                            placeholder="Quantity"
+                                        <AutoComplete
+                                            id="driver"
+                                            class="w-full"
+                                            :suggestions="driverName"
+                                            @complete="driverNameSearch"
+                                            @item-select="onDriverSelect"
+                                            optionLabel="display"
+                                            dropdown
+                                            placeholder="Driver name"
                                         />
                                         <Message
                                             severity="error"
@@ -85,53 +87,49 @@
                             <div class="grid grid-cols-2 gap-10 mb-5">
                                 <div class="w-full">
                                     <label
-                                        for="cost"
+                                        for="c-odometer"
                                         class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                        >Cost<span class="ml-1 text-red-400"
-                                            >*</span
-                                        ></label
-                                    >
-                                    <FormField
-                                        id="cost"
-                                        name="cost"
-                                        class="flex flex-col gap-1"
-                                    >
-                                        <InputText
-                                            id="cost"
-                                            type="text"
-                                            v-model="form.cost"
-                                            placeholder="Cost"
-                                        />
-                                        <Message
-                                            severity="error"
-                                            size="small"
-                                            variant="simple"
-                                            >{{
-                                        }}</Message>
-                                    </FormField>
-                                </div>
-                                <div class="w-full">
-                                    <label
-                                        for="vehicle_name"
-                                        class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                        >Fuel Type<span
+                                        >Current Odometer<span
                                             class="ml-1 text-red-400"
                                             >*</span
                                         ></label
                                     >
                                     <FormField
-                                        id="vehicle_name"
-                                        name="vehicle_name"
+                                        id="c-odometer"
+                                        name="c-odometer"
                                         class="flex flex-col gap-1"
                                     >
-                                        <AutoComplete
-                                            id="vehicle_name"
+                                        <InputNumber
+                                            v-model="form.curr_odometer"
+                                            placeholder="Current Odometer"
                                             class="w-full"
-                                            :suggestions="fuelName"
-                                            @complete="fuelNameSearch"
-                                            v-model="form.fuel_type"
-                                            dropdown
-                                            placeholder="Type"
+                                        />
+                                        <Message
+                                            severity="error"
+                                            size="small"
+                                            variant="simple"
+                                            >{{
+                                        }}</Message>
+                                    </FormField>
+                                </div>
+                                <div class="w-full">
+                                    <label
+                                        for="p_odometer"
+                                        class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                        >Previous Odometer<span
+                                            class="ml-1 text-red-400"
+                                            >*</span
+                                        ></label
+                                    >
+                                    <FormField
+                                        id="p_odometer"
+                                        name="p_odometer"
+                                        class="flex flex-col gap-1"
+                                    >
+                                        <InputNumber
+                                            v-model="form.prev_odometer"
+                                            placeholder="Previous Odometer"
+                                            class="w-full"
                                         />
                                         <Message
                                             severity="error"
@@ -142,32 +140,55 @@
                                     </FormField>
                                 </div>
                             </div>
-                            <div class="mb-2">
+                            <div class="grid grid-cols-2 gap-10 mb-5">
                                 <div class="w-full">
                                     <label
-                                        for="birthday"
+                                        for="t-distance"
                                         class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                        >Refueling Date<span
+                                        >Total Distance<span
                                             class="ml-1 text-red-400"
                                             >*</span
-                                        >
-                                    </label>
+                                        ></label
+                                    >
                                     <FormField
-                                        id="birthday"
-                                        name="birthday"
+                                        id="t-distance"
+                                        name="t-distance"
                                         class="flex flex-col gap-1"
                                     >
-                                        <div class="flex-auto">
-                                            <DatePicker
-                                                id="birthday"
-                                                showIcon
-                                                fluid
-                                                v-model="form.refuelingDate"
-                                                :showOnFocus="false"
-                                                inputId="birthday"
-                                                placeholder="Refueling Date"
-                                            />
-                                        </div>
+                                        <InputNumber
+                                            v-model="form.curr_odometer"
+                                            placeholder="Total Distance"
+                                            class="w-full"
+                                        />
+                                        <Message
+                                            severity="error"
+                                            size="small"
+                                            variant="simple"
+                                            >{{
+                                        }}</Message>
+                                    </FormField>
+                                </div>
+                                <div class="w-full">
+                                    <label
+                                        for="t_refuel"
+                                        class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                        >Total Refuel<span
+                                            class="ml-1 text-red-400"
+                                            >*</span
+                                        ><span class="text-xs font-thin"
+                                            >(Liter)</span
+                                        ></label
+                                    >
+                                    <FormField
+                                        id="t_refuel"
+                                        name="t_refuel"
+                                        class="flex flex-col gap-1"
+                                    >
+                                        <InputNumber
+                                            v-model="form.prev_odometer"
+                                            placeholder="Total Refuel"
+                                            class="w-full"
+                                        />
                                         <Message
                                             severity="error"
                                             size="small"
@@ -177,6 +198,120 @@
                                     </FormField>
                                 </div>
                             </div>
+                            <div class="grid grid-cols-2 gap-10 mb-5">
+                                <div class="w-full">
+                                    <label
+                                        for="avg_fuel"
+                                        class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                        >Avg. Fuel Consumption<span
+                                            class="ml-1 text-red-400"
+                                            >*</span
+                                        ><span class="text-xs font-thin"
+                                            >(Kilometer / Liter)</span
+                                        ></label
+                                    >
+                                    <FormField
+                                        id="avg_fuel"
+                                        name="avg_fuel"
+                                        class="flex flex-col gap-1"
+                                    >
+                                        <InputNumber
+                                            v-model="form.curr_odometer"
+                                            placeholder="Avg. Fuel"
+                                            class="w-full"
+                                        />
+                                        <Message
+                                            severity="error"
+                                            size="small"
+                                            variant="simple"
+                                            >{{
+                                        }}</Message>
+                                    </FormField>
+                                </div>
+                                <div class="w-full">
+                                    <label
+                                        for="t_refuel"
+                                        class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                        >Amount<span class="ml-1 text-red-400"
+                                            >*</span
+                                        ></label
+                                    >
+                                    <FormField
+                                        id="t_refuel"
+                                        name="t_refuel"
+                                        class="flex flex-col gap-1"
+                                    >
+                                        <InputNumber
+                                            v-model="form.prev_odometer"
+                                            placeholder="Amount"
+                                            class="w-full"
+                                        />
+                                        <Message
+                                            severity="error"
+                                            size="small"
+                                            variant="simple"
+                                            >{{
+                                        }}</Message>
+                                    </FormField>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-10 mb-5">
+                                <div class="w-full">
+                                    <label
+                                        for="station"
+                                        class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                        >Station<span class="ml-1 text-red-400"
+                                            >*</span
+                                        ></label
+                                    >
+                                    <FormField
+                                        id="station"
+                                        name="station"
+                                        class="flex flex-col gap-1"
+                                    >
+                                        <InputNumber
+                                            v-model="form.curr_odometer"
+                                            placeholder="Station"
+                                            class="w-full"
+                                        />
+                                        <Message
+                                            severity="error"
+                                            size="small"
+                                            variant="simple"
+                                            >{{
+                                        }}</Message>
+                                    </FormField>
+                                </div>
+                                <div class="w-full">
+                                    <label
+                                        for="remarks"
+                                        class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                        >Remarks<span class="ml-1 text-red-400"
+                                            >*</span
+                                        ></label
+                                    >
+                                    <FormField
+                                        id="remarks"
+                                        name="remarks"
+                                        class="flex flex-col gap-1"
+                                    >
+                                        <Textarea
+                                            v-model="form.address"
+                                            variant="filled"
+                                            rows="3"
+                                            cols="30"
+                                            placeholder="Remarks"
+                                        />
+                                        <Message
+                                            severity="error"
+                                            size="small"
+                                            variant="simple"
+                                            >{{
+                                        }}</Message>
+                                    </FormField>
+                                </div>
+                            </div>
+
                             <!-- <div class="w-full">
                                 <label
                                     for="image_upload"
@@ -228,14 +363,19 @@ import InputText from "primevue/inputtext";
 import AutoComplete from "primevue/autocomplete";
 import DatePicker from "primevue/datepicker";
 import Toast from "primevue/toast";
-import FileUpload from "primevue/fileupload";
+import InputNumber from "primevue/inputnumber";
+import Textarea from "primevue/textarea";
 
 const toast = useToast();
-const fuelName = ref([]);
 const tractorName = ref([]);
+const driverName = ref([]);
 
 const props = defineProps({
     tractor: {
+        type: Array,
+        required: true,
+    },
+    driver: {
         type: Array,
         required: true,
     },
@@ -243,6 +383,7 @@ const props = defineProps({
 
 const form = useForm({
     vehicleId: "",
+    driverId: "",
     liters: "",
     cost: "",
     fuel_type: "",
@@ -270,29 +411,30 @@ const submit = () => {
     });
 };
 
-const fuelNameSearch = () => {
-    fuelName.value = [
-        "Diesel",
-        "Gasoline",
-        "Ethanol",
-        "Biodiesel",
-        "Hydrogen",
-        "Methanol",
-        "Natural Gas",
-    ];
-};
-
 const tractorNameSearch = () => {
     tractorName.value = props.tractor.map((tr) => ({
         id: tr.id,
         license_plate: tr.license_plate,
     }));
-
-    console.log(tractorName.value);
 };
 
 const onTractorSelect = (event) => {
     form.vehicleId = event.value.id;
+};
+
+const driverNameSearch = () => {
+    driverName.value = props.driver.map((dr) => ({
+        id: dr.id,
+        firstName: dr.first_name,
+        lastName: dr.last_name,
+        display: `${dr.first_name} ${dr.last_name}`,
+    }));
+
+    console.log(driverName.value);
+};
+
+const onDriverSelect = (event) => {
+    form.driverId = event.value.id;
 };
 
 watch(

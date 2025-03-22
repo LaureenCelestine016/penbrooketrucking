@@ -102,6 +102,9 @@
                                             <div
                                                 class="text-surface-900 dark:text-surface-0 font-medium !text-2xl"
                                             >
+                                                <span class="text-gray-600"
+                                                    >₱</span
+                                                >
                                                 {{ props.fuelTotal || 0 }}
                                             </div>
                                         </div>
@@ -139,6 +142,9 @@
                                             <div
                                                 class="text-surface-900 dark:text-surface-0 font-medium !text-2xl"
                                             >
+                                                <span class="text-gray-600"
+                                                    >₱</span
+                                                >
                                                 {{
                                                     props.maintenanceTotal || 0
                                                 }}

@@ -46,7 +46,7 @@
                         >{{ form.errors.password }}</Message
                     >
 
-                    <div class="flex justify-between items-center mb-4">
+                    <div class="flex justify-between items-center mb-4 mt-4">
                         <div class="flex items-center">
                             <Checkbox
                                 v-model="checked1"
@@ -67,12 +67,12 @@
                     />
                 </form>
 
-                <p class="text-center mt-4 text-gray-600">
+                <!-- <p class="text-center mt-4 text-gray-600">
                     Don't have an account?
                     <a href="#" class="text-primary font-semibold"
                         >Create one</a
                     >
-                </p>
+                </p> -->
             </div>
 
             <!-- Right Section with Gradient Animation -->
@@ -103,15 +103,12 @@
 
 <script setup>
 import { Head, Link, useForm } from "@inertiajs/vue3";
-import { onMounted, ref } from "vue";
-import L from "leaflet";
 
-import Toast from "primevue/toast";
 import { useToast } from "primevue/usetoast";
 import Message from "primevue/message";
-import Password from "primevue/password";
 import Button from "primevue/button";
 import InputText from "primevue/inputtext";
+import Checkbox from "primevue/checkbox";
 
 defineProps({
     canResetPassword: {
@@ -123,7 +120,6 @@ defineProps({
 });
 
 const toast = useToast();
-
 const form = useForm({
     login: "",
     password: "",
@@ -152,43 +148,6 @@ const submit = () => {
         onFinish: () => form.reset("password"),
     });
 };
-
-const location = () => {
-    const map = ref(null);
-
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            function (position) {
-                const { latitude } = position.coords;
-                const { longitude } = position.coords;
-
-                // const coords = [latitude, longitude];
-                const coords = [latitude, longitude];
-
-                // Initialize the map
-                map.value = L.map("map").setView(coords, 13);
-
-                // Add a tile layer to the map
-                L.tileLayer(
-                    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                ).addTo(map.value);
-
-                // Add a marker to the map
-                L.marker(coords)
-                    .addTo(map.value)
-                    .bindPopup("You are here!")
-                    .openPopup();
-            },
-            function () {
-                alert(`Could not get your position`);
-            }
-        );
-    }
-};
-
-onMounted(() => {
-    location();
-});
 </script>
 <style scoped>
 .form {
