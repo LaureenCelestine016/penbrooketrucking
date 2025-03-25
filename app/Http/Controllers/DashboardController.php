@@ -39,19 +39,19 @@ class DashboardController extends Controller
 
                 $driver = Driver::count();
 
-                $fuelTotal = Fuel_record::sum('cost');
+                // $fuelTotal = Fuel_record::sum('cost');
 
                 $maintenanceTotal = Maintenance_task::sum('total');
 
-                $fuelConsumption = Vehicle::with('fuelRecords')
-                ->get()
-                ->map(function ($vehicle) {
-                    return [
-                        'name' => $vehicle->model, // Change to your actual vehicle name column
-                        'total_fuel' => $vehicle->fuelRecords->sum('liters'),
-                        'total_cost' => $vehicle->fuelRecords->sum('cost'),
-                    ];
-                });
+                // $fuelConsumption = Vehicle::with('fuelRecords')
+                // ->get()
+                // ->map(function ($vehicle) {
+                //     return [
+                //         'name' => $vehicle->model, // Change to your actual vehicle name column
+                //         'total_fuel' => $vehicle->fuelRecords->sum('liters'),
+                //         'total_cost' => $vehicle->fuelRecords->sum('cost'),
+                //     ];
+                // });
 
 
                 $maintenanceCosts = [
@@ -99,12 +99,12 @@ class DashboardController extends Controller
                 return Inertia::render('Dashboard', [
                     'truck' => $trucks,
                     'driver' => $driver,
-                    'fuelTotal' => $fuelTotal,
+                    // 'fuelTotal' => $fuelTotal,
                     'maintenanceTotal' => $maintenanceTotal,
                     'operationalCount' => $operationalCount,
                     'nonOperationalCount' => $nonOperationalCount,
                     'maintenance' => $maintenance,
-                    'fuelConsumption' => $fuelConsumption,
+                    // 'fuelConsumption' => $fuelConsumption,
                     'vehicleMaintenanceCosts' => $maintenanceCosts,
                     'monthlyExpenses' => $monthlyExpenses,
                     'notification' => $notifications,

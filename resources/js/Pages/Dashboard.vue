@@ -738,16 +738,16 @@ if (isAdmin) {
             },
         };
 
-        const fuelLabels = props.fuelConsumption.map((item) => item.name);
-        const fuelValues = props.fuelConsumption.map((item) => item.total_cost);
+        // const fuelLabels = props.fuelConsumption.map((item) => item.name);
+        // const fuelValues = props.fuelConsumption.map((item) => item.total_cost);
 
         fuelChartData.value = {
-            labels: fuelLabels,
+            // labels: fuelLabels,
             datasets: [
                 {
                     label: "Fuel Efficiency (L/km)",
                     borderColor: "#FFA500",
-                    data: fuelValues,
+                    // data: fuelValues,
                     fill: false,
                 },
             ],

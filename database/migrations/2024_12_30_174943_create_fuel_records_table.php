@@ -23,6 +23,7 @@ return new class extends Migration
             $table->integer('avg_fuel_consumption');
             $table->decimal('amount', 10, 2);
             $table->string('station');
+            $table->string('remarks')->nullable();
             $table->date('refueling_date');
             $table->string('is_used')->default(0);
             $table->timestamps();

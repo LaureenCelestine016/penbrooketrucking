@@ -34,9 +34,16 @@ class Trailer extends Model
              // Get current date
              $now = Carbon::now();
 
-             // Update expiration statuses based on current date
-             $trailer->lto_is_Expired = $now->gt($trailer->lto_exp_date) ? 1 : 0;
-             $trailer->calibration_is_Expired = $now->gt($trailer->calibration_exp_date) ? 1 : 0;
+            if ($trailer->lto_is_Expired === 1) {
+                $trailer->lto_is_Expired = $now->gt(Carbon::parse($trailer->lto_exp_date)) ? 1 : 0;
+            }
+
+            if ($trailer->calibration_is_Expired === 1) {
+                $trailer->calibration_is_Expired = $now->gt(Carbon::parse($trailer->calibration_exp_date)) ? 1 : 0;
+            }
+
+
+
 
          });
      }

@@ -20,9 +20,11 @@ class FuelRecordController extends Controller
     public function index()
     {
 
-        $fuel = Fuel_record::with('vehicle')->orderBy('created_at','desc')->get();
-
-        return Inertia::render('Fuel/Index', ['fuels' => $fuel]);
+        return Inertia::render('Fuel/Index', [
+            'fuels' => Fuel_record::with('vehicle','driver')->orderBy('created_at','desc')->get(),
+            'tractor' => Vehicle::orderBy('created_at','desc')->get(),
+            'drivers' => Driver::where('status','active')->orderBy('created_at','desc')->get(),
+        ]);
 
 
     }
@@ -43,33 +45,46 @@ class FuelRecordController extends Controller
      */
     public function store(Request $request)
     {
+
         $validatedData = $request->validate([
             'vehicleId'         => 'required|integer|exists:vehicles,id',
+            'driverId'          => 'required|integer|exists:drivers,id',
+            'curr_odometer'     => 'required|numeric|min:1',
+            'prev_odometer'     => 'required|numeric|min:1',
+            'total_distance'    => 'required|numeric|min:1',
             'liters'            => 'required|numeric|min:1',
-            'cost'              => 'required|numeric|min:0',
-            'fuel_type'         => 'required|string',
-            'refuelingDate'     => 'required|date',
+            'avg_fuel'          => 'required|numeric|min:0',
+            'amount'            => 'required|numeric|min:0',
+            'station'           => 'required|string',
+            'date_refilled'     => 'required|date',
+            'remarks'           => 'required|string',
         ]);
 
-        $validatedData['cost'] = round($validatedData['cost'], 2);
+        $validatedData['amount'] = round($validatedData['amount'], 2);
 
         try{
             DB::transaction(function () use ($validatedData, $request) {
                 $fuel = Fuel_record::create([
-                    'vehicle_id'           => $validatedData['vehicleId'],
-                    'liters'               => $validatedData['liters'],
-                    'cost'                 => $validatedData['cost'],
-                    'refueling_date'       => $validatedData['refuelingDate'],
-                    'fuel_type'            => $validatedData['fuel_type'],
+                    'vehicle_id'               => $validatedData['vehicleId'],
+                    'driver_id'                => $validatedData['driverId'],
+                    'current_odometer'         => $validatedData['curr_odometer'],
+                    'previous_odometer'        => $validatedData['prev_odometer'],
+                    'total_distance'           => $validatedData['total_distance'],
+                    'total_refuel'             => $validatedData['liters'],
+                    'avg_fuel_consumption'     => $validatedData['avg_fuel'],
+                    'amount'                   => $validatedData['amount'],
+                    'station'                  => $validatedData['station'],
+                    'remarks'                  => $validatedData['remarks'],
+                    'refueling_date'           => $validatedData['date_refilled'],
                 ]);
 
                 Expenses::create([
                     'fuel_id'                   => $fuel->id,
                     'vehicle_id'                => $validatedData['vehicleId'],
                     'category_id'               => 3,
-                    'amount'                    => $validatedData['cost'],
-                    'description'               => $validatedData['fuel_type'],
-                    'expense_date'              => $validatedData['refuelingDate'],
+                    'amount'                    => $validatedData['amount'],
+                    'description'               => $validatedData['remarks'],
+                    'expense_date'              => $validatedData['date_refilled'],
 
                 ]);
             });
@@ -104,7 +119,36 @@ class FuelRecordController extends Controller
      */
     public function update(Request $request, Fuel_record $fuel_record)
     {
-        //
+
+        $request->validate([
+            'vehicleId'             => 'required|integer|exists:vehicles,id',
+            'driverId'              => 'required|integer|exists:drivers,id',
+            'current_odometer'      => 'required|numeric|min:1',
+            'previous_odometer'     => 'required|numeric|min:1',
+            'total_distance'        => 'required|numeric|min:1',
+            'total_refuel'          => 'required|numeric|min:1',
+            'avg_fuel_consumption'  => 'required|numeric|min:0',
+            'amount'                => 'required|numeric|min:0',
+            'station'               => 'required|string',
+            'refueling_date'        => 'required|date',
+            'remarks'               => 'required|string',
+        ]);
+
+        $fuel_record->update([
+            'vehicle_id'            => $request->vehicleId,
+            'driver_id'             => $request->driverId,
+            'current_odometer'      => $request->current_odometer,
+            'previous_odometer'     => $request->previous_odometer,
+            'total_distance'        => $request->total_distance,
+            'total_refuel'          => $request->total_refuel,
+            'avg_fuel_consumption'  => $request->avg_fuel_consumption,
+            'amount'                => $request->amount,
+            'station'               => $request->station,
+            'refueling_date'        => $request->refueling_date,
+            'remarks'               => $request->remarks,
+        ]);
+
+        return redirect()->route('fuel', $fuel_record)->with('success', 'Fuel record updated successfully!');
     }
 
     /**

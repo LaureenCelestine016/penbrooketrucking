@@ -12,23 +12,30 @@ class Fuel_record extends Model
 
     protected $dates = ['deleted_at'];
 
-
     protected $table = 'fuel_records';
 
     protected $fillable = [
         'vehicle_id',
-        'liters',
-        'cost',
+        'driver_id',
+        'current_odometer',
+        'previous_odometer',
+        'total_distance',
+        'total_refuel',
+        'avg_fuel_consumption',
+        'amount',
+        'station',
+        'remarks',
         'refueling_date',
-        'fuel_type',
-        'is_used',
-        'image',
-        'type'
+        'is_used'
     ];
 
     public function vehicle()
     {
         return $this->belongsTo(Vehicle::class);
+    }
+    public function driver()
+    {
+        return $this->belongsTo(Driver::class);
     }
 
     public function routes()

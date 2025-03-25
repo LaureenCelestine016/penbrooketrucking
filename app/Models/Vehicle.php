@@ -40,28 +40,28 @@ class Vehicle extends Model
        'image'
     ];
 
-    // protected static function boot()
-    // {
-    // parent::boot();
+    protected static function boot()
+    {
+    parent::boot();
 
-    // static::updating(function ($vehicle) {
-    //     $now = Carbon::now();
+    static::updating(function ($vehicle) {
+        $now = Carbon::now();
 
-    //     // Only update to 1 if it's not already 1
-    //     if ($vehicle->lto_is_Expired === 1) {
-    //         $vehicle->lto_is_Expired = $now->gt(Carbon::parse($vehicle->lto_exp_date)) ? 1 : 0;
-    //     }
-    //     if ($vehicle->conveyance_is_Expired === 0) {
-    //         $vehicle->conveyance_is_Expired = $now->gt(Carbon::parse($vehicle->conveyance_exp_date)) ? 1 : 0;
-    //     }
-    //     if ($vehicle->filcon_is_Expired === 0) {
-    //         $vehicle->filcon_is_Expired = $now->gt(Carbon::parse($vehicle->filcon_exp_date)) ? 1 : 0;
-    //     }
-    //     if ($vehicle->ltfrb_is_Expired === 0) {
-    //         $vehicle->ltfrb_is_Expired = $now->gt(Carbon::parse($vehicle->ltfrb_exp_date)) ? 1 : 0;
-    //     }
-    // });
-    // }
+        // Only update to 1 if it's not already 1
+        if ($vehicle->lto_is_Expired === 1) {
+            $vehicle->lto_is_Expired = $now->gt(Carbon::parse($vehicle->lto_exp_date)) ? 1 : 0;
+        }
+        if ($vehicle->conveyance_is_Expired === 1) {
+            $vehicle->conveyance_is_Expired = $now->gt(Carbon::parse($vehicle->conveyance_exp_date)) ? 1 : 0;
+        }
+        if ($vehicle->filcon_is_Expired === 1) {
+            $vehicle->filcon_is_Expired = $now->gt(Carbon::parse($vehicle->filcon_exp_date)) ? 1 : 0;
+        }
+        if ($vehicle->ltfrb_is_Expired === 1) {
+            $vehicle->ltfrb_is_Expired = $now->gt(Carbon::parse($vehicle->ltfrb_exp_date)) ? 1 : 0;
+        }
+    });
+    }
 
 
     public function gpsTrackers()
