@@ -23,18 +23,20 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
-//User
-Route::get('/login', function () {
-    return Inertia::render('Login', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-})->name('login');
+// User login route with redirection if authenticated and cache control headers.
+Route::middleware(['guest'])->group(function () {
+    Route::get('/login', function () {
+        return Inertia::render('Login', [
+            'canLogin'       => Route::has('login'),
+            'canRegister'    => Route::has('register'),
+            'laravelVersion' => Application::VERSION,
+            'phpVersion'     => PHP_VERSION,
+        ]);
+    })->name('login');
+});
 
-Route::middleware(['auth','verified'])->group(function( ) {
-    Route::get('dashboard',[DashboardController::class, 'index'])->name('dashboard');
+Route::middleware(['auth','verified'])->group(function () {
+    Route::get('/dashboard',[DashboardController::class, 'index'])->name('dashboard');
 });
 
 Route::middleware('auth')->group(function () {
@@ -64,7 +66,6 @@ Route::middleware('auth', 'check.trailer.expiration')->prefix('trailer')->group(
     Route::delete('/delete/{trailer}', [TrailerController::class, 'destroy'])->name('trailer.delete');
     Route::get('/detail/{trailer}', [TrailerController::class, 'show'])->name('trailer.show');
     Route::put('/{trailer}', [TrailerController::class, 'update'])->name('trailer.update');
-
 });
 
 Route::middleware('auth')->prefix('driver')->group(function () {
@@ -89,7 +90,6 @@ Route::middleware('auth')->prefix('location')->group(function () {
     Route::put('/{location}', [LocationController::class,'update'])->name('location.update');
     Route::delete('/delete/{location}', [LocationController::class, 'destroy'])->name('location.delete');
     Route::post('/delete-all', [LocationController::class, 'deletedAll'])->name('locations.delete');
-
 });
 
 Route::middleware('auth')->prefix('route')->group(function () {
@@ -100,7 +100,6 @@ Route::middleware('auth')->prefix('route')->group(function () {
     Route::put('/{route}', [RouteController::class,'update'])->name('route.update');
     Route::delete('/delete/{route}', [RouteController::class, 'destroy'])->name('route.delete');
     Route::post('/delete-all', [RouteController::class, 'deletedAll'])->name('routes.delete');
-
 });
 
 Route::middleware('auth')->prefix('fuel')->group(function () {
@@ -110,7 +109,6 @@ Route::middleware('auth')->prefix('fuel')->group(function () {
     Route::put('/{fuel_record}', [FuelRecordController::class,'update'])->name('fuel.update');
     Route::delete('/delete/{fuel_record}', [FuelRecordController::class, 'destroy'])->name('fuel.delete');
     Route::post('/delete-all', [FuelRecordController::class, 'deletedAll'])->name('fuels.delete');
-
 });
 
 Route::middleware('auth')->prefix('maintenance')->group(function () {
@@ -135,10 +133,9 @@ Route::middleware('auth')->prefix('registration')->group(function () {
     Route::post('/store', [TruckRegistrationController::class,'store'])->name('registration.store');
 });
 
-
 Route::middleware('auth')->prefix('notification')->group(function () {
     Route::patch('/notification/update/{id}', [NotificationController::class, 'updateStatus'])
-    ->name('notification.update');
+         ->name('notification.update');
 });
 
 Route::middleware('auth')->prefix('reports')->group(function () {
@@ -157,8 +154,6 @@ Route::middleware('auth')->group(function () {
     Route::post('/chat/send', [ChatController::class, 'sendMessage'])->name('chat.send');
     Route::get('/chat/messages/{receiverId}', [ChatController::class, 'fetchMessages'])->name('chat.fetch');
 });
-
-
 
 Route::get('/api/gps-data', [GPSController::class,'store']);
 

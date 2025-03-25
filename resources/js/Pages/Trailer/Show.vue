@@ -98,8 +98,11 @@
                                                     >Registration Details</span
                                                 >
                                                 <Badge
+                                                    v-if="
+                                                        props.notification >= 1
+                                                    "
                                                     class="absolute right-1 top-2"
-                                                    :value="notification"
+                                                    :value="props.notification"
                                                     severity="danger"
                                                 ></Badge>
                                             </Tab>

@@ -22,7 +22,8 @@ class Kernel extends HttpKernel
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
         \App\Http\Middleware\CheckVehicleExpiration::class,
-        \App\Http\Middleware\CheckTrailerExpiration::class
+        \App\Http\Middleware\CheckTrailerExpiration::class,
+        \App\Http\Middleware\RedirectIfAuthenticated::class,
     ];
 
     /**
@@ -40,6 +41,8 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \App\Http\Middleware\HandleInertiaRequests::class,
             \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
+            \Illuminate\Session\Middleware\StartSession::class,
+            \App\Http\Middleware\RedirectIfAuthenticated::class,
         ],
 
         'api' => [
@@ -70,6 +73,8 @@ class Kernel extends HttpKernel
         'user' => \App\Http\Middleware\AdminMiddleware::class,
         'redirectAdmin' => \App\Http\Middleware\redirectAdmin::class,
         'check.vehicle.expiration' => \App\Http\Middleware\CheckVehicleExpiration::class,
-        'check.trailer.expiration' => \App\Http\Middleware\CheckTrailerExpiration::class
+        'check.trailer.expiration' => \App\Http\Middleware\CheckTrailerExpiration::class,
+
+
     ];
 }

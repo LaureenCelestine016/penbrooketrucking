@@ -135,6 +135,7 @@ const submit = () => {
                 detail: "Account login successfully!",
                 life: 3000,
             });
+
             form.reset("password", "password_confirmation");
         },
         onError: () => {

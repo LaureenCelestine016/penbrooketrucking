@@ -60,6 +60,50 @@ class Vehicle extends Model
         if ($vehicle->ltfrb_is_Expired === 1) {
             $vehicle->ltfrb_is_Expired = $now->gt(Carbon::parse($vehicle->ltfrb_exp_date)) ? 1 : 0;
         }
+
+        // notification
+        $expirationTypes = [
+            'LTO Registration' => ['lto_exp_date', 'lto_is_Expired'],
+            'Conveyance Permit' => ['conveyance_exp_date', 'conveyance_is_Expired'],
+            'Filcon Certification' => ['filcon_exp_date', 'filcon_is_Expired'],
+            'LTFRB Permit' => ['ltfrb_exp_date', 'ltfrb_is_Expired'],
+        ];
+
+        foreach ($expirationTypes as $type => [$expDateField, $isExpiredField]) {
+            // Only proceed if the field is actually updated
+            if ($vehicle->isDirty($expDateField) || $vehicle->isDirty($isExpiredField)) {
+                $expDate = Carbon::parse($vehicle->$expDateField);
+                $isExpired = $now->gt($expDate) ? 1 : 0;
+
+                // Update the expiration status
+                $vehicle->$isExpiredField = $isExpired;
+
+                // Check and update existing notification
+                $notification = Notification::where('vehicle_id', $vehicle->id)
+                    ->where('message', 'like', "%$type%")
+                    ->first();
+
+                if ($notification) {
+                    $notification->update([
+                        'status' => $isExpired ? 'pending' : 'resolved',
+                        'updated_at' => $now,
+                    ]);
+                } else {
+                    // Create a new notification if none exists
+                    Notification::create([
+                        'vehicle_id' => $vehicle->id,
+                        'message' => "TYG-345 ISUZU-2016: $type exp date is about to expire on {$expDate->format('Y-m-d')}",
+                        'status' => $isExpired ? 'pending' : 'resolved',
+                        'reported_at' => $now,
+                        'created_at' => $now,
+                        'updated_at' => $now,
+                    ]);
+                }
+            }
+        }
+
+
+
     });
     }
 
