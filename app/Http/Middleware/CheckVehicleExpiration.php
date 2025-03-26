@@ -20,7 +20,9 @@ class CheckVehicleExpiration
     public function handle(Request $request, Closure $next): Response
 {
     $today = Carbon::today();
+
     $fiveDaysBefore = $today->copy()->addDays(5); // 5 days from today
+
 
     $expiryFields = [
         'lto_exp_date' => 'lto_is_Expired',
@@ -37,6 +39,9 @@ private function checkAndUpdateExpiration($vehicles, $expiryFields, $fiveDaysBef
 {
     foreach ($vehicles as $vehicle) {
         foreach ($expiryFields as $expDateColumn => $isExpiredColumn) {
+
+
+
             if (!empty($vehicle->$expDateColumn) && Carbon::parse($vehicle->$expDateColumn)->lessThanOrEqualTo($fiveDaysBefore) && $vehicle->$isExpiredColumn == 0) {
                 // Use a transaction to ensure updates and notification creation happen together
                 DB::transaction(function () use ($vehicle, $expDateColumn, $isExpiredColumn) {
