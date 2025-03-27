@@ -123,6 +123,7 @@ use Inertia\Inertia;
         Route::get('/', [TruckRegistrationController::class,'index'])->name('registration');
         Route::get('/create', [TruckRegistrationController::class,'create'])->name('registration.create');
         Route::post('/store', [TruckRegistrationController::class,'store'])->name('registration.store');
+        Route::put('/{id}', [TruckRegistrationController::class,'update'])->name('registration.update');
     });
 
     Route::middleware('auth')->prefix('notification')->group(function () {

@@ -391,21 +391,21 @@ const adminItems = ref([
     },
 
     {
-        label: "Truck Registration",
+        label: "Fleet & Compliance",
         icon: "pi pi-book",
         items: [
             {
-                label: "Registration",
-                icon: "pi pi-list",
+                label: "Truck Registration",
+                icon: "pi pi-truck",
                 command: () => {
-                    router.get("/expenses");
+                    router.get("/registration/create");
                 },
             },
             {
-                label: "Add Registration",
-                icon: "pi pi-plus",
+                label: "Driver Compliance",
+                icon: "pi pi-user",
                 command: () => {
-                    router.get("/registration/create");
+                    router.get("");
                 },
             },
         ],

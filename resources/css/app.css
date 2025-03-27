@@ -24,3 +24,9 @@
     scrollbar-width: thin; /* Firefox thin scrollbar */
     scrollbar-color: #888 transparent; /* Thumb color and track color for Firefox */
 }
+.p-toast {
+    z-index: 99999 !important; /* Ensure the toast is always on top */
+    position: fixed !important; /* Fix it to avoid overlap issues */
+    top: 20px !important; /* Adjust if needed */
+    right: 20px !important; /* Adjust if needed */
+}
