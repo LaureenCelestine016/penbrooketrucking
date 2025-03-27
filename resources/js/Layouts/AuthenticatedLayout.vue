@@ -244,133 +244,116 @@ const isChatOpen = ref(false); // Controls the popup visibility
 // Define menu items for Admin (user_type === 1)
 const adminItems = ref([
     {
-        label: "Dashboard",
-        icon: "pi pi-chart-line",
-        command: () => {
-            router.get("/dashboard");
-        },
-    },
-    {
-        label: "Truck",
-        icon: "pi pi-truck",
+        label: "Operational Management",
+        icon: "pi pi-cog",
         items: [
             {
-                label: "Tractor Head",
-                icon: "pi pi-list",
+                label: "Dashboard",
+                icon: "pi pi-chart-line",
                 command: () => {
-                    router.get("/vehicle");
+                    router.get("/dashboard");
                 },
+            },
+            {
+                label: "Truck",
+                icon: "pi pi-truck",
                 items: [
                     {
-                        label: "Add Tractor",
-                        icon: "pi pi-plus",
+                        label: "Tractor Head",
+                        icon: "pi pi-list",
                         command: () => {
-                            router.get("/vehicle/create");
+                            router.get("/vehicle");
                         },
+                        items: [
+                            {
+                                label: "Add Tractor",
+                                icon: "pi pi-plus",
+                                command: () => {
+                                    router.get("/vehicle/create");
+                                },
+                            },
+                        ],
+                    },
+                    {
+                        label: "Trailer",
+                        icon: "pi pi-list",
+                        command: () => {
+                            router.get("/trailer");
+                        },
+                        items: [
+                            {
+                                label: "Add Trailer",
+                                icon: "pi pi-plus",
+                                command: () => {
+                                    router.get("/trailer/create");
+                                },
+                            },
+                        ],
                     },
                 ],
             },
-            {
-                label: "Trailer",
-                icon: "pi pi-list",
-                command: () => {
-                    router.get("/trailer");
-                },
-                items: [
-                    {
-                        label: "Add Trailer",
-                        icon: "pi pi-plus",
-                        command: () => {
-                            router.get("/trailer/create");
-                        },
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        label: "Driver",
-        icon: "pi pi-users",
-        items: [
+
             {
                 label: "Driver List",
                 icon: "pi pi-list",
                 command: () => {
                     router.get("/driver");
                 },
-            },
-            {
-                label: "Add Driver",
-                icon: "pi pi-plus",
-                command: () => {
-                    router.get("/driver/create");
-                },
+                items: [
+                    {
+                        label: "Add Driver",
+                        icon: "pi pi-plus",
+                        command: () => {
+                            router.get("/driver/create");
+                        },
+                    },
+                ],
             },
         ],
     },
+
     {
-        label: "Location",
+        label: "Tracking and Routing",
         icon: "pi pi-map-marker",
         items: [
             {
-                label: "Location List",
+                label: "Location",
                 icon: "pi pi-list",
                 command: () => {
                     router.get("/location");
                 },
+                items: [
+                    {
+                        label: "Add Location",
+                        icon: "pi pi-plus",
+                        command: () => {
+                            router.get("/location/create");
+                        },
+                    },
+                ],
             },
-            {
-                label: "Add Location",
-                icon: "pi pi-plus",
-                command: () => {
-                    router.get("/location/create");
-                },
-            },
-        ],
-    },
-    {
-        label: "Route",
-        icon: "pi pi-wave-pulse",
-        items: [
             {
                 label: "Route List",
                 icon: "pi pi-list",
                 command: () => {
                     router.get("/route");
                 },
-            },
-            {
-                label: "Add Route",
-                icon: "pi pi-plus",
-                command: () => {
-                    router.get("/route/create");
-                },
+                items: [
+                    {
+                        label: "Add Route",
+                        icon: "pi pi-plus",
+                        command: () => {
+                            router.get("/route/create");
+                        },
+                    },
+                ],
             },
         ],
     },
+
     {
-        label: "Fuel",
+        label: "Maintenance and Fuel Management",
         icon: "pi pi-gauge",
-        items: [
-            {
-                label: "Fuel Record",
-                icon: "pi pi-list",
-                command: () => {
-                    router.get("/fuel");
-                },
-            },
-            {
-                label: "Add Fuel",
-                icon: "pi pi-plus",
-                command: () => {
-                    router.get("/fuel/create");
-                },
-            },
-        ],
-    },
-    {
-        label: "Maintenance",
-        icon: "pi pi-wrench",
         items: [
             {
                 label: "Maintenance Record",
@@ -378,39 +361,57 @@ const adminItems = ref([
                 command: () => {
                     router.get("/maintenance");
                 },
+                items: [
+                    {
+                        label: "Add Maintenance",
+                        icon: "pi pi-plus",
+                        command: () => {
+                            router.get("/maintenance/create");
+                        },
+                    },
+                ],
             },
             {
-                label: "Add Maintenance",
-                icon: "pi pi-plus",
+                label: "Fuel Record",
+                icon: "pi pi-list",
                 command: () => {
-                    router.get("/maintenance/create");
+                    router.get("/fuel");
                 },
+                items: [
+                    {
+                        label: "Add Fuel",
+                        icon: "pi pi-plus",
+                        command: () => {
+                            router.get("/fuel/create");
+                        },
+                    },
+                ],
             },
         ],
     },
 
-    // {
-    //     label: "Truck Registration",
-    //     icon: "pi pi-book",
-    //     items: [
-    //         {
-    //             label: "Registration",
-    //             icon: "pi pi-list",
-    //             command: () => {
-    //                 router.get("/expenses");
-    //             },
-    //         },
-    //         {
-    //             label: "Add Registration",
-    //             icon: "pi pi-plus",
-    //             command: () => {
-    //                 router.get("/registration/create");
-    //             },
-    //         },
-    //     ],
-    // },
     {
-        label: "Expenses",
+        label: "Truck Registration",
+        icon: "pi pi-book",
+        items: [
+            {
+                label: "Registration",
+                icon: "pi pi-list",
+                command: () => {
+                    router.get("/expenses");
+                },
+            },
+            {
+                label: "Add Registration",
+                icon: "pi pi-plus",
+                command: () => {
+                    router.get("/registration/create");
+                },
+            },
+        ],
+    },
+    {
+        label: "Financial Management",
         icon: "pi pi-money-bill",
         items: [
             {
@@ -419,48 +420,50 @@ const adminItems = ref([
                 command: () => {
                     router.get("/expenses");
                 },
+                items: [
+                    {
+                        label: "Add Expenses",
+                        icon: "pi pi-plus",
+                        command: () => {
+                            router.get("/expenses/create");
+                        },
+                    },
+                ],
             },
             {
-                label: "Add Expenses",
-                icon: "pi pi-plus",
-                command: () => {
-                    router.get("/expenses/create");
-                },
-            },
-        ],
-    },
-    {
-        label: "Report",
-        icon: "pi pi-book",
+                label: "Report",
+                icon: "pi pi-book",
 
-        items: [
-            {
-                label: "Route ",
-                icon: "pi pi-folder",
-                command: () => {
-                    router.get("/reports/route");
-                },
-            },
-            {
-                label: "Fuel ",
-                icon: "pi pi-folder",
-                command: () => {
-                    router.get("/reports/fuel");
-                },
-            },
-            {
-                label: "Maintenance ",
-                icon: "pi pi-folder",
-                command: () => {
-                    router.get("/reports/maintenance");
-                },
-            },
-            {
-                label: "Expenses ",
-                icon: "pi pi-folder",
-                command: () => {
-                    router.get("/reports/expenses");
-                },
+                items: [
+                    {
+                        label: "Route ",
+                        icon: "pi pi-folder",
+                        command: () => {
+                            router.get("/reports/route");
+                        },
+                    },
+                    {
+                        label: "Fuel ",
+                        icon: "pi pi-folder",
+                        command: () => {
+                            router.get("/reports/fuel");
+                        },
+                    },
+                    {
+                        label: "Maintenance ",
+                        icon: "pi pi-folder",
+                        command: () => {
+                            router.get("/reports/maintenance");
+                        },
+                    },
+                    {
+                        label: "Expenses ",
+                        icon: "pi pi-folder",
+                        command: () => {
+                            router.get("/reports/expenses");
+                        },
+                    },
+                ],
             },
         ],
     },
@@ -495,6 +498,8 @@ const showingNavigationDropdown = ref(false);
 .menubar {
     height: 54px;
     border: 0;
+    position: relative;
+    z-index: 9999; /* Higher than cover-picture */
 }
 
 .footer {

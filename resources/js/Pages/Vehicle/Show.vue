@@ -1675,7 +1675,6 @@ watch(
     width: 97%;
     z-index: 15;
     column-gap: 24px;
-    row-gap: 24px;
 }
 
 .transparent-head {
