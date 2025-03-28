@@ -6,6 +6,7 @@ use App\Models\TruckRegistration;
 use Illuminate\Http\Request;
 use App\Models\Trailer;
 use App\Models\Vehicle;
+use App\Models\Expenses;
 use Inertia\Inertia;
 use Carbon\Carbon;
 
@@ -61,33 +62,77 @@ class TruckRegistrationController extends Controller
     {
 
         if($request->truckId == "1") {
+            $validatedData = $request->validate([
+                'truckId' => 'required|string',
+                'lto_reg_date' => 'nullable|date',
+                'lto_exp_date' => 'nullable|date|after:lto_reg_date',
+                'conveyance_date' => 'nullable|date',
+                'conveyance_exp_date' => 'nullable|date|after:conveyance_date',
+                'filcom_fab_date' => 'nullable|date',
+                'ltfrb_reg_date' => 'nullable|date',
+                'filcon_exp_date' => 'nullable|date',
+                'ltfrb_exp_date' => 'nullable|date',
+                'cost' => 'nullable|numeric|min:0',
+                'remarks' => 'nullable|string|max:255',
+            ]);
+
             $vehicle = Vehicle::findOrFail($id);
 
-            // Update the expiration dates
-            $vehicle->lto_reg_date = $request->input('lto_reg_date');
-            $vehicle->lto_exp_date = $request->input('lto_exp_date');
-            $vehicle->conveyance_date = $request->input('conveyance_date');
-            $vehicle->conveyance_exp_date = $request->input('conveyance_exp_date');
 
-            // Check if the new expiration date is in the future and update the is_Expired fields
-            if (Carbon::parse($vehicle->lto_exp_date)->isFuture() ) {
-                $vehicle->lto_is_Expired = 0;
+            if ($request->has('lto_reg_date')) {
+                $vehicle->lto_reg_date = $request->input('lto_reg_date');
+            }
+            if ($request->has('lto_exp_date')) {
+                $vehicle->lto_exp_date = $request->input('lto_exp_date');
+                $vehicle->lto_is_Expired = Carbon::parse($vehicle->lto_exp_date)->isFuture() ? 0 : 1;
+            }
+            if ($request->has('conveyance_date')) {
+                $vehicle->conveyance_date = $request->input('conveyance_date');
+            }
+            if ($request->has('conveyance_exp_date')) {
+                $vehicle->conveyance_exp_date = $request->input('conveyance_exp_date');
+                $vehicle->conveyance_is_Expired = Carbon::parse($vehicle->conveyance_exp_date)->isFuture() ? 0 : 1;
+            }
+            if ($request->has('filcom_fab_date')) {
+                $vehicle->filcom_fab_date = $request->input('filcom_fab_date');
+            }
+            if ($request->has('filcon_exp_date')) {
+                $vehicle->filcon_exp_date = $request->input('filcon_exp_date');
+                $vehicle->filcon_is_Expired = Carbon::parse($vehicle->filcon_exp_date)->isFuture() ? 0 : 1;
+            }
+            if ($request->has('ltfrb_reg_date')) {
+                $vehicle->ltfrb_reg_date = $request->input('ltfrb_reg_date');
+            }
+            if ($request->has('ltfrb_exp_date')) {
+                $vehicle->ltfrb_exp_date = $request->input('ltfrb_exp_date');
+                $vehicle->ltfrb_is_Expired = Carbon::parse($vehicle->ltfrb_exp_date)->isFuture() ? 0 : 1;
             }
 
-            if (Carbon::parse($vehicle->conveyance_exp_date)->isFuture()) {
-                $vehicle->conveyance_is_Expired = 0;
-            }
-
-            // Save the changes
             $vehicle->save();
 
-            return response()->json([
-                'message' => 'Vehicle updated successfully!',
-                'vehicle' => $vehicle
+            Expenses::create([
+                'vehicle_id'                => $id,
+                'category_id'               => 1,
+                'amount'                    => $validatedData['cost'],
+                'description'               => $validatedData['remarks'],
+                'expense_date'              => $vehicle->updated_at,
             ]);
+
+            return redirect()->route('registration.create', $vehicle)
+                ->with('success', 'Vehicle registration updated successfully!');
         }
 
+        if($request->truckId == "2") {
+            $validatedData = $request->validate([
 
+                'lto_reg_date' => 'nullable|date',
+                'lto_exp_date' => 'nullable|date|after:lto_reg_date',
+                'conveyance_date' => 'nullable|date',
+                'conveyance_exp_date' => 'nullable|date|after:conveyance_date',
+                'cost' => 'nullable|numeric|min:0',
+                'remarks' => 'nullable|string|max:255',
+            ]);
+        }
 
     }
 
@@ -96,6 +141,6 @@ class TruckRegistrationController extends Controller
      */
     public function destroy(TruckRegistration $truckRegistration)
     {
-        //
+
     }
 }

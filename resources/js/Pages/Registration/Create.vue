@@ -647,35 +647,78 @@
                                         >Payment Details
                                     </label>
                                     <div class="grid grid-cols-2 gap-4 mb-4">
-                                        <div class="w-full">
-                                            <label
-                                                for="remarks"
-                                                class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                                >Cost<span
-                                                    class="ml-1 text-red-400"
-                                                    >*</span
-                                                ></label
-                                            >
-                                            <FormField
-                                                id="remarks"
-                                                name="remarks"
-                                                class="flex flex-col gap-1"
-                                            >
-                                                <InputNumber
-                                                    v-model="form.cost"
-                                                    placeholder="Cost"
-                                                    mode="currency"
-                                                    currency="PHP"
-                                                    class="w-full"
-                                                />
-                                                <Message
-                                                    severity="error"
-                                                    size="small"
-                                                    variant="simple"
-                                                    >{{
-                                                }}</Message>
-                                            </FormField>
+                                        <div class="flex flex-row gap-x-4">
+                                            <div class="w-full">
+                                                <label
+                                                    for="remarks"
+                                                    class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                                    >Cost<span
+                                                        class="ml-1 text-red-400"
+                                                        >*</span
+                                                    ></label
+                                                >
+                                                <FormField
+                                                    id="remarks"
+                                                    name="remarks"
+                                                    class="flex flex-col gap-1"
+                                                >
+                                                    <InputNumber
+                                                        v-model="form.cost"
+                                                        placeholder="Cost"
+                                                        mode="currency"
+                                                        currency="PHP"
+                                                        class="w-full"
+                                                    />
+                                                    <Message
+                                                        severity="error"
+                                                        size="small"
+                                                        variant="simple"
+                                                        >{{
+                                                    }}</Message>
+                                                </FormField>
+                                            </div>
+                                            <div class="w-full">
+                                                <label
+                                                    for="ltoRegDate"
+                                                    class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                                    >Expense Date<span
+                                                        class="ml-1 text-red-400"
+                                                        >*</span
+                                                    ></label
+                                                >
+                                                <FormField
+                                                    id="ltoRegDate"
+                                                    name="ltoRegDate"
+                                                    class="flex flex-col gap-1"
+                                                >
+                                                    <DatePicker
+                                                        id="calibDate"
+                                                        v-model="
+                                                            form.lto_reg_date
+                                                        "
+                                                        showIcon
+                                                        fluid
+                                                        :showOnFocus="false"
+                                                        inputId="registrationExp"
+                                                        placeholder="Expense Date"
+                                                    />
+                                                    <Message
+                                                        v-if="
+                                                            form.errors
+                                                                .lto_reg_date
+                                                        "
+                                                        severity="error"
+                                                        size="small"
+                                                        variant="simple"
+                                                        >{{
+                                                            form.errors
+                                                                .lto_reg_date
+                                                        }}</Message
+                                                    >
+                                                </FormField>
+                                            </div>
                                         </div>
+
                                         <!-- Vehicle Selection -->
 
                                         <!-- Max Cost -->
@@ -1135,6 +1178,8 @@ import Message from "primevue/message";
 import InputNumber from "primevue/inputnumber";
 import Textarea from "primevue/textarea";
 import FileUpload from "primevue/fileupload";
+import Toast from "primevue/toast";
+import { useToast } from "primevue/usetoast";
 
 const props = defineProps({
     tructor: {
@@ -1147,6 +1192,7 @@ const props = defineProps({
     },
 });
 
+const toast = useToast();
 const truck = ref(""); // Tracks selected vehicle type
 const tructors = ref([]);
 const trailers = ref([]);
@@ -1263,7 +1309,7 @@ const submit = () => {
             toast.add({
                 severity: "success",
                 summary: "Success",
-                detail: "Vehicle updated successfully!",
+                detail: "Registration updated successfully!",
                 life: 3000,
             });
         },
