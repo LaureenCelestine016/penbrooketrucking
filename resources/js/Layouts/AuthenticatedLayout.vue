@@ -41,7 +41,11 @@
                                     </svg>
                                 </div> -->
 
-                                <Dropdown align="right" width="48">
+                                <Dropdown
+                                    align="right"
+                                    width="48"
+                                    class="dropdown"
+                                >
                                     <template #trigger>
                                         <div
                                             class="flex flex-row gap-1 items-center justify-center"
@@ -499,10 +503,14 @@ const showingNavigationDropdown = ref(false);
     height: 54px;
     border: 0;
     position: relative;
-    z-index: 9999; /* Higher than cover-picture */
+    z-index: 999; /* Higher than cover-picture */
 }
 
 .footer {
     height: 64px;
+}
+
+.dropdown {
+    z-index: 9999;
 }
 </style>

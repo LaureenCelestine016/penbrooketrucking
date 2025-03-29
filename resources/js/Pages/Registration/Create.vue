@@ -155,7 +155,7 @@
                                         </div>
                                         <!-- LTO Expired date -->
                                         <div
-                                            v-if="ltoExpired === 1"
+                                            v-if="isLtoExpired"
                                             class="w-full mb-2"
                                         >
                                             <label
@@ -287,7 +287,7 @@
                                         </div>
                                         <!-- Conveyance Expired date -->
                                         <div
-                                            v-if="conveyanceExpired === 1"
+                                            v-if="isconveyanceExpired"
                                             class="w-full mb-2"
                                         >
                                             <label
@@ -422,7 +422,7 @@
                                             </FormField>
                                         </div>
                                         <div
-                                            v-if="filcomExpired === 1"
+                                            v-if="isFilcomExpired"
                                             class="w-full mb-2"
                                         >
                                             <label
@@ -557,7 +557,7 @@
                                             </FormField>
                                         </div>
                                         <div
-                                            v-if="ltfrbExpired === 1"
+                                            v-if="isLftbExpired"
                                             class="w-full mb-2"
                                         >
                                             <label
@@ -694,7 +694,7 @@
                                                     <DatePicker
                                                         id="calibDate"
                                                         v-model="
-                                                            form.lto_reg_date
+                                                            form.expenses_date
                                                         "
                                                         showIcon
                                                         fluid
@@ -718,10 +718,6 @@
                                                 </FormField>
                                             </div>
                                         </div>
-
-                                        <!-- Vehicle Selection -->
-
-                                        <!-- Max Cost -->
                                         <div class="w-full">
                                             <label
                                                 for="remarks"
@@ -751,8 +747,6 @@
                                                 }}</Message>
                                             </FormField>
                                         </div>
-
-                                        <!-- Generate Report Button -->
                                     </div>
                                 </div>
                                 <div class="mt-8">
@@ -1121,8 +1115,6 @@
                                                 }}</Message>
                                             </FormField>
                                         </div>
-
-                                        <!-- Generate Report Button -->
                                     </div>
                                 </div>
                                 <div class="mt-8">
@@ -1166,7 +1158,7 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head, useForm } from "@inertiajs/vue3";
-import { ref, watch } from "vue";
+import { ref, watch, nextTick, computed } from "vue";
 import dayjs from "dayjs";
 
 import RadioButton from "primevue/radiobutton";
@@ -1197,9 +1189,6 @@ const truck = ref(""); // Tracks selected vehicle type
 const tructors = ref([]);
 const trailers = ref([]);
 
-const ltoExpired = ref(null);
-const conveyanceExpired = ref(null);
-const filcomExpired = ref(null);
 const ltfrbExpired = ref(null);
 const calibrationExpired = ref(null);
 
@@ -1207,6 +1196,7 @@ const tructorId = ref(null);
 const trailerId = ref(null);
 const cost = ref(0);
 const remarks = ref("");
+const expenses_date = ref(null);
 
 const form = useForm({
     id: null,
@@ -1221,7 +1211,30 @@ const form = useForm({
     calibration_date: null,
     cost: 0,
     remarks: "",
+    expenses_date: null,
     truckId: null,
+});
+
+const isLtoExpired = computed(() => {
+    const selectedTractor = props.tructor.find((v) => v.id === tructorId.value);
+    return selectedTractor ? selectedTractor.lto_is_Expired === 1 : false;
+});
+
+const isconveyanceExpired = computed(() => {
+    const selectedTractor = props.tructor.find((v) => v.id === tructorId.value);
+    return selectedTractor
+        ? selectedTractor.conveyance_is_Expired === 1
+        : false;
+});
+
+const isFilcomExpired = computed(() => {
+    const selectedTractor = props.tructor.find((v) => v.id === tructorId.value);
+    return selectedTractor ? selectedTractor.filcon_is_Expired === 1 : false;
+});
+
+const isLftbExpired = computed(() => {
+    const selectedTractor = props.tructor.find((v) => v.id === tructorId.value);
+    return selectedTractor ? selectedTractor.ltfrb_is_Expired === 1 : false;
 });
 
 // Populate dropdowns
@@ -1240,15 +1253,10 @@ const trailerNameSearch = () => {
 };
 
 // When a tractor is selected
-const onTructorSelect = (event) => {
+const onTructorSelect = async (event) => {
     const selectedTractor = props.tructor.find((v) => v.id === event.value.id);
 
     if (selectedTractor) {
-        ltoExpired.value = selectedTractor.lto_is_Expired;
-        conveyanceExpired.value = selectedTractor.conveyance_is_Expired;
-        filcomExpired.value = selectedTractor.filcon_is_Expired;
-        ltfrbExpired.value = selectedTractor.ltfrb_is_Expired;
-
         tructorId.value = selectedTractor.id;
 
         // Reset form and assign only the selected tractor
@@ -1260,15 +1268,17 @@ const onTructorSelect = (event) => {
                 conveyance_date: selectedTractor.conveyance_date,
                 filcom_fab_date: selectedTractor.filcom_fab_date,
                 ltfrb_reg_date: selectedTractor.ltfrb_reg_date,
-                lto_exp_date: selectedTractor.ltfrb_exp_date,
+                lto_exp_date: selectedTractor.lto_exp_date,
                 conveyance_exp_date: selectedTractor.conveyance_exp_date,
                 filcon_exp_date: selectedTractor.filcon_exp_date,
                 ltfrb_exp_date: selectedTractor.ltfrb_exp_date,
                 cost: cost.value,
+                expenses_date: expenses_date.value,
                 remarks: remarks.value,
                 truckId: truck.value,
             })
         );
+        await nextTick(); // Ensures UI updates reactively
     }
 };
 
@@ -1292,6 +1302,7 @@ const onTrailerSelect = (event) => {
                 lto_exp_date: selectedTrailer.lto_exp_date,
                 calibration_exp_date: selectedTrailer.calibration_exp_date,
                 cost: cost.value,
+                expenses_date: expenses_date.value,
                 remarks: remarks.value,
                 truckId: truck.value,
             })
@@ -1381,6 +1392,15 @@ watch(
             form.calibration_exp_date = dayjs(newValue)
                 .add(1, "year")
                 .format("YYYY-MM-DD");
+        }
+    }
+);
+
+watch(
+    () => form.expenses_date,
+    (newValue) => {
+        if (newValue) {
+            form.expenses_date = dayjs(newValue).format("YYYY-MM-DD");
         }
     }
 );

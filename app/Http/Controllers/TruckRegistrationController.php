@@ -7,8 +7,10 @@ use Illuminate\Http\Request;
 use App\Models\Trailer;
 use App\Models\Vehicle;
 use App\Models\Expenses;
+use App\Models\Notification;
 use Inertia\Inertia;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class TruckRegistrationController extends Controller
 {
@@ -73,6 +75,7 @@ class TruckRegistrationController extends Controller
                 'filcon_exp_date' => 'nullable|date',
                 'ltfrb_exp_date' => 'nullable|date',
                 'cost' => 'nullable|numeric|min:0',
+                'expenses_date' => 'required|date',
                 'remarks' => 'nullable|string|max:255',
             ]);
 
@@ -110,12 +113,14 @@ class TruckRegistrationController extends Controller
 
             $vehicle->save();
 
+            $this->updateNotifications($vehicle->id, $request);
+
             Expenses::create([
                 'vehicle_id'                => $id,
                 'category_id'               => 1,
                 'amount'                    => $validatedData['cost'],
                 'description'               => $validatedData['remarks'],
-                'expense_date'              => $vehicle->updated_at,
+                'expense_date'              => $validatedData['expenses_date']
             ]);
 
             return redirect()->route('registration.create', $vehicle)
@@ -124,17 +129,53 @@ class TruckRegistrationController extends Controller
 
         if($request->truckId == "2") {
             $validatedData = $request->validate([
-
                 'lto_reg_date' => 'nullable|date',
                 'lto_exp_date' => 'nullable|date|after:lto_reg_date',
                 'conveyance_date' => 'nullable|date',
                 'conveyance_exp_date' => 'nullable|date|after:conveyance_date',
                 'cost' => 'nullable|numeric|min:0',
                 'remarks' => 'nullable|string|max:255',
+                'expenses_date' => 'required|date',
             ]);
         }
 
     }
+
+    private function updateNotifications($vehicleId, $request)
+    {
+        $notificationFields = [
+            'lto_exp_date' => 'Lto exp date',
+            'conveyance_exp_date' => 'Conveyance exp date',
+            'filcon_exp_date' => 'Filcon exp date',
+            'ltfrb_exp_date' => 'Ltfrb exp date',
+        ];
+
+        foreach ($notificationFields as $field => $messageType) {
+            if ($request->has($field)) {
+                $newExpDate = Carbon::parse($request->input($field))->format('Y-m-d');
+
+                Log::info("Checking for {$messageType} notifications with date: {$newExpDate}");
+
+                // Ensure exact match for expiration type and date
+                $existingNotification = Notification::where('vehicle_id', $vehicleId)
+                    ->where('status', 'pending')
+                    ->whereRaw("message REGEXP ?", ["{$messageType}.*{$newExpDate}"]) // Ensure message contains both type & exact date
+                    ->first();
+
+                if ($existingNotification) {
+                    Log::info("Found matching notification: ID {$existingNotification->id}, updating to resolved");
+
+                    $existingNotification->status = 'resolved';
+                    $existingNotification->updated_at = now();
+                    $existingNotification->save();
+                } else {
+                    Log::warning("No exact match found for {$messageType} with date {$newExpDate}");
+                }
+            }
+        }
+    }
+
+
 
     /**
      * Remove the specified resource from storage.
