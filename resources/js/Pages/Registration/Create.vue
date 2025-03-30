@@ -155,7 +155,7 @@
                                         </div>
                                         <!-- LTO Expired date -->
                                         <div
-                                            v-if="isLtoExpired"
+                                            v-if="isLtoTractorExpired"
                                             class="w-full mb-2"
                                         >
                                             <label
@@ -705,14 +705,14 @@
                                                     <Message
                                                         v-if="
                                                             form.errors
-                                                                .lto_reg_date
+                                                                .expenses_date
                                                         "
                                                         severity="error"
                                                         size="small"
                                                         variant="simple"
                                                         >{{
                                                             form.errors
-                                                                .lto_reg_date
+                                                                .expenses_date
                                                         }}</Message
                                                     >
                                                 </FormField>
@@ -830,7 +830,7 @@
                                         </div>
                                         <!-- LTO Expired date -->
                                         <div
-                                            v-if="ltoExpired === 1"
+                                            v-if="isLtoTrailerExpired === 1"
                                             class="w-full mb-2"
                                         >
                                             <label
@@ -963,7 +963,7 @@
                                         </div>
                                         <!-- Calibration Expired date -->
                                         <div
-                                            v-if="calibrationExpired === 1"
+                                            v-if="isCalibrationExpired === 1"
                                             class="w-full mb-2"
                                         >
                                             <label
@@ -1054,38 +1054,77 @@
                                         >Payment Details
                                     </label>
                                     <div class="grid grid-cols-2 gap-4 mb-4">
-                                        <div class="w-full">
-                                            <label
-                                                for="remarks"
-                                                class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                                >Cost<span
-                                                    class="ml-1 text-red-400"
-                                                    >*</span
-                                                ></label
-                                            >
-                                            <FormField
-                                                id="remarks"
-                                                name="remarks"
-                                                class="flex flex-col gap-1"
-                                            >
-                                                <InputNumber
-                                                    v-model="form.cost"
-                                                    placeholder="Cost"
-                                                    mode="currency"
-                                                    currency="PHP"
-                                                    class="w-full"
-                                                />
-                                                <Message
-                                                    severity="error"
-                                                    size="small"
-                                                    variant="simple"
-                                                    >{{
-                                                }}</Message>
-                                            </FormField>
+                                        <div class="flex flex-row gap-x-4">
+                                            <div class="w-full">
+                                                <label
+                                                    for="remarks"
+                                                    class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                                    >Cost<span
+                                                        class="ml-1 text-red-400"
+                                                        >*</span
+                                                    ></label
+                                                >
+                                                <FormField
+                                                    id="remarks"
+                                                    name="remarks"
+                                                    class="flex flex-col gap-1"
+                                                >
+                                                    <InputNumber
+                                                        v-model="form.cost"
+                                                        placeholder="Cost"
+                                                        mode="currency"
+                                                        currency="PHP"
+                                                        class="w-full"
+                                                    />
+                                                    <Message
+                                                        severity="error"
+                                                        size="small"
+                                                        variant="simple"
+                                                        >{{
+                                                    }}</Message>
+                                                </FormField>
+                                            </div>
+                                            <div class="w-full">
+                                                <label
+                                                    for="ltoRegDate"
+                                                    class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                                    >Expense Date<span
+                                                        class="ml-1 text-red-400"
+                                                        >*</span
+                                                    ></label
+                                                >
+                                                <FormField
+                                                    id="ltoRegDate"
+                                                    name="ltoRegDate"
+                                                    class="flex flex-col gap-1"
+                                                >
+                                                    <DatePicker
+                                                        id="calibDate"
+                                                        v-model="
+                                                            form.expenses_date
+                                                        "
+                                                        showIcon
+                                                        fluid
+                                                        :showOnFocus="false"
+                                                        inputId="registrationExp"
+                                                        placeholder="Expense Date"
+                                                    />
+                                                    <Message
+                                                        v-if="
+                                                            form.errors
+                                                                .expenses_date
+                                                        "
+                                                        severity="error"
+                                                        size="small"
+                                                        variant="simple"
+                                                        >{{
+                                                            form.errors
+                                                                .expenses_date
+                                                        }}</Message
+                                                    >
+                                                </FormField>
+                                            </div>
                                         </div>
-                                        <!-- Vehicle Selection -->
-
-                                        <!-- Max Cost -->
                                         <div class="w-full">
                                             <label
                                                 for="remarks"
@@ -1189,9 +1228,6 @@ const truck = ref(""); // Tracks selected vehicle type
 const tructors = ref([]);
 const trailers = ref([]);
 
-const ltfrbExpired = ref(null);
-const calibrationExpired = ref(null);
-
 const tructorId = ref(null);
 const trailerId = ref(null);
 const cost = ref(0);
@@ -1209,13 +1245,14 @@ const form = useForm({
     ltfrb_reg_date: null,
     ltfrb_exp_date: null,
     calibration_date: null,
+    calibration_exp_date: null,
     cost: 0,
     remarks: "",
     expenses_date: null,
     truckId: null,
 });
 
-const isLtoExpired = computed(() => {
+const isLtoTractorExpired = computed(() => {
     const selectedTractor = props.tructor.find((v) => v.id === tructorId.value);
     return selectedTractor ? selectedTractor.lto_is_Expired === 1 : false;
 });
@@ -1235,6 +1272,22 @@ const isFilcomExpired = computed(() => {
 const isLftbExpired = computed(() => {
     const selectedTractor = props.tructor.find((v) => v.id === tructorId.value);
     return selectedTractor ? selectedTractor.ltfrb_is_Expired === 1 : false;
+});
+
+const isLtoTrailerExpired = computed(() => {
+    const selectedTrailer = props.trailer.find((v) => v.id === trailerId.value);
+    console.log(selectedTrailer);
+
+    return selectedTrailer ? selectedTrailer.lto_is_Expired === 1 : false;
+});
+
+console.log(isLtoTrailerExpired.value);
+
+const isCalibrationExpired = computed(() => {
+    const selectedTrailer = props.trailer.find((v) => v.id === trailerId.value);
+    return selectedTrailer
+        ? selectedTrailer.calibration_is_Expired === 1
+        : false;
 });
 
 // Populate dropdowns
@@ -1283,13 +1336,10 @@ const onTructorSelect = async (event) => {
 };
 
 // When a trailer is selected
-const onTrailerSelect = (event) => {
+const onTrailerSelect = async (event) => {
     const selectedTrailer = props.trailer.find((v) => v.id === event.value.id);
 
     if (selectedTrailer) {
-        ltoExpired.value = selectedTrailer.lto_is_Expired;
-        calibrationExpired.value = selectedTrailer.calibration_is_Expired;
-
         trailerId.value = selectedTrailer.id;
 
         // Reset form and assign only the selected trailer
@@ -1307,6 +1357,7 @@ const onTrailerSelect = (event) => {
                 truckId: truck.value,
             })
         );
+        await nextTick();
     }
 };
 

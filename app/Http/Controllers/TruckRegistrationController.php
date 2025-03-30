@@ -14,13 +14,6 @@ use Illuminate\Support\Facades\Log;
 
 class TruckRegistrationController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
 
     /**
      * Show the form for creating a new resource.
@@ -31,30 +24,6 @@ class TruckRegistrationController extends Controller
             'tructor' => Vehicle::orderBy('created_at', 'desc')->get(),
             'trailer' => Trailer::orderBy('created_at', 'desc')->get()
         ]);
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(TruckRegistration $truckRegistration)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(TruckRegistration $truckRegistration)
-    {
-        //
     }
 
     /**
@@ -80,7 +49,7 @@ class TruckRegistrationController extends Controller
             ]);
 
             $vehicle = Vehicle::findOrFail($id);
-
+            $originalVehicle = $vehicle->getOriginal();
 
             if ($request->has('lto_reg_date')) {
                 $vehicle->lto_reg_date = $request->input('lto_reg_date');
@@ -113,7 +82,7 @@ class TruckRegistrationController extends Controller
 
             $vehicle->save();
 
-            $this->updateNotifications($vehicle->id, $request);
+            $this->updateNotifications($originalVehicle, $request);
 
             Expenses::create([
                 'vehicle_id'                => $id,
@@ -131,40 +100,79 @@ class TruckRegistrationController extends Controller
             $validatedData = $request->validate([
                 'lto_reg_date' => 'nullable|date',
                 'lto_exp_date' => 'nullable|date|after:lto_reg_date',
-                'conveyance_date' => 'nullable|date',
-                'conveyance_exp_date' => 'nullable|date|after:conveyance_date',
+                'calibration_date' => 'nullable|date',
+                'calibration_exp_date' => 'nullable|date|after:conveyance_date',
                 'cost' => 'nullable|numeric|min:0',
                 'remarks' => 'nullable|string|max:255',
                 'expenses_date' => 'required|date',
             ]);
+
+            $trailer = Trailer::findOrFail($id);
+            $originalTrailer = $trailer->getOriginal();
+
+            if ($request->has('lto_reg_date')) {
+                $trailer->lto_reg_date = $request->input('lto_reg_date');
+            }
+            if ($request->has('lto_exp_date')) {
+                $trailer->lto_exp_date = $request->input('lto_exp_date');
+                $trailer->lto_is_Expired = Carbon::parse($trailer->lto_exp_date)->isFuture() ? 0 : 1;
+            }
+            if ($request->has('calibration_date')) {
+                $trailer->calibration_date = $request->input('calibration_date');
+            }
+            if ($request->has('calibration_exp_date')) {
+                $trailer->calibration_exp_date = $request->input('calibration_exp_date');
+                $trailer->calibration_is_Expired = Carbon::parse($trailer->calibration_exp_date)->isFuture() ? 0 : 1;
+            }
+
+            $trailer->save();
+
+            $this->updateNotifications($originalTrailer, $request);
+
         }
 
     }
 
-    private function updateNotifications($vehicleId, $request)
+    private function updateNotifications($originalVehicle, $request)
     {
+
         $notificationFields = [
-            'lto_exp_date' => 'Lto exp date',
-            'conveyance_exp_date' => 'Conveyance exp date',
-            'filcon_exp_date' => 'Filcon exp date',
-            'ltfrb_exp_date' => 'Ltfrb exp date',
+            'lto_exp_date' => 'Lto exp date is about to expire on',
+            'conveyance_exp_date' => 'Conveyance exp date is about to expire on',
+            'filcon_exp_date' => 'Filcon exp date is about to expire on',
+            'ltfrb_exp_date' => 'Ltfrb exp date is about to expire on',
+            'calibration_exp_date' => 'Calibration exp date is about to expire on'
         ];
 
         foreach ($notificationFields as $field => $messageType) {
             if ($request->has($field)) {
                 $newExpDate = Carbon::parse($request->input($field))->format('Y-m-d');
+                $oldExpDate = Carbon::parse($originalVehicle[$field])->format('Y-m-d');
 
-                Log::info("Checking for {$messageType} notifications with date: {$newExpDate}");
 
-                // Ensure exact match for expiration type and date
-                $existingNotification = Notification::where('vehicle_id', $vehicleId)
+                Log::info("Checking {$messageType}: Old Date: {$oldExpDate}, New Date: {$newExpDate}");
+
+                if ($oldExpDate == $newExpDate) {
+                    Log::info("Skipping {$messageType}, no change detected");
+                    continue;
+                }
+
+                Log::info("Processing {$messageType} notifications for date: {$newExpDate}");
+
+                // Correct query
+                $matchingNotifications = Notification::where('vehicle_id', $originalVehicle['id'])
                     ->where('status', 'pending')
-                    ->whereRaw("message REGEXP ?", ["{$messageType}.*{$newExpDate}"]) // Ensure message contains both type & exact date
-                    ->first();
+                    ->where('message', 'LIKE', "%{$messageType}%")
+                    ->where('message', 'LIKE', "%{$oldExpDate}%")
+                    ->get();
+
+                Log::info("Potential matches for {$messageType}: " . json_encode($matchingNotifications->pluck('message')));
+
+                // Correct filtering
+                $existingNotification = $matchingNotifications->first(fn($n) => str_contains($n->message, $oldExpDate));
 
                 if ($existingNotification) {
                     Log::info("Found matching notification: ID {$existingNotification->id}, updating to resolved");
-
                     $existingNotification->status = 'resolved';
                     $existingNotification->updated_at = now();
                     $existingNotification->save();
@@ -174,8 +182,6 @@ class TruckRegistrationController extends Controller
             }
         }
     }
-
-
 
     /**
      * Remove the specified resource from storage.
