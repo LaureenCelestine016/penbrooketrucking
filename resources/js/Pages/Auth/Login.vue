@@ -55,9 +55,12 @@
                             />
                             <label class="text-gray-600">Remember me</label>
                         </div>
-                        <a href="#" class="text-primary font-semibold"
-                            >Forgot Password?</a
+                        <Link
+                            :href="route('password.request')"
+                            class="text-primary font-semibold"
                         >
+                            Forgot Password?
+                        </Link>
                     </div>
 
                     <Button

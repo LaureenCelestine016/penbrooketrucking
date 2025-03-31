@@ -830,14 +830,14 @@
                                         </div>
                                         <!-- LTO Expired date -->
                                         <div
-                                            v-if="isLtoTrailerExpired === 1"
+                                            v-if="isLtoTrailerExpired"
                                             class="w-full mb-2"
                                         >
                                             <label
                                                 for="LTOExpDate"
                                                 class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                                >LTO Expired Date<span
-                                                    class="ml-1 text-red-400"
+                                                >LTO Expired Date
+                                                <span class="ml-1 text-red-400"
                                                     >*
                                                 </span></label
                                             >
@@ -963,7 +963,7 @@
                                         </div>
                                         <!-- Calibration Expired date -->
                                         <div
-                                            v-if="isCalibrationExpired === 1"
+                                            v-if="isCalibrationExpired"
                                             class="w-full mb-2"
                                         >
                                             <label
@@ -1276,12 +1276,8 @@ const isLftbExpired = computed(() => {
 
 const isLtoTrailerExpired = computed(() => {
     const selectedTrailer = props.trailer.find((v) => v.id === trailerId.value);
-    console.log(selectedTrailer);
-
     return selectedTrailer ? selectedTrailer.lto_is_Expired === 1 : false;
 });
-
-console.log(isLtoTrailerExpired.value);
 
 const isCalibrationExpired = computed(() => {
     const selectedTrailer = props.trailer.find((v) => v.id === trailerId.value);

@@ -42,7 +42,7 @@ class CheckTrailerExpiration
 
                     Notification::create([
                         'trailer_id' => $item->id,
-                        'message' => "{$item->license_plate}"." "."{$item->model}: " . ucfirst(str_replace('_', ' ', $expDateColumn)) . " is about  to expire on " . $item->$expDateColumn,
+                        'message' => "{$item->license_plate}"." "."{$item->model}: " . ucfirst(str_replace('_', ' ', $expDateColumn)) . " is about to expire on " . $item->$expDateColumn,
                         'status' => 'pending',
                         'reported_at' => now(),
                         'created_at' => now(),

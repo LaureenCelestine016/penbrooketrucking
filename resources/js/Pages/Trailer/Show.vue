@@ -345,18 +345,14 @@
                                                                     name="ltoRegDate"
                                                                     class="flex flex-col gap-1"
                                                                 >
-                                                                    <DatePicker
-                                                                        id="calibDate"
+                                                                    <InputText
+                                                                        disabled=""
+                                                                        type="text"
+                                                                        placeholder="LTO Expired Date"
                                                                         v-model="
                                                                             form.lto_reg_date
                                                                         "
-                                                                        showIcon
-                                                                        fluid
-                                                                        :showOnFocus="
-                                                                            false
-                                                                        "
-                                                                        inputId="registrationExp"
-                                                                        placeholder="Calibration Date"
+                                                                        class="!bg-gray-50"
                                                                     />
                                                                     <Message
                                                                         v-if="
@@ -377,6 +373,51 @@
                                                             </div>
                                                             <!-- LTO Expired date -->
                                                             <div
+                                                                v-if="
+                                                                    props
+                                                                        .trailer
+                                                                        .lto_is_Expired ===
+                                                                    1
+                                                                "
+                                                                class="w-full mb-2"
+                                                            >
+                                                                <label
+                                                                    for="LTOExpDate"
+                                                                    class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                                                    >LTO Expired
+                                                                    Date<span
+                                                                        class="ml-1 text-red-400"
+                                                                        >*
+                                                                    </span></label
+                                                                >
+
+                                                                <FormField
+                                                                    id="LTOExpDate"
+                                                                    name="LTOExpDate"
+                                                                    class="flex flex-col gap-1"
+                                                                >
+                                                                    <InputText
+                                                                        disabled=""
+                                                                        type="text"
+                                                                        placeholder="LTO Expired Date"
+                                                                        v-model="
+                                                                            form.lto_exp_date
+                                                                        "
+                                                                        class="!border-red-500 !bg-gray-50"
+                                                                    />
+                                                                    <Message
+                                                                        severity="error"
+                                                                        size="small"
+                                                                        variant="simple"
+                                                                    >
+                                                                        LTO is
+                                                                        about to
+                                                                        expire.
+                                                                    </Message>
+                                                                </FormField>
+                                                            </div>
+                                                            <div
+                                                                v-else
                                                                 :class="[
                                                                     'w-100',
                                                                     form.hasErrors
@@ -390,43 +431,40 @@
                                                                     >LTO Expired
                                                                     Date<span
                                                                         class="ml-1 text-red-400"
-                                                                        >*</span
-                                                                    ></label
+                                                                        >*
+                                                                    </span></label
                                                                 >
+
                                                                 <FormField
                                                                     id="LTOExpDate"
                                                                     name="LTOExpDate"
                                                                     class="flex flex-col gap-1"
                                                                 >
-                                                                    <DatePicker
-                                                                        id="LTOExpDate"
+                                                                    <InputText
+                                                                        disabled=""
+                                                                        type="text"
+                                                                        placeholder="LTO Expired Date"
                                                                         v-model="
                                                                             form.lto_exp_date
                                                                         "
-                                                                        showIcon
-                                                                        fluid
-                                                                        :showOnFocus="
-                                                                            false
-                                                                        "
-                                                                        inputId="LTOExpDate"
-                                                                        placeholder="LTO Expired Date"
-                                                                        disabled="true"
+                                                                        class="!bg-gray-50"
                                                                     />
                                                                     <Message
                                                                         v-if="
                                                                             form
                                                                                 .errors
-                                                                                .license_plate
+                                                                                .lto_exp_date
                                                                         "
                                                                         severity="error"
                                                                         size="small"
                                                                         variant="simple"
-                                                                        >{{
+                                                                    >
+                                                                        {{
                                                                             form
                                                                                 .errors
-                                                                                .license_plate
-                                                                        }}</Message
-                                                                    >
+                                                                                .lto_exp_date
+                                                                        }}
+                                                                    </Message>
                                                                 </FormField>
                                                             </div>
                                                         </div>
@@ -434,6 +472,7 @@
                                                         <div
                                                             class="grid grid-cols-2 gap-8 mb-1"
                                                         >
+                                                            <!-- LTO Reg date -->
                                                             <div
                                                                 :class="[
                                                                     'w-100',
@@ -443,7 +482,7 @@
                                                                 ]"
                                                             >
                                                                 <label
-                                                                    for="calibDate"
+                                                                    for="ltoRegDate"
                                                                     class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
                                                                     >Calibration
                                                                     Registered
@@ -453,27 +492,19 @@
                                                                     ></label
                                                                 >
                                                                 <FormField
-                                                                    id="calibDate"
-                                                                    name="calibDate"
+                                                                    id="ltoRegDate"
+                                                                    name="ltoRegDate"
                                                                     class="flex flex-col gap-1"
                                                                 >
-                                                                    <div
-                                                                        class="flex-auto"
-                                                                    >
-                                                                        <DatePicker
-                                                                            id="calibDate"
-                                                                            v-model="
-                                                                                form.calibration_date
-                                                                            "
-                                                                            showIcon
-                                                                            fluid
-                                                                            :showOnFocus="
-                                                                                false
-                                                                            "
-                                                                            inputId="registrationExp"
-                                                                            placeholder="Calibration Date"
-                                                                        />
-                                                                    </div>
+                                                                    <InputText
+                                                                        disabled=""
+                                                                        type="text"
+                                                                        placeholder="LTO Expired Date"
+                                                                        v-model="
+                                                                            form.calibration_date
+                                                                        "
+                                                                        class="!bg-gray-50"
+                                                                    />
                                                                     <Message
                                                                         v-if="
                                                                             form
@@ -491,7 +522,55 @@
                                                                     >
                                                                 </FormField>
                                                             </div>
+                                                            <!-- LTO Expired date -->
                                                             <div
+                                                                v-if="
+                                                                    props
+                                                                        .trailer
+                                                                        .calibration_is_Expired ===
+                                                                    1
+                                                                "
+                                                                class="w-full mb-2"
+                                                            >
+                                                                <label
+                                                                    for="LTOExpDate"
+                                                                    class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                                                    >Calibration
+                                                                    Expired
+                                                                    Date<span
+                                                                        class="ml-1 text-red-400"
+                                                                        >*
+                                                                    </span></label
+                                                                >
+
+                                                                <FormField
+                                                                    id="LTOExpDate"
+                                                                    name="LTOExpDate"
+                                                                    class="flex flex-col gap-1"
+                                                                >
+                                                                    <InputText
+                                                                        disabled=""
+                                                                        type="text"
+                                                                        placeholder="LTO Expired Date"
+                                                                        v-model="
+                                                                            form.calibration_exp_date
+                                                                        "
+                                                                        class="!border-red-500 !bg-gray-50"
+                                                                    />
+                                                                    <Message
+                                                                        severity="error"
+                                                                        size="small"
+                                                                        variant="simple"
+                                                                    >
+                                                                        Calibration
+                                                                        is about
+                                                                        to
+                                                                        expire.
+                                                                    </Message>
+                                                                </FormField>
+                                                            </div>
+                                                            <div
+                                                                v-else
                                                                 :class="[
                                                                     'w-100',
                                                                     form.hasErrors
@@ -500,53 +579,46 @@
                                                                 ]"
                                                             >
                                                                 <label
-                                                                    for="calibExpDate"
-                                                                    class="text-gray-700 dark:text-surface-50 text-sm font-medium mb-2 block"
+                                                                    for="LTOExpDate"
+                                                                    class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
                                                                     >Calibration
                                                                     Expired
                                                                     Date<span
                                                                         class="ml-1 text-red-400"
-                                                                        >*</span
-                                                                    ></label
+                                                                        >*
+                                                                    </span></label
                                                                 >
+
                                                                 <FormField
-                                                                    id="calibExpDate"
-                                                                    name="calibExpDate"
+                                                                    id="LTOExpDate"
+                                                                    name="LTOExpDate"
                                                                     class="flex flex-col gap-1"
                                                                 >
-                                                                    <div
-                                                                        class="flex-auto"
-                                                                    >
-                                                                        <DatePicker
-                                                                            id="calibExpDate"
-                                                                            v-model="
-                                                                                form.calibration_exp_date
-                                                                            "
-                                                                            showIcon
-                                                                            fluid
-                                                                            :showOnFocus="
-                                                                                false
-                                                                            "
-                                                                            inputId="calibExpDate"
-                                                                            placeholder="Calibration Expired Date"
-                                                                            disabled=""
-                                                                        />
-                                                                    </div>
+                                                                    <InputText
+                                                                        disabled=""
+                                                                        type="text"
+                                                                        placeholder="LTO Expired Date"
+                                                                        v-model="
+                                                                            form.calibration_exp_date
+                                                                        "
+                                                                        class="!bg-gray-50"
+                                                                    />
                                                                     <Message
                                                                         v-if="
                                                                             form
                                                                                 .errors
-                                                                                .registration_expiration_date
+                                                                                .calibration_exp_date
                                                                         "
                                                                         severity="error"
                                                                         size="small"
                                                                         variant="simple"
-                                                                        >{{
+                                                                    >
+                                                                        {{
                                                                             form
                                                                                 .errors
-                                                                                .registration_expiration_date
-                                                                        }}</Message
-                                                                    >
+                                                                                .calibration_exp_date
+                                                                        }}
+                                                                    </Message>
                                                                 </FormField>
                                                             </div>
                                                         </div>

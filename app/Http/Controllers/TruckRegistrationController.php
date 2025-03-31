@@ -159,12 +159,21 @@ class TruckRegistrationController extends Controller
 
                 Log::info("Processing {$messageType} notifications for date: {$newExpDate}");
 
-                // Correct query
-                $matchingNotifications = Notification::where('vehicle_id', $originalVehicle['id'])
+                if($request->truckId == "1") {
+
+                    $matchingNotifications = Notification::where('vehicle_id', $originalVehicle['id'])
                     ->where('status', 'pending')
                     ->where('message', 'LIKE', "%{$messageType}%")
                     ->where('message', 'LIKE', "%{$oldExpDate}%")
                     ->get();
+                } else {
+                    $matchingNotifications = Notification::where('trailer_id', $originalVehicle['id'])
+                    ->where('status', 'pending')
+                    ->where('message', 'LIKE', "%{$messageType}%")
+                    ->where('message', 'LIKE', "%{$oldExpDate}%")
+                    ->get();
+
+                }
 
                 Log::info("Potential matches for {$messageType}: " . json_encode($matchingNotifications->pluck('message')));
 

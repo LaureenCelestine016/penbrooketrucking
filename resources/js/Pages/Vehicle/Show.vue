@@ -454,18 +454,14 @@
                                                                     name="ltoRegDate"
                                                                     class="flex flex-col gap-1"
                                                                 >
-                                                                    <DatePicker
-                                                                        id="calibDate"
+                                                                    <InputText
+                                                                        disabled=""
+                                                                        type="text"
+                                                                        placeholder="LTO Expired Date"
                                                                         v-model="
                                                                             form.lto_reg_date
                                                                         "
-                                                                        showIcon
-                                                                        fluid
-                                                                        :showOnFocus="
-                                                                            false
-                                                                        "
-                                                                        inputId="registrationExp"
-                                                                        placeholder="Calibration Date"
+                                                                        class="!bg-gray-50"
                                                                     />
                                                                     <Message
                                                                         v-if="
@@ -609,23 +605,15 @@
                                                                     name="conveyDate"
                                                                     class="flex flex-col gap-1"
                                                                 >
-                                                                    <div
-                                                                        class="flex-auto"
-                                                                    >
-                                                                        <DatePicker
-                                                                            id="conveyDate"
-                                                                            v-model="
-                                                                                form.conveyance_date
-                                                                            "
-                                                                            showIcon
-                                                                            fluid
-                                                                            :showOnFocus="
-                                                                                false
-                                                                            "
-                                                                            inputId="conveyDate"
-                                                                            placeholder="Conveyance Date"
-                                                                        />
-                                                                    </div>
+                                                                    <InputText
+                                                                        disabled=""
+                                                                        type="text"
+                                                                        placeholder="Conveyance Expired Date"
+                                                                        v-model="
+                                                                            form.conveyance_exp_date
+                                                                        "
+                                                                        class="!bg-gray-50"
+                                                                    />
                                                                     <Message
                                                                         v-if="
                                                                             form
@@ -767,23 +755,15 @@
                                                                     name="filcomFab"
                                                                     class="flex flex-col gap-1"
                                                                 >
-                                                                    <div
-                                                                        class="flex-auto"
-                                                                    >
-                                                                        <DatePicker
-                                                                            id="filcomFab"
-                                                                            v-model="
-                                                                                form.filcom_fab_date
-                                                                            "
-                                                                            showIcon
-                                                                            fluid
-                                                                            :showOnFocus="
-                                                                                false
-                                                                            "
-                                                                            inputId="filcomFab"
-                                                                            placeholder="Filcom Fab Date"
-                                                                        />
-                                                                    </div>
+                                                                    <InputText
+                                                                        disabled=""
+                                                                        type="text"
+                                                                        placeholder="Filcon Fab Expired Date"
+                                                                        v-model="
+                                                                            form.filcon_exp_date
+                                                                        "
+                                                                        class="!bg-gray-50"
+                                                                    />
                                                                     <Message
                                                                         v-if="
                                                                             form
@@ -924,23 +904,15 @@
                                                                     name="LTFRBReg"
                                                                     class="flex flex-col gap-1"
                                                                 >
-                                                                    <div
-                                                                        class="flex-auto"
-                                                                    >
-                                                                        <DatePicker
-                                                                            id="LTFRBReg"
-                                                                            v-model="
-                                                                                form.ltfrb_reg_date
-                                                                            "
-                                                                            showIcon
-                                                                            fluid
-                                                                            :showOnFocus="
-                                                                                false
-                                                                            "
-                                                                            inputId="LTFRBReg"
-                                                                            placeholder="LTFRB Date"
-                                                                        />
-                                                                    </div>
+                                                                    <InputText
+                                                                        disabled=""
+                                                                        type="text"
+                                                                        placeholder="LTFRB Expired Date"
+                                                                        v-model="
+                                                                            form.ltfrb_exp_date
+                                                                        "
+                                                                        class="!bg-gray-50"
+                                                                    />
                                                                     <Message
                                                                         v-if="
                                                                             form
@@ -1444,20 +1416,58 @@
                                                             class="h-[20rem]"
                                                         >
                                                             <Column
-                                                                field="fuel_type"
-                                                                header="Fuel Type"
+                                                                field="current_odometer"
+                                                                header="Current Odometer"
+                                                                style="
+                                                                    min-width: 5rem;
+                                                                "
+                                                                :headerStyle="{
+                                                                    'text-align':
+                                                                        'center',
+                                                                }"
+                                                                bodyStyle="text-align: center"
                                                             ></Column>
                                                             <Column
-                                                                field="liters"
+                                                                field="previous_odometer"
+                                                                header="Previous Odometer"
+                                                                style="
+                                                                    min-width: 5rem;
+                                                                "
+                                                            ></Column>
+                                                            <Column
+                                                                field="total_distance"
+                                                                header="Distance"
+                                                                style="
+                                                                    min-width: 5rem;
+                                                                "
+                                                            ></Column>
+                                                            <Column
+                                                                field="total_refuel"
                                                                 header="Liters"
+                                                                style="
+                                                                    min-width: 5rem;
+                                                                "
                                                             ></Column>
                                                             <Column
-                                                                field="cost"
-                                                                header="Cost"
+                                                                field="avg_fuel_consumption"
+                                                                header="Avg. Fuel"
+                                                                style="
+                                                                    min-width: 5rem;
+                                                                "
+                                                            ></Column>
+                                                            <Column
+                                                                field="amount"
+                                                                header="Amount"
+                                                                style="
+                                                                    min-width: 5rem;
+                                                                "
                                                             ></Column>
                                                             <Column
                                                                 field="refueling_date"
                                                                 header="Date Refilled"
+                                                                style="
+                                                                    min-width: 5rem;
+                                                                "
                                                             ></Column>
                                                         </DataTable>
                                                     </div>
@@ -1747,5 +1757,9 @@ watch(
 
 .class {
     background-color: whitesmoke !important;
+}
+
+.p-datatable .p-datatable-thead > tr > th {
+    text-align: center !important;
 }
 </style>
