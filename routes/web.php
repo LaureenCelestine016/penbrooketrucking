@@ -15,6 +15,7 @@ use App\Http\Controllers\RouteController;
 use App\Http\Controllers\TrailerController;
 use App\Http\Controllers\TruckRegistrationController;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\ImageController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -149,6 +150,12 @@ use Inertia\Inertia;
     });
 
     Route::get('/api/gps-data', [GPSController::class,'store']);
+
+    Route::middleware(['web'])->group(function () {
+        Route::post('/upload', [ImageController::class, 'upload']);
+        Route::get('/image/{id}', [ImageController::class, 'show']);
+    });
+
 
 
 // User login route with redirection if authenticated and cache control headers.

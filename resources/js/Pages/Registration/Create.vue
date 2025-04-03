@@ -759,8 +759,8 @@
                                         ></label
                                     >
                                     <FileUpload
-                                        name="demo[]"
-                                        url="/api/upload"
+                                        name="image"
+                                        url="/upload"
                                         @upload="onAdvancedUpload($event)"
                                         :multiple="true"
                                         accept="image/*"
@@ -1167,7 +1167,7 @@
                                     >
                                     <FileUpload
                                         name="demo[]"
-                                        url="/api/upload"
+                                        url="/upload"
                                         @upload="onAdvancedUpload($event)"
                                         :multiple="true"
                                         accept="image/*"
@@ -1196,8 +1196,10 @@
 </template>
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { Head, useForm } from "@inertiajs/vue3";
+import { Head, router, useForm, usePage } from "@inertiajs/vue3";
 import { ref, watch, nextTick, computed } from "vue";
+import axios from "axios";
+
 import dayjs from "dayjs";
 
 import RadioButton from "primevue/radiobutton";
@@ -1233,6 +1235,9 @@ const trailerId = ref(null);
 const cost = ref(0);
 const remarks = ref("");
 const expenses_date = ref(null);
+
+const csrfToken = usePage().props.csrf_token;
+console.log("CSRF Token:", csrfToken); // Check if CSRF token exists
 
 const form = useForm({
     id: null,
@@ -1370,6 +1375,10 @@ const submit = () => {
                 detail: "Registration updated successfully!",
                 life: 3000,
             });
+
+            form.cost = "";
+            form.expenses_date = "";
+            form.remarks = "";
         },
         onError: (errors) => {
             console.error(errors); // Debugging
@@ -1467,4 +1476,21 @@ watch(truck, (newVal) => {
         }
     }
 });
+
+const onAdvancedUpload = async (event) => {
+    const formData = new FormData();
+    formData.append("image", event.files[0]);
+
+    try {
+        const response = await axios.post("/upload", formData, {
+            headers: {
+                "X-CSRF-TOKEN": csrfToken,
+                "Content-Type": "multipart/form-data",
+            },
+        });
+        console.log("File uploaded successfully", response.data);
+    } catch (error) {
+        console.error("Upload failed:", error.response?.data || error.message);
+    }
+};
 </script>
