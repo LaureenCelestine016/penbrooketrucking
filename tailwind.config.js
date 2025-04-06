@@ -29,6 +29,9 @@ export default {
             backgroundColor: {
                 navyblue: "#213555", // Custom background light blue
             },
+            borderColor: {
+                navyblue: "#213555",
+            },
         },
     },
 

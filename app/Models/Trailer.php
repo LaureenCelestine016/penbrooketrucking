@@ -26,27 +26,6 @@ class Trailer extends Model
         'image'
      ];
 
-     protected static function boot()
-     {
-         parent::boot();
-
-         static::updating(function ($trailer) {
-             // Get current date
-             $now = Carbon::now();
-
-            if ($trailer->lto_is_Expired === 1) {
-                $trailer->lto_is_Expired = $now->gt(Carbon::parse($trailer->lto_exp_date)) ? 1 : 0;
-            }
-
-            if ($trailer->calibration_is_Expired === 1) {
-                $trailer->calibration_is_Expired = $now->gt(Carbon::parse($trailer->calibration_exp_date)) ? 1 : 0;
-            }
-
-
-
-
-         });
-     }
 
     public function routes()
     {

@@ -642,7 +642,7 @@
                                 </div>
                                 <div>
                                     <label
-                                        for="Plate_number"
+                                        for="Payment"
                                         class="text-gray-700 dark:text-surface-0 text-2xl font-medium mb-4 block"
                                         >Payment Details
                                     </label>
@@ -670,11 +670,14 @@
                                                         class="w-full"
                                                     />
                                                     <Message
+                                                        v-if="form.errors.cost"
                                                         severity="error"
                                                         size="small"
                                                         variant="simple"
                                                         >{{
-                                                    }}</Message>
+                                                            form.errors.cost
+                                                        }}</Message
+                                                    >
                                                 </FormField>
                                             </div>
                                             <div class="w-full">
@@ -740,11 +743,14 @@
                                                     placeholder="Remarks"
                                                 />
                                                 <Message
+                                                    v-if="form.errors.remarks"
                                                     severity="error"
                                                     size="small"
                                                     variant="simple"
                                                     >{{
-                                                }}</Message>
+                                                        form.errors.remarks
+                                                    }}</Message
+                                                >
                                             </FormField>
                                         </div>
                                     </div>
@@ -1077,11 +1083,14 @@
                                                         class="w-full"
                                                     />
                                                     <Message
+                                                        v-if="form.errors.cost"
                                                         severity="error"
                                                         size="small"
                                                         variant="simple"
                                                         >{{
-                                                    }}</Message>
+                                                            form.errors.cost
+                                                        }}</Message
+                                                    >
                                                 </FormField>
                                             </div>
                                             <div class="w-full">
@@ -1147,11 +1156,14 @@
                                                     placeholder="Remarks"
                                                 />
                                                 <Message
+                                                    v-if="form.errors.remarks"
                                                     severity="error"
                                                     size="small"
                                                     variant="simple"
                                                     >{{
-                                                }}</Message>
+                                                        form.errors.remarks
+                                                    }}</Message
+                                                >
                                             </FormField>
                                         </div>
                                     </div>

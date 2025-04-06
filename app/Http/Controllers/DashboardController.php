@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Vehicle;
-use App\Models\Route; // Your routes table model
+use App\Models\Route;
 use App\Models\Notification;
 use App\Models\Maintenance_task;
 use App\Models\Fuel_record;
@@ -18,131 +18,123 @@ use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
-
-
-    public function index() {
-
+    public function index()
+    {
         $user = Auth::user();
+        $currentYear = date('Y');
 
-            if($user->user_type == 1) {
-                $trucks = collect([Vehicle::class, Trailer::class])
+        if ($user->user_type == 1) {
+            // Count Vehicles & Trailers
+            $trucks = collect([Vehicle::class, Trailer::class])
                 ->sum(fn($model) => $model::count());
 
-                $operationalCount = collect([Vehicle::class, Trailer::class])
+            $operationalCount = collect([Vehicle::class, Trailer::class])
                 ->sum(fn($model) => $model::where('status', 'Operational')->count());
 
-                $nonOperationalCount = collect([Vehicle::class, Trailer::class])
+            $nonOperationalCount = collect([Vehicle::class, Trailer::class])
                 ->sum(fn($model) => $model::where('status', 'Non-Operational')->count());
 
-                $maintenance = collect([Vehicle::class, Trailer::class])
+            $maintenance = collect([Vehicle::class, Trailer::class])
                 ->sum(fn($model) => $model::where('status', 'Maintenance')->count());
 
-                $driver = Driver::count();
+            $driver = Driver::count();
+            $maintenanceTotal = Maintenance_task::sum('total');
 
-                // $fuelTotal = Fuel_record::sum('cost');
-
-                $maintenanceTotal = Maintenance_task::sum('total');
-
-                // $fuelConsumption = Vehicle::with('fuelRecords')
-                // ->get()
-                // ->map(function ($vehicle) {
-                //     return [
-                //         'name' => $vehicle->model, // Change to your actual vehicle name column
-                //         'total_fuel' => $vehicle->fuelRecords->sum('liters'),
-                //         'total_cost' => $vehicle->fuelRecords->sum('cost'),
-                //     ];
-                // });
-
-
-                $maintenanceCosts = [
-                    'vehicles' => Vehicle::with('maintenanceTasks')
-                        ->get()
-                        ->map(function ($vehicle) {
-                            return [
-                                'name' => $vehicle->model, // Change this to your actual column name
-                                'total_cost' => $vehicle->maintenanceTasks->sum('total'),
-                            ];
-                        }),
-
-                    'trailers' => Trailer::with('maintenanceTasks')
-                        ->get()
-                        ->map(function ($trailer) {
-                            return [
-                                'name' => $trailer->license_plate,
-                                'total_cost' => $trailer->maintenanceTasks->sum('total'),
-                            ];
-                        }),
-                ];
-
-                $monthlyExpenses = Expenses::with('category') // Load category relationship
-                ->select(
-                    DB::raw("DATE_FORMAT(expense_date, '%Y-%m') as month"),
-                    'category_id',
-                    DB::raw("SUM(amount) as total_cost")
+            // Get yearly maintenance costs
+            $yearlyCosts = Maintenance_task::select(
+                    DB::raw("YEAR(breakdown_date) as year"),
+                    DB::raw("SUM(total) as total_cost")
                 )
-                ->groupBy('month', 'category_id')
-                ->orderBy('month', 'ASC')
-                ->get()
-                ->map(function ($expense) {
-                    return [
-                        'month' => $expense->month,
-                        'category_id' => $expense->category_id,
-                        'category_name' => $expense->category->name, // Get category name from relationship
-                        'total_cost' => $expense->total_cost,
-                    ];
-                });
+                ->groupBy('year')
+                ->orderBy('year', 'ASC')
+                ->get();
 
-                $notifications = Notification::with('vehicle','trailer' )->where('status', 'pending')->orderBy('reported_at', 'desc')->get();
+            // Default monthly maintenance costs for the current year
+            $maintenanceCosts = $this->getMaintenanceDataByYear($currentYear);
 
-                $drivers = User::where('user_type', 0)->get();
+            // Fetch Yearly Expenses
+            $yearlyExpenses = Expenses::select(
+                DB::raw("YEAR(expense_date) as year"),
+                DB::raw("SUM(amount) as total_cost")
+            )
+            ->groupBy('year')
+            ->orderBy('year', 'ASC')
+            ->get();
 
-                return Inertia::render('Dashboard', [
-                    'truck' => $trucks,
-                    'driver' => $driver,
-                    // 'fuelTotal' => $fuelTotal,
-                    'maintenanceTotal' => $maintenanceTotal,
+            // Default Monthly Expenses for the current year
+            $expensesData = $this->getExpensesDataByYear($currentYear);
+
+            return Inertia::render('Dashboard', [
+                'truck' => $trucks,
+                'driver' => $driver,
+                'maintenanceTotal' => $maintenanceTotal,
+                'operationalData' => [
                     'operationalCount' => $operationalCount,
                     'nonOperationalCount' => $nonOperationalCount,
                     'maintenance' => $maintenance,
-                    // 'fuelConsumption' => $fuelConsumption,
-                    'vehicleMaintenanceCosts' => $maintenanceCosts,
-                    'monthlyExpenses' => $monthlyExpenses,
-                    'notification' => $notifications,
-                    'drivers'  => $drivers
-                ]);
+                ],
+                'yearlyData' => $yearlyCosts, // Yearly maintenance costs
+                'maintenanceData' => $maintenanceCosts, // Default to current year
+                'selectedYear' => $currentYear, // Default selected year
+                'yearlyExpenses' => $yearlyExpenses, // Yearly expenses
+                'expensesData' => $expensesData, // Default monthly expenses
+            ]);
+        } else {
+            $driverId = $user->driver_id;
 
-            } else {
-                $driverId = $user->driver_id;
-
-                $assignedRides = Route::where('driver_id', $driverId)->where('status', 'Yet to start')->count();
-                $ongoingRides = Route::where('driver_id', $driverId)
-                    ->where('status', 'Ongoing')
-                    ->count();
-                $completedRides = Route::where('driver_id', $driverId)
-                    ->where('status', 'Completed')
-                    ->count();
-                $cancelledRide = Route::with('startLocation','endLocation')->where('driver_id', $driverId)
-                    ->where('status', 'Cancelled')->count();
-
-                $driverTruckUsed = Route::with('vehicle', 'trailer', 'startLocation', 'endLocation')
-                    ->where('driver_id', $driverId)->where('status','Completed') // Filter by driver_id
-                    ->get();
-
-                // $pendingNotifications = Notification::where('driver_id', $driverId)
-                //     ->where('status', 'pending')
-                //     ->count();
-
-                return Inertia::render('Dashboard', [
-                    'assignedRides'       => $assignedRides,
-                    'ongoingRides'        => $ongoingRides,
-                    'completedRides'      => $completedRides,
-                    'cancelledRide'       => $cancelledRide ,
-                    'driverTruckUsed'     => $driverTruckUsed
-                    // 'pendingNotifications'=> $pendingNotifications,
-                ]);
-
-            }
+            return Inertia::render('Dashboard', [
+                'assignedRides' => Route::where('driver_id', $driverId)->where('status', 'Yet to start')->count(),
+                'ongoingRides' => Route::where('driver_id', $driverId)->where('status', 'Ongoing')->count(),
+                'completedRides' => Route::where('driver_id', $driverId)->where('status', 'Completed')->count(),
+                'cancelledRide' => Route::where('driver_id', $driverId)->where('status', 'Cancelled')->count(),
+                'driverTruckUsed' => Route::where('driver_id', $driverId)->where('status', 'Completed')->get(),
+            ]);
         }
-
     }
 
+    // Fetch maintenance data by year
+    private function getMaintenanceDataByYear($year)
+    {
+        return Maintenance_task::select(
+                DB::raw("YEAR(breakdown_date) as year"),
+                DB::raw("MONTH(breakdown_date) as month"),
+                DB::raw("SUM(total) as total_cost")
+            )
+            ->whereYear('breakdown_date', $year)
+            ->groupBy('year', 'month')
+            ->orderBy('month', 'ASC')
+            ->get();
+    }
+
+    // API to fetch maintenance costs for a selected year
+    public function getMaintenanceCosts(Request $request)
+    {
+        $year = $request->query('year', date('Y'));
+        $maintenanceCosts = $this->getMaintenanceDataByYear($year);
+
+        return response()->json(['maintenanceData' => $maintenanceCosts]);
+    }
+
+    // Fetch expenses data by year
+    private function getExpensesDataByYear($year)
+    {
+        return Expenses::select(
+                DB::raw("YEAR(expense_date) as year"),
+                DB::raw("MONTH(expense_date) as month"),
+                DB::raw("SUM(amount) as total_cost")
+            )
+            ->whereYear('expense_date', $year)
+            ->groupBy('year', 'month')
+            ->orderBy('month', 'ASC')
+            ->get();
+    }
+
+    // API to fetch expenses for a selected year
+    public function getExpensesByYear(Request $request)
+    {
+        $year = $request->query('year', date('Y'));
+        $expensesData = $this->getExpensesDataByYear($year);
+
+        return response()->json(['expensesData' => $expensesData]);
+    }
+}

@@ -23,6 +23,7 @@
         "@primevue/themes": "^4.2.5",
         "chart.js": "^4.4.8",
         "dayjs": "^1.11.13",
+        "echarts": "^5.6.0",
         "intl-tel-input": "^25.2.1",
         "leaflet": "^1.9.4",
         "leaflet-routing-machine": "^3.2.12",
