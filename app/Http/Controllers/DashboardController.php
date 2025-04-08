@@ -22,6 +22,9 @@ class DashboardController extends Controller
     {
         $user = Auth::user();
         $currentYear = date('Y');
+        $lastYear = $currentYear - 1;
+        $currentMonth = (int) date('m'); // ← fix here
+
 
         if ($user->user_type == 1) {
             // Count Vehicles & Trailers
@@ -90,6 +93,28 @@ class DashboardController extends Controller
                     ];
                 });
 
+            $lastYearYTD = Fuel_record::whereYear('refueling_date', $lastYear)
+                ->sum('total_refuel');
+
+            $currentYearYTD = Fuel_record::whereYear('refueling_date', $currentYear)
+                ->sum('total_refuel');
+
+            $totalGrowth = $lastYearYTD > 0
+                ? round((($currentYearYTD - $lastYearYTD) / $lastYearYTD) * 100, 2)
+                : null; // Avoid division by zero
+
+            $sameMonthLastYear = Fuel_record::whereYear('refueling_date', $lastYear)
+                ->whereMonth('refueling_date', $currentMonth)
+                ->sum('total_refuel');
+
+
+
+            $currentMonthRefuel = Fuel_record::whereYear('refueling_date', $currentYear)
+                ->whereMonth('refueling_date', $currentMonth)
+                ->sum('total_refuel');
+
+            $monthlyGrowth = $currentMonthRefuel - $sameMonthLastYear;
+
             return Inertia::render('Dashboard', [
                 'truck' => $trucks,
                 'driver' => $driver,
@@ -106,6 +131,14 @@ class DashboardController extends Controller
                 'expensesData' => $expensesData, // Default monthly expenses
                 'litersByDriver' => $litersByDriver, // ✅ Add this line
                 'litersPerMonth' => $litersPerMonth,
+                'fuelStats' => [
+                    'lastYearYTD' => $lastYearYTD,
+                    'currentYearYTD' => $currentYearYTD,
+                    'totalGrowth' => $totalGrowth,
+                    'sameMonthLastYear' => $sameMonthLastYear,
+                    'currentMonth' => $currentMonthRefuel,
+                    'monthlyGrowth' => $monthlyGrowth,
+                ],
             ]);
         } else {
             $driverId = $user->driver_id;

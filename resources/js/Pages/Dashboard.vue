@@ -172,6 +172,7 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="col-span-5">
                         <div class="grid grid-cols-2 gap-x-2">
                             <!-- Vehicle status -->
@@ -185,14 +186,15 @@
                         </div>
                     </div>
                     <div class="col-span-5">
-                        <!-- Vehicle status -->
-                        <ExpensesChart :expensesData="expensesData" />
-                    </div>
-                    <div class="col-span-5">
                         <FuelChart
                             :litersByDriver="litersByDriver"
                             :litersPerMonth="litersByDriver"
+                            :fuelStats="fuelStats"
                         />
+                    </div>
+                    <div class="col-span-5">
+                        <!-- Vehicle status -->
+                        <ExpensesChart :expensesData="expensesData" />
                     </div>
                 </div>
             </div>
@@ -218,6 +220,7 @@ const props = defineProps({
     expensesData: Object,
     litersByDriver: Object,
     litersPerMonth: Object,
+    fuelStats: Object,
 });
 </script>
 
