@@ -61,8 +61,34 @@ class DashboardController extends Controller
             ->orderBy('year', 'ASC')
             ->get();
 
+
             // Default Monthly Expenses for the current year
-            $expensesData = $this->getExpensesDataByYear($currentYear);
+            $expensesData = $this->getCombinedExpensesDataByYear($currentYear);
+
+            $litersByDriver = Fuel_record::join('drivers', 'fuel_records.driver_id', '=', 'drivers.id')
+                ->select(
+                    'drivers.id',
+                    'drivers.last_name',
+                    DB::raw('SUM(fuel_records.total_refuel) as total_liters')
+                )
+                ->groupBy('drivers.id', 'drivers.last_name')
+                ->orderByDesc('total_liters')
+                ->get();
+
+            $litersPerMonth = Fuel_record::select(
+                    DB::raw("MONTH(refueling_date) as month"),
+                    DB::raw("SUM(total_refuel) as total_liters")
+                )
+                ->whereYear('refueling_date', date('Y'))
+                ->groupBy(DB::raw("MONTH(refueling_date)"))
+                ->orderBy(DB::raw("MONTH(refueling_date)"))
+                ->get()
+                ->map(function ($item) {
+                    return [
+                        'month' => date("F", mktime(0, 0, 0, $item->month, 1)),
+                        'total_liters' => $item->total_liters,
+                    ];
+                });
 
             return Inertia::render('Dashboard', [
                 'truck' => $trucks,
@@ -78,6 +104,8 @@ class DashboardController extends Controller
                 'selectedYear' => $currentYear, // Default selected year
                 'yearlyExpenses' => $yearlyExpenses, // Yearly expenses
                 'expensesData' => $expensesData, // Default monthly expenses
+                'litersByDriver' => $litersByDriver, // ✅ Add this line
+                'litersPerMonth' => $litersPerMonth,
             ]);
         } else {
             $driverId = $user->driver_id;
@@ -116,24 +144,49 @@ class DashboardController extends Controller
     }
 
     // Fetch expenses data by year
-    private function getExpensesDataByYear($year)
-    {
-        return Expenses::select(
-                DB::raw("YEAR(expense_date) as year"),
-                DB::raw("MONTH(expense_date) as month"),
-                DB::raw("SUM(amount) as total_cost")
-            )
-            ->whereYear('expense_date', $year)
-            ->groupBy('year', 'month')
-            ->orderBy('month', 'ASC')
-            ->get();
-    }
+    private function getCombinedExpensesDataByYear($year)
+{
+    // Vehicle expenses query using license_plate as the asset name
+    $vehicleExpenses = DB::table('expenses')
+        ->join('vehicles', 'expenses.vehicle_id', '=', 'vehicles.id')
+        ->selectRaw('
+            vehicles.id as asset_id,
+            vehicles.license_plate as asset_name,
+            MONTH(expense_date) as month,
+            SUM(amount) as total_cost
+        ')
+        ->whereNotNull('expenses.vehicle_id')
+        ->whereYear('expense_date', $year)
+        ->groupBy('vehicles.id', 'vehicles.license_plate', DB::raw('MONTH(expense_date)'));
+
+    // Trailer expenses query (assuming trailers also use license_plate; adjust if needed)
+    $trailerExpenses = DB::table('expenses')
+        ->join('trailers', 'expenses.trailer_id', '=', 'trailers.id')
+        ->selectRaw('
+            trailers.id + 10000 as asset_id,
+            trailers.license_plate as asset_name,
+            MONTH(expense_date) as month,
+            SUM(amount) as total_cost
+        ')
+        ->whereNotNull('expenses.trailer_id')
+        ->whereYear('expense_date', $year)
+        ->groupBy('trailers.id', 'trailers.license_plate', DB::raw('MONTH(expense_date)'));
+
+    // Combine both queries
+    $combinedExpenses = $vehicleExpenses
+        ->unionAll($trailerExpenses)
+        ->orderBy('asset_name')
+        ->get();
+
+    return $combinedExpenses;
+}
+
 
     // API to fetch expenses for a selected year
     public function getExpensesByYear(Request $request)
     {
         $year = $request->query('year', date('Y'));
-        $expensesData = $this->getExpensesDataByYear($year);
+        $expensesData = $this->getCombinedExpensesDataByYear($year);
 
         return response()->json(['expensesData' => $expensesData]);
     }

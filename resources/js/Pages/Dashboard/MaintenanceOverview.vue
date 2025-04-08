@@ -146,10 +146,10 @@ const updateMaintenanceChart = () => {
     const option = {
         tooltip: { trigger: "axis" },
         grid: {
-            left: "3%",
-            right: "3%",
+            left: "2%",
+            right: "2%",
             top: "5%",
-            bottom: "10%",
+            bottom: "5%",
             containLabel: true,
         },
         xAxis: {
@@ -171,7 +171,7 @@ const updateMaintenanceChart = () => {
             {
                 type: "bar",
                 data: isYearly ? data.map((y) => y.value) : data,
-                barWidth: "22px",
+                barWidth: "40px",
                 itemStyle: { color: "#213555", borderRadius: [4, 4, 0, 0] },
                 label: {
                     show: true,

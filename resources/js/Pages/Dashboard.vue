@@ -10,7 +10,7 @@
 
         <div class="py-8">
             <div class="mx-12">
-                <div class="grid grid-cols-4 gap-y-4 gap-x-4">
+                <div class="grid grid-cols-4 gap-y-3 gap-x-4">
                     <div class="col-span-5">
                         <div class="grid grid-cols-12 gap-2">
                             <div
@@ -184,14 +184,15 @@
                             />
                         </div>
                     </div>
-
                     <div class="col-span-5">
-                        <div
-                            class="bg-white shadow rounded-md h-100 w-full grid grid-cols-3"
-                        ></div>
+                        <!-- Vehicle status -->
+                        <ExpensesChart :expensesData="expensesData" />
                     </div>
                     <div class="col-span-5">
-                        <ExpensesChart :expensesData="expensesData" />
+                        <FuelChart
+                            :litersByDriver="litersByDriver"
+                            :litersPerMonth="litersByDriver"
+                        />
                     </div>
                 </div>
             </div>
@@ -205,6 +206,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import StatusOverview from "../Pages/Dashboard/Vehiclestatus.vue";
 import MaintenanceOverview from "../Pages/Dashboard/MaintenanceOverview.vue";
 import ExpensesChart from "../Pages/Dashboard/ExpensesChart.vue";
+import FuelChart from "../Pages/Dashboard/FuelChart.vue";
 import { ref, onMounted, onBeforeUnmount, watch } from "vue";
 import { Head, usePage, router } from "@inertiajs/vue3";
 
@@ -214,6 +216,8 @@ const props = defineProps({
     operationalData: Object,
     maintenanceData: Object,
     expensesData: Object,
+    litersByDriver: Object,
+    litersPerMonth: Object,
 });
 </script>
 
