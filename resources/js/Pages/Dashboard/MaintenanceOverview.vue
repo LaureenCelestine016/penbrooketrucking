@@ -1,10 +1,14 @@
 <template>
     <div class="bg-white shadow-lg p-4 rounded-xl flex flex-col h-full">
-        <div class="flex justify-between items-center mb-2">
-            <h3 class="text-xl font-semibold text-gray-700">
+        <!-- Header -->
+        <div
+            class="flex flex-col md:flex-row md:justify-between md:items-center gap-3 mb-4"
+        >
+            <h3 class="text-lg md:text-xl font-semibold text-gray-700">
                 Maintenance Overview
             </h3>
-            <div class="w-32">
+
+            <div class="w-full md:w-40">
                 <AutoComplete
                     id="year"
                     v-model="selectedYearObject"
@@ -18,11 +22,10 @@
                 />
             </div>
         </div>
-        <div class="flex-1 min-h-0">
-            <div
-                ref="maintenanceChart"
-                class="w-full h-full min-h-[400px]"
-            ></div>
+
+        <!-- Chart -->
+        <div class="flex-1 min-h-[300px] md:min-h-[400px]">
+            <div ref="maintenanceChart" class="w-full h-full"></div>
         </div>
     </div>
 </template>

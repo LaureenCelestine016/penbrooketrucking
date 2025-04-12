@@ -16,6 +16,7 @@ use App\Http\Controllers\TrailerController;
 use App\Http\Controllers\TruckRegistrationController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\ImageController;
+use App\Http\Controllers\TracksolidController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -31,6 +32,9 @@ use Inertia\Inertia;
     Route::middleware(['auth','verified'])->group(function () {
         Route::get('/dashboard',[DashboardController::class, 'index'])->name('dashboard');
         Route::get('/dashboard/maintenance-costs',[DashboardController::class, 'getMaintenanceCosts'])->name('dashboard.getMaintenanceCost');
+        Route::get('/dashboard/fuel-stats', [DashboardController::class, 'getFuelStats'])->name('dashboard.getFuelStats');
+
+        Route::get('/dashboard/driver/{id}', [DashboardController::class, 'driverDashboard'])->name('dashboard.driver');
     });
 
     Route::middleware('auth')->group(function () {
@@ -150,12 +154,16 @@ use Inertia\Inertia;
         Route::get('/chat/messages/{receiverId}', [ChatController::class, 'fetchMessages'])->name('chat.fetch');
     });
 
-    Route::get('/api/gps-data', [GPSController::class,'store']);
-
     Route::middleware(['web'])->group(function () {
         Route::post('/upload', [ImageController::class, 'upload']);
         Route::get('/image/{id}', [ImageController::class, 'show']);
     });
+
+    Route::get('/tracksolid', [TracksolidController::class, 'index'])->name('tracksolid.index');
+    Route::post('/tracksolid/get-token', [TracksolidController::class, 'getToken'])->name('tracksolid.get-token');
+
+    Route::post('/tracksolid/location', [TracksolidController::class, 'getLocation']);
+
 
 
 

@@ -4,13 +4,15 @@
 
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="font-semibold text-2xl text-gray-800 leading-tight">
+            <h2
+                class="font-semibold text-xl md:text-2xl text-gray-800 leading-tight"
+            >
                 Tractor Head
             </h2>
         </template>
 
         <div class="py-4">
-            <div class="mx-12">
+            <div class="px-4 sm:px-6 lg:px-12">
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                     <div class="card">
                         <DataTable
@@ -24,20 +26,23 @@
                             paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                             :rowsPerPageOptions="[5, 10, 25]"
                             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} vehicles"
+                            class="w-full overflow-auto"
                         >
+                            <!-- Table Header -->
                             <template #header>
                                 <div
-                                    class="flex flex-wrap gap-2 items-center justify-between p-1"
+                                    class="flex flex-col md:flex-row gap-3 md:gap-4 justify-between items-start md:items-center p-2"
                                 >
                                     <Button
                                         label="EXPORT TO EXCEL"
                                         icon="pi pi-upload"
                                         severity="secondary"
                                         @click="exportCSV($event)"
+                                        class="w-full md:w-auto"
                                     />
 
                                     <div
-                                        class="flex gap-4 justify-center items-center"
+                                        class="flex flex-col sm:flex-row gap-2 items-start sm:items-center"
                                     >
                                         <Button
                                             label="Delete"
@@ -49,8 +54,9 @@
                                                 !selectedVehicle ||
                                                 !selectedVehicle.length
                                             "
+                                            class="w-full sm:w-auto"
                                         />
-                                        <IconField>
+                                        <IconField class="w-full sm:w-64">
                                             <InputIcon>
                                                 <i class="pi pi-search" />
                                             </InputIcon>
@@ -59,48 +65,43 @@
                                                     filters['global'].value
                                                 "
                                                 placeholder="Search..."
+                                                class="w-full"
                                             />
                                         </IconField>
                                     </div>
-
-                                    <!-- <h4 class="m-0">Manage Products</h4> -->
                                 </div>
                             </template>
 
+                            <!-- Table Columns -->
                             <Column
                                 selectionMode="multiple"
                                 style="width: 3rem"
                                 :exportable="false"
-                            ></Column>
+                            />
                             <Column
                                 field="license_plate"
                                 header="Plate number"
                                 sortable
                                 style="min-width: 10rem"
-                            ></Column>
+                            />
                             <Column
                                 field="model"
                                 header="Model"
                                 sortable
                                 style="min-width: 10rem"
-                            ></Column>
+                            />
                             <Column
                                 field="engine_number"
                                 header="Engine number"
                                 sortable
                                 style="min-width: 10rem"
-                            >
-                                <!-- <template #body="slotProps">
-                                    {{ formatCurrency(slotProps.data.price) }}
-                                </template> -->
-                            </Column>
+                            />
                             <Column
                                 field="capacity"
                                 header="Capacity"
                                 sortable
                                 style="min-width: 10rem"
-                            ></Column>
-
+                            />
                             <Column
                                 field="status"
                                 header="Status"
@@ -121,7 +122,6 @@
                             </Column>
                             <Column
                                 header="Action"
-                                sortable=""
                                 :exportable="false"
                                 style="min-width: 10rem"
                             >
@@ -146,21 +146,22 @@
                             </Column>
                         </DataTable>
 
+                        <!-- Confirm Delete Dialog -->
                         <Dialog
                             v-model:visible="deleteVehicleDialog"
-                            :style="{ width: '450px' }"
+                            :style="{ width: '90%', maxWidth: '450px' }"
                             header="Confirm"
                             :modal="true"
                         >
                             <div class="flex items-center gap-4">
                                 <i
-                                    class="pi pi-exclamation-triangle !text-3xl"
+                                    class="pi pi-exclamation-triangle text-3xl text-red-500"
                                 />
-                                <span v-if="vehicles"
-                                    >Are you sure you want to delete
+                                <span v-if="vehicles">
+                                    Are you sure you want to delete
                                     <b>{{ vehicleData.vehicle_name }}</b
-                                    >?</span
-                                >
+                                    >?
+                                </span>
                             </div>
                             <template #footer>
                                 <Button
@@ -177,20 +178,21 @@
                             </template>
                         </Dialog>
 
+                        <!-- Confirm Delete Multiple Dialog -->
                         <Dialog
                             v-model:visible="deleteVehiclesDialog"
-                            :style="{ width: '450px' }"
+                            :style="{ width: '90%', maxWidth: '450px' }"
                             header="Confirm"
                             :modal="true"
                         >
                             <div class="flex items-center gap-4">
                                 <i
-                                    class="pi pi-exclamation-triangle !text-3xl"
+                                    class="pi pi-exclamation-triangle text-3xl text-red-500"
                                 />
-                                <span v-if="vehicles"
-                                    >Are you sure you want to delete the
-                                    selected vehicles?</span
-                                >
+                                <span v-if="vehicles">
+                                    Are you sure you want to delete the selected
+                                    vehicles?
+                                </span>
                             </div>
                             <template #footer>
                                 <Button
@@ -213,6 +215,7 @@
         </div>
     </AuthenticatedLayout>
 </template>
+
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head, router, Link } from "@inertiajs/vue3";

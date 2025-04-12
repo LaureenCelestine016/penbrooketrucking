@@ -2,138 +2,35 @@
     <Head title="Dashboard" />
     <Toast />
     <AuthenticatedLayout>
-        <!-- <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Dashboard
+        <template #header>
+            <h2 class="font-semibold text-2xl text-gray-800 leading-tight mb-8">
+                Driver Dashborad
             </h2>
-        </template> -->
-
-        <div v-if="isAdmin" class="py-8 px-4 sm:px-6 lg:px-2">
-            <div class="grid grid-cols-1 gap-y-6 lg:grid-cols-1">
-                <!-- Summary Cards -->
-                <div
-                    class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"
-                >
-                    <!-- TRUCKS -->
-                    <div
-                        class="bg-white dark:bg-surface-900 shadow p-4 rounded-md"
+            <div class="flex flex-row items-center gap-x-4 border p-2 rounded">
+                <i
+                    class="pi pi-arrow-circle-left text-6xl text-[#213555] hover:text-blue-500 cursor-pointer transition-colors duration-200"
+                    style="font-size: 3rem"
+                    @click="goBack"
+                ></i>
+                <div class="dark:bg-surface-900 shado flex flex-col">
+                    <h2
+                        class="text-3xl uppercase font-black text-customblue tracking-widest"
                     >
-                        <div class="flex justify-between mb-4">
-                            <div>
-                                <span
-                                    class="block text-surface-500 dark:text-surface-300 font-medium text-base"
-                                    >TRUCKS</span
-                                >
-                                <div
-                                    class="text-surface-900 dark:text-surface-0 font-medium text-2xl"
-                                >
-                                    {{ props.truck || 0 }}
-                                </div>
-                            </div>
-                            <div
-                                class="flex items-center justify-center bg-blue-100 dark:bg-blue-400/30 rounded-md w-10 h-10"
-                            >
-                                <!-- Icon here -->
-                            </div>
-                        </div>
-                    </div>
+                        {{ props.driver.first_name }}
+                        {{ props.driver.last_name }}
+                    </h2>
 
-                    <!-- DRIVER -->
-                    <div
-                        class="bg-white dark:bg-surface-900 shadow p-4 rounded-md"
+                    <h2
+                        class="text-base uppercase font-thin text-customblue tracking-widest"
                     >
-                        <div class="flex justify-between mb-4">
-                            <div>
-                                <span
-                                    class="block text-surface-500 dark:text-surface-300 font-medium text-base"
-                                    >DRIVER</span
-                                >
-                                <div
-                                    class="text-surface-900 dark:text-surface-0 font-medium text-2xl"
-                                >
-                                    {{ props.driver || 0 }}
-                                </div>
-                            </div>
-                            <div
-                                class="flex items-center justify-center bg-green-100 dark:bg-green-400/30 rounded-md w-10 h-10"
-                            >
-                                <!-- Icon here -->
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- FUEL -->
-                    <div
-                        class="bg-white dark:bg-surface-900 shadow p-4 rounded-md"
-                    >
-                        <div class="flex justify-between mb-4">
-                            <div>
-                                <span
-                                    class="block text-surface-500 dark:text-surface-300 font-medium text-base"
-                                    >FUEL</span
-                                >
-                                <div
-                                    class="text-surface-900 dark:text-surface-0 font-medium text-2xl"
-                                >
-                                    <span class="text-gray-600">₱</span> 0
-                                </div>
-                            </div>
-                            <div
-                                class="flex items-center justify-center bg-yellow-100 dark:bg-yellow-400/30 rounded-md w-10 h-10"
-                            >
-                                <!-- Icon here -->
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- MAINTENANCE -->
-                    <div
-                        class="bg-white dark:bg-surface-900 shadow p-4 rounded-md"
-                    >
-                        <div class="flex justify-between mb-4">
-                            <div>
-                                <span
-                                    class="block text-surface-500 dark:text-surface-300 font-medium text-base"
-                                    >MAINTENANCE</span
-                                >
-                                <div
-                                    class="text-surface-900 dark:text-surface-0 font-medium text-2xl"
-                                >
-                                    <span class="text-gray-600">₱</span> 0
-                                </div>
-                            </div>
-                            <div
-                                class="flex items-center justify-center bg-red-100 dark:bg-red-400/30 rounded-md w-10 h-10"
-                            >
-                                <!-- Icon here -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Vehicle & Maintenance Status -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <StatusOverview :operationalData="operationalData" />
-                    <MaintenanceOverview :maintenanceData="maintenanceData" />
-                </div>
-
-                <!-- Fuel Chart -->
-                <div>
-                    <FuelChart
-                        :litersByDriver="litersByDriver"
-                        :litersPerMonth="litersPerMonth"
-                        :fuelStats="fuelStats"
-                    />
-                </div>
-
-                <!-- Expenses Chart -->
-                <div>
-                    <ExpensesChart :expensesData="expensesData" />
+                        {{ props.driver.license_number }}
+                    </h2>
                 </div>
             </div>
-        </div>
-
-        <div v-else class="py-8">
+        </template>
+        <template #s> </template>
+        <div></div>
+        <div class="py-8">
             <div class="mx-12 relative">
                 <div class="grid grid-cols-4 gap-y-3 gap-x-4">
                     <div class="col-span-5">
@@ -364,18 +261,15 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </AuthenticatedLayout>
+        </div></AuthenticatedLayout
+    >
 </template>
-
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import StatusOverview from "../Pages/Dashboard/Vehiclestatus.vue";
-import MaintenanceOverview from "../Pages/Dashboard/MaintenanceOverview.vue";
-import ExpensesChart from "../Pages/Dashboard/ExpensesChart.vue";
-import FuelChart from "../Pages/Dashboard/FuelChart.vue";
-import FuelChartDriver from "../Pages/Dashboard/FuelChartDriver.vue";
-import { ref, onMounted, onBeforeUnmount, watch } from "vue";
+import FuelChart from "./FuelChart.vue";
+import FuelChartDriver from "./FuelChartDriver.vue";
+
+import { ref, onMounted, onBeforeUnmount, watch, nextTick } from "vue";
 import { Head, usePage, router } from "@inertiajs/vue3";
 import AutoComplete from "primevue/autocomplete";
 
@@ -395,19 +289,7 @@ import Sidebar from "primevue/sidebar";
 const { props } = usePage();
 console.log(props);
 
-const user = props.auth.user;
-const isAdmin = user.user_type === 1;
+const goBack = () => {
+    window.history.back();
+};
 </script>
-
-<style scoped>
-h3 {
-    font-size: 1.25rem;
-    font-weight: 600;
-}
-
-.echarts {
-    width: 100%;
-    height: 100%;
-    min-height: 300px;
-}
-</style>

@@ -96,7 +96,6 @@ const initChart = () => {
         props.expensesData.forEach(({ month, total_cost }) => {
             totalByMonth[month - 1] += parseFloat(total_cost);
         });
-        console.log(totalByMonth);
 
         series = [
             {

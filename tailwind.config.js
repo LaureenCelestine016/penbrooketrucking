@@ -31,9 +31,7 @@ export default {
             },
             borderColor: {
                 navyblue: "#213555",
-            },
-            colors: {
-                lightblue: "#a5d8ff", // Now usable as text-lightblue, bg-lightblue, border-lightblue, etc.
+                lightblue: "#07649d",
             },
         },
     },

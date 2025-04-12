@@ -99,6 +99,7 @@
                     ></div>
                 </div>
             </div>
+
             <div class="border border-gray-300 rounded-md p-4 min-h-[300px]">
                 <div class="flex flex-col space-y-6">
                     <!-- YTD Comparison -->
@@ -141,7 +142,6 @@ import { router, usePage } from "@inertiajs/vue3";
 import * as echarts from "echarts";
 
 const { props } = usePage();
-console.log(props);
 
 const litersDriverChart = ref(null);
 const litersPerMonthChart = ref(null);
@@ -308,10 +308,10 @@ const updateMonthChart = () => {
     const option = {
         tooltip: { trigger: "axis" },
         grid: {
-            left: "1%",
-            right: "5%",
-            top: "5%",
-            bottom: "5%",
+            left: "2%",
+            right: "3%",
+            top: "12%",
+            bottom: "0%",
             containLabel: true,
         },
         xAxis: {
