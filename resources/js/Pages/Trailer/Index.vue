@@ -9,205 +9,196 @@
             </h2>
         </template>
 
-        <div class="py-4">
-            <div class="mx-12">
-                <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
-                    <div class="card">
-                        <DataTable
-                            ref="dt"
-                            v-model:selection="selectedTrailer"
-                            :value="trailers"
-                            dataKey="id"
-                            :paginator="true"
-                            :rows="10"
-                            :filters="filters"
-                            paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-                            :rowsPerPageOptions="[5, 10, 25]"
-                            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} vehicles"
-                        >
-                            <template #header>
+        <div class="py-4 px-4 sm:px-2 lg:px-2">
+            <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
+                <div class="card">
+                    <DataTable
+                        ref="dt"
+                        v-model:selection="selectedTrailer"
+                        :value="trailers"
+                        dataKey="id"
+                        :paginator="true"
+                        :rows="10"
+                        :filters="filters"
+                        paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+                        :rowsPerPageOptions="[5, 10, 25]"
+                        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} vehicles"
+                    >
+                        <template #header>
+                            <div
+                                class="flex flex-wrap gap-2 items-center justify-between p-1"
+                            >
+                                <Button
+                                    label="EXPORT TO EXCEL"
+                                    icon="pi pi-upload"
+                                    severity="secondary"
+                                    @click="exportCSV($event)"
+                                />
+
                                 <div
-                                    class="flex flex-wrap gap-2 items-center justify-between p-1"
+                                    class="flex gap-4 justify-center items-center"
                                 >
                                     <Button
-                                        label="EXPORT TO EXCEL"
-                                        icon="pi pi-upload"
-                                        severity="secondary"
-                                        @click="exportCSV($event)"
-                                    />
-
-                                    <div
-                                        class="flex gap-4 justify-center items-center"
-                                    >
-                                        <Button
-                                            label="Delete"
-                                            icon="pi pi-trash"
-                                            severity="danger"
-                                            outlined
-                                            @click="confirmDeleteSelected"
-                                            :disabled="
-                                                !selectedTrailer ||
-                                                !selectedTrailer.length
-                                            "
-                                        />
-                                        <IconField>
-                                            <InputIcon>
-                                                <i class="pi pi-search" />
-                                            </InputIcon>
-                                            <InputText
-                                                v-model="
-                                                    filters['global'].value
-                                                "
-                                                placeholder="Search..."
-                                            />
-                                        </IconField>
-                                    </div>
-
-                                    <!-- <h4 class="m-0">Manage Products</h4> -->
-                                </div>
-                            </template>
-
-                            <Column
-                                selectionMode="multiple"
-                                style="width: 3rem"
-                                :exportable="false"
-                            ></Column>
-                            <Column
-                                field="license_plate"
-                                header="Plate number"
-                                sortable
-                                style="min-width: 10rem"
-                            ></Column>
-                            <Column
-                                field="body_number"
-                                header="Body number"
-                                sortable
-                                style="min-width: 10rem"
-                            ></Column>
-                            <Column
-                                field="lto_exp_date"
-                                header="LTO Expired Date"
-                                sortable
-                                style="min-width: 10rem"
-                            >
-                            </Column>
-                            <Column
-                                field="calibration_exp_date"
-                                header="Calibration Expired Date"
-                                sortable
-                                style="min-width: 10rem"
-                            ></Column>
-
-                            <Column
-                                field="status"
-                                header="Status"
-                                sortable
-                                style="min-width: 10rem"
-                            >
-                                <template #body="slotProps">
-                                    <Tag
-                                        class="status"
-                                        :value="slotProps.data.status"
-                                        :severity="
-                                            getStatusLabel(
-                                                slotProps.data.status
-                                            )
-                                        "
-                                    />
-                                </template>
-                            </Column>
-                            <Column
-                                header="Action"
-                                sortable=""
-                                :exportable="false"
-                                style="min-width: 10rem"
-                            >
-                                <template #body="slotProps">
-                                    <Button
-                                        icon="pi pi-pencil"
-                                        outlined
-                                        rounded
-                                        class="mr-2"
-                                        @click="showDetail(slotProps.data.id)"
-                                    />
-                                    <Button
+                                        label="Delete"
                                         icon="pi pi-trash"
-                                        outlined
-                                        rounded
                                         severity="danger"
-                                        @click="
-                                            confirmDeleteTrailer(slotProps.data)
+                                        outlined
+                                        @click="confirmDeleteSelected"
+                                        :disabled="
+                                            !selectedTrailer ||
+                                            !selectedTrailer.length
                                         "
                                     />
-                                </template>
-                            </Column>
-                        </DataTable>
+                                    <IconField>
+                                        <InputIcon>
+                                            <i class="pi pi-search" />
+                                        </InputIcon>
+                                        <InputText
+                                            v-model="filters['global'].value"
+                                            placeholder="Search..."
+                                        />
+                                    </IconField>
+                                </div>
 
-                        <Dialog
-                            v-model:visible="deleteTrailerDialog"
-                            :style="{ width: '450px' }"
-                            header="Confirm"
-                            :modal="true"
-                        >
-                            <div class="flex items-center gap-4">
-                                <i
-                                    class="pi pi-exclamation-triangle !text-3xl"
-                                />
-                                <span v-if="trailerData"
-                                    >Are you sure you want to delete
-                                    <b>{{ trailerData.license_plate }}</b
-                                    >?</span
-                                >
+                                <!-- <h4 class="m-0">Manage Products</h4> -->
                             </div>
-                            <template #footer>
-                                <Button
-                                    label="No"
-                                    icon="pi pi-times"
-                                    text
-                                    @click="deleteTrailerDialog = false"
-                                />
-                                <Button
-                                    label="Yes"
-                                    icon="pi pi-check"
-                                    @click="deleteTrailer(trailerData.id)"
+                        </template>
+
+                        <Column
+                            selectionMode="multiple"
+                            style="width: 3rem"
+                            :exportable="false"
+                        ></Column>
+                        <Column
+                            field="license_plate"
+                            header="Plate number"
+                            sortable
+                            style="min-width: 10rem"
+                        ></Column>
+                        <Column
+                            field="body_number"
+                            header="Body number"
+                            sortable
+                            style="min-width: 10rem"
+                        ></Column>
+                        <Column
+                            field="lto_exp_date"
+                            header="LTO Expired Date"
+                            sortable
+                            style="min-width: 10rem"
+                        >
+                        </Column>
+                        <Column
+                            field="calibration_exp_date"
+                            header="Calibration Expired Date"
+                            sortable
+                            style="min-width: 10rem"
+                        ></Column>
+
+                        <Column
+                            field="status"
+                            header="Status"
+                            sortable
+                            style="min-width: 10rem"
+                        >
+                            <template #body="slotProps">
+                                <Tag
+                                    class="status"
+                                    :value="slotProps.data.status"
+                                    :severity="
+                                        getStatusLabel(slotProps.data.status)
+                                    "
                                 />
                             </template>
-                        </Dialog>
-
-                        <Dialog
-                            v-model:visible="deleteTrailersDialog"
-                            :style="{ width: '450px' }"
-                            header="Confirm"
-                            :modal="true"
+                        </Column>
+                        <Column
+                            header="Action"
+                            sortable=""
+                            :exportable="false"
+                            style="min-width: 10rem"
                         >
-                            <div class="flex items-center gap-4">
-                                <i
-                                    class="pi pi-exclamation-triangle !text-3xl"
-                                />
-                                <span v-if="trailers"
-                                    >Are you sure you want to delete the
-                                    selected Trailers?</span
-                                >
-                            </div>
-                            <template #footer>
+                            <template #body="slotProps">
                                 <Button
-                                    label="No"
-                                    icon="pi pi-times"
-                                    text
-                                    @click="deleteTrailersDialog = false"
+                                    icon="pi pi-pencil"
+                                    outlined
+                                    rounded
+                                    class="mr-2"
+                                    @click="showDetail(slotProps.data.id)"
                                 />
                                 <Button
-                                    label="Yes"
-                                    icon="pi pi-check"
-                                    text
-                                    @click="deleteSelectedTrailers"
+                                    icon="pi pi-trash"
+                                    outlined
+                                    rounded
+                                    severity="danger"
+                                    @click="
+                                        confirmDeleteTrailer(slotProps.data)
+                                    "
                                 />
                             </template>
-                        </Dialog>
-                    </div>
+                        </Column>
+                    </DataTable>
+
+                    <Dialog
+                        v-model:visible="deleteTrailerDialog"
+                        :style="{ width: '450px' }"
+                        header="Confirm"
+                        :modal="true"
+                    >
+                        <div class="flex items-center gap-4">
+                            <i class="pi pi-exclamation-triangle !text-3xl" />
+                            <span v-if="trailerData"
+                                >Are you sure you want to delete
+                                <b>{{ trailerData.license_plate }}</b
+                                >?</span
+                            >
+                        </div>
+                        <template #footer>
+                            <Button
+                                label="No"
+                                icon="pi pi-times"
+                                text
+                                @click="deleteTrailerDialog = false"
+                            />
+                            <Button
+                                label="Yes"
+                                icon="pi pi-check"
+                                @click="deleteTrailer(trailerData.id)"
+                            />
+                        </template>
+                    </Dialog>
+
+                    <Dialog
+                        v-model:visible="deleteTrailersDialog"
+                        :style="{ width: '450px' }"
+                        header="Confirm"
+                        :modal="true"
+                    >
+                        <div class="flex items-center gap-4">
+                            <i class="pi pi-exclamation-triangle !text-3xl" />
+                            <span v-if="trailers"
+                                >Are you sure you want to delete the selected
+                                Trailers?</span
+                            >
+                        </div>
+                        <template #footer>
+                            <Button
+                                label="No"
+                                icon="pi pi-times"
+                                text
+                                @click="deleteTrailersDialog = false"
+                            />
+                            <Button
+                                label="Yes"
+                                icon="pi pi-check"
+                                text
+                                @click="deleteSelectedTrailers"
+                            />
+                        </template>
+                    </Dialog>
                 </div>
-            </div></div
-    ></AuthenticatedLayout>
+            </div>
+        </div>
+    </AuthenticatedLayout>
 </template>
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";

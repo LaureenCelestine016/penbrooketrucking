@@ -16,7 +16,7 @@
                         class="bg-white rounded-xl p-5 shadow text-center border border-gray-200 flex flex-col justify-center"
                     >
                         <div class="text-3xl font-bold text-gray-900">
-                            {{ props.fuelStats.lastYearYTD }}
+                            {{ formatNumber(props.fuelStats.lastYearYTD) }}
                         </div>
                         <div class="text-sm text-gray-500">
                             Total Liter YTD Last Year
@@ -27,7 +27,7 @@
                         class="bg-white rounded-xl p-5 shadow text-center border border-gray-200 flex flex-col justify-center"
                     >
                         <div class="text-3xl font-bold text-gray-900">
-                            {{ props.fuelStats.currentYearYTD }}
+                            {{ formatNumber(props.fuelStats.currentYearYTD) }}
                         </div>
                         <div class="text-sm text-gray-500">Total YTD</div>
                     </div>
@@ -36,7 +36,7 @@
                         class="bg-white rounded-xl p-5 shadow text-center border border-gray-200 flex flex-col justify-center"
                     >
                         <div class="text-3xl font-bold text-gray-900">
-                            {{ props.fuelStats.totalFuel }}
+                            {{ formatNumber(props.fuelStats.totalFuel) }}
                         </div>
                         <div class="text-sm text-gray-500">Total Fuel</div>
                     </div>
@@ -178,6 +178,17 @@ const onDriverSelect = (driverId) => {
     fetchFuelStats();
 };
 
+const formatNumber = (value) => {
+    if (!value && value !== 0) return "-";
+
+    if (value >= 1000000) {
+        return (value / 1000000).toFixed(2) + "M";
+    } else if (value >= 1000) {
+        return (value / 1000).toFixed(2) + "K";
+    }
+    return value.toString();
+};
+
 const fetchFuelStats = async () => {
     try {
         const response = await axios.get(route("dashboard.getFuelStats"), {
@@ -258,7 +269,7 @@ const updateFuelChart = () => {
             {
                 type: "bar",
                 data: data,
-                barWidth: "40px",
+                barWidth: "20px",
                 itemStyle: {
                     color: "#213555",
                     borderRadius: [4, 4, 0, 0],

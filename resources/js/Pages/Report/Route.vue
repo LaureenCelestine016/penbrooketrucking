@@ -8,77 +8,77 @@
                 Route Report
             </h2>
         </template>
-        <div class="py-4">
-            <div class="mx-12">
-                <div
-                    class="bg-white overflow-hidden shadow-sm sm:rounded-md p-4"
-                >
-                    <div class="card flex justify-center mb-5">
-                        <DatePicker
-                            v-model="dates"
-                            selectionMode="range"
-                            :manualInput="false"
-                            placeholder="Select Date Range"
-                            showIcon
-                        />
-                    </div>
-                    <div class="grid grid-cols-2 gap-4 mb-4">
-                        <AutoComplete
-                            v-model="driver"
-                            dropdown
-                            :suggestions="drivers"
-                            optionLabel="full_name"
-                            @complete="searchDrivers"
-                            placeholder="Select Driver"
-                        />
-
-                        <!-- Vehicle Selection -->
-                        <AutoComplete
-                            v-model="vehicle"
-                            dropdown
-                            :suggestions="vehicles"
-                            optionLabel="license_plate"
-                            @complete="searchVehicles"
-                            placeholder="Select Vehicle"
-                        />
-
-                        <!-- Generate Report Button -->
-                    </div>
-                    <Button
-                        @click="submitForm"
-                        label="Generate Report"
-                        class="p-button-primary w-full mt-5"
+        <div class="py-4 px-4 sm:px-2 lg:px-2">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-md p-4">
+                <div class="card flex justify-center mb-5">
+                    <DatePicker
+                        v-model="dates"
+                        selectionMode="range"
+                        :manualInput="false"
+                        placeholder="Select Date Range"
+                        showIcon
+                    />
+                </div>
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <AutoComplete
+                        v-model="driver"
+                        dropdown
+                        :suggestions="drivers"
+                        optionLabel="full_name"
+                        @complete="searchDrivers"
+                        placeholder="Select Driver"
                     />
 
-                    <!-- Data Table -->
-                    <DataTable
-                        :value="routes"
-                        ref="dt"
-                        tableStyle="min-width: 50rem"
-                        class="mt-6"
-                    >
-                        <template #header>
-                            <div class="text-end pb-4">
-                                <Button
-                                    icon="pi pi-external-link"
-                                    label="Export"
-                                    @click="exportCSV($event)"
-                                />
-                            </div>
-                        </template>
-                        <Column
-                            field="vehicle.license_plate"
-                            header="Tractor / Trailer"
-                        />
-                        <Column field="driver.first_name" header="First Name" />
-                        <Column field="driver.last_name" header="Last Name" />
-                        <Column field="start_date" header="Trip Date" />
-                        <Column
-                            field="end_location.address"
-                            header="Location"
-                        />
-                    </DataTable>
+                    <!-- Vehicle Selection -->
+                    <AutoComplete
+                        v-model="vehicle"
+                        dropdown
+                        :suggestions="vehicles"
+                        optionLabel="license_plate"
+                        @complete="searchVehicles"
+                        placeholder="Select Vehicle"
+                    />
+
+                    <!-- Generate Report Button -->
                 </div>
+                <Button
+                    @click="submitForm"
+                    label="Generate Report"
+                    class="p-button-primary w-full mt-5"
+                />
+
+                <!-- Data Table -->
+                <DataTable
+                    :value="routes"
+                    ref="dt"
+                    tableStyle="min-width: 50rem"
+                    class="mt-6"
+                >
+                    <template #header>
+                        <div class="flex flex-row gap-2 justify-end pb-4">
+                            <Button
+                                icon="pi pi-file-pdf"
+                                label="PDF"
+                                severity="danger"
+                                class="w-[100px]"
+                                @click="exportPDF"
+                            />
+                            <Button
+                                icon="pi pi-external-link"
+                                label="Export"
+                                @click="exportCSV($event)"
+                            />
+                        </div>
+                    </template>
+                    <Column
+                        field="vehicle.license_plate"
+                        header="Tractor / Trailer"
+                    />
+                    <Column field="driver.first_name" header="First Name" />
+                    <Column field="driver.last_name" header="Last Name" />
+                    <Column field="start_date" header="Trip Date" />
+                    <Column field="end_location.address" header="Location" />
+                </DataTable>
             </div>
         </div>
     </AuthenticatedLayout>
@@ -164,5 +164,34 @@ const searchVehicles = (event) => {
 
 const exportCSV = () => {
     dt.value.exportCSV();
+};
+
+const exportPDF = () => {
+    const routesData = props.routes.map((route) => ({
+        end_date: route.end_date,
+        first_name: route.driver?.first_name ?? "",
+        last_name: route.driver?.last_name ?? "",
+        license_plate: route.vehicle?.license_plate ?? "",
+        location: route.end_location?.address ?? "",
+    }));
+
+    axios
+        .post(
+            route("reports.routespdf"),
+            { routes: routesData },
+            { responseType: "blob" }
+        )
+        .then((response) => {
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement("a");
+            link.href = url;
+            link.setAttribute("download", "route_report.pdf");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        })
+        .catch((error) => {
+            console.error("PDF export failed", error);
+        });
 };
 </script>

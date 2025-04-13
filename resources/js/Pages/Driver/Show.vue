@@ -8,7 +8,7 @@
                 class="font-semibold text-xl text-gray-800 leading-tight mb-4 flex items-center"
             ></h2>
 
-            <div class="py-8">
+            <div class="px-4 sm:px-2 lg:px-2">
                 <div class="">
                     <div class="cover-pictue-container">
                         <Card class="cover-picture">

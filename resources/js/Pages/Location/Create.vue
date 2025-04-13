@@ -7,20 +7,19 @@
                 Add Location
             </h2>
         </template>
-        <div class="py-4">
-            <div class="mx-12">
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <form @submit.prevent="submit" class="p-6">
-                        <div class="">
-                            <label
-                                class="text-gray-900 dark:text-surface-0 text-xl font-medium mb-4 block"
-                                >Address Information</label
-                            >
-                            <!---
+        <div class="py-4 px-4 sm:px-2 lg:px-2">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <form @submit.prevent="submit" class="p-6">
+                    <div class="">
+                        <label
+                            class="text-gray-900 dark:text-surface-0 text-xl font-medium mb-4 block"
+                            >Address Information</label
+                        >
+                        <!---
 
 
                             -->
-                            <!-- <div class="grid grid-cols-2 gap-10 mb-4">
+                        <!-- <div class="grid grid-cols-2 gap-10 mb-4">
                                 <div class="w-full">
                                     <label
                                         for="region"
@@ -208,39 +207,39 @@
                                 </div>
                             </div> -->
 
-                            <!-- landmark -->
-                            <div>
-                                <div class="w-full mb-5">
-                                    <label
-                                        for="landmark"
-                                        class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                        >Address<span class="ml-1 text-red-400"
-                                            >*</span
-                                        ></label
-                                    >
-                                    <FormField
+                        <!-- landmark -->
+                        <div>
+                            <div class="w-full mb-5">
+                                <label
+                                    for="landmark"
+                                    class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                    >Address<span class="ml-1 text-red-400"
+                                        >*</span
+                                    ></label
+                                >
+                                <FormField
+                                    id="landmark"
+                                    name="landmark"
+                                    class="flex flex-col gap-1"
+                                >
+                                    <InputText
                                         id="landmark"
-                                        name="landmark"
-                                        class="flex flex-col gap-1"
+                                        type="text"
+                                        class="user--input firstName"
+                                        placeholder="Address"
+                                        v-model="form.address"
+                                    />
+                                    <Message
+                                        v-if="form.errors.name"
+                                        severity="error"
+                                        size="small"
+                                        variant="simple"
+                                        >{{ form.errors.name }}</Message
                                     >
-                                        <InputText
-                                            id="landmark"
-                                            type="text"
-                                            class="user--input firstName"
-                                            placeholder="Address"
-                                            v-model="form.address"
-                                        />
-                                        <Message
-                                            v-if="form.errors.name"
-                                            severity="error"
-                                            size="small"
-                                            variant="simple"
-                                            >{{ form.errors.name }}</Message
-                                        >
-                                    </FormField>
-                                </div>
+                                </FormField>
                             </div>
-                            <!-- <div class="flex items-center gap-2 mt-3">
+                        </div>
+                        <!-- <div class="flex items-center gap-2 mt-3">
                                 <label
                                     class="text-gray-900 dark:text-surface-0 text-xl font-medium my-4 block"
                                     >Coordinates</label
@@ -266,7 +265,7 @@
                                     >
                                 </div>
                             </div> -->
-                            <!-- <div class="grid grid-cols-2 gap-10 mb-4">
+                        <!-- <div class="grid grid-cols-2 gap-10 mb-4">
                                 <div class="w-full">
                                     <label
                                         for="latitude"
@@ -332,23 +331,18 @@
                                 </div>
                             </div> -->
 
-                            <div
-                                id="map"
-                                style="
-                                    width: 100%;
-                                    height: 450px;
-                                    background: #eee;
-                                "
-                            ></div>
-                            <Button
-                                label="SUBMIT"
-                                type="submit"
-                                icon="pi pi-send"
-                                class="w-full mt-4"
-                            />
-                        </div>
-                    </form>
-                </div>
+                        <div
+                            id="map"
+                            style="width: 100%; height: 450px; background: #eee"
+                        ></div>
+                        <Button
+                            label="SUBMIT"
+                            type="submit"
+                            icon="pi pi-send"
+                            class="w-full mt-4"
+                        />
+                    </div>
+                </form>
             </div>
         </div>
     </AuthenticatedLayout>

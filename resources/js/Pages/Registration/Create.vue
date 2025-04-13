@@ -8,1201 +8,1134 @@
                 Update Truck Registration
             </h2>
         </template>
-        <div class="py-4">
-            <div class="mx-12">
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-md">
-                    <form @submit.prevent="submit" class="p-6">
-                        <div class="">
-                            <div class="flex flex-row gap-x-8 mb-6">
-                                <div class="flex items-center gap-2">
-                                    <RadioButton
-                                        v-model="truck"
-                                        inputId="ingredient1"
-                                        name="truck"
-                                        value="1"
-                                    />
-                                    <label for="ingredient1"
-                                        >TRACTOR HEAD</label
-                                    >
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <RadioButton
-                                        v-model="truck"
-                                        inputId="ingredient2"
-                                        name="truck"
-                                        value="2"
-                                    />
-                                    <label for="ingredient2">TRAILER</label>
-                                </div>
+        <div class="py-4 px-4 sm:px-2 lg:px-2">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-md">
+                <form @submit.prevent="submit" class="p-6">
+                    <div class="">
+                        <div class="flex flex-row gap-x-8 mb-6">
+                            <div class="flex items-center gap-2">
+                                <RadioButton
+                                    v-model="truck"
+                                    inputId="ingredient1"
+                                    name="truck"
+                                    value="1"
+                                />
+                                <label for="ingredient1">TRACTOR HEAD</label>
                             </div>
-                            <div class="grid grid-cols-2 gap-10 mb-6">
-                                <div class="w-full">
-                                    <label
-                                        for="tructor"
-                                        class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                        >Tractor Truck<span
-                                            class="ml-1 text-red-400"
-                                            >*</span
-                                        ></label
-                                    >
-                                    <FormField
-                                        id="tructor"
-                                        name="tructor"
-                                        class="flex flex-col gap-1"
-                                    >
-                                        <AutoComplete
-                                            id="tructor"
-                                            class="w-full"
-                                            :suggestions="tructors"
-                                            @complete="tructorNameSearch"
-                                            @item-select="onTructorSelect"
-                                            optionLabel="name"
-                                            dropdown
-                                            placeholder="Plate no."
-                                            :disabled="truck !== '1'"
-                                        />
-                                    </FormField>
-                                </div>
-                                <div class="w-full">
-                                    <label
-                                        for="trailer"
-                                        class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                        >Trailer Truck<span
-                                            class="ml-1 text-red-400"
-                                            >*</span
-                                        ></label
-                                    >
-                                    <FormField
-                                        id="trailer"
-                                        name="trailer"
-                                        class="flex flex-col gap-1"
-                                    >
-                                        <AutoComplete
-                                            id="trailer"
-                                            class="w-full"
-                                            :suggestions="trailers"
-                                            @complete="trailerNameSearch"
-                                            @item-select="onTrailerSelect"
-                                            optionLabel="name"
-                                            dropdown
-                                            placeholder="Plate no."
-                                            :disabled="truck !== '2'"
-                                        />
-                                    </FormField>
-                                </div>
-                            </div>
-                            <div
-                                v-if="!truck"
-                                class="h-[150px] border-2 border-dashed border-surface mb-7 flex items-center justify-center text-gray-600 text-2xl font-medium"
-                            >
-                                SELECT TRUCK TYPE
-                            </div>
-                            <div class="mt-5 mb-11" v-else-if="truck === '1'">
-                                <div class="">
-                                    <label
-                                        for="Plate_number"
-                                        class="text-gray-700 dark:text-surface-0 text-2xl font-medium mb-4 block"
-                                        >Registration Details
-                                    </label>
-                                    <div
-                                        class="grid grid-cols-2 gap-8 mb-1"
-                                        disabled=""
-                                    >
-                                        <!-- LTO Reg date -->
-                                        <div
-                                            :class="[
-                                                'w-100',
-                                                form.hasErrors
-                                                    ? 'mb-4'
-                                                    : 'mb-6',
-                                            ]"
-                                        >
-                                            <label
-                                                for="ltoRegDate"
-                                                class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                                >LTO Registered Date<span
-                                                    class="ml-1 text-red-400"
-                                                    >*</span
-                                                ></label
-                                            >
-                                            <FormField
-                                                id="ltoRegDate"
-                                                name="ltoRegDate"
-                                                class="flex flex-col gap-1"
-                                            >
-                                                <DatePicker
-                                                    id="calibDate"
-                                                    v-model="form.lto_reg_date"
-                                                    showIcon
-                                                    fluid
-                                                    :showOnFocus="false"
-                                                    inputId="registrationExp"
-                                                    placeholder="LTO Registration Date"
-                                                    :disabled="!tructorId"
-                                                />
-                                                <Message
-                                                    v-if="
-                                                        form.errors.lto_reg_date
-                                                    "
-                                                    severity="error"
-                                                    size="small"
-                                                    variant="simple"
-                                                    >{{
-                                                        form.errors.lto_reg_date
-                                                    }}</Message
-                                                >
-                                            </FormField>
-                                        </div>
-                                        <!-- LTO Expired date -->
-                                        <div
-                                            v-if="isLtoTractorExpired"
-                                            class="w-full mb-2"
-                                        >
-                                            <label
-                                                for="LTOExpDate"
-                                                class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                                >LTO Expired Date<span
-                                                    class="ml-1 text-red-400"
-                                                    >*
-                                                </span></label
-                                            >
-
-                                            <FormField
-                                                id="LTOExpDate"
-                                                name="LTOExpDate"
-                                                class="flex flex-col gap-1"
-                                            >
-                                                <InputText
-                                                    disabled=""
-                                                    type="text"
-                                                    placeholder="LTO Expired Date"
-                                                    v-model="form.lto_exp_date"
-                                                    class="!border-red-500 !bg-gray-50"
-                                                />
-                                                <Message
-                                                    severity="error"
-                                                    size="small"
-                                                    variant="simple"
-                                                >
-                                                    Updating LTO expiration date
-                                                </Message>
-                                            </FormField>
-                                        </div>
-                                        <div
-                                            v-else
-                                            :class="[
-                                                'w-100',
-                                                form.hasErrors
-                                                    ? 'mb-4'
-                                                    : 'mb-6',
-                                            ]"
-                                        >
-                                            <label
-                                                for="LTOExpDate"
-                                                class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                                >LTO Expired Date<span
-                                                    class="ml-1 text-red-400"
-                                                    >*
-                                                </span></label
-                                            >
-
-                                            <FormField
-                                                id="LTOExpDate"
-                                                name="LTOExpDate"
-                                                class="flex flex-col gap-1"
-                                            >
-                                                <InputText
-                                                    disabled=""
-                                                    type="text"
-                                                    placeholder="LTO Expired Date"
-                                                    v-model="form.lto_exp_date"
-                                                    class="!bg-gray-50"
-                                                />
-                                                <Message
-                                                    v-if="
-                                                        form.errors.lto_exp_date
-                                                    "
-                                                    severity="error"
-                                                    size="small"
-                                                    variant="simple"
-                                                >
-                                                    {{
-                                                        form.errors.lto_exp_date
-                                                    }}
-                                                </Message>
-                                            </FormField>
-                                        </div>
-                                    </div>
-                                    <!-- Conveyance -->
-                                    <div class="grid grid-cols-2 gap-8 mb-1">
-                                        <div
-                                            :class="[
-                                                'w-100',
-                                                form.hasErrors
-                                                    ? 'mb-4'
-                                                    : 'mb-6',
-                                            ]"
-                                        >
-                                            <label
-                                                for="conveyDate"
-                                                class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                                >Conveyance Registered Date<span
-                                                    class="ml-1 text-red-400"
-                                                    >*</span
-                                                ></label
-                                            >
-                                            <FormField
-                                                id="conveyDate"
-                                                name="conveyDate"
-                                                class="flex flex-col gap-1"
-                                            >
-                                                <div class="flex-auto">
-                                                    <DatePicker
-                                                        id="conveyDate"
-                                                        v-model="
-                                                            form.conveyance_date
-                                                        "
-                                                        showIcon
-                                                        fluid
-                                                        :showOnFocus="false"
-                                                        inputId="conveyDate"
-                                                        placeholder="Conveyance Date"
-                                                        :disabled="!tructorId"
-                                                    />
-                                                </div>
-                                                <Message
-                                                    v-if="
-                                                        form.errors
-                                                            .conveyance_date
-                                                    "
-                                                    severity="error"
-                                                    size="small"
-                                                    variant="simple"
-                                                    >{{
-                                                        form.errors
-                                                            .conveyance_date
-                                                    }}</Message
-                                                >
-                                            </FormField>
-                                        </div>
-                                        <!-- Conveyance Expired date -->
-                                        <div
-                                            v-if="isconveyanceExpired"
-                                            class="w-full mb-2"
-                                        >
-                                            <label
-                                                for="conExpdate"
-                                                class="text-gray-700 dark:text-surface-50 text-sm font-medium mb-2 block"
-                                                >Conveyance Expired Date<span
-                                                    class="ml-1 text-red-400"
-                                                    >*</span
-                                                ></label
-                                            >
-                                            <FormField
-                                                id="conExpdate"
-                                                name="conExpdate"
-                                                class="flex flex-col gap-1"
-                                            >
-                                                <InputText
-                                                    disabled=""
-                                                    type="text"
-                                                    placeholder="Conveyance Expired Date"
-                                                    v-model="
-                                                        form.conveyance_exp_date
-                                                    "
-                                                    class="!border-red-500 !bg-gray-50"
-                                                />
-                                                <Message
-                                                    severity="error"
-                                                    size="small"
-                                                    variant="simple"
-                                                >
-                                                    Updating Conveyance
-                                                    expiration date
-                                                </Message>
-                                            </FormField>
-                                        </div>
-                                        <div
-                                            v-else
-                                            :class="[
-                                                'w-100',
-                                                form.hasErrors
-                                                    ? 'mb-4'
-                                                    : 'mb-6',
-                                            ]"
-                                        >
-                                            <label
-                                                for="conExpdate"
-                                                class="text-gray-700 dark:text-surface-50 text-sm font-medium mb-2 block"
-                                                >Conveyance Expired Date<span
-                                                    class="ml-1 text-red-400"
-                                                    >*</span
-                                                ></label
-                                            >
-                                            <FormField
-                                                id="conExpdate"
-                                                name="conExpdate"
-                                                class="flex flex-col gap-1"
-                                            >
-                                                <InputText
-                                                    disabled=""
-                                                    type="text"
-                                                    placeholder="Conveyance Expired Date"
-                                                    v-model="
-                                                        form.conveyance_exp_date
-                                                    "
-                                                    class="!bg-gray-50"
-                                                />
-                                                <Message
-                                                    v-if="
-                                                        form.errors
-                                                            .conveyance_exp_date
-                                                    "
-                                                    severity="error"
-                                                    size="small"
-                                                    variant="simple"
-                                                    >{{
-                                                        form.errors
-                                                            .conveyance_exp_date
-                                                    }}</Message
-                                                >
-                                            </FormField>
-                                        </div>
-                                    </div>
-                                    <!-- Filcom Fab -->
-                                    <div class="grid grid-cols-2 gap-8 mb-1">
-                                        <div
-                                            :class="[
-                                                'w-100',
-                                                form.hasErrors
-                                                    ? 'mb-4'
-                                                    : 'mb-6',
-                                            ]"
-                                        >
-                                            <label
-                                                for="filcomFab"
-                                                class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                                >Filcom Fab Registered Date<span
-                                                    class="ml-1 text-red-400"
-                                                    >*</span
-                                                ></label
-                                            >
-                                            <FormField
-                                                id="filcomFab"
-                                                name="filcomFab"
-                                                class="flex flex-col gap-1"
-                                            >
-                                                <div class="flex-auto">
-                                                    <DatePicker
-                                                        id="filcomFab"
-                                                        v-model="
-                                                            form.filcom_fab_date
-                                                        "
-                                                        showIcon
-                                                        fluid
-                                                        :showOnFocus="false"
-                                                        inputId="filcomFab"
-                                                        placeholder="Filcom Fab Date"
-                                                        :disabled="!tructorId"
-                                                    />
-                                                </div>
-                                                <Message
-                                                    v-if="
-                                                        form.errors
-                                                            .conveyance_date
-                                                    "
-                                                    severity="error"
-                                                    size="small"
-                                                    variant="simple"
-                                                    >{{
-                                                        form.errors
-                                                            .conveyance_date
-                                                    }}</Message
-                                                >
-                                            </FormField>
-                                        </div>
-                                        <div
-                                            v-if="isFilcomExpired"
-                                            class="w-full mb-2"
-                                        >
-                                            <label
-                                                for="filcomFab"
-                                                class="text-gray-700 dark:text-surface-50 text-sm font-medium mb-2 block"
-                                                >Filcom Fab Expired Date<span
-                                                    class="ml-1 text-red-400"
-                                                    >*</span
-                                                ></label
-                                            >
-                                            <FormField
-                                                id="filcomFab"
-                                                name="filcomFab"
-                                                class="flex flex-col gap-1"
-                                            >
-                                                <InputText
-                                                    disabled=""
-                                                    type="text"
-                                                    placeholder="Filcon Fab Expired Date"
-                                                    v-model="
-                                                        form.filcon_exp_date
-                                                    "
-                                                    class="!border-red-500 !bg-gray-50"
-                                                />
-                                                <Message
-                                                    severity="error"
-                                                    size="small"
-                                                    variant="simple"
-                                                >
-                                                    Updating Filcom expiration
-                                                    date
-                                                </Message>
-                                            </FormField>
-                                        </div>
-                                        <div
-                                            v-else
-                                            :class="[
-                                                'w-100',
-                                                form.hasErrors
-                                                    ? 'mb-4'
-                                                    : 'mb-6',
-                                            ]"
-                                        >
-                                            <label
-                                                for="filcomFab"
-                                                class="text-gray-700 dark:text-surface-50 text-sm font-medium mb-2 block"
-                                                >Filcom Fab Expired Date<span
-                                                    class="ml-1 text-red-400"
-                                                    >*</span
-                                                ></label
-                                            >
-                                            <FormField
-                                                id="conExpdate"
-                                                name="conExpdate"
-                                                class="flex flex-col gap-1"
-                                            >
-                                                <InputText
-                                                    disabled=""
-                                                    type="text"
-                                                    placeholder="Filcon Fab Expired Date"
-                                                    v-model="
-                                                        form.filcon_exp_date
-                                                    "
-                                                    class="!bg-gray-50"
-                                                />
-                                                <Message
-                                                    v-if="
-                                                        form.errors
-                                                            .filcon_exp_date
-                                                    "
-                                                    severity="error"
-                                                    size="small"
-                                                    variant="simple"
-                                                    >{{
-                                                        form.errors
-                                                            .filcon_exp_date
-                                                    }}</Message
-                                                >
-                                            </FormField>
-                                        </div>
-                                    </div>
-                                    <!-- LTFRB -->
-                                    <div class="grid grid-cols-2 gap-8 mb-1">
-                                        <div
-                                            :class="[
-                                                'w-100',
-                                                form.hasErrors
-                                                    ? 'mb-4'
-                                                    : 'mb-6',
-                                            ]"
-                                        >
-                                            <label
-                                                for="LTFRBReg"
-                                                class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                                >LTFRB Registered Date<span
-                                                    class="ml-1 text-red-400"
-                                                    >*</span
-                                                ></label
-                                            >
-                                            <FormField
-                                                id="LTFRBReg"
-                                                name="LTFRBReg"
-                                                class="flex flex-col gap-1"
-                                            >
-                                                <div class="flex-auto">
-                                                    <DatePicker
-                                                        id="LTFRBReg"
-                                                        v-model="
-                                                            form.ltfrb_reg_date
-                                                        "
-                                                        showIcon
-                                                        fluid
-                                                        :showOnFocus="false"
-                                                        inputId="LTFRBReg"
-                                                        placeholder="LTFRB Date"
-                                                        :disabled="!tructorId"
-                                                    />
-                                                </div>
-                                                <Message
-                                                    v-if="
-                                                        form.errors
-                                                            .ltfrb_reg_date
-                                                    "
-                                                    severity="error"
-                                                    size="small"
-                                                    variant="simple"
-                                                    >{{
-                                                        form.errors
-                                                            .ltfrb_reg_date
-                                                    }}</Message
-                                                >
-                                            </FormField>
-                                        </div>
-                                        <div
-                                            v-if="isLftbExpired"
-                                            class="w-full mb-2"
-                                        >
-                                            <label
-                                                for="LTFRBExp"
-                                                class="text-gray-700 dark:text-surface-50 text-sm font-medium mb-2 block"
-                                                >LTFRB Expired Date<span
-                                                    class="ml-1 text-red-400"
-                                                    >*</span
-                                                ></label
-                                            >
-                                            <FormField
-                                                id="LTFRBExp"
-                                                name="LTFRBExp"
-                                                class="flex flex-col gap-1"
-                                            >
-                                                <InputText
-                                                    disabled=""
-                                                    type="text"
-                                                    placeholder="LTFRB Expired Date"
-                                                    v-model="
-                                                        form.ltfrb_exp_date
-                                                    "
-                                                    class="!border-red-500 !bg-gray-50"
-                                                />
-                                                <Message
-                                                    severity="error"
-                                                    size="small"
-                                                    variant="simple"
-                                                >
-                                                    Updating LTFRB expiration
-                                                    date
-                                                </Message>
-                                            </FormField>
-                                        </div>
-                                        <div
-                                            v-else
-                                            :class="[
-                                                'w-100',
-                                                form.hasErrors
-                                                    ? 'mb-4'
-                                                    : 'mb-6',
-                                            ]"
-                                        >
-                                            <label
-                                                for="LTFRBExp"
-                                                class="text-gray-700 dark:text-surface-50 text-sm font-medium mb-2 block"
-                                                >LTFRB Expired Date<span
-                                                    class="ml-1 text-red-400"
-                                                    >*</span
-                                                ></label
-                                            >
-                                            <FormField
-                                                id="LTFRBExp"
-                                                name="LTFRBExp"
-                                                class="flex flex-col gap-1"
-                                            >
-                                                <InputText
-                                                    disabled=""
-                                                    type="text"
-                                                    placeholder="LTFRB Expired Date"
-                                                    v-model="
-                                                        form.ltfrb_exp_date
-                                                    "
-                                                    class="!bg-gray-50"
-                                                />
-                                                <Message
-                                                    v-if="
-                                                        form.errors
-                                                            .ltfrb_exp_date
-                                                    "
-                                                    severity="error"
-                                                    size="small"
-                                                    variant="simple"
-                                                    >{{
-                                                        form.errors
-                                                            .ltfrb_exp_date
-                                                    }}</Message
-                                                >
-                                            </FormField>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div>
-                                    <label
-                                        for="Payment"
-                                        class="text-gray-700 dark:text-surface-0 text-2xl font-medium mb-4 block"
-                                        >Payment Details
-                                    </label>
-                                    <div class="grid grid-cols-2 gap-4 mb-4">
-                                        <div class="flex flex-row gap-x-4">
-                                            <div class="w-full">
-                                                <label
-                                                    for="remarks"
-                                                    class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                                    >Cost<span
-                                                        class="ml-1 text-red-400"
-                                                        >*</span
-                                                    ></label
-                                                >
-                                                <FormField
-                                                    id="remarks"
-                                                    name="remarks"
-                                                    class="flex flex-col gap-1"
-                                                >
-                                                    <InputNumber
-                                                        v-model="form.cost"
-                                                        placeholder="Cost"
-                                                        mode="currency"
-                                                        currency="PHP"
-                                                        class="w-full"
-                                                    />
-                                                    <Message
-                                                        v-if="form.errors.cost"
-                                                        severity="error"
-                                                        size="small"
-                                                        variant="simple"
-                                                        >{{
-                                                            form.errors.cost
-                                                        }}</Message
-                                                    >
-                                                </FormField>
-                                            </div>
-                                            <div class="w-full">
-                                                <label
-                                                    for="ltoRegDate"
-                                                    class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                                    >Expense Date<span
-                                                        class="ml-1 text-red-400"
-                                                        >*</span
-                                                    ></label
-                                                >
-                                                <FormField
-                                                    id="ltoRegDate"
-                                                    name="ltoRegDate"
-                                                    class="flex flex-col gap-1"
-                                                >
-                                                    <DatePicker
-                                                        id="calibDate"
-                                                        v-model="
-                                                            form.expenses_date
-                                                        "
-                                                        showIcon
-                                                        fluid
-                                                        :showOnFocus="false"
-                                                        inputId="registrationExp"
-                                                        placeholder="Expense Date"
-                                                    />
-                                                    <Message
-                                                        v-if="
-                                                            form.errors
-                                                                .expenses_date
-                                                        "
-                                                        severity="error"
-                                                        size="small"
-                                                        variant="simple"
-                                                        >{{
-                                                            form.errors
-                                                                .expenses_date
-                                                        }}</Message
-                                                    >
-                                                </FormField>
-                                            </div>
-                                        </div>
-                                        <div class="w-full">
-                                            <label
-                                                for="remarks"
-                                                class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                                >Remarks<span
-                                                    class="ml-1 text-red-400"
-                                                    >*</span
-                                                ></label
-                                            >
-                                            <FormField
-                                                id="remarks"
-                                                name="remarks"
-                                                class="flex flex-col gap-1"
-                                            >
-                                                <Textarea
-                                                    v-model="form.remarks"
-                                                    variant="filled"
-                                                    rows="2"
-                                                    cols="30"
-                                                    placeholder="Remarks"
-                                                />
-                                                <Message
-                                                    v-if="form.errors.remarks"
-                                                    severity="error"
-                                                    size="small"
-                                                    variant="simple"
-                                                    >{{
-                                                        form.errors.remarks
-                                                    }}</Message
-                                                >
-                                            </FormField>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="mt-8">
-                                    <label
-                                        for="remarks"
-                                        class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                        >Upload Scan Documents<span
-                                            class="ml-1 text-red-400"
-                                            >*</span
-                                        ></label
-                                    >
-                                    <FileUpload
-                                        name="image"
-                                        url="/upload"
-                                        @upload="onAdvancedUpload($event)"
-                                        :multiple="true"
-                                        accept="image/*"
-                                        :maxFileSize="1000000"
-                                    >
-                                        <template #empty>
-                                            <span
-                                                >Drag and drop files to here to
-                                                upload.</span
-                                            >
-                                        </template>
-                                    </FileUpload>
-                                </div>
-                            </div>
-                            <div class="mt-11 mb-11" v-else-if="truck === '2'">
-                                <div>
-                                    <label
-                                        for="Plate_number"
-                                        class="text-gray-700 dark:text-surface-0 text-2xl font-medium mb-4 block"
-                                        >Registration Details
-                                    </label>
-                                    <div class="grid grid-cols-2 gap-8 mb-1">
-                                        <!-- LTO Reg date -->
-                                        <div
-                                            :class="[
-                                                'w-100',
-                                                form.hasErrors
-                                                    ? 'mb-4'
-                                                    : 'mb-6',
-                                            ]"
-                                        >
-                                            <label
-                                                for="ltoRegDate"
-                                                class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                                >LTO Registered Date<span
-                                                    class="ml-1 text-red-400"
-                                                    >*</span
-                                                ></label
-                                            >
-                                            <FormField
-                                                id="ltoRegDate"
-                                                name="ltoRegDate"
-                                                class="flex flex-col gap-1"
-                                            >
-                                                <DatePicker
-                                                    id="calibDate"
-                                                    v-model="form.lto_reg_date"
-                                                    showIcon
-                                                    fluid
-                                                    :showOnFocus="false"
-                                                    inputId="registrationExp"
-                                                    placeholder="LTO Registration Date"
-                                                    :disabled="!trailerId"
-                                                />
-                                                <Message
-                                                    v-if="
-                                                        form.errors.lto_reg_date
-                                                    "
-                                                    severity="error"
-                                                    size="small"
-                                                    variant="simple"
-                                                    >{{
-                                                        form.errors.lto_reg_date
-                                                    }}</Message
-                                                >
-                                            </FormField>
-                                        </div>
-                                        <!-- LTO Expired date -->
-                                        <div
-                                            v-if="isLtoTrailerExpired"
-                                            class="w-full mb-2"
-                                        >
-                                            <label
-                                                for="LTOExpDate"
-                                                class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                                >LTO Expired Date
-                                                <span class="ml-1 text-red-400"
-                                                    >*
-                                                </span></label
-                                            >
-
-                                            <FormField
-                                                id="LTOExpDate"
-                                                name="LTOExpDate"
-                                                class="flex flex-col gap-1"
-                                            >
-                                                <InputText
-                                                    disabled=""
-                                                    type="text"
-                                                    placeholder="LTO Expired Date"
-                                                    v-model="form.lto_exp_date"
-                                                    class="!border-red-500 !bg-gray-50"
-                                                />
-                                                <Message
-                                                    severity="error"
-                                                    size="small"
-                                                    variant="simple"
-                                                >
-                                                    Updating LTO expiration date
-                                                </Message>
-                                            </FormField>
-                                        </div>
-                                        <div
-                                            v-else
-                                            :class="[
-                                                'w-100',
-                                                form.hasErrors
-                                                    ? 'mb-4'
-                                                    : 'mb-6',
-                                            ]"
-                                        >
-                                            <label
-                                                for="LTOExpDate"
-                                                class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                                >LTO Expired Date<span
-                                                    class="ml-1 text-red-400"
-                                                    >*
-                                                </span></label
-                                            >
-
-                                            <FormField
-                                                id="LTOExpDate"
-                                                name="LTOExpDate"
-                                                class="flex flex-col gap-1"
-                                            >
-                                                <InputText
-                                                    disabled=""
-                                                    type="text"
-                                                    placeholder="LTO Expired Date"
-                                                    v-model="form.lto_exp_date"
-                                                    class="!bg-gray-50"
-                                                />
-                                                <Message
-                                                    v-if="
-                                                        form.errors.lto_exp_date
-                                                    "
-                                                    severity="error"
-                                                    size="small"
-                                                    variant="simple"
-                                                >
-                                                    {{
-                                                        form.errors.lto_exp_date
-                                                    }}
-                                                </Message>
-                                            </FormField>
-                                        </div>
-                                    </div>
-                                    <!-- Calibration -->
-                                    <div class="grid grid-cols-2 gap-8 mb-1">
-                                        <div
-                                            :class="[
-                                                'w-100',
-                                                form.hasErrors
-                                                    ? 'mb-4'
-                                                    : 'mb-6',
-                                            ]"
-                                        >
-                                            <label
-                                                for="conveyDate"
-                                                class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                                >Calibration Registered
-                                                Date<span
-                                                    class="ml-1 text-red-400"
-                                                    >*</span
-                                                ></label
-                                            >
-                                            <FormField
-                                                id="conveyDate"
-                                                name="conveyDate"
-                                                class="flex flex-col gap-1"
-                                            >
-                                                <div class="flex-auto">
-                                                    <DatePicker
-                                                        id="conveyDate"
-                                                        v-model="
-                                                            form.calibration_date
-                                                        "
-                                                        showIcon
-                                                        fluid
-                                                        :showOnFocus="false"
-                                                        inputId="conveyDate"
-                                                        placeholder="Calibraton Expired Date"
-                                                        :disabled="!trailerId"
-                                                    />
-                                                </div>
-                                                <Message
-                                                    v-if="
-                                                        form.errors
-                                                            .calibration_date
-                                                    "
-                                                    severity="error"
-                                                    size="small"
-                                                    variant="simple"
-                                                    >{{
-                                                        form.errors
-                                                            .calibration_date
-                                                    }}</Message
-                                                >
-                                            </FormField>
-                                        </div>
-                                        <!-- Calibration Expired date -->
-                                        <div
-                                            v-if="isCalibrationExpired"
-                                            class="w-full mb-2"
-                                        >
-                                            <label
-                                                for="conExpdate"
-                                                class="text-gray-700 dark:text-surface-50 text-sm font-medium mb-2 block"
-                                                >Calibration Expired Date<span
-                                                    class="ml-1 text-red-400"
-                                                    >*</span
-                                                ></label
-                                            >
-                                            <FormField
-                                                id="conExpdate"
-                                                name="conExpdate"
-                                                class="flex flex-col gap-1"
-                                            >
-                                                <InputText
-                                                    disabled=""
-                                                    type="text"
-                                                    placeholder="Calibration Expired Date"
-                                                    v-model="
-                                                        form.calibration_exp_date
-                                                    "
-                                                    class="!border-red-500 !bg-gray-50"
-                                                />
-                                                <Message
-                                                    severity="error"
-                                                    size="small"
-                                                    variant="simple"
-                                                >
-                                                    Updating Calibration
-                                                    expiration date
-                                                </Message>
-                                            </FormField>
-                                        </div>
-                                        <div
-                                            v-else
-                                            :class="[
-                                                'w-100',
-                                                form.hasErrors
-                                                    ? 'mb-4'
-                                                    : 'mb-6',
-                                            ]"
-                                        >
-                                            <label
-                                                for="conExpdate"
-                                                class="text-gray-700 dark:text-surface-50 text-sm font-medium mb-2 block"
-                                                >Calibration Expired Date<span
-                                                    class="ml-1 text-red-400"
-                                                    >*</span
-                                                ></label
-                                            >
-                                            <FormField
-                                                id="conExpdate"
-                                                name="conExpdate"
-                                                class="flex flex-col gap-1"
-                                            >
-                                                <InputText
-                                                    disabled=""
-                                                    type="text"
-                                                    placeholder="Calibration Expired Date"
-                                                    v-model="
-                                                        form.calibration_exp_date
-                                                    "
-                                                    class="!bg-gray-50"
-                                                />
-                                                <Message
-                                                    v-if="
-                                                        form.errors
-                                                            .calibration_exp_date
-                                                    "
-                                                    severity="error"
-                                                    size="small"
-                                                    variant="simple"
-                                                    >{{
-                                                        form.errors
-                                                            .calibration_exp_date
-                                                    }}</Message
-                                                >
-                                            </FormField>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <label
-                                        for="Plate_number"
-                                        class="text-gray-700 dark:text-surface-0 text-2xl font-medium mb-4 block"
-                                        >Payment Details
-                                    </label>
-                                    <div class="grid grid-cols-2 gap-4 mb-4">
-                                        <div class="flex flex-row gap-x-4">
-                                            <div class="w-full">
-                                                <label
-                                                    for="remarks"
-                                                    class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                                    >Cost<span
-                                                        class="ml-1 text-red-400"
-                                                        >*</span
-                                                    ></label
-                                                >
-                                                <FormField
-                                                    id="remarks"
-                                                    name="remarks"
-                                                    class="flex flex-col gap-1"
-                                                >
-                                                    <InputNumber
-                                                        v-model="form.cost"
-                                                        placeholder="Cost"
-                                                        mode="currency"
-                                                        currency="PHP"
-                                                        class="w-full"
-                                                    />
-                                                    <Message
-                                                        v-if="form.errors.cost"
-                                                        severity="error"
-                                                        size="small"
-                                                        variant="simple"
-                                                        >{{
-                                                            form.errors.cost
-                                                        }}</Message
-                                                    >
-                                                </FormField>
-                                            </div>
-                                            <div class="w-full">
-                                                <label
-                                                    for="ltoRegDate"
-                                                    class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                                    >Expense Date<span
-                                                        class="ml-1 text-red-400"
-                                                        >*</span
-                                                    ></label
-                                                >
-                                                <FormField
-                                                    id="ltoRegDate"
-                                                    name="ltoRegDate"
-                                                    class="flex flex-col gap-1"
-                                                >
-                                                    <DatePicker
-                                                        id="calibDate"
-                                                        v-model="
-                                                            form.expenses_date
-                                                        "
-                                                        showIcon
-                                                        fluid
-                                                        :showOnFocus="false"
-                                                        inputId="registrationExp"
-                                                        placeholder="Expense Date"
-                                                    />
-                                                    <Message
-                                                        v-if="
-                                                            form.errors
-                                                                .expenses_date
-                                                        "
-                                                        severity="error"
-                                                        size="small"
-                                                        variant="simple"
-                                                        >{{
-                                                            form.errors
-                                                                .expenses_date
-                                                        }}</Message
-                                                    >
-                                                </FormField>
-                                            </div>
-                                        </div>
-                                        <div class="w-full">
-                                            <label
-                                                for="remarks"
-                                                class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                                >Remarks<span
-                                                    class="ml-1 text-red-400"
-                                                    >*</span
-                                                ></label
-                                            >
-                                            <FormField
-                                                id="remarks"
-                                                name="remarks"
-                                                class="flex flex-col gap-1"
-                                            >
-                                                <Textarea
-                                                    v-model="form.remarks"
-                                                    variant="filled"
-                                                    rows="2"
-                                                    cols="30"
-                                                    placeholder="Remarks"
-                                                />
-                                                <Message
-                                                    v-if="form.errors.remarks"
-                                                    severity="error"
-                                                    size="small"
-                                                    variant="simple"
-                                                    >{{
-                                                        form.errors.remarks
-                                                    }}</Message
-                                                >
-                                            </FormField>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="mt-8">
-                                    <label
-                                        for="remarks"
-                                        class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                        >Upload Scan Documents<span
-                                            class="ml-1 text-red-400"
-                                            >*</span
-                                        ></label
-                                    >
-                                    <FileUpload
-                                        name="demo[]"
-                                        url="/upload"
-                                        @upload="onAdvancedUpload($event)"
-                                        :multiple="true"
-                                        accept="image/*"
-                                        :maxFileSize="1000000"
-                                    >
-                                        <template #empty>
-                                            <span
-                                                >Drag and drop files to here to
-                                                upload.</span
-                                            >
-                                        </template>
-                                    </FileUpload>
-                                </div>
+                            <div class="flex items-center gap-2">
+                                <RadioButton
+                                    v-model="truck"
+                                    inputId="ingredient2"
+                                    name="truck"
+                                    value="2"
+                                />
+                                <label for="ingredient2">TRAILER</label>
                             </div>
                         </div>
-                        <Button
-                            label="UPDATE"
-                            type="submit"
-                            icon="pi pi-pencil"
-                            class="w-full"
-                        />
-                    </form>
-                </div>
+                        <div class="grid grid-cols-2 gap-10 mb-6">
+                            <div class="w-full">
+                                <label
+                                    for="tructor"
+                                    class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                    >Tractor Truck<span
+                                        class="ml-1 text-red-400"
+                                        >*</span
+                                    ></label
+                                >
+                                <FormField
+                                    id="tructor"
+                                    name="tructor"
+                                    class="flex flex-col gap-1"
+                                >
+                                    <AutoComplete
+                                        id="tructor"
+                                        class="w-full"
+                                        :suggestions="tructors"
+                                        @complete="tructorNameSearch"
+                                        @item-select="onTructorSelect"
+                                        optionLabel="name"
+                                        dropdown
+                                        placeholder="Plate no."
+                                        :disabled="truck !== '1'"
+                                    />
+                                </FormField>
+                            </div>
+                            <div class="w-full">
+                                <label
+                                    for="trailer"
+                                    class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                    >Trailer Truck<span
+                                        class="ml-1 text-red-400"
+                                        >*</span
+                                    ></label
+                                >
+                                <FormField
+                                    id="trailer"
+                                    name="trailer"
+                                    class="flex flex-col gap-1"
+                                >
+                                    <AutoComplete
+                                        id="trailer"
+                                        class="w-full"
+                                        :suggestions="trailers"
+                                        @complete="trailerNameSearch"
+                                        @item-select="onTrailerSelect"
+                                        optionLabel="name"
+                                        dropdown
+                                        placeholder="Plate no."
+                                        :disabled="truck !== '2'"
+                                    />
+                                </FormField>
+                            </div>
+                        </div>
+                        <div
+                            v-if="!truck"
+                            class="h-[150px] border-2 border-dashed border-surface mb-7 flex items-center justify-center text-gray-600 text-2xl font-medium"
+                        >
+                            SELECT TRUCK TYPE
+                        </div>
+                        <div class="mt-5 mb-11" v-else-if="truck === '1'">
+                            <div class="">
+                                <label
+                                    for="Plate_number"
+                                    class="text-gray-700 dark:text-surface-0 text-2xl font-medium mb-4 block"
+                                    >Registration Details
+                                </label>
+                                <div
+                                    class="grid grid-cols-2 gap-8 mb-1"
+                                    disabled=""
+                                >
+                                    <!-- LTO Reg date -->
+                                    <div
+                                        :class="[
+                                            'w-100',
+                                            form.hasErrors ? 'mb-4' : 'mb-6',
+                                        ]"
+                                    >
+                                        <label
+                                            for="ltoRegDate"
+                                            class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                            >LTO Registered Date<span
+                                                class="ml-1 text-red-400"
+                                                >*</span
+                                            ></label
+                                        >
+                                        <FormField
+                                            id="ltoRegDate"
+                                            name="ltoRegDate"
+                                            class="flex flex-col gap-1"
+                                        >
+                                            <DatePicker
+                                                id="calibDate"
+                                                v-model="form.lto_reg_date"
+                                                showIcon
+                                                fluid
+                                                :showOnFocus="false"
+                                                inputId="registrationExp"
+                                                placeholder="LTO Registration Date"
+                                                :disabled="!tructorId"
+                                            />
+                                            <Message
+                                                v-if="form.errors.lto_reg_date"
+                                                severity="error"
+                                                size="small"
+                                                variant="simple"
+                                                >{{
+                                                    form.errors.lto_reg_date
+                                                }}</Message
+                                            >
+                                        </FormField>
+                                    </div>
+                                    <!-- LTO Expired date -->
+                                    <div
+                                        v-if="isLtoTractorExpired"
+                                        class="w-full mb-2"
+                                    >
+                                        <label
+                                            for="LTOExpDate"
+                                            class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                            >LTO Expired Date<span
+                                                class="ml-1 text-red-400"
+                                                >*
+                                            </span></label
+                                        >
+
+                                        <FormField
+                                            id="LTOExpDate"
+                                            name="LTOExpDate"
+                                            class="flex flex-col gap-1"
+                                        >
+                                            <InputText
+                                                disabled=""
+                                                type="text"
+                                                placeholder="LTO Expired Date"
+                                                v-model="form.lto_exp_date"
+                                                class="!border-red-500 !bg-gray-50"
+                                            />
+                                            <Message
+                                                severity="error"
+                                                size="small"
+                                                variant="simple"
+                                            >
+                                                Updating LTO expiration date
+                                            </Message>
+                                        </FormField>
+                                    </div>
+                                    <div
+                                        v-else
+                                        :class="[
+                                            'w-100',
+                                            form.hasErrors ? 'mb-4' : 'mb-6',
+                                        ]"
+                                    >
+                                        <label
+                                            for="LTOExpDate"
+                                            class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                            >LTO Expired Date<span
+                                                class="ml-1 text-red-400"
+                                                >*
+                                            </span></label
+                                        >
+
+                                        <FormField
+                                            id="LTOExpDate"
+                                            name="LTOExpDate"
+                                            class="flex flex-col gap-1"
+                                        >
+                                            <InputText
+                                                disabled=""
+                                                type="text"
+                                                placeholder="LTO Expired Date"
+                                                v-model="form.lto_exp_date"
+                                                class="!bg-gray-50"
+                                            />
+                                            <Message
+                                                v-if="form.errors.lto_exp_date"
+                                                severity="error"
+                                                size="small"
+                                                variant="simple"
+                                            >
+                                                {{ form.errors.lto_exp_date }}
+                                            </Message>
+                                        </FormField>
+                                    </div>
+                                </div>
+                                <!-- Conveyance -->
+                                <div class="grid grid-cols-2 gap-8 mb-1">
+                                    <div
+                                        :class="[
+                                            'w-100',
+                                            form.hasErrors ? 'mb-4' : 'mb-6',
+                                        ]"
+                                    >
+                                        <label
+                                            for="conveyDate"
+                                            class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                            >Conveyance Registered Date<span
+                                                class="ml-1 text-red-400"
+                                                >*</span
+                                            ></label
+                                        >
+                                        <FormField
+                                            id="conveyDate"
+                                            name="conveyDate"
+                                            class="flex flex-col gap-1"
+                                        >
+                                            <div class="flex-auto">
+                                                <DatePicker
+                                                    id="conveyDate"
+                                                    v-model="
+                                                        form.conveyance_date
+                                                    "
+                                                    showIcon
+                                                    fluid
+                                                    :showOnFocus="false"
+                                                    inputId="conveyDate"
+                                                    placeholder="Conveyance Date"
+                                                    :disabled="!tructorId"
+                                                />
+                                            </div>
+                                            <Message
+                                                v-if="
+                                                    form.errors.conveyance_date
+                                                "
+                                                severity="error"
+                                                size="small"
+                                                variant="simple"
+                                                >{{
+                                                    form.errors.conveyance_date
+                                                }}</Message
+                                            >
+                                        </FormField>
+                                    </div>
+                                    <!-- Conveyance Expired date -->
+                                    <div
+                                        v-if="isconveyanceExpired"
+                                        class="w-full mb-2"
+                                    >
+                                        <label
+                                            for="conExpdate"
+                                            class="text-gray-700 dark:text-surface-50 text-sm font-medium mb-2 block"
+                                            >Conveyance Expired Date<span
+                                                class="ml-1 text-red-400"
+                                                >*</span
+                                            ></label
+                                        >
+                                        <FormField
+                                            id="conExpdate"
+                                            name="conExpdate"
+                                            class="flex flex-col gap-1"
+                                        >
+                                            <InputText
+                                                disabled=""
+                                                type="text"
+                                                placeholder="Conveyance Expired Date"
+                                                v-model="
+                                                    form.conveyance_exp_date
+                                                "
+                                                class="!border-red-500 !bg-gray-50"
+                                            />
+                                            <Message
+                                                severity="error"
+                                                size="small"
+                                                variant="simple"
+                                            >
+                                                Updating Conveyance expiration
+                                                date
+                                            </Message>
+                                        </FormField>
+                                    </div>
+                                    <div
+                                        v-else
+                                        :class="[
+                                            'w-100',
+                                            form.hasErrors ? 'mb-4' : 'mb-6',
+                                        ]"
+                                    >
+                                        <label
+                                            for="conExpdate"
+                                            class="text-gray-700 dark:text-surface-50 text-sm font-medium mb-2 block"
+                                            >Conveyance Expired Date<span
+                                                class="ml-1 text-red-400"
+                                                >*</span
+                                            ></label
+                                        >
+                                        <FormField
+                                            id="conExpdate"
+                                            name="conExpdate"
+                                            class="flex flex-col gap-1"
+                                        >
+                                            <InputText
+                                                disabled=""
+                                                type="text"
+                                                placeholder="Conveyance Expired Date"
+                                                v-model="
+                                                    form.conveyance_exp_date
+                                                "
+                                                class="!bg-gray-50"
+                                            />
+                                            <Message
+                                                v-if="
+                                                    form.errors
+                                                        .conveyance_exp_date
+                                                "
+                                                severity="error"
+                                                size="small"
+                                                variant="simple"
+                                                >{{
+                                                    form.errors
+                                                        .conveyance_exp_date
+                                                }}</Message
+                                            >
+                                        </FormField>
+                                    </div>
+                                </div>
+                                <!-- Filcom Fab -->
+                                <div class="grid grid-cols-2 gap-8 mb-1">
+                                    <div
+                                        :class="[
+                                            'w-100',
+                                            form.hasErrors ? 'mb-4' : 'mb-6',
+                                        ]"
+                                    >
+                                        <label
+                                            for="filcomFab"
+                                            class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                            >Filcom Fab Registered Date<span
+                                                class="ml-1 text-red-400"
+                                                >*</span
+                                            ></label
+                                        >
+                                        <FormField
+                                            id="filcomFab"
+                                            name="filcomFab"
+                                            class="flex flex-col gap-1"
+                                        >
+                                            <div class="flex-auto">
+                                                <DatePicker
+                                                    id="filcomFab"
+                                                    v-model="
+                                                        form.filcom_fab_date
+                                                    "
+                                                    showIcon
+                                                    fluid
+                                                    :showOnFocus="false"
+                                                    inputId="filcomFab"
+                                                    placeholder="Filcom Fab Date"
+                                                    :disabled="!tructorId"
+                                                />
+                                            </div>
+                                            <Message
+                                                v-if="
+                                                    form.errors.conveyance_date
+                                                "
+                                                severity="error"
+                                                size="small"
+                                                variant="simple"
+                                                >{{
+                                                    form.errors.conveyance_date
+                                                }}</Message
+                                            >
+                                        </FormField>
+                                    </div>
+                                    <div
+                                        v-if="isFilcomExpired"
+                                        class="w-full mb-2"
+                                    >
+                                        <label
+                                            for="filcomFab"
+                                            class="text-gray-700 dark:text-surface-50 text-sm font-medium mb-2 block"
+                                            >Filcom Fab Expired Date<span
+                                                class="ml-1 text-red-400"
+                                                >*</span
+                                            ></label
+                                        >
+                                        <FormField
+                                            id="filcomFab"
+                                            name="filcomFab"
+                                            class="flex flex-col gap-1"
+                                        >
+                                            <InputText
+                                                disabled=""
+                                                type="text"
+                                                placeholder="Filcon Fab Expired Date"
+                                                v-model="form.filcon_exp_date"
+                                                class="!border-red-500 !bg-gray-50"
+                                            />
+                                            <Message
+                                                severity="error"
+                                                size="small"
+                                                variant="simple"
+                                            >
+                                                Updating Filcom expiration date
+                                            </Message>
+                                        </FormField>
+                                    </div>
+                                    <div
+                                        v-else
+                                        :class="[
+                                            'w-100',
+                                            form.hasErrors ? 'mb-4' : 'mb-6',
+                                        ]"
+                                    >
+                                        <label
+                                            for="filcomFab"
+                                            class="text-gray-700 dark:text-surface-50 text-sm font-medium mb-2 block"
+                                            >Filcom Fab Expired Date<span
+                                                class="ml-1 text-red-400"
+                                                >*</span
+                                            ></label
+                                        >
+                                        <FormField
+                                            id="conExpdate"
+                                            name="conExpdate"
+                                            class="flex flex-col gap-1"
+                                        >
+                                            <InputText
+                                                disabled=""
+                                                type="text"
+                                                placeholder="Filcon Fab Expired Date"
+                                                v-model="form.filcon_exp_date"
+                                                class="!bg-gray-50"
+                                            />
+                                            <Message
+                                                v-if="
+                                                    form.errors.filcon_exp_date
+                                                "
+                                                severity="error"
+                                                size="small"
+                                                variant="simple"
+                                                >{{
+                                                    form.errors.filcon_exp_date
+                                                }}</Message
+                                            >
+                                        </FormField>
+                                    </div>
+                                </div>
+                                <!-- LTFRB -->
+                                <div class="grid grid-cols-2 gap-8 mb-1">
+                                    <div
+                                        :class="[
+                                            'w-100',
+                                            form.hasErrors ? 'mb-4' : 'mb-6',
+                                        ]"
+                                    >
+                                        <label
+                                            for="LTFRBReg"
+                                            class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                            >LTFRB Registered Date<span
+                                                class="ml-1 text-red-400"
+                                                >*</span
+                                            ></label
+                                        >
+                                        <FormField
+                                            id="LTFRBReg"
+                                            name="LTFRBReg"
+                                            class="flex flex-col gap-1"
+                                        >
+                                            <div class="flex-auto">
+                                                <DatePicker
+                                                    id="LTFRBReg"
+                                                    v-model="
+                                                        form.ltfrb_reg_date
+                                                    "
+                                                    showIcon
+                                                    fluid
+                                                    :showOnFocus="false"
+                                                    inputId="LTFRBReg"
+                                                    placeholder="LTFRB Date"
+                                                    :disabled="!tructorId"
+                                                />
+                                            </div>
+                                            <Message
+                                                v-if="
+                                                    form.errors.ltfrb_reg_date
+                                                "
+                                                severity="error"
+                                                size="small"
+                                                variant="simple"
+                                                >{{
+                                                    form.errors.ltfrb_reg_date
+                                                }}</Message
+                                            >
+                                        </FormField>
+                                    </div>
+                                    <div
+                                        v-if="isLftbExpired"
+                                        class="w-full mb-2"
+                                    >
+                                        <label
+                                            for="LTFRBExp"
+                                            class="text-gray-700 dark:text-surface-50 text-sm font-medium mb-2 block"
+                                            >LTFRB Expired Date<span
+                                                class="ml-1 text-red-400"
+                                                >*</span
+                                            ></label
+                                        >
+                                        <FormField
+                                            id="LTFRBExp"
+                                            name="LTFRBExp"
+                                            class="flex flex-col gap-1"
+                                        >
+                                            <InputText
+                                                disabled=""
+                                                type="text"
+                                                placeholder="LTFRB Expired Date"
+                                                v-model="form.ltfrb_exp_date"
+                                                class="!border-red-500 !bg-gray-50"
+                                            />
+                                            <Message
+                                                severity="error"
+                                                size="small"
+                                                variant="simple"
+                                            >
+                                                Updating LTFRB expiration date
+                                            </Message>
+                                        </FormField>
+                                    </div>
+                                    <div
+                                        v-else
+                                        :class="[
+                                            'w-100',
+                                            form.hasErrors ? 'mb-4' : 'mb-6',
+                                        ]"
+                                    >
+                                        <label
+                                            for="LTFRBExp"
+                                            class="text-gray-700 dark:text-surface-50 text-sm font-medium mb-2 block"
+                                            >LTFRB Expired Date<span
+                                                class="ml-1 text-red-400"
+                                                >*</span
+                                            ></label
+                                        >
+                                        <FormField
+                                            id="LTFRBExp"
+                                            name="LTFRBExp"
+                                            class="flex flex-col gap-1"
+                                        >
+                                            <InputText
+                                                disabled=""
+                                                type="text"
+                                                placeholder="LTFRB Expired Date"
+                                                v-model="form.ltfrb_exp_date"
+                                                class="!bg-gray-50"
+                                            />
+                                            <Message
+                                                v-if="
+                                                    form.errors.ltfrb_exp_date
+                                                "
+                                                severity="error"
+                                                size="small"
+                                                variant="simple"
+                                                >{{
+                                                    form.errors.ltfrb_exp_date
+                                                }}</Message
+                                            >
+                                        </FormField>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <label
+                                    for="Payment"
+                                    class="text-gray-700 dark:text-surface-0 text-2xl font-medium mb-4 block"
+                                    >Payment Details
+                                </label>
+                                <div class="grid grid-cols-2 gap-4 mb-4">
+                                    <div class="flex flex-row gap-x-4">
+                                        <div class="w-full">
+                                            <label
+                                                for="remarks"
+                                                class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                                >Cost<span
+                                                    class="ml-1 text-red-400"
+                                                    >*</span
+                                                ></label
+                                            >
+                                            <FormField
+                                                id="remarks"
+                                                name="remarks"
+                                                class="flex flex-col gap-1"
+                                            >
+                                                <InputNumber
+                                                    v-model="form.cost"
+                                                    placeholder="Cost"
+                                                    mode="currency"
+                                                    currency="PHP"
+                                                    class="w-full"
+                                                />
+                                                <Message
+                                                    v-if="form.errors.cost"
+                                                    severity="error"
+                                                    size="small"
+                                                    variant="simple"
+                                                    >{{
+                                                        form.errors.cost
+                                                    }}</Message
+                                                >
+                                            </FormField>
+                                        </div>
+                                        <div class="w-full">
+                                            <label
+                                                for="ltoRegDate"
+                                                class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                                >Expense Date<span
+                                                    class="ml-1 text-red-400"
+                                                    >*</span
+                                                ></label
+                                            >
+                                            <FormField
+                                                id="ltoRegDate"
+                                                name="ltoRegDate"
+                                                class="flex flex-col gap-1"
+                                            >
+                                                <DatePicker
+                                                    id="calibDate"
+                                                    v-model="form.expenses_date"
+                                                    showIcon
+                                                    fluid
+                                                    :showOnFocus="false"
+                                                    inputId="registrationExp"
+                                                    placeholder="Expense Date"
+                                                />
+                                                <Message
+                                                    v-if="
+                                                        form.errors
+                                                            .expenses_date
+                                                    "
+                                                    severity="error"
+                                                    size="small"
+                                                    variant="simple"
+                                                    >{{
+                                                        form.errors
+                                                            .expenses_date
+                                                    }}</Message
+                                                >
+                                            </FormField>
+                                        </div>
+                                    </div>
+                                    <div class="w-full">
+                                        <label
+                                            for="remarks"
+                                            class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                            >Remarks<span
+                                                class="ml-1 text-red-400"
+                                                >*</span
+                                            ></label
+                                        >
+                                        <FormField
+                                            id="remarks"
+                                            name="remarks"
+                                            class="flex flex-col gap-1"
+                                        >
+                                            <Textarea
+                                                v-model="form.remarks"
+                                                variant="filled"
+                                                rows="2"
+                                                cols="30"
+                                                placeholder="Remarks"
+                                            />
+                                            <Message
+                                                v-if="form.errors.remarks"
+                                                severity="error"
+                                                size="small"
+                                                variant="simple"
+                                                >{{
+                                                    form.errors.remarks
+                                                }}</Message
+                                            >
+                                        </FormField>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-8">
+                                <label
+                                    for="remarks"
+                                    class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                    >Upload Scan Documents<span
+                                        class="ml-1 text-red-400"
+                                        >*</span
+                                    ></label
+                                >
+                                <FileUpload
+                                    name="image"
+                                    url="/upload"
+                                    @upload="onAdvancedUpload($event)"
+                                    :multiple="true"
+                                    accept="image/*"
+                                    :maxFileSize="1000000"
+                                >
+                                    <template #empty>
+                                        <span
+                                            >Drag and drop files to here to
+                                            upload.</span
+                                        >
+                                    </template>
+                                </FileUpload>
+                            </div>
+                        </div>
+                        <div class="mt-11 mb-11" v-else-if="truck === '2'">
+                            <div>
+                                <label
+                                    for="Plate_number"
+                                    class="text-gray-700 dark:text-surface-0 text-2xl font-medium mb-4 block"
+                                    >Registration Details
+                                </label>
+                                <div class="grid grid-cols-2 gap-8 mb-1">
+                                    <!-- LTO Reg date -->
+                                    <div
+                                        :class="[
+                                            'w-100',
+                                            form.hasErrors ? 'mb-4' : 'mb-6',
+                                        ]"
+                                    >
+                                        <label
+                                            for="ltoRegDate"
+                                            class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                            >LTO Registered Date<span
+                                                class="ml-1 text-red-400"
+                                                >*</span
+                                            ></label
+                                        >
+                                        <FormField
+                                            id="ltoRegDate"
+                                            name="ltoRegDate"
+                                            class="flex flex-col gap-1"
+                                        >
+                                            <DatePicker
+                                                id="calibDate"
+                                                v-model="form.lto_reg_date"
+                                                showIcon
+                                                fluid
+                                                :showOnFocus="false"
+                                                inputId="registrationExp"
+                                                placeholder="LTO Registration Date"
+                                                :disabled="!trailerId"
+                                            />
+                                            <Message
+                                                v-if="form.errors.lto_reg_date"
+                                                severity="error"
+                                                size="small"
+                                                variant="simple"
+                                                >{{
+                                                    form.errors.lto_reg_date
+                                                }}</Message
+                                            >
+                                        </FormField>
+                                    </div>
+                                    <!-- LTO Expired date -->
+                                    <div
+                                        v-if="isLtoTrailerExpired"
+                                        class="w-full mb-2"
+                                    >
+                                        <label
+                                            for="LTOExpDate"
+                                            class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                            >LTO Expired Date
+                                            <span class="ml-1 text-red-400"
+                                                >*
+                                            </span></label
+                                        >
+
+                                        <FormField
+                                            id="LTOExpDate"
+                                            name="LTOExpDate"
+                                            class="flex flex-col gap-1"
+                                        >
+                                            <InputText
+                                                disabled=""
+                                                type="text"
+                                                placeholder="LTO Expired Date"
+                                                v-model="form.lto_exp_date"
+                                                class="!border-red-500 !bg-gray-50"
+                                            />
+                                            <Message
+                                                severity="error"
+                                                size="small"
+                                                variant="simple"
+                                            >
+                                                Updating LTO expiration date
+                                            </Message>
+                                        </FormField>
+                                    </div>
+                                    <div
+                                        v-else
+                                        :class="[
+                                            'w-100',
+                                            form.hasErrors ? 'mb-4' : 'mb-6',
+                                        ]"
+                                    >
+                                        <label
+                                            for="LTOExpDate"
+                                            class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                            >LTO Expired Date<span
+                                                class="ml-1 text-red-400"
+                                                >*
+                                            </span></label
+                                        >
+
+                                        <FormField
+                                            id="LTOExpDate"
+                                            name="LTOExpDate"
+                                            class="flex flex-col gap-1"
+                                        >
+                                            <InputText
+                                                disabled=""
+                                                type="text"
+                                                placeholder="LTO Expired Date"
+                                                v-model="form.lto_exp_date"
+                                                class="!bg-gray-50"
+                                            />
+                                            <Message
+                                                v-if="form.errors.lto_exp_date"
+                                                severity="error"
+                                                size="small"
+                                                variant="simple"
+                                            >
+                                                {{ form.errors.lto_exp_date }}
+                                            </Message>
+                                        </FormField>
+                                    </div>
+                                </div>
+                                <!-- Calibration -->
+                                <div class="grid grid-cols-2 gap-8 mb-1">
+                                    <div
+                                        :class="[
+                                            'w-100',
+                                            form.hasErrors ? 'mb-4' : 'mb-6',
+                                        ]"
+                                    >
+                                        <label
+                                            for="conveyDate"
+                                            class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                            >Calibration Registered Date<span
+                                                class="ml-1 text-red-400"
+                                                >*</span
+                                            ></label
+                                        >
+                                        <FormField
+                                            id="conveyDate"
+                                            name="conveyDate"
+                                            class="flex flex-col gap-1"
+                                        >
+                                            <div class="flex-auto">
+                                                <DatePicker
+                                                    id="conveyDate"
+                                                    v-model="
+                                                        form.calibration_date
+                                                    "
+                                                    showIcon
+                                                    fluid
+                                                    :showOnFocus="false"
+                                                    inputId="conveyDate"
+                                                    placeholder="Calibraton Expired Date"
+                                                    :disabled="!trailerId"
+                                                />
+                                            </div>
+                                            <Message
+                                                v-if="
+                                                    form.errors.calibration_date
+                                                "
+                                                severity="error"
+                                                size="small"
+                                                variant="simple"
+                                                >{{
+                                                    form.errors.calibration_date
+                                                }}</Message
+                                            >
+                                        </FormField>
+                                    </div>
+                                    <!-- Calibration Expired date -->
+                                    <div
+                                        v-if="isCalibrationExpired"
+                                        class="w-full mb-2"
+                                    >
+                                        <label
+                                            for="conExpdate"
+                                            class="text-gray-700 dark:text-surface-50 text-sm font-medium mb-2 block"
+                                            >Calibration Expired Date<span
+                                                class="ml-1 text-red-400"
+                                                >*</span
+                                            ></label
+                                        >
+                                        <FormField
+                                            id="conExpdate"
+                                            name="conExpdate"
+                                            class="flex flex-col gap-1"
+                                        >
+                                            <InputText
+                                                disabled=""
+                                                type="text"
+                                                placeholder="Calibration Expired Date"
+                                                v-model="
+                                                    form.calibration_exp_date
+                                                "
+                                                class="!border-red-500 !bg-gray-50"
+                                            />
+                                            <Message
+                                                severity="error"
+                                                size="small"
+                                                variant="simple"
+                                            >
+                                                Updating Calibration expiration
+                                                date
+                                            </Message>
+                                        </FormField>
+                                    </div>
+                                    <div
+                                        v-else
+                                        :class="[
+                                            'w-100',
+                                            form.hasErrors ? 'mb-4' : 'mb-6',
+                                        ]"
+                                    >
+                                        <label
+                                            for="conExpdate"
+                                            class="text-gray-700 dark:text-surface-50 text-sm font-medium mb-2 block"
+                                            >Calibration Expired Date<span
+                                                class="ml-1 text-red-400"
+                                                >*</span
+                                            ></label
+                                        >
+                                        <FormField
+                                            id="conExpdate"
+                                            name="conExpdate"
+                                            class="flex flex-col gap-1"
+                                        >
+                                            <InputText
+                                                disabled=""
+                                                type="text"
+                                                placeholder="Calibration Expired Date"
+                                                v-model="
+                                                    form.calibration_exp_date
+                                                "
+                                                class="!bg-gray-50"
+                                            />
+                                            <Message
+                                                v-if="
+                                                    form.errors
+                                                        .calibration_exp_date
+                                                "
+                                                severity="error"
+                                                size="small"
+                                                variant="simple"
+                                                >{{
+                                                    form.errors
+                                                        .calibration_exp_date
+                                                }}</Message
+                                            >
+                                        </FormField>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label
+                                    for="Plate_number"
+                                    class="text-gray-700 dark:text-surface-0 text-2xl font-medium mb-4 block"
+                                    >Payment Details
+                                </label>
+                                <div class="grid grid-cols-2 gap-4 mb-4">
+                                    <div class="flex flex-row gap-x-4">
+                                        <div class="w-full">
+                                            <label
+                                                for="remarks"
+                                                class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                                >Cost<span
+                                                    class="ml-1 text-red-400"
+                                                    >*</span
+                                                ></label
+                                            >
+                                            <FormField
+                                                id="remarks"
+                                                name="remarks"
+                                                class="flex flex-col gap-1"
+                                            >
+                                                <InputNumber
+                                                    v-model="form.cost"
+                                                    placeholder="Cost"
+                                                    mode="currency"
+                                                    currency="PHP"
+                                                    class="w-full"
+                                                />
+                                                <Message
+                                                    v-if="form.errors.cost"
+                                                    severity="error"
+                                                    size="small"
+                                                    variant="simple"
+                                                    >{{
+                                                        form.errors.cost
+                                                    }}</Message
+                                                >
+                                            </FormField>
+                                        </div>
+                                        <div class="w-full">
+                                            <label
+                                                for="ltoRegDate"
+                                                class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                                >Expense Date<span
+                                                    class="ml-1 text-red-400"
+                                                    >*</span
+                                                ></label
+                                            >
+                                            <FormField
+                                                id="ltoRegDate"
+                                                name="ltoRegDate"
+                                                class="flex flex-col gap-1"
+                                            >
+                                                <DatePicker
+                                                    id="calibDate"
+                                                    v-model="form.expenses_date"
+                                                    showIcon
+                                                    fluid
+                                                    :showOnFocus="false"
+                                                    inputId="registrationExp"
+                                                    placeholder="Expense Date"
+                                                />
+                                                <Message
+                                                    v-if="
+                                                        form.errors
+                                                            .expenses_date
+                                                    "
+                                                    severity="error"
+                                                    size="small"
+                                                    variant="simple"
+                                                    >{{
+                                                        form.errors
+                                                            .expenses_date
+                                                    }}</Message
+                                                >
+                                            </FormField>
+                                        </div>
+                                    </div>
+                                    <div class="w-full">
+                                        <label
+                                            for="remarks"
+                                            class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                            >Remarks<span
+                                                class="ml-1 text-red-400"
+                                                >*</span
+                                            ></label
+                                        >
+                                        <FormField
+                                            id="remarks"
+                                            name="remarks"
+                                            class="flex flex-col gap-1"
+                                        >
+                                            <Textarea
+                                                v-model="form.remarks"
+                                                variant="filled"
+                                                rows="2"
+                                                cols="30"
+                                                placeholder="Remarks"
+                                            />
+                                            <Message
+                                                v-if="form.errors.remarks"
+                                                severity="error"
+                                                size="small"
+                                                variant="simple"
+                                                >{{
+                                                    form.errors.remarks
+                                                }}</Message
+                                            >
+                                        </FormField>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-8">
+                                <label
+                                    for="remarks"
+                                    class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                    >Upload Scan Documents<span
+                                        class="ml-1 text-red-400"
+                                        >*</span
+                                    ></label
+                                >
+                                <FileUpload
+                                    name="demo[]"
+                                    url="/upload"
+                                    @upload="onAdvancedUpload($event)"
+                                    :multiple="true"
+                                    accept="image/*"
+                                    :maxFileSize="1000000"
+                                >
+                                    <template #empty>
+                                        <span
+                                            >Drag and drop files to here to
+                                            upload.</span
+                                        >
+                                    </template>
+                                </FileUpload>
+                            </div>
+                        </div>
+                    </div>
+                    <Button
+                        label="UPDATE"
+                        type="submit"
+                        icon="pi pi-pencil"
+                        class="w-full"
+                    />
+                </form>
             </div></div
     ></AuthenticatedLayout>
 </template>

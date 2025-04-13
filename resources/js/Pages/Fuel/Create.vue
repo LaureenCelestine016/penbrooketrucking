@@ -8,360 +8,356 @@
                 Add Fuel
             </h2>
         </template>
-        <div class="py-4">
-            <div class="mx-12">
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-md">
-                    <form @submit.prevent="submit" class="p-6">
-                        <div class="">
-                            <label
-                                class="text-gray-900 dark:text-surface-0 text-xl font-medium mb-4 block"
-                                >Add Fuel</label
-                            >
-                            <div class="grid grid-cols-2 gap-10 mb-5">
-                                <div class="w-full">
-                                    <label
-                                        for="tractor"
-                                        class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                        >Truck
-                                        <span class="ml-1 text-red-400"
-                                            >*</span
-                                        ></label
-                                    >
-                                    <FormField
+        <div class="py-4 px-4 sm:px-2 lg:px-2">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-md">
+                <form @submit.prevent="submit" class="p-6">
+                    <div class="">
+                        <label
+                            class="text-gray-900 dark:text-surface-0 text-xl font-medium mb-4 block"
+                            >Add Fuel</label
+                        >
+                        <div class="grid grid-cols-2 gap-10 mb-5">
+                            <div class="w-full">
+                                <label
+                                    for="tractor"
+                                    class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                    >Truck
+                                    <span class="ml-1 text-red-400"
+                                        >*</span
+                                    ></label
+                                >
+                                <FormField
+                                    id="tractor"
+                                    name="tractor"
+                                    class="flex flex-col gap-1"
+                                >
+                                    <AutoComplete
                                         id="tractor"
-                                        name="tractor"
-                                        class="flex flex-col gap-1"
-                                    >
-                                        <AutoComplete
-                                            id="tractor"
-                                            class="w-full"
-                                            :suggestions="tractorName"
-                                            @complete="tractorNameSearch"
-                                            @item-select="onTractorSelect"
-                                            optionLabel="license_plate"
-                                            dropdown
-                                            placeholder="Truck name"
-                                        />
-                                        <Message
-                                            severity="error"
-                                            size="small"
-                                            variant="simple"
-                                            >{{
-                                        }}</Message>
-                                    </FormField>
-                                </div>
-                                <div class="w-full">
-                                    <label
-                                        for="driver"
-                                        class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                        >Driver<span class="ml-1 text-red-400"
-                                            >*</span
-                                        ></label
-                                    >
-                                    <FormField
+                                        class="w-full"
+                                        :suggestions="tractorName"
+                                        @complete="tractorNameSearch"
+                                        @item-select="onTractorSelect"
+                                        optionLabel="license_plate"
+                                        dropdown
+                                        placeholder="Truck name"
+                                    />
+                                    <Message
+                                        severity="error"
+                                        size="small"
+                                        variant="simple"
+                                        >{{
+                                    }}</Message>
+                                </FormField>
+                            </div>
+                            <div class="w-full">
+                                <label
+                                    for="driver"
+                                    class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                    >Driver<span class="ml-1 text-red-400"
+                                        >*</span
+                                    ></label
+                                >
+                                <FormField
+                                    id="driver"
+                                    name="driver"
+                                    class="flex flex-col gap-1"
+                                >
+                                    <AutoComplete
                                         id="driver"
-                                        name="driver"
-                                        class="flex flex-col gap-1"
-                                    >
-                                        <AutoComplete
-                                            id="driver"
-                                            class="w-full"
-                                            :suggestions="driverName"
-                                            @complete="driverNameSearch"
-                                            @item-select="onDriverSelect"
-                                            optionLabel="display"
-                                            dropdown
-                                            placeholder="Driver name"
-                                        />
-                                        <Message
-                                            severity="error"
-                                            size="small"
-                                            variant="simple"
-                                            >{{
-                                        }}</Message>
-                                    </FormField>
-                                </div>
+                                        class="w-full"
+                                        :suggestions="driverName"
+                                        @complete="driverNameSearch"
+                                        @item-select="onDriverSelect"
+                                        optionLabel="display"
+                                        dropdown
+                                        placeholder="Driver name"
+                                    />
+                                    <Message
+                                        severity="error"
+                                        size="small"
+                                        variant="simple"
+                                        >{{
+                                    }}</Message>
+                                </FormField>
                             </div>
-                            <div class="grid grid-cols-2 gap-10 mb-5">
-                                <div class="w-full">
-                                    <label
-                                        for="c-odometer"
-                                        class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                        >Current Odometer<span
-                                            class="ml-1 text-red-400"
-                                            >*</span
-                                        ></label
-                                    >
-                                    <FormField
-                                        id="c-odometer"
-                                        name="c-odometer"
-                                        class="flex flex-col gap-1"
-                                    >
-                                        <InputNumber
-                                            v-model="form.curr_odometer"
-                                            placeholder="Current Odometer"
-                                            class="w-full"
-                                        />
-                                        <Message
-                                            severity="error"
-                                            size="small"
-                                            variant="simple"
-                                            >{{
-                                        }}</Message>
-                                    </FormField>
-                                </div>
-                                <div class="w-full">
-                                    <label
-                                        for="p_odometer"
-                                        class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                        >Previous Odometer<span
-                                            class="ml-1 text-red-400"
-                                            >*</span
-                                        ></label
-                                    >
-                                    <FormField
-                                        id="p_odometer"
-                                        name="p_odometer"
-                                        class="flex flex-col gap-1"
-                                    >
-                                        <InputNumber
-                                            v-model="form.prev_odometer"
-                                            placeholder="Previous Odometer"
-                                            class="w-full"
-                                        />
-                                        <Message
-                                            severity="error"
-                                            size="small"
-                                            variant="simple"
-                                            >{{
-                                        }}</Message>
-                                    </FormField>
-                                </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-10 mb-5">
+                            <div class="w-full">
+                                <label
+                                    for="c-odometer"
+                                    class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                    >Current Odometer<span
+                                        class="ml-1 text-red-400"
+                                        >*</span
+                                    ></label
+                                >
+                                <FormField
+                                    id="c-odometer"
+                                    name="c-odometer"
+                                    class="flex flex-col gap-1"
+                                >
+                                    <InputNumber
+                                        v-model="form.curr_odometer"
+                                        placeholder="Current Odometer"
+                                        class="w-full"
+                                    />
+                                    <Message
+                                        severity="error"
+                                        size="small"
+                                        variant="simple"
+                                        >{{
+                                    }}</Message>
+                                </FormField>
                             </div>
-                            <div class="grid grid-cols-2 gap-10 mb-5">
-                                <div class="w-full">
-                                    <label
-                                        for="t-distance"
-                                        class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                        >Total Distance<span
-                                            class="ml-1 text-red-400"
-                                            >*</span
-                                        ></label
-                                    >
-                                    <FormField
-                                        id="t-distance"
-                                        name="t-distance"
-                                        class="flex flex-col gap-1"
-                                    >
-                                        <InputNumber
-                                            v-model="form.total_distance"
-                                            placeholder="Total Distance"
-                                            class="w-full"
-                                        />
-                                        <Message
-                                            severity="error"
-                                            size="small"
-                                            variant="simple"
-                                            >{{
-                                        }}</Message>
-                                    </FormField>
-                                </div>
-                                <div class="w-full">
-                                    <label
-                                        for="t_refuel"
-                                        class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                        >Total Refuel<span
-                                            class="ml-1 text-red-400"
-                                            >*</span
-                                        ><span class="text-xs font-thin"
-                                            >(Liter)</span
-                                        ></label
-                                    >
-                                    <FormField
-                                        id="t_refuel"
-                                        name="t_refuel"
-                                        class="flex flex-col gap-1"
-                                    >
-                                        <InputNumber
-                                            v-model="form.liters"
-                                            placeholder="Total Refuel"
-                                            class="w-full"
-                                        />
-                                        <Message
-                                            severity="error"
-                                            size="small"
-                                            variant="simple"
-                                            >{{
-                                        }}</Message>
-                                    </FormField>
-                                </div>
+                            <div class="w-full">
+                                <label
+                                    for="p_odometer"
+                                    class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                    >Previous Odometer<span
+                                        class="ml-1 text-red-400"
+                                        >*</span
+                                    ></label
+                                >
+                                <FormField
+                                    id="p_odometer"
+                                    name="p_odometer"
+                                    class="flex flex-col gap-1"
+                                >
+                                    <InputNumber
+                                        v-model="form.prev_odometer"
+                                        placeholder="Previous Odometer"
+                                        class="w-full"
+                                    />
+                                    <Message
+                                        severity="error"
+                                        size="small"
+                                        variant="simple"
+                                        >{{
+                                    }}</Message>
+                                </FormField>
                             </div>
-                            <div class="grid grid-cols-2 gap-10 mb-5">
+                        </div>
+                        <div class="grid grid-cols-2 gap-10 mb-5">
+                            <div class="w-full">
+                                <label
+                                    for="t-distance"
+                                    class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                    >Total Distance<span
+                                        class="ml-1 text-red-400"
+                                        >*</span
+                                    ></label
+                                >
+                                <FormField
+                                    id="t-distance"
+                                    name="t-distance"
+                                    class="flex flex-col gap-1"
+                                >
+                                    <InputNumber
+                                        v-model="form.total_distance"
+                                        placeholder="Total Distance"
+                                        class="w-full"
+                                    />
+                                    <Message
+                                        severity="error"
+                                        size="small"
+                                        variant="simple"
+                                        >{{
+                                    }}</Message>
+                                </FormField>
+                            </div>
+                            <div class="w-full">
+                                <label
+                                    for="t_refuel"
+                                    class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                    >Total Refuel<span class="ml-1 text-red-400"
+                                        >*</span
+                                    ><span class="text-xs font-thin"
+                                        >(Liter)</span
+                                    ></label
+                                >
+                                <FormField
+                                    id="t_refuel"
+                                    name="t_refuel"
+                                    class="flex flex-col gap-1"
+                                >
+                                    <InputNumber
+                                        v-model="form.liters"
+                                        placeholder="Total Refuel"
+                                        class="w-full"
+                                    />
+                                    <Message
+                                        severity="error"
+                                        size="small"
+                                        variant="simple"
+                                        >{{
+                                    }}</Message>
+                                </FormField>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-10 mb-5">
+                            <div class="w-full">
+                                <label
+                                    for="avg_fuel"
+                                    class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                    >Avg. Fuel Consumption<span
+                                        class="ml-1 text-red-400"
+                                        >*</span
+                                    ><span class="text-xs font-thin"
+                                        >(Kilometer / Liter)</span
+                                    ></label
+                                >
+                                <FormField
+                                    id="avg_fuel"
+                                    name="avg_fuel"
+                                    class="flex flex-col gap-1"
+                                >
+                                    <InputNumber
+                                        v-model="form.avg_fuel"
+                                        placeholder="Avg. Fuel"
+                                        class="w-full"
+                                    />
+                                    <Message
+                                        severity="error"
+                                        size="small"
+                                        variant="simple"
+                                        >{{
+                                    }}</Message>
+                                </FormField>
+                            </div>
+                            <div class="w-full">
+                                <label
+                                    for="amount"
+                                    class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                    >Amount<span class="ml-1 text-red-400"
+                                        >*</span
+                                    ></label
+                                >
+                                <FormField
+                                    id="amount"
+                                    name="amount"
+                                    class="flex flex-col gap-1"
+                                >
+                                    <InputNumber
+                                        v-model="form.amount"
+                                        placeholder="Amount"
+                                        mode="currency"
+                                        currency="PHP"
+                                        class="w-full"
+                                    />
+                                    <Message
+                                        severity="error"
+                                        size="small"
+                                        variant="simple"
+                                        >{{
+                                    }}</Message>
+                                </FormField>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-10 mb-5">
+                            <div class="w-full">
+                                <label
+                                    for="station"
+                                    class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                    >Station<span class="ml-1 text-red-400"
+                                        >*</span
+                                    ></label
+                                >
+                                <FormField
+                                    id="station"
+                                    name="station"
+                                    class="flex flex-col gap-1"
+                                >
+                                    <InputText
+                                        type="text"
+                                        placeholder="Station"
+                                        class="user--input firstName"
+                                        v-model="form.station"
+                                    />
+                                    <Message
+                                        severity="error"
+                                        size="small"
+                                        variant="simple"
+                                        >{{
+                                    }}</Message>
+                                </FormField>
+                            </div>
+                            <div class="flex flex-row gap-x-4">
                                 <div class="w-full">
                                     <label
-                                        for="avg_fuel"
+                                        for="dateRefuel"
                                         class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                        >Avg. Fuel Consumption<span
+                                        >Date Refilled<span
                                             class="ml-1 text-red-400"
                                             >*</span
-                                        ><span class="text-xs font-thin"
-                                            >(Kilometer / Liter)</span
                                         ></label
                                     >
                                     <FormField
-                                        id="avg_fuel"
-                                        name="avg_fuel"
+                                        id="dateRefuel"
+                                        name="dateRefuel"
                                         class="flex flex-col gap-1"
                                     >
-                                        <InputNumber
-                                            v-model="form.avg_fuel"
-                                            placeholder="Avg. Fuel"
-                                            class="w-full"
-                                        />
-                                        <Message
-                                            severity="error"
-                                            size="small"
-                                            variant="simple"
-                                            >{{
-                                        }}</Message>
-                                    </FormField>
-                                </div>
-                                <div class="w-full">
-                                    <label
-                                        for="amount"
-                                        class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                        >Amount<span class="ml-1 text-red-400"
-                                            >*</span
-                                        ></label
-                                    >
-                                    <FormField
-                                        id="amount"
-                                        name="amount"
-                                        class="flex flex-col gap-1"
-                                    >
-                                        <InputNumber
-                                            v-model="form.amount"
-                                            placeholder="Amount"
-                                            mode="currency"
-                                            currency="PHP"
-                                            class="w-full"
-                                        />
-                                        <Message
-                                            severity="error"
-                                            size="small"
-                                            variant="simple"
-                                            >{{
-                                        }}</Message>
-                                    </FormField>
-                                </div>
-                            </div>
-                            <div class="grid grid-cols-2 gap-10 mb-5">
-                                <div class="w-full">
-                                    <label
-                                        for="station"
-                                        class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                        >Station<span class="ml-1 text-red-400"
-                                            >*</span
-                                        ></label
-                                    >
-                                    <FormField
-                                        id="station"
-                                        name="station"
-                                        class="flex flex-col gap-1"
-                                    >
-                                        <InputText
-                                            type="text"
-                                            placeholder="Station"
-                                            class="user--input firstName"
-                                            v-model="form.station"
-                                        />
-                                        <Message
-                                            severity="error"
-                                            size="small"
-                                            variant="simple"
-                                            >{{
-                                        }}</Message>
-                                    </FormField>
-                                </div>
-                                <div class="flex flex-row gap-x-4">
-                                    <div class="w-full">
-                                        <label
-                                            for="dateRefuel"
-                                            class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                            >Date Refilled<span
-                                                class="ml-1 text-red-400"
-                                                >*</span
-                                            ></label
-                                        >
-                                        <FormField
-                                            id="dateRefuel"
-                                            name="dateRefuel"
-                                            class="flex flex-col gap-1"
-                                        >
-                                            <div class="flex-auto">
-                                                <DatePicker
-                                                    id="dateRefuel"
-                                                    v-model="form.date_refilled"
-                                                    showIcon
-                                                    fluid
-                                                    :showOnFocus="false"
-                                                    inputId="dateRefuel"
-                                                    placeholder="Date Refilled"
-                                                />
-                                            </div>
-                                            <Message
-                                                v-if="form.errors.LTOregDate"
-                                                severity="error"
-                                                size="small"
-                                                variant="simple"
-                                                >{{
-                                                    form.errors.LTOregDate
-                                                }}</Message
-                                            >
-                                        </FormField>
-                                    </div>
-                                    <div class="w-full">
-                                        <label
-                                            for="remarks"
-                                            class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                            >Remarks<span
-                                                class="ml-1 text-red-400"
-                                                >*</span
-                                            ></label
-                                        >
-                                        <FormField
-                                            id="remarks"
-                                            name="remarks"
-                                            class="flex flex-col gap-1"
-                                        >
-                                            <Textarea
-                                                v-model="form.remarks"
-                                                variant="filled"
-                                                rows="2"
-                                                cols="30"
-                                                placeholder="Remarks"
+                                        <div class="flex-auto">
+                                            <DatePicker
+                                                id="dateRefuel"
+                                                v-model="form.date_refilled"
+                                                showIcon
+                                                fluid
+                                                :showOnFocus="false"
+                                                inputId="dateRefuel"
+                                                placeholder="Date Refilled"
                                             />
-                                            <Message
-                                                severity="error"
-                                                size="small"
-                                                variant="simple"
-                                                >{{
-                                            }}</Message>
-                                        </FormField>
-                                    </div>
+                                        </div>
+                                        <Message
+                                            v-if="form.errors.LTOregDate"
+                                            severity="error"
+                                            size="small"
+                                            variant="simple"
+                                            >{{
+                                                form.errors.LTOregDate
+                                            }}</Message
+                                        >
+                                    </FormField>
+                                </div>
+                                <div class="w-full">
+                                    <label
+                                        for="remarks"
+                                        class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                        >Remarks<span class="ml-1 text-red-400"
+                                            >*</span
+                                        ></label
+                                    >
+                                    <FormField
+                                        id="remarks"
+                                        name="remarks"
+                                        class="flex flex-col gap-1"
+                                    >
+                                        <Textarea
+                                            v-model="form.remarks"
+                                            variant="filled"
+                                            rows="2"
+                                            cols="30"
+                                            placeholder="Remarks"
+                                        />
+                                        <Message
+                                            severity="error"
+                                            size="small"
+                                            variant="simple"
+                                            >{{
+                                        }}</Message>
+                                    </FormField>
                                 </div>
                             </div>
                         </div>
-                        <div>
-                            <Button
-                                label="SUBMIT"
-                                type="submit"
-                                icon="pi pi-send"
-                                class="w-full mt-12"
-                            />
-                        </div>
-                    </form>
-                </div>
+                    </div>
+                    <div>
+                        <Button
+                            label="SUBMIT"
+                            type="submit"
+                            icon="pi pi-send"
+                            class="w-full mt-12"
+                        />
+                    </div>
+                </form>
             </div>
         </div>
     </AuthenticatedLayout>

@@ -43,6 +43,7 @@ class DashboardController extends Controller
 
             $driver = Driver::count();
             $maintenanceTotal = Maintenance_task::sum('total');
+            $fuelTotal = Fuel_record::sum('amount');
 
             // Get yearly maintenance costs
             $yearlyCosts = Maintenance_task::select(
@@ -120,6 +121,7 @@ class DashboardController extends Controller
                 'truck' => $trucks,
                 'driver' => $driver,
                 'maintenanceTotal' => $maintenanceTotal,
+                'fuelTotal' => $fuelTotal,
                 'operationalData' => [
                     'operationalCount' => $operationalCount,
                     'nonOperationalCount' => $nonOperationalCount,

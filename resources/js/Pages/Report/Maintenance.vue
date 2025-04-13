@@ -8,114 +8,101 @@
                 Maintenance Report
             </h2>
         </template>
-        <div class="py-4">
-            <div class="mx-12">
-                <div
-                    class="bg-white overflow-hidden shadow-sm sm:rounded-md p-4"
-                >
-                    <div class="card flex justify-center mb-5">
-                        <DatePicker
-                            v-model="dates"
-                            selectionMode="range"
-                            :manualInput="false"
-                            placeholder="Select Date Range"
-                            showIcon
-                        />
-                    </div>
-                    <div class="grid grid-cols-2 gap-4 mb-4">
-                        <!-- Vehicle Selection -->
-                        <AutoComplete
-                            v-model="vehicle"
-                            dropdown
-                            :suggestions="vehicles"
-                            optionLabel="license_plate"
-                            @complete="searchVehicles"
-                            placeholder="Select Tractor"
-                        />
-                        <AutoComplete
-                            v-model="trailer"
-                            dropdown
-                            :suggestions="trailers"
-                            optionLabel="license_plate"
-                            @complete="searchTrailer"
-                            placeholder="Select Trailer"
-                        />
-
-                        <!-- Generate Report Button -->
-                    </div>
-                    <div class="grid grid-cols-2 gap-4 mb-4">
-                        <!-- Vehicle Selection -->
-                        <InputNumber
-                            v-model="form.min_cost"
-                            placeholder="Min Cost"
-                            mode="currency"
-                            currency="PHP"
-                            class="w-full"
-                        />
-
-                        <!-- Max Cost -->
-                        <InputNumber
-                            v-model="form.max_cost"
-                            placeholder="Max Cost"
-                            mode="currency"
-                            currency="PHP"
-                            class="w-full"
-                        />
-                        <!-- Generate Report Button -->
-                    </div>
-                    <div class="w-full">
-                        <InputText
-                            id="manufacturer_year"
-                            type="text"
-                            placeholder="Supplier"
-                            v-model="form.supplier"
-                            class="w-full"
-                        />
-                    </div>
-                    <Button
-                        @click="submitForm"
-                        label="Generate Report"
-                        class="p-button-primary w-full mt-5"
+        <div class="py-4 px-4 sm:px-2 lg:px-2">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-md p-4">
+                <div class="card flex justify-center mb-5">
+                    <DatePicker
+                        v-model="dates"
+                        selectionMode="range"
+                        :manualInput="false"
+                        placeholder="Select Date Range"
+                        showIcon
+                    />
+                </div>
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <!-- Vehicle Selection -->
+                    <AutoComplete
+                        v-model="vehicle"
+                        dropdown
+                        :suggestions="vehicles"
+                        optionLabel="license_plate"
+                        @complete="searchVehicles"
+                        placeholder="Select Tractor"
+                    />
+                    <AutoComplete
+                        v-model="trailer"
+                        dropdown
+                        :suggestions="trailers"
+                        optionLabel="license_plate"
+                        @complete="searchTrailer"
+                        placeholder="Select Trailer"
                     />
 
-                    <!-- Data Table -->
-                    <DataTable
-                        :value="maintenanceFilter"
-                        ref="dt"
-                        tableStyle="min-width: 50rem"
-                        class="mt-6"
-                    >
-                        <template #header>
-                            <div class="text-end pb-4">
-                                <Button
-                                    icon="pi pi-external-link"
-                                    label="Export"
-                                    @click="exportCSV($event)"
-                                />
-                            </div>
-                        </template>
-                        <Column
-                            field="vehicle.license_plate"
-                            header="Tractor"
-                        />
-                        <Column
-                            field="trailer.license_plate"
-                            header="Trailer"
-                        />
-                        <Column
-                            field="item_description"
-                            header="Item and Description"
-                        />
-                        <Column field="price" header="Price" />
-                        <Column field="total" header="Total" />
-                        <Column field="supplier" header="Supplier" />
-                        <Column
-                            field="breakdown_date"
-                            header="Breakdown Date"
-                        />
-                        <Column field="up_date" header="Up date" />
-                    </DataTable>
+                    <!-- Generate Report Button -->
                 </div>
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <!-- Vehicle Selection -->
+                    <InputNumber
+                        v-model="form.min_cost"
+                        placeholder="Min Cost"
+                        mode="currency"
+                        currency="PHP"
+                        class="w-full"
+                    />
+
+                    <!-- Max Cost -->
+                    <InputNumber
+                        v-model="form.max_cost"
+                        placeholder="Max Cost"
+                        mode="currency"
+                        currency="PHP"
+                        class="w-full"
+                    />
+                    <!-- Generate Report Button -->
+                </div>
+                <div class="w-full">
+                    <InputText
+                        id="manufacturer_year"
+                        type="text"
+                        placeholder="Supplier"
+                        v-model="form.supplier"
+                        class="w-full"
+                    />
+                </div>
+                <Button
+                    @click="submitForm"
+                    label="Generate Report"
+                    class="p-button-primary w-full mt-5"
+                />
+
+                <!-- Data Table -->
+                <DataTable
+                    :value="maintenanceFilter"
+                    ref="dt"
+                    tableStyle="min-width: 50rem"
+                    class="mt-6"
+                >
+                    <template #header>
+                        <div class="text-end pb-4">
+                            <Button
+                                icon="pi pi-external-link"
+                                label="Export"
+                                @click="exportCSV($event)"
+                            />
+                        </div>
+                    </template>
+                    <Column field="vehicle.license_plate" header="Tractor" />
+                    <Column field="trailer.license_plate" header="Trailer" />
+                    <Column
+                        field="item_description"
+                        header="Item and Description"
+                    />
+                    <Column field="price" header="Price" />
+                    <Column field="total" header="Total" />
+                    <Column field="supplier" header="Supplier" />
+                    <Column field="breakdown_date" header="Breakdown Date" />
+                    <Column field="up_date" header="Up date" />
+                </DataTable>
             </div>
         </div>
     </AuthenticatedLayout>

@@ -8,451 +8,440 @@
                 Fuel List
             </h2>
         </template>
-        <div class="py-4">
-            <div class="mx-12">
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="card">
-                        <DataTable
-                            ref="dt"
-                            v-model:selection="selectedFuels"
-                            :value="fuels"
-                            dataKey="id"
-                            :paginator="true"
-                            :rows="10"
-                            :filters="filters"
-                            :globalFilterFields="['vehicle.name']"
-                            paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-                            :rowsPerPageOptions="[5, 10, 25]"
-                            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} vehicles"
-                        >
-                            <template #header>
+        <div class="py-4 px-4 sm:px-2 lg:px-2">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="card">
+                    <DataTable
+                        ref="dt"
+                        v-model:selection="selectedFuels"
+                        :value="fuels"
+                        dataKey="id"
+                        :paginator="true"
+                        :rows="10"
+                        :filters="filters"
+                        :globalFilterFields="['vehicle.name']"
+                        paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+                        :rowsPerPageOptions="[5, 10, 25]"
+                        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} vehicles"
+                    >
+                        <template #header>
+                            <div
+                                class="flex flex-wrap gap-2 items-center justify-between p-1"
+                            >
+                                <Button
+                                    label="EXPORT TO EXCEL"
+                                    icon="pi pi-upload"
+                                    severity="secondary"
+                                    @click="exportCSV($event)"
+                                />
+
                                 <div
-                                    class="flex flex-wrap gap-2 items-center justify-between p-1"
+                                    class="flex gap-4 justify-center items-center"
                                 >
                                     <Button
-                                        label="EXPORT TO EXCEL"
-                                        icon="pi pi-upload"
-                                        severity="secondary"
-                                        @click="exportCSV($event)"
-                                    />
-
-                                    <div
-                                        class="flex gap-4 justify-center items-center"
-                                    >
-                                        <Button
-                                            label="Delete"
-                                            icon="pi pi-trash"
-                                            severity="danger"
-                                            outlined
-                                            @click="confirmDeleteSelected"
-                                            :disabled="
-                                                !selectedFuels ||
-                                                !selectedFuels.length
-                                            "
-                                        />
-                                        <IconField>
-                                            <InputIcon>
-                                                <i class="pi pi-search" />
-                                            </InputIcon>
-                                            <InputText
-                                                v-model="
-                                                    filters['global'].value
-                                                "
-                                                placeholder="Search..."
-                                            />
-                                        </IconField>
-                                    </div>
-                                </div>
-                            </template>
-
-                            <Column
-                                selectionMode="multiple"
-                                style="width: 3rem"
-                                :exportable="false"
-                            ></Column>
-                            <Column
-                                field="vehicle.license_plate"
-                                header="Truck"
-                                sortable
-                                style="min-width: 8rem"
-                            ></Column>
-                            <Column
-                                field="total_refuel"
-                                header="Liters"
-                                sortable
-                                style="min-width: 8rem"
-                            ></Column>
-                            <Column
-                                field="amount"
-                                header="Amount"
-                                sortable
-                                style="min-width: 8rem"
-                            >
-                            </Column>
-                            <Column
-                                field="total_distance"
-                                header="Distance"
-                                sortable
-                                style="min-width: 8rem"
-                            >
-                            </Column>
-                            <Column
-                                field="refueling_date"
-                                header="Date Refilled"
-                                sortable
-                                style="min-width: 8rem"
-                            ></Column>
-                            <Column
-                                header="Action"
-                                sortable=""
-                                :exportable="false"
-                                style="min-width: 8rem"
-                            >
-                                <template #body="slotProps">
-                                    <Button
-                                        icon="pi pi-pencil"
-                                        outlined
-                                        rounded
-                                        class="mr-2"
-                                        @click="showDetail(slotProps.data)"
-                                    />
-                                    <Button
+                                        label="Delete"
                                         icon="pi pi-trash"
-                                        outlined
-                                        rounded
                                         severity="danger"
-                                        @click="
-                                            confirmDeleteFuel(slotProps.data)
+                                        outlined
+                                        @click="confirmDeleteSelected"
+                                        :disabled="
+                                            !selectedFuels ||
+                                            !selectedFuels.length
                                         "
                                     />
-                                </template>
-                            </Column>
-                        </DataTable>
-                        <form @submit.prevent="submit">
-                            <Dialog
-                                v-model:visible="fuelDialog"
-                                :style="{ width: '750px' }"
-                                header="Fuel Details"
-                                :modal="true"
-                            >
-                                <div class="flex flex-row gap-5 mb-4">
-                                    <div class="w-full">
-                                        <label
-                                            for="tractor"
-                                            class="block font-bold mb-3"
-                                            >Truck</label
-                                        >
-                                        <FormField
-                                            id="tractor"
-                                            name="tractor"
-                                            class="flex flex-col gap-1"
-                                        >
-                                            <AutoComplete
-                                                id="tractor"
-                                                class="w-full"
-                                                v-model="licensePlate"
-                                                :suggestions="tractorName"
-                                                @complete="tractorNameSearch"
-                                                @item-select="onTractorSelect"
-                                                optionLabel="license_plate"
-                                                dropdown
-                                                placeholder="Truck name"
-                                            />
-                                            <Message
-                                                severity="error"
-                                                size="small"
-                                                variant="simple"
-                                                >{{
-                                            }}</Message>
-                                        </FormField>
-                                    </div>
-                                    <div class="w-full">
-                                        <label
-                                            for="name"
-                                            class="block font-bold mb-3"
-                                            >Driver</label
-                                        >
-                                        <FormField
-                                            id="driver"
-                                            name="driver"
-                                            class="flex flex-col gap-1"
-                                        >
-                                            <AutoComplete
-                                                id="driver"
-                                                class="w-full"
-                                                v-model="driveFullname"
-                                                :suggestions="driverName"
-                                                @complete="driverNameSearch"
-                                                @item-select="onDriverSelect"
-                                                optionLabel="display"
-                                                dropdown
-                                                placeholder="Driver name"
-                                            />
-                                            <Message
-                                                severity="error"
-                                                size="small"
-                                                variant="simple"
-                                                >{{
-                                            }}</Message>
-                                        </FormField>
-                                    </div>
-                                </div>
-                                <div class="flex flex-row gap-5 mb-4">
-                                    <div class="w-full">
-                                        <label
-                                            for="name"
-                                            class="block font-bold mb-3"
-                                            >Current Odometer</label
-                                        >
-                                        <FormField
-                                            id="c-odometer"
-                                            name="c-odometer"
-                                            class="flex flex-col gap-1"
-                                        >
-                                            <InputNumber
-                                                v-model="form.current_odometer"
-                                                placeholder="Current Odometer"
-                                                class="w-full"
-                                            />
-                                            <Message
-                                                severity="error"
-                                                size="small"
-                                                variant="simple"
-                                                >{{
-                                            }}</Message>
-                                        </FormField>
-                                    </div>
-                                    <div class="w-full">
-                                        <label
-                                            for="name"
-                                            class="block font-bold mb-3"
-                                            >Previous Odometer</label
-                                        >
-                                        <FormField
-                                            id="p_odometer"
-                                            name="p_odometer"
-                                            class="flex flex-col gap-1"
-                                        >
-                                            <InputNumber
-                                                v-model="form.previous_odometer"
-                                                placeholder="Previous Odometer"
-                                                class="w-full"
-                                            />
-                                            <Message
-                                                severity="error"
-                                                size="small"
-                                                variant="simple"
-                                                >{{
-                                            }}</Message>
-                                        </FormField>
-                                    </div>
-                                </div>
-                                <div class="flex flex-row gap-5 mb-4">
-                                    <div class="w-full">
-                                        <label
-                                            for="name"
-                                            class="block font-bold mb-3"
-                                            >Total Distance</label
-                                        >
-                                        <FormField
-                                            id="t-distance"
-                                            name="t-distance"
-                                            class="flex flex-col gap-1"
-                                        >
-                                            <InputNumber
-                                                v-model="form.total_distance"
-                                                placeholder="Total Distance"
-                                                class="w-full"
-                                            />
-                                            <Message
-                                                severity="error"
-                                                size="small"
-                                                variant="simple"
-                                                >{{
-                                            }}</Message>
-                                        </FormField>
-                                    </div>
-                                    <div class="w-full">
-                                        <label
-                                            for="name"
-                                            class="block font-bold mb-3"
-                                            >Total Refuel
-                                            <span class="font-thin text-sm"
-                                                >(Liter)</span
-                                            ></label
-                                        >
-                                        <InputNumber
-                                            v-model="form.total_refuel"
-                                            placeholder="Total Refuel"
-                                            class="w-full"
-                                        />
-                                    </div>
-                                </div>
-                                <div class="flex flex-row gap-5 mb-4">
-                                    <div class="w-full">
-                                        <label
-                                            for="name"
-                                            class="block font-bold mb-3"
-                                            >Avg. Fuel Consumption</label
-                                        >
-                                        <InputNumber
-                                            v-model="form.avg_fuel_consumption"
-                                            placeholder="Avg. Fuel"
-                                            class="w-full"
-                                        />
-                                    </div>
-                                    <div class="w-full">
-                                        <label
-                                            for="name"
-                                            class="block font-bold mb-3"
-                                            >Amount
-                                        </label>
-                                        <InputNumber
-                                            v-model="form.amount"
-                                            placeholder="Amount"
-                                            class="w-full"
-                                        />
-                                    </div>
-                                </div>
-                                <div class="flex flex-row gap-5 mb-4">
-                                    <div class="w-full">
-                                        <label
-                                            for="name"
-                                            class="block font-bold mb-3"
-                                            >Station</label
-                                        >
+                                    <IconField>
+                                        <InputIcon>
+                                            <i class="pi pi-search" />
+                                        </InputIcon>
                                         <InputText
-                                            v-model="form.station"
-                                            placeholder="Station"
+                                            v-model="filters['global'].value"
+                                            placeholder="Search..."
+                                        />
+                                    </IconField>
+                                </div>
+                            </div>
+                        </template>
+
+                        <Column
+                            selectionMode="multiple"
+                            style="width: 3rem"
+                            :exportable="false"
+                        ></Column>
+                        <Column
+                            field="vehicle.license_plate"
+                            header="Truck"
+                            sortable
+                            style="min-width: 8rem"
+                        ></Column>
+                        <Column
+                            field="total_refuel"
+                            header="Liters"
+                            sortable
+                            style="min-width: 8rem"
+                        ></Column>
+                        <Column
+                            field="amount"
+                            header="Amount"
+                            sortable
+                            style="min-width: 8rem"
+                        >
+                        </Column>
+                        <Column
+                            field="total_distance"
+                            header="Distance"
+                            sortable
+                            style="min-width: 8rem"
+                        >
+                        </Column>
+                        <Column
+                            field="refueling_date"
+                            header="Date Refilled"
+                            sortable
+                            style="min-width: 8rem"
+                        ></Column>
+                        <Column
+                            header="Action"
+                            sortable=""
+                            :exportable="false"
+                            style="min-width: 8rem"
+                        >
+                            <template #body="slotProps">
+                                <Button
+                                    icon="pi pi-pencil"
+                                    outlined
+                                    rounded
+                                    class="mr-2"
+                                    @click="showDetail(slotProps.data)"
+                                />
+                                <Button
+                                    icon="pi pi-trash"
+                                    outlined
+                                    rounded
+                                    severity="danger"
+                                    @click="confirmDeleteFuel(slotProps.data)"
+                                />
+                            </template>
+                        </Column>
+                    </DataTable>
+                    <form @submit.prevent="submit">
+                        <Dialog
+                            v-model:visible="fuelDialog"
+                            :style="{ width: '750px' }"
+                            header="Fuel Details"
+                            :modal="true"
+                        >
+                            <div class="flex flex-row gap-5 mb-4">
+                                <div class="w-full">
+                                    <label
+                                        for="tractor"
+                                        class="block font-bold mb-3"
+                                        >Truck</label
+                                    >
+                                    <FormField
+                                        id="tractor"
+                                        name="tractor"
+                                        class="flex flex-col gap-1"
+                                    >
+                                        <AutoComplete
+                                            id="tractor"
+                                            class="w-full"
+                                            v-model="licensePlate"
+                                            :suggestions="tractorName"
+                                            @complete="tractorNameSearch"
+                                            @item-select="onTractorSelect"
+                                            optionLabel="license_plate"
+                                            dropdown
+                                            placeholder="Truck name"
+                                        />
+                                        <Message
+                                            severity="error"
+                                            size="small"
+                                            variant="simple"
+                                            >{{
+                                        }}</Message>
+                                    </FormField>
+                                </div>
+                                <div class="w-full">
+                                    <label
+                                        for="name"
+                                        class="block font-bold mb-3"
+                                        >Driver</label
+                                    >
+                                    <FormField
+                                        id="driver"
+                                        name="driver"
+                                        class="flex flex-col gap-1"
+                                    >
+                                        <AutoComplete
+                                            id="driver"
+                                            class="w-full"
+                                            v-model="driveFullname"
+                                            :suggestions="driverName"
+                                            @complete="driverNameSearch"
+                                            @item-select="onDriverSelect"
+                                            optionLabel="display"
+                                            dropdown
+                                            placeholder="Driver name"
+                                        />
+                                        <Message
+                                            severity="error"
+                                            size="small"
+                                            variant="simple"
+                                            >{{
+                                        }}</Message>
+                                    </FormField>
+                                </div>
+                            </div>
+                            <div class="flex flex-row gap-5 mb-4">
+                                <div class="w-full">
+                                    <label
+                                        for="name"
+                                        class="block font-bold mb-3"
+                                        >Current Odometer</label
+                                    >
+                                    <FormField
+                                        id="c-odometer"
+                                        name="c-odometer"
+                                        class="flex flex-col gap-1"
+                                    >
+                                        <InputNumber
+                                            v-model="form.current_odometer"
+                                            placeholder="Current Odometer"
                                             class="w-full"
                                         />
-                                    </div>
-                                    <div class="w-full">
-                                        <label
-                                            for="name"
-                                            class="block font-bold mb-3"
-                                            >Refilled Date
-                                        </label>
-                                        <div class="flex-auto">
-                                            <DatePicker
-                                                v-model="form.refueling_date"
-                                                id="dateRefuel"
-                                                showIcon
-                                                fluid
-                                                :showOnFocus="false"
-                                                inputId="dateRefuel"
-                                                placeholder="Date Refilled"
-                                            />
-                                        </div>
-                                    </div>
+                                        <Message
+                                            severity="error"
+                                            size="small"
+                                            variant="simple"
+                                            >{{
+                                        }}</Message>
+                                    </FormField>
                                 </div>
-                                <div>
-                                    <div class="w-full">
-                                        <label
-                                            for="remarks"
-                                            class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                            >Remarks<span
-                                                class="ml-1 text-red-400"
-                                                >*</span
-                                            ></label
-                                        >
-                                        <FormField
-                                            id="remarks"
-                                            name="remarks"
-                                            class="flex flex-col gap-1"
-                                        >
-                                            <Textarea
-                                                v-model="form.remarks"
-                                                variant="filled"
-                                                rows="2"
-                                                cols="30"
-                                                placeholder="Remarks"
-                                            />
-                                            <Message
-                                                severity="error"
-                                                size="small"
-                                                variant="simple"
-                                                >{{
-                                            }}</Message>
-                                        </FormField>
-                                    </div>
+                                <div class="w-full">
+                                    <label
+                                        for="name"
+                                        class="block font-bold mb-3"
+                                        >Previous Odometer</label
+                                    >
+                                    <FormField
+                                        id="p_odometer"
+                                        name="p_odometer"
+                                        class="flex flex-col gap-1"
+                                    >
+                                        <InputNumber
+                                            v-model="form.previous_odometer"
+                                            placeholder="Previous Odometer"
+                                            class="w-full"
+                                        />
+                                        <Message
+                                            severity="error"
+                                            size="small"
+                                            variant="simple"
+                                            >{{
+                                        }}</Message>
+                                    </FormField>
                                 </div>
-                                <template #footer>
-                                    <Button
-                                        label="UPDATE CHANGE"
-                                        icon="pi pi-pencil"
-                                        @click="submit"
-                                        class="w-full mt-4"
+                            </div>
+                            <div class="flex flex-row gap-5 mb-4">
+                                <div class="w-full">
+                                    <label
+                                        for="name"
+                                        class="block font-bold mb-3"
+                                        >Total Distance</label
+                                    >
+                                    <FormField
+                                        id="t-distance"
+                                        name="t-distance"
+                                        class="flex flex-col gap-1"
+                                    >
+                                        <InputNumber
+                                            v-model="form.total_distance"
+                                            placeholder="Total Distance"
+                                            class="w-full"
+                                        />
+                                        <Message
+                                            severity="error"
+                                            size="small"
+                                            variant="simple"
+                                            >{{
+                                        }}</Message>
+                                    </FormField>
+                                </div>
+                                <div class="w-full">
+                                    <label
+                                        for="name"
+                                        class="block font-bold mb-3"
+                                        >Total Refuel
+                                        <span class="font-thin text-sm"
+                                            >(Liter)</span
+                                        ></label
+                                    >
+                                    <InputNumber
+                                        v-model="form.total_refuel"
+                                        placeholder="Total Refuel"
+                                        class="w-full"
                                     />
-                                </template>
-                            </Dialog>
-                        </form>
-
-                        <Dialog
-                            v-model:visible="deleteFuelDialog"
-                            :style="{ width: '450px' }"
-                            header="Confirm"
-                            :modal="true"
-                        >
-                            <div class="flex items-center gap-4">
-                                <i
-                                    class="pi pi-exclamation-triangle !text-3xl"
-                                />
-                                <span v-if="fuelData"
-                                    >Are you sure you want to delete this fuel
-                                    with the cost and date is
-                                    <b class="text-red-700 text-sm"
-                                        >₱{{ fuelData.cost }} -
-                                        {{ fuelData.refueling_date }}</b
-                                    >?</span
-                                >
+                                </div>
+                            </div>
+                            <div class="flex flex-row gap-5 mb-4">
+                                <div class="w-full">
+                                    <label
+                                        for="name"
+                                        class="block font-bold mb-3"
+                                        >Avg. Fuel Consumption</label
+                                    >
+                                    <InputNumber
+                                        v-model="form.avg_fuel_consumption"
+                                        placeholder="Avg. Fuel"
+                                        class="w-full"
+                                    />
+                                </div>
+                                <div class="w-full">
+                                    <label
+                                        for="name"
+                                        class="block font-bold mb-3"
+                                        >Amount
+                                    </label>
+                                    <InputNumber
+                                        v-model="form.amount"
+                                        placeholder="Amount"
+                                        class="w-full"
+                                    />
+                                </div>
+                            </div>
+                            <div class="flex flex-row gap-5 mb-4">
+                                <div class="w-full">
+                                    <label
+                                        for="name"
+                                        class="block font-bold mb-3"
+                                        >Station</label
+                                    >
+                                    <InputText
+                                        v-model="form.station"
+                                        placeholder="Station"
+                                        class="w-full"
+                                    />
+                                </div>
+                                <div class="w-full">
+                                    <label
+                                        for="name"
+                                        class="block font-bold mb-3"
+                                        >Refilled Date
+                                    </label>
+                                    <div class="flex-auto">
+                                        <DatePicker
+                                            v-model="form.refueling_date"
+                                            id="dateRefuel"
+                                            showIcon
+                                            fluid
+                                            :showOnFocus="false"
+                                            inputId="dateRefuel"
+                                            placeholder="Date Refilled"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="w-full">
+                                    <label
+                                        for="remarks"
+                                        class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                        >Remarks<span class="ml-1 text-red-400"
+                                            >*</span
+                                        ></label
+                                    >
+                                    <FormField
+                                        id="remarks"
+                                        name="remarks"
+                                        class="flex flex-col gap-1"
+                                    >
+                                        <Textarea
+                                            v-model="form.remarks"
+                                            variant="filled"
+                                            rows="2"
+                                            cols="30"
+                                            placeholder="Remarks"
+                                        />
+                                        <Message
+                                            severity="error"
+                                            size="small"
+                                            variant="simple"
+                                            >{{
+                                        }}</Message>
+                                    </FormField>
+                                </div>
                             </div>
                             <template #footer>
                                 <Button
-                                    label="No"
-                                    icon="pi pi-times"
-                                    text
-                                    @click="deleteFuelDialog = false"
-                                />
-                                <Button
-                                    label="Yes"
-                                    icon="pi pi-check"
-                                    @click="deleteFuel(fuelData.id)"
+                                    label="UPDATE CHANGE"
+                                    icon="pi pi-pencil"
+                                    @click="submit"
+                                    class="w-full mt-4"
                                 />
                             </template>
                         </Dialog>
+                    </form>
 
-                        <Dialog
-                            v-model:visible="deleteFuelsDialog"
-                            :style="{ width: '450px' }"
-                            header="Confirm"
-                            :modal="true"
-                        >
-                            <div class="flex items-center gap-4">
-                                <i
-                                    class="pi pi-exclamation-triangle !text-3xl"
-                                />
-                                <span v-if="fuels"
-                                    >Are you sure you want to delete the
-                                    selected fuels?</span
-                                >
-                            </div>
-                            <template #footer>
-                                <Button
-                                    label="No"
-                                    icon="pi pi-times"
-                                    text
-                                    @click="deleteFuelsDialog = false"
-                                />
-                                <Button
-                                    label="Yes"
-                                    icon="pi pi-check"
-                                    text
-                                    @click="deleteSelectedFuels"
-                                />
-                            </template>
-                        </Dialog>
-                    </div>
+                    <Dialog
+                        v-model:visible="deleteFuelDialog"
+                        :style="{ width: '450px' }"
+                        header="Confirm"
+                        :modal="true"
+                    >
+                        <div class="flex items-center gap-4">
+                            <i class="pi pi-exclamation-triangle !text-3xl" />
+                            <span v-if="fuelData"
+                                >Are you sure you want to delete this fuel with
+                                the cost and date is
+                                <b class="text-red-700 text-sm"
+                                    >₱{{ fuelData.cost }} -
+                                    {{ fuelData.refueling_date }}</b
+                                >?</span
+                            >
+                        </div>
+                        <template #footer>
+                            <Button
+                                label="No"
+                                icon="pi pi-times"
+                                text
+                                @click="deleteFuelDialog = false"
+                            />
+                            <Button
+                                label="Yes"
+                                icon="pi pi-check"
+                                @click="deleteFuel(fuelData.id)"
+                            />
+                        </template>
+                    </Dialog>
+
+                    <Dialog
+                        v-model:visible="deleteFuelsDialog"
+                        :style="{ width: '450px' }"
+                        header="Confirm"
+                        :modal="true"
+                    >
+                        <div class="flex items-center gap-4">
+                            <i class="pi pi-exclamation-triangle !text-3xl" />
+                            <span v-if="fuels"
+                                >Are you sure you want to delete the selected
+                                fuels?</span
+                            >
+                        </div>
+                        <template #footer>
+                            <Button
+                                label="No"
+                                icon="pi pi-times"
+                                text
+                                @click="deleteFuelsDialog = false"
+                            />
+                            <Button
+                                label="Yes"
+                                icon="pi pi-check"
+                                text
+                                @click="deleteSelectedFuels"
+                            />
+                        </template>
+                    </Dialog>
                 </div>
             </div>
         </div>

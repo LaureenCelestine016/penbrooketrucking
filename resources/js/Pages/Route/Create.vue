@@ -8,401 +8,387 @@
                 Add Route
             </h2>
         </template>
-        <div class="py-4">
-            <div class="mx-12">
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-md">
-                    <form @submit.prevent="submit" class="p-6">
-                        <!-- Vehicle Infomation -->
-                        <div class="">
-                            <label
-                                class="text-gray-900 dark:text-surface-0 text-xl font-medium mb-4 block"
-                                >Route</label
-                            >
-                            <div class="grid grid-cols-2 gap-10 mb-5">
-                                <div class="w-full">
-                                    <label
-                                        for="tructor"
-                                        class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                        >Tractor Truck<span
-                                            class="ml-1 text-red-400"
-                                            >*</span
-                                        ></label
-                                    >
-                                    <FormField
+        <div class="py-4 px-4 sm:px-2 lg:px-2">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-md">
+                <form @submit.prevent="submit" class="p-6">
+                    <!-- Vehicle Infomation -->
+                    <div class="">
+                        <label
+                            class="text-gray-900 dark:text-surface-0 text-xl font-medium mb-4 block"
+                            >Route</label
+                        >
+                        <div class="grid grid-cols-2 gap-10 mb-5">
+                            <div class="w-full">
+                                <label
+                                    for="tructor"
+                                    class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                    >Tractor Truck<span
+                                        class="ml-1 text-red-400"
+                                        >*</span
+                                    ></label
+                                >
+                                <FormField
+                                    id="tructor"
+                                    name="tructor"
+                                    class="flex flex-col gap-1"
+                                >
+                                    <AutoComplete
                                         id="tructor"
-                                        name="tructor"
-                                        class="flex flex-col gap-1"
+                                        class="w-full"
+                                        :suggestions="tructors"
+                                        @complete="tructorNameSearch"
+                                        @item-select="onTructorSelect"
+                                        optionLabel="name"
+                                        dropdown
+                                        placeholder="Plate no."
+                                    />
+                                    <Message
+                                        v-if="form.errors.tructorId"
+                                        severity="error"
+                                        size="small"
+                                        variant="simple"
+                                        >{{ form.errors.tructorId }}</Message
                                     >
-                                        <AutoComplete
-                                            id="tructor"
-                                            class="w-full"
-                                            :suggestions="tructors"
-                                            @complete="tructorNameSearch"
-                                            @item-select="onTructorSelect"
-                                            optionLabel="name"
-                                            dropdown
-                                            placeholder="Plate no."
-                                        />
-                                        <Message
-                                            v-if="form.errors.tructorId"
-                                            severity="error"
-                                            size="small"
-                                            variant="simple"
-                                            >{{
-                                                form.errors.tructorId
-                                            }}</Message
-                                        >
-                                    </FormField>
-                                </div>
-                                <div class="w-full">
-                                    <label
-                                        for="trailer"
-                                        class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                        >Trailer Truck<span
-                                            class="ml-1 text-red-400"
-                                            >*</span
-                                        ></label
-                                    >
-                                    <FormField
+                                </FormField>
+                            </div>
+                            <div class="w-full">
+                                <label
+                                    for="trailer"
+                                    class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                    >Trailer Truck<span
+                                        class="ml-1 text-red-400"
+                                        >*</span
+                                    ></label
+                                >
+                                <FormField
+                                    id="trailer"
+                                    name="trailer"
+                                    class="flex flex-col gap-1"
+                                >
+                                    <AutoComplete
                                         id="trailer"
-                                        name="trailer"
-                                        class="flex flex-col gap-1"
+                                        class="w-full"
+                                        :suggestions="trailers"
+                                        @complete="trailerNameSearch"
+                                        @item-select="onTrailerSelect"
+                                        optionLabel="name"
+                                        dropdown
+                                        placeholder="Plate no."
+                                    />
+                                    <Message
+                                        v-if="form.errors.vehicleId"
+                                        severity="error"
+                                        size="small"
+                                        variant="simple"
+                                        >{{ form.errors.vehicleId }}</Message
                                     >
-                                        <AutoComplete
-                                            id="trailer"
-                                            class="w-full"
-                                            :suggestions="trailers"
-                                            @complete="trailerNameSearch"
-                                            @item-select="onTrailerSelect"
-                                            optionLabel="name"
-                                            dropdown
-                                            placeholder="Plate no."
-                                        />
-                                        <Message
-                                            v-if="form.errors.vehicleId"
-                                            severity="error"
-                                            size="small"
-                                            variant="simple"
-                                            >{{
-                                                form.errors.vehicleId
-                                            }}</Message
-                                        >
-                                    </FormField>
-                                </div>
+                                </FormField>
                             </div>
-                            <div class="grid grid-cols-2 gap-10 mb-5">
-                                <div class="w-full">
-                                    <label
-                                        for="driver"
-                                        class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                        >Driver<span class="ml-1 text-red-400"
-                                            >*</span
-                                        ></label
-                                    >
-                                    <FormField
+                        </div>
+                        <div class="grid grid-cols-2 gap-10 mb-5">
+                            <div class="w-full">
+                                <label
+                                    for="driver"
+                                    class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                    >Driver<span class="ml-1 text-red-400"
+                                        >*</span
+                                    ></label
+                                >
+                                <FormField
+                                    id="driver"
+                                    name="driver"
+                                    class="flex flex-col gap-1"
+                                >
+                                    <AutoComplete
                                         id="driver"
-                                        name="driver"
-                                        class="flex flex-col gap-1"
+                                        class="w-full"
+                                        :suggestions="driverName"
+                                        @complete="driverNameSearch"
+                                        @item-select="onDriverSelect"
+                                        optionLabel="name"
+                                        dropdown
+                                        placeholder="Driver name"
+                                    />
+                                    <Message
+                                        v-if="form.errors.driverId"
+                                        severity="error"
+                                        size="small"
+                                        variant="simple"
+                                        >{{ form.errors.driverId }}</Message
                                     >
-                                        <AutoComplete
-                                            id="driver"
-                                            class="w-full"
-                                            :suggestions="driverName"
-                                            @complete="driverNameSearch"
-                                            @item-select="onDriverSelect"
-                                            optionLabel="name"
-                                            dropdown
-                                            placeholder="Driver name"
-                                        />
-                                        <Message
-                                            v-if="form.errors.driverId"
-                                            severity="error"
-                                            size="small"
-                                            variant="simple"
-                                            >{{ form.errors.driverId }}</Message
-                                        >
-                                    </FormField>
-                                </div>
-                                <div class="w-full">
-                                    <label
-                                        for="First_name"
-                                        class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                        >Trip Status<span
-                                            class="ml-1 text-red-400"
-                                            >*</span
-                                        ></label
-                                    >
-                                    <FormField
-                                        id="First_name"
-                                        name="First_name"
-                                        class="flex flex-col gap-1"
-                                    >
-                                        <AutoComplete
-                                            id="vehicle_name"
-                                            class="w-full"
-                                            v-model="form.status"
-                                            :suggestions="tripStatus"
-                                            @complete="tripStatusSearch"
-                                            dropdown
-                                            placeholder="Status"
-                                        />
-                                        <Message
-                                            v-if="form.errors.status"
-                                            severity="error"
-                                            size="small"
-                                            variant="simple"
-                                            >{{ form.errors.status }}</Message
-                                        >
-                                    </FormField>
-                                </div>
+                                </FormField>
                             </div>
-                            <div class="grid grid-cols-2 gap-10 mb-5">
-                                <div class="w-full">
-                                    <label
-                                        for="start_location"
-                                        class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                        >Trip Start Location<span
-                                            class="ml-1 text-red-400"
-                                            >*</span
-                                        ></label
+                            <div class="w-full">
+                                <label
+                                    for="First_name"
+                                    class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                    >Trip Status<span class="ml-1 text-red-400"
+                                        >*</span
+                                    ></label
+                                >
+                                <FormField
+                                    id="First_name"
+                                    name="First_name"
+                                    class="flex flex-col gap-1"
+                                >
+                                    <AutoComplete
+                                        id="vehicle_name"
+                                        class="w-full"
+                                        v-model="form.status"
+                                        :suggestions="tripStatus"
+                                        @complete="tripStatusSearch"
+                                        dropdown
+                                        placeholder="Status"
+                                    />
+                                    <Message
+                                        v-if="form.errors.status"
+                                        severity="error"
+                                        size="small"
+                                        variant="simple"
+                                        >{{ form.errors.status }}</Message
                                     >
-                                    <FormField
+                                </FormField>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-10 mb-5">
+                            <div class="w-full">
+                                <label
+                                    for="start_location"
+                                    class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                    >Trip Start Location<span
+                                        class="ml-1 text-red-400"
+                                        >*</span
+                                    ></label
+                                >
+                                <FormField
+                                    id="start_location"
+                                    name="start_location"
+                                    class="flex flex-col gap-1"
+                                >
+                                    <AutoComplete
                                         id="start_location"
-                                        name="start_location"
-                                        class="flex flex-col gap-1"
+                                        class="w-full"
+                                        :suggestions="startLoc"
+                                        @complete="startLocSearch"
+                                        @item-select="onStLocSelect"
+                                        optionLabel="address"
+                                        dropdown
+                                        placeholder="Location"
+                                    />
+                                    <Message
+                                        v-if="form.errors.startLocId"
+                                        severity="error"
+                                        size="small"
+                                        variant="simple"
+                                        >{{ form.errors.startLocId }}</Message
                                     >
-                                        <AutoComplete
-                                            id="start_location"
-                                            class="w-full"
-                                            :suggestions="startLoc"
-                                            @complete="startLocSearch"
-                                            @item-select="onStLocSelect"
-                                            optionLabel="address"
-                                            dropdown
-                                            placeholder="Location"
-                                        />
-                                        <Message
-                                            v-if="form.errors.startLocId"
-                                            severity="error"
-                                            size="small"
-                                            variant="simple"
-                                            >{{
-                                                form.errors.startLocId
-                                            }}</Message
-                                        >
-                                    </FormField>
-                                </div>
-                                <div class="w-full">
-                                    <label
-                                        for="driver"
-                                        class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                        >Trip End Location<span
-                                            class="ml-1 text-red-400"
-                                            >*</span
-                                        ></label
-                                    >
-                                    <FormField
+                                </FormField>
+                            </div>
+                            <div class="w-full">
+                                <label
+                                    for="driver"
+                                    class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                    >Trip End Location<span
+                                        class="ml-1 text-red-400"
+                                        >*</span
+                                    ></label
+                                >
+                                <FormField
+                                    id="driver"
+                                    name="driver"
+                                    class="flex flex-col gap-1"
+                                >
+                                    <AutoComplete
                                         id="driver"
-                                        name="driver"
-                                        class="flex flex-col gap-1"
+                                        class="w-full"
+                                        :suggestions="endLoc"
+                                        @complete="endLocSearch"
+                                        @item-select="onEndLocSelect"
+                                        optionLabel="address"
+                                        dropdown
+                                        placeholder="Location"
+                                    />
+                                    <Message
+                                        v-if="form.errors.endLocId"
+                                        severity="error"
+                                        size="small"
+                                        variant="simple"
+                                        >{{ form.errors.endLocId }}</Message
                                     >
-                                        <AutoComplete
-                                            id="driver"
-                                            class="w-full"
-                                            :suggestions="endLoc"
-                                            @complete="endLocSearch"
-                                            @item-select="onEndLocSelect"
-                                            optionLabel="address"
-                                            dropdown
-                                            placeholder="Location"
-                                        />
-                                        <Message
-                                            v-if="form.errors.endLocId"
-                                            severity="error"
-                                            size="small"
-                                            variant="simple"
-                                            >{{ form.errors.endLocId }}</Message
-                                        >
-                                    </FormField>
-                                </div>
+                                </FormField>
                             </div>
-                            <div class="grid grid-cols-2 gap-10 mb-5">
-                                <div class="w-full">
-                                    <label
-                                        for="license_expired_date"
-                                        class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                        >Trip Start Date<span
-                                            class="ml-1 text-red-400"
-                                            >*</span
-                                        >
-                                    </label>
-                                    <FormField
-                                        id="license_expired_date"
-                                        name="license_expired_date"
-                                        class="flex flex-col gap-1"
+                        </div>
+                        <div class="grid grid-cols-2 gap-10 mb-5">
+                            <div class="w-full">
+                                <label
+                                    for="license_expired_date"
+                                    class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                    >Trip Start Date<span
+                                        class="ml-1 text-red-400"
+                                        >*</span
                                     >
-                                        <div class="flex-auto">
-                                            <DatePicker
-                                                id="registration_expired"
-                                                v-model="form.dateStart"
-                                                showIcon
-                                                fluid
-                                                :showOnFocus="false"
-                                                inputId="license_expired"
-                                                placeholder="Start Date"
-                                            />
-                                        </div>
-                                        <Message
-                                            v-if="form.errors.dateStart"
-                                            severity="error"
-                                            size="small"
-                                            variant="simple"
-                                            >{{
-                                                form.errors.dateStart
-                                            }}</Message
-                                        >
-                                    </FormField>
-                                </div>
-                                <div class="w-full">
-                                    <label
-                                        for="license_expired_date"
-                                        class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                        >Trip End Date<span
-                                            class="ml-1 text-red-400"
-                                            >*</span
-                                        >
-                                    </label>
-                                    <FormField
-                                        id="license_expired_date"
-                                        name="license_expired_date"
-                                        class="flex flex-col gap-1"
-                                    >
-                                        <div class="flex-auto">
-                                            <DatePicker
-                                                id="registration_expired"
-                                                v-model="form.dateEnd"
-                                                showIcon
-                                                fluid
-                                                :showOnFocus="false"
-                                                inputId="license_expired"
-                                                placeholder="End Date"
-                                            />
-                                        </div>
-                                        <Message
-                                            v-if="form.errors.dateEnd"
-                                            severity="error"
-                                            size="small"
-                                            variant="simple"
-                                            >{{ form.errors.dateEnd }}</Message
-                                        >
-                                    </FormField>
-                                </div>
-                            </div>
-                            <div class="grid grid-cols-2 gap-10 mb-5">
-                                <div class="w-full">
-                                    <label
-                                        for="First_name"
-                                        class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                        >Approx TOTAL KM<span
-                                            class="ml-1 text-red-400"
-                                            >*</span
-                                        ></label
-                                    >
-                                    <FormField
-                                        id="First_name"
-                                        name="First_name"
-                                        class="flex flex-col gap-1"
-                                    >
-                                        <InputText
-                                            type="text"
-                                            v-model="form.aproxKM"
-                                            class="user--input firstName"
-                                            placeholder="Kilometer"
+                                </label>
+                                <FormField
+                                    id="license_expired_date"
+                                    name="license_expired_date"
+                                    class="flex flex-col gap-1"
+                                >
+                                    <div class="flex-auto">
+                                        <DatePicker
+                                            id="registration_expired"
+                                            v-model="form.dateStart"
+                                            showIcon
+                                            fluid
+                                            :showOnFocus="false"
+                                            inputId="license_expired"
+                                            placeholder="Start Date"
                                         />
-                                        <Message
-                                            v-if="form.errors.aproxKM"
-                                            severity="error"
-                                            size="small"
-                                            variant="simple"
-                                            >{{ form.errors.aproxKM }}</Message
-                                        >
-                                    </FormField>
-                                </div>
-                                <div class="w-full">
-                                    <label
-                                        for="fuel"
-                                        class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                        >Fuel amount<span
-                                            class="ml-1 text-red-400"
-                                            >*</span
-                                        ></label
+                                    </div>
+                                    <Message
+                                        v-if="form.errors.dateStart"
+                                        severity="error"
+                                        size="small"
+                                        variant="simple"
+                                        >{{ form.errors.dateStart }}</Message
                                     >
-                                    <FormField
-                                        id="fuel"
-                                        name="fuel"
-                                        class="flex flex-col gap-1"
+                                </FormField>
+                            </div>
+                            <div class="w-full">
+                                <label
+                                    for="license_expired_date"
+                                    class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                    >Trip End Date<span
+                                        class="ml-1 text-red-400"
+                                        >*</span
                                     >
-                                        <AutoComplete
-                                            id="vehicle_name"
-                                            class="w-full"
-                                            :suggestions="fuelAmount"
-                                            @complete="fuelAmountSearch"
-                                            @item-select="onFuelSelect"
-                                            dropdown
-                                            placeholder="Amount"
-                                            optionLabel="display"
-                                            :forceSelection="true"
-                                        >
-                                            <template #option="slotProps">
-                                                <div>
-                                                    <span
-                                                        >₱
-                                                        {{
-                                                            slotProps.option
-                                                                .cost
-                                                        }}</span
-                                                    >
-                                                    <span class="fuel-date">
-                                                        — Refuel Date:
-                                                        {{
-                                                            slotProps.option
-                                                                .date
-                                                        }}</span
-                                                    >
-                                                </div>
-                                            </template>
-                                        </AutoComplete>
+                                </label>
+                                <FormField
+                                    id="license_expired_date"
+                                    name="license_expired_date"
+                                    class="flex flex-col gap-1"
+                                >
+                                    <div class="flex-auto">
+                                        <DatePicker
+                                            id="registration_expired"
+                                            v-model="form.dateEnd"
+                                            showIcon
+                                            fluid
+                                            :showOnFocus="false"
+                                            inputId="license_expired"
+                                            placeholder="End Date"
+                                        />
+                                    </div>
+                                    <Message
+                                        v-if="form.errors.dateEnd"
+                                        severity="error"
+                                        size="small"
+                                        variant="simple"
+                                        >{{ form.errors.dateEnd }}</Message
+                                    >
+                                </FormField>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-10 mb-5">
+                            <div class="w-full">
+                                <label
+                                    for="First_name"
+                                    class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                    >Approx TOTAL KM<span
+                                        class="ml-1 text-red-400"
+                                        >*</span
+                                    ></label
+                                >
+                                <FormField
+                                    id="First_name"
+                                    name="First_name"
+                                    class="flex flex-col gap-1"
+                                >
+                                    <InputText
+                                        type="text"
+                                        v-model="form.aproxKM"
+                                        class="user--input firstName"
+                                        placeholder="Kilometer"
+                                    />
+                                    <Message
+                                        v-if="form.errors.aproxKM"
+                                        severity="error"
+                                        size="small"
+                                        variant="simple"
+                                        >{{ form.errors.aproxKM }}</Message
+                                    >
+                                </FormField>
+                            </div>
+                            <div class="w-full">
+                                <label
+                                    for="fuel"
+                                    class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                    >Fuel amount<span class="ml-1 text-red-400"
+                                        >*</span
+                                    ></label
+                                >
+                                <FormField
+                                    id="fuel"
+                                    name="fuel"
+                                    class="flex flex-col gap-1"
+                                >
+                                    <AutoComplete
+                                        id="vehicle_name"
+                                        class="w-full"
+                                        :suggestions="fuelAmount"
+                                        @complete="fuelAmountSearch"
+                                        @item-select="onFuelSelect"
+                                        dropdown
+                                        placeholder="Amount"
+                                        optionLabel="display"
+                                        :forceSelection="true"
+                                    >
+                                        <template #option="slotProps">
+                                            <div>
+                                                <span
+                                                    >₱
+                                                    {{
+                                                        slotProps.option.cost
+                                                    }}</span
+                                                >
+                                                <span class="fuel-date">
+                                                    — Refuel Date:
+                                                    {{
+                                                        slotProps.option.date
+                                                    }}</span
+                                                >
+                                            </div>
+                                        </template>
+                                    </AutoComplete>
 
-                                        <Message
-                                            v-if="form.errors.fuelId"
-                                            severity="error"
-                                            size="small"
-                                            variant="simple"
-                                            >{{ form.errors.fuelId }}</Message
-                                        >
-                                    </FormField>
-                                </div>
+                                    <Message
+                                        v-if="form.errors.fuelId"
+                                        severity="error"
+                                        size="small"
+                                        variant="simple"
+                                        >{{ form.errors.fuelId }}</Message
+                                    >
+                                </FormField>
                             </div>
                         </div>
-                        <div>
-                            <Button
-                                label="SUBMIT"
-                                type="submit"
-                                icon="pi pi-send"
-                                class="w-full mt-12"
-                            />
-                        </div>
-                    </form>
-                    <div
-                        id="map"
-                        style="
-                            width: 100%;
-                            height: 550px;
-                            background: #eee;
-                            display: none;
-                        "
-                    ></div>
-                </div>
+                    </div>
+                    <div>
+                        <Button
+                            label="SUBMIT"
+                            type="submit"
+                            icon="pi pi-send"
+                            class="w-full mt-12"
+                        />
+                    </div>
+                </form>
+                <div
+                    id="map"
+                    style="
+                        width: 100%;
+                        height: 550px;
+                        background: #eee;
+                        display: none;
+                    "
+                ></div>
             </div>
         </div>
     </AuthenticatedLayout>

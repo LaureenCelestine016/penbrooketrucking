@@ -8,224 +8,212 @@
                 Route List
             </h2>
         </template>
-        <div class="py-4">
-            <div class="mx-12">
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-md">
-                    <div class="card">
-                        <DataTable
-                            ref="dt"
-                            v-model:selection="selectedRoute"
-                            :value="route"
-                            dataKey="id"
-                            :paginator="true"
-                            :rows="5"
-                            :filters="filters"
-                            :globalFilterFields="[
-                                'name.first',
-                                'name.middle',
-                                'name.last',
-                                'license_details.license_number',
-                                'status',
-                            ]"
-                            paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-                            :rowsPerPageOptions="[5, 10, 25]"
-                            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} vehicles"
-                        >
-                            <template #header>
+        <div class="py-4 px-4 sm:px-2 lg:px-2">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-md">
+                <div class="card">
+                    <DataTable
+                        ref="dt"
+                        v-model:selection="selectedRoute"
+                        :value="route"
+                        dataKey="id"
+                        :paginator="true"
+                        :rows="5"
+                        :filters="filters"
+                        :globalFilterFields="[
+                            'name.first',
+                            'name.middle',
+                            'name.last',
+                            'license_details.license_number',
+                            'status',
+                        ]"
+                        paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+                        :rowsPerPageOptions="[5, 10, 25]"
+                        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} vehicles"
+                    >
+                        <template #header>
+                            <div
+                                class="flex flex-wrap gap-2 items-center justify-between p-1"
+                            >
+                                <Button
+                                    label="EXPORT TO EXCEL"
+                                    icon="pi pi-upload"
+                                    severity="secondary"
+                                    @click="exportCSV($event)"
+                                />
+
                                 <div
-                                    class="flex flex-wrap gap-2 items-center justify-between p-1"
+                                    class="flex gap-4 justify-center items-center"
                                 >
                                     <Button
-                                        label="EXPORT TO EXCEL"
-                                        icon="pi pi-upload"
-                                        severity="secondary"
-                                        @click="exportCSV($event)"
-                                    />
-
-                                    <div
-                                        class="flex gap-4 justify-center items-center"
-                                    >
-                                        <Button
-                                            label="Delete"
-                                            icon="pi pi-trash"
-                                            severity="danger"
-                                            outlined
-                                            @click="confirmDeleteSelected"
-                                            :disabled="
-                                                !selectedRoute ||
-                                                !selectedRoute.length
-                                            "
-                                        />
-                                        <IconField>
-                                            <InputIcon>
-                                                <i class="pi pi-search" />
-                                            </InputIcon>
-                                            <InputText
-                                                v-model="
-                                                    filters['global'].value
-                                                "
-                                                placeholder="Search..."
-                                            />
-                                        </IconField>
-                                    </div>
-                                </div>
-                            </template>
-
-                            <Column
-                                selectionMode="multiple"
-                                style="width: 3rem"
-                                :exportable="false"
-                            ></Column>
-                            <Column
-                                field=""
-                                header="Vehicle"
-                                sortable
-                                style="min-width: 9rem"
-                                ><template #body="slotProps">
-                                    {{ slotProps.data.vehicle?.license_plate }}
-                                </template></Column
-                            >
-                            <Column
-                                field=""
-                                header="Driver"
-                                sortable
-                                style="min-width: 8rem"
-                                ><template #body="slotProps">
-                                    {{ slotProps.data.driver?.first_name }}
-                                    {{ slotProps.data.driver?.last_name }}
-                                </template></Column
-                            >
-                            <Column
-                                field=""
-                                header="Start Location"
-                                sortable
-                                style="min-width: 8rem"
-                            >
-                                <template #body="slotProps">
-                                    {{ slotProps.data.start_location?.address }}
-                                </template>
-                            </Column>
-                            <Column
-                                field=""
-                                header="End Location"
-                                sortable
-                                style="min-width: 8rem"
-                            >
-                                <template #body="slotProps">
-                                    {{ slotProps.data.end_location?.address }}
-                                </template>
-                            </Column>
-                            <Column
-                                field="status"
-                                header="Status"
-                                sortable
-                                style="min-width: 8rem"
-                            >
-                                <template #body="slotProps">
-                                    <Tag
-                                        class="status"
-                                        :class="{
-                                            'blinking-status':
-                                                slotProps.data?.status ===
-                                                'Ongoing',
-                                        }"
-                                        :value="slotProps.data?.status"
-                                        :severity="
-                                            getStatusLabel(
-                                                slotProps.data?.status
-                                            )
-                                        "
-                                    />
-                                </template>
-                            </Column>
-                            <Column
-                                header="Action"
-                                sortable=""
-                                :exportable="false"
-                                style="min-width: 8rem"
-                            >
-                                <template #body="slotProps">
-                                    <Link> </Link>
-                                    <Button
-                                        icon="pi pi-pencil"
-                                        outlined
-                                        rounded
-                                        class="mr-2"
-                                        @click="showDetail(slotProps.data)"
-                                    />
-                                    <Button
+                                        label="Delete"
                                         icon="pi pi-trash"
-                                        outlined
-                                        rounded
                                         severity="danger"
-                                        @click="
-                                            confirmDeleteRoute(slotProps.data)
+                                        outlined
+                                        @click="confirmDeleteSelected"
+                                        :disabled="
+                                            !selectedRoute ||
+                                            !selectedRoute.length
                                         "
                                     />
-                                </template>
-                            </Column>
-                        </DataTable>
-
-                        <Dialog
-                            v-model:visible="deleteRouteDialog"
-                            :style="{ width: '450px' }"
-                            header="Confirm"
-                            :modal="true"
-                        >
-                            <div class="flex items-center gap-4">
-                                <i
-                                    class="pi pi-exclamation-triangle !text-3xl"
-                                />
-                                <span v-if="routeData"
-                                    >Are you sure you want to delete this route?
-                                </span>
+                                    <IconField>
+                                        <InputIcon>
+                                            <i class="pi pi-search" />
+                                        </InputIcon>
+                                        <InputText
+                                            v-model="filters['global'].value"
+                                            placeholder="Search..."
+                                        />
+                                    </IconField>
+                                </div>
                             </div>
-                            <template #footer>
-                                <Button
-                                    label="No"
-                                    icon="pi pi-times"
-                                    text
-                                    @click="deleteRouteDialog = false"
-                                />
-                                <Button
-                                    label="Yes"
-                                    icon="pi pi-check"
-                                    @click="deleteRoute(routeData.id)"
+                        </template>
+
+                        <Column
+                            selectionMode="multiple"
+                            style="width: 3rem"
+                            :exportable="false"
+                        ></Column>
+                        <Column
+                            field=""
+                            header="Vehicle"
+                            sortable
+                            style="min-width: 9rem"
+                            ><template #body="slotProps">
+                                {{ slotProps.data.vehicle?.license_plate }}
+                            </template></Column
+                        >
+                        <Column
+                            field=""
+                            header="Driver"
+                            sortable
+                            style="min-width: 8rem"
+                            ><template #body="slotProps">
+                                {{ slotProps.data.driver?.first_name }}
+                                {{ slotProps.data.driver?.last_name }}
+                            </template></Column
+                        >
+                        <Column
+                            field=""
+                            header="Start Location"
+                            sortable
+                            style="min-width: 8rem"
+                        >
+                            <template #body="slotProps">
+                                {{ slotProps.data.start_location?.address }}
+                            </template>
+                        </Column>
+                        <Column
+                            field=""
+                            header="End Location"
+                            sortable
+                            style="min-width: 8rem"
+                        >
+                            <template #body="slotProps">
+                                {{ slotProps.data.end_location?.address }}
+                            </template>
+                        </Column>
+                        <Column
+                            field="status"
+                            header="Status"
+                            sortable
+                            style="min-width: 8rem"
+                        >
+                            <template #body="slotProps">
+                                <Tag
+                                    class="status"
+                                    :class="{
+                                        'blinking-status':
+                                            slotProps.data?.status ===
+                                            'Ongoing',
+                                    }"
+                                    :value="slotProps.data?.status"
+                                    :severity="
+                                        getStatusLabel(slotProps.data?.status)
+                                    "
                                 />
                             </template>
-                        </Dialog>
-
-                        <Dialog
-                            v-model:visible="deleteRoutesDialog"
-                            :style="{ width: '450px' }"
-                            header="Confirm"
-                            :modal="true"
+                        </Column>
+                        <Column
+                            header="Action"
+                            sortable=""
+                            :exportable="false"
+                            style="min-width: 8rem"
                         >
-                            <div class="flex items-center gap-4">
-                                <i
-                                    class="pi pi-exclamation-triangle !text-3xl"
-                                />
-                                <span v-if="selectedRoute"
-                                    >Are you sure you want to delete the
-                                    selected routes?</span
-                                >
-                            </div>
-                            <template #footer>
+                            <template #body="slotProps">
+                                <Link> </Link>
                                 <Button
-                                    label="No"
-                                    icon="pi pi-times"
-                                    text
-                                    @click="deleteRoutesDialog = false"
+                                    icon="pi pi-pencil"
+                                    outlined
+                                    rounded
+                                    class="mr-2"
+                                    @click="showDetail(slotProps.data)"
                                 />
                                 <Button
-                                    label="Yes"
-                                    icon="pi pi-check"
-                                    text
-                                    @click="deleteSelectedRoutes"
+                                    icon="pi pi-trash"
+                                    outlined
+                                    rounded
+                                    severity="danger"
+                                    @click="confirmDeleteRoute(slotProps.data)"
                                 />
                             </template>
-                        </Dialog>
-                    </div>
+                        </Column>
+                    </DataTable>
+
+                    <Dialog
+                        v-model:visible="deleteRouteDialog"
+                        :style="{ width: '450px' }"
+                        header="Confirm"
+                        :modal="true"
+                    >
+                        <div class="flex items-center gap-4">
+                            <i class="pi pi-exclamation-triangle !text-3xl" />
+                            <span v-if="routeData"
+                                >Are you sure you want to delete this route?
+                            </span>
+                        </div>
+                        <template #footer>
+                            <Button
+                                label="No"
+                                icon="pi pi-times"
+                                text
+                                @click="deleteRouteDialog = false"
+                            />
+                            <Button
+                                label="Yes"
+                                icon="pi pi-check"
+                                @click="deleteRoute(routeData.id)"
+                            />
+                        </template>
+                    </Dialog>
+
+                    <Dialog
+                        v-model:visible="deleteRoutesDialog"
+                        :style="{ width: '450px' }"
+                        header="Confirm"
+                        :modal="true"
+                    >
+                        <div class="flex items-center gap-4">
+                            <i class="pi pi-exclamation-triangle !text-3xl" />
+                            <span v-if="selectedRoute"
+                                >Are you sure you want to delete the selected
+                                routes?</span
+                            >
+                        </div>
+                        <template #footer>
+                            <Button
+                                label="No"
+                                icon="pi pi-times"
+                                text
+                                @click="deleteRoutesDialog = false"
+                            />
+                            <Button
+                                label="Yes"
+                                icon="pi pi-check"
+                                text
+                                @click="deleteSelectedRoutes"
+                            />
+                        </template>
+                    </Dialog>
                 </div>
             </div>
         </div>

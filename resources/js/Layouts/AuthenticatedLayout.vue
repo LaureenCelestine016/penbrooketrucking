@@ -151,11 +151,11 @@
 
         <!-- Menu Bar -->
         <nav class="bg-white border-b border-gray-200">
-            <div class="mx-4 sm:mx-12">
+            <div class="mx-4 sm:mx-6">
                 <div class="py-3">
                     <Menubar
                         :model="items"
-                        class="w-full text-sm sm:text-base"
+                        class="menubar w-full text-xs md:text-sm lg:text-base"
                     />
                 </div>
             </div>
@@ -357,13 +357,13 @@ const adminItems = ref([
                     router.get("/registration/create");
                 },
             },
-            {
-                label: "Driver Compliance",
-                icon: "pi pi-user",
-                command: () => {
-                    router.get("");
-                },
-            },
+            // {
+            //     label: "Driver Compliance",
+            //     icon: "pi pi-user",
+            //     command: () => {
+            //         router.get("");
+            //     },
+            // },
         ],
     },
     {
@@ -376,15 +376,15 @@ const adminItems = ref([
                 command: () => {
                     router.get("/expenses");
                 },
-                items: [
-                    {
-                        label: "Add Expenses",
-                        icon: "pi pi-plus",
-                        command: () => {
-                            router.get("/expenses/create");
-                        },
-                    },
-                ],
+                // items: [
+                //     {
+                //         label: "Add Expenses",
+                //         icon: "pi pi-plus",
+                //         command: () => {
+                //             router.get("/expenses/create");
+                //         },
+                //     },
+                // ],
             },
             {
                 label: "Report",
@@ -452,10 +452,9 @@ const showingNavigationDropdown = ref(false);
 
 <style scoped>
 .menubar {
-    height: 54px;
-    border: 0;
+    height: auto;
     position: relative;
-    z-index: 999; /* Higher than cover-picture */
+    z-index: 999;
 }
 
 .footer {

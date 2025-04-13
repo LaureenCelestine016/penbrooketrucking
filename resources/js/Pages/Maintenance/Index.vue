@@ -8,203 +8,191 @@
                 Maintenance Record
             </h2>
         </template>
-        <div class="py-4">
-            <div class="mx-12">
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="card">
-                        <DataTable
-                            ref="dt"
-                            v-model:selection="selectedMaintenance"
-                            :value="maintenance"
-                            dataKey="id"
-                            :paginator="true"
-                            :rows="10"
-                            :filters="filters"
-                            :globalFilterFields="['vehicle.name']"
-                            paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-                            :rowsPerPageOptions="[5, 10, 25]"
-                            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} vehicles"
-                        >
-                            <template #header>
+        <div class="py-4 px-4 sm:px-2 lg:px-2">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="card">
+                    <DataTable
+                        ref="dt"
+                        v-model:selection="selectedMaintenance"
+                        :value="maintenance"
+                        dataKey="id"
+                        :paginator="true"
+                        :rows="10"
+                        :filters="filters"
+                        :globalFilterFields="['vehicle.name']"
+                        paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+                        :rowsPerPageOptions="[5, 10, 25]"
+                        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} vehicles"
+                    >
+                        <template #header>
+                            <div
+                                class="flex flex-wrap gap-2 items-center justify-between p-1"
+                            >
+                                <Button
+                                    label="EXPORT TO EXCEL"
+                                    icon="pi pi-upload"
+                                    severity="secondary"
+                                    @click="exportCSV($event)"
+                                />
+
                                 <div
-                                    class="flex flex-wrap gap-2 items-center justify-between p-1"
+                                    class="flex gap-4 justify-center items-center"
                                 >
                                     <Button
-                                        label="EXPORT TO EXCEL"
-                                        icon="pi pi-upload"
-                                        severity="secondary"
-                                        @click="exportCSV($event)"
-                                    />
-
-                                    <div
-                                        class="flex gap-4 justify-center items-center"
-                                    >
-                                        <Button
-                                            label="Delete"
-                                            icon="pi pi-trash"
-                                            severity="danger"
-                                            outlined
-                                            @click="confirmDeleteSelected"
-                                            :disabled="
-                                                !selectedMaintenance ||
-                                                !selectedMaintenance.length
-                                            "
-                                        />
-                                        <IconField>
-                                            <InputIcon>
-                                                <i class="pi pi-search" />
-                                            </InputIcon>
-                                            <InputText
-                                                v-model="
-                                                    filters['global'].value
-                                                "
-                                                placeholder="Search..."
-                                            />
-                                        </IconField>
-                                    </div>
-                                </div>
-                            </template>
-
-                            <Column
-                                selectionMode="multiple"
-                                style="width: 3rem"
-                                :exportable="false"
-                            ></Column>
-                            <Column
-                                field=""
-                                header="Tructor / Trailer"
-                                sortable
-                                style="min-width: 10rem"
-                                ><template #body="slotProps">
-                                    {{ slotProps.data.vehicle?.model }}
-                                    {{ slotProps.data.vehicle?.license_plate }}
-                                    {{ slotProps.data.trailer?.license_plate }}
-                                </template></Column
-                            >
-                            <Column
-                                field="item_description"
-                                header="Item"
-                                sortable
-                                style="min-width: 8rem"
-                            ></Column>
-                            <Column
-                                field="quantity"
-                                header="Quantity"
-                                sortable
-                                style="min-width: 8rem"
-                            >
-                            </Column>
-                            <Column
-                                field="unit"
-                                header="Unit"
-                                sortable
-                                style="min-width: 8rem"
-                            >
-                            </Column>
-                            <Column
-                                field="price"
-                                header="Price"
-                                sortable
-                                style="min-width: 8rem"
-                            ></Column>
-                            <Column
-                                field="total"
-                                header="Total"
-                                sortable
-                                style="min-width: 8rem"
-                            ></Column>
-                            <Column
-                                header="Action"
-                                sortable=""
-                                :exportable="false"
-                                style="min-width: 8rem"
-                            >
-                                <template #body="slotProps">
-                                    <Button
-                                        icon="pi pi-pencil"
-                                        outlined
-                                        rounded
-                                        class="mr-2"
-                                        @click="showDetail(slotProps.data.id)"
-                                    />
-                                    <Button
+                                        label="Delete"
                                         icon="pi pi-trash"
-                                        outlined
-                                        rounded
                                         severity="danger"
-                                        @click="
-                                            confirmDeleteMaintenance(
-                                                slotProps.data
-                                            )
+                                        outlined
+                                        @click="confirmDeleteSelected"
+                                        :disabled="
+                                            !selectedMaintenance ||
+                                            !selectedMaintenance.length
                                         "
                                     />
-                                </template>
-                            </Column>
-                        </DataTable>
-
-                        <Dialog
-                            v-model:visible="deleteMaintenanceDialog"
-                            :style="{ width: '450px' }"
-                            header="Confirm"
-                            :modal="true"
-                        >
-                            <div class="flex items-center gap-4">
-                                <i
-                                    class="pi pi-exclamation-triangle !text-3xl"
-                                />
-                                <span v-if="maintenanceData"
-                                    >Are you sure you want to delete this
-                                    maintenance?</span
-                                >
+                                    <IconField>
+                                        <InputIcon>
+                                            <i class="pi pi-search" />
+                                        </InputIcon>
+                                        <InputText
+                                            v-model="filters['global'].value"
+                                            placeholder="Search..."
+                                        />
+                                    </IconField>
+                                </div>
                             </div>
-                            <template #footer>
+                        </template>
+
+                        <Column
+                            selectionMode="multiple"
+                            style="width: 3rem"
+                            :exportable="false"
+                        ></Column>
+                        <Column
+                            field=""
+                            header="Tructor / Trailer"
+                            sortable
+                            style="min-width: 10rem"
+                            ><template #body="slotProps">
+                                {{ slotProps.data.vehicle?.model }}
+                                {{ slotProps.data.vehicle?.license_plate }}
+                                {{ slotProps.data.trailer?.license_plate }}
+                            </template></Column
+                        >
+                        <Column
+                            field="item_description"
+                            header="Item"
+                            sortable
+                            style="min-width: 8rem"
+                        ></Column>
+                        <Column
+                            field="quantity"
+                            header="Quantity"
+                            sortable
+                            style="min-width: 8rem"
+                        >
+                        </Column>
+                        <Column
+                            field="unit"
+                            header="Unit"
+                            sortable
+                            style="min-width: 8rem"
+                        >
+                        </Column>
+                        <Column
+                            field="price"
+                            header="Price"
+                            sortable
+                            style="min-width: 8rem"
+                        ></Column>
+                        <Column
+                            field="total"
+                            header="Total"
+                            sortable
+                            style="min-width: 8rem"
+                        ></Column>
+                        <Column
+                            header="Action"
+                            sortable=""
+                            :exportable="false"
+                            style="min-width: 8rem"
+                        >
+                            <template #body="slotProps">
                                 <Button
-                                    label="No"
-                                    icon="pi pi-times"
-                                    text
-                                    @click="deleteMaintenanceDialog = false"
+                                    icon="pi pi-pencil"
+                                    outlined
+                                    rounded
+                                    class="mr-2"
+                                    @click="showDetail(slotProps.data.id)"
                                 />
                                 <Button
-                                    label="Yes"
-                                    icon="pi pi-check"
+                                    icon="pi pi-trash"
+                                    outlined
+                                    rounded
+                                    severity="danger"
                                     @click="
-                                        deleteMaintenance(maintenanceData.id)
+                                        confirmDeleteMaintenance(slotProps.data)
                                     "
                                 />
                             </template>
-                        </Dialog>
+                        </Column>
+                    </DataTable>
 
-                        <Dialog
-                            v-model:visible="deleteMaintenancesDialog"
-                            :style="{ width: '450px' }"
-                            header="Confirm"
-                            :modal="true"
-                        >
-                            <div class="flex items-center gap-4">
-                                <i
-                                    class="pi pi-exclamation-triangle !text-3xl"
-                                />
-                                <span v-if="maintenance"
-                                    >Are you sure you want to delete the
-                                    selected maintenance?</span
-                                >
-                            </div>
-                            <template #footer>
-                                <Button
-                                    label="No"
-                                    icon="pi pi-times"
-                                    text
-                                    @click="deleteMaintenancesDialog = false"
-                                />
-                                <Button
-                                    label="Yes"
-                                    icon="pi pi-check"
-                                    text
-                                    @click="deleteSelectedMaintenance"
-                                />
-                            </template>
-                        </Dialog>
-                    </div>
+                    <Dialog
+                        v-model:visible="deleteMaintenanceDialog"
+                        :style="{ width: '450px' }"
+                        header="Confirm"
+                        :modal="true"
+                    >
+                        <div class="flex items-center gap-4">
+                            <i class="pi pi-exclamation-triangle !text-3xl" />
+                            <span v-if="maintenanceData"
+                                >Are you sure you want to delete this
+                                maintenance?</span
+                            >
+                        </div>
+                        <template #footer>
+                            <Button
+                                label="No"
+                                icon="pi pi-times"
+                                text
+                                @click="deleteMaintenanceDialog = false"
+                            />
+                            <Button
+                                label="Yes"
+                                icon="pi pi-check"
+                                @click="deleteMaintenance(maintenanceData.id)"
+                            />
+                        </template>
+                    </Dialog>
+
+                    <Dialog
+                        v-model:visible="deleteMaintenancesDialog"
+                        :style="{ width: '450px' }"
+                        header="Confirm"
+                        :modal="true"
+                    >
+                        <div class="flex items-center gap-4">
+                            <i class="pi pi-exclamation-triangle !text-3xl" />
+                            <span v-if="maintenance"
+                                >Are you sure you want to delete the selected
+                                maintenance?</span
+                            >
+                        </div>
+                        <template #footer>
+                            <Button
+                                label="No"
+                                icon="pi pi-times"
+                                text
+                                @click="deleteMaintenancesDialog = false"
+                            />
+                            <Button
+                                label="Yes"
+                                icon="pi pi-check"
+                                text
+                                @click="deleteSelectedMaintenance"
+                            />
+                        </template>
+                    </Dialog>
                 </div>
             </div></div
     ></AuthenticatedLayout>

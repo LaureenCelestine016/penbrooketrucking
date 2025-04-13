@@ -11,205 +11,199 @@
             </h2>
         </template>
 
-        <div class="py-4">
-            <div class="px-4 sm:px-6 lg:px-12">
-                <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
-                    <div class="card">
-                        <DataTable
-                            ref="dt"
-                            v-model:selection="selectedVehicle"
-                            :value="Vehicles"
-                            dataKey="id"
-                            :paginator="true"
-                            :rows="5"
-                            :filters="filters"
-                            paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-                            :rowsPerPageOptions="[5, 10, 25]"
-                            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} vehicles"
-                            class="w-full overflow-auto"
-                        >
-                            <!-- Table Header -->
-                            <template #header>
+        <div class="py-4 px-4 sm:px-2 lg:px-2">
+            <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
+                <div class="card">
+                    <DataTable
+                        ref="dt"
+                        v-model:selection="selectedVehicle"
+                        :value="Vehicles"
+                        dataKey="id"
+                        :paginator="true"
+                        :rows="5"
+                        :filters="filters"
+                        paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+                        :rowsPerPageOptions="[5, 10, 25]"
+                        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} vehicles"
+                        class="w-full overflow-auto"
+                    >
+                        <!-- Table Header -->
+                        <template #header>
+                            <div
+                                class="flex flex-col md:flex-row gap-3 md:gap-4 justify-between items-start md:items-center p-2"
+                            >
+                                <Button
+                                    label="EXPORT TO EXCEL"
+                                    icon="pi pi-upload"
+                                    severity="secondary"
+                                    @click="exportCSV($event)"
+                                    class="w-full md:w-auto"
+                                />
+
                                 <div
-                                    class="flex flex-col md:flex-row gap-3 md:gap-4 justify-between items-start md:items-center p-2"
+                                    class="flex flex-col sm:flex-row gap-2 items-start sm:items-center"
                                 >
                                     <Button
-                                        label="EXPORT TO EXCEL"
-                                        icon="pi pi-upload"
-                                        severity="secondary"
-                                        @click="exportCSV($event)"
-                                        class="w-full md:w-auto"
-                                    />
-
-                                    <div
-                                        class="flex flex-col sm:flex-row gap-2 items-start sm:items-center"
-                                    >
-                                        <Button
-                                            label="Delete"
-                                            icon="pi pi-trash"
-                                            severity="danger"
-                                            outlined
-                                            @click="confirmDeleteSelected"
-                                            :disabled="
-                                                !selectedVehicle ||
-                                                !selectedVehicle.length
-                                            "
-                                            class="w-full sm:w-auto"
-                                        />
-                                        <IconField class="w-full sm:w-64">
-                                            <InputIcon>
-                                                <i class="pi pi-search" />
-                                            </InputIcon>
-                                            <InputText
-                                                v-model="
-                                                    filters['global'].value
-                                                "
-                                                placeholder="Search..."
-                                                class="w-full"
-                                            />
-                                        </IconField>
-                                    </div>
-                                </div>
-                            </template>
-
-                            <!-- Table Columns -->
-                            <Column
-                                selectionMode="multiple"
-                                style="width: 3rem"
-                                :exportable="false"
-                            />
-                            <Column
-                                field="license_plate"
-                                header="Plate number"
-                                sortable
-                                style="min-width: 10rem"
-                            />
-                            <Column
-                                field="model"
-                                header="Model"
-                                sortable
-                                style="min-width: 10rem"
-                            />
-                            <Column
-                                field="engine_number"
-                                header="Engine number"
-                                sortable
-                                style="min-width: 10rem"
-                            />
-                            <Column
-                                field="capacity"
-                                header="Capacity"
-                                sortable
-                                style="min-width: 10rem"
-                            />
-                            <Column
-                                field="status"
-                                header="Status"
-                                sortable
-                                style="min-width: 10rem"
-                            >
-                                <template #body="slotProps">
-                                    <Tag
-                                        class="status"
-                                        :value="slotProps.data.status"
-                                        :severity="
-                                            getStatusLabel(
-                                                slotProps.data.status
-                                            )
-                                        "
-                                    />
-                                </template>
-                            </Column>
-                            <Column
-                                header="Action"
-                                :exportable="false"
-                                style="min-width: 10rem"
-                            >
-                                <template #body="slotProps">
-                                    <Button
-                                        icon="pi pi-pencil"
-                                        outlined
-                                        rounded
-                                        class="mr-2"
-                                        @click="showDetail(slotProps.data.id)"
-                                    />
-                                    <Button
+                                        label="Delete"
                                         icon="pi pi-trash"
-                                        outlined
-                                        rounded
                                         severity="danger"
-                                        @click="
-                                            confirmDeleteVehicle(slotProps.data)
+                                        outlined
+                                        @click="confirmDeleteSelected"
+                                        :disabled="
+                                            !selectedVehicle ||
+                                            !selectedVehicle.length
                                         "
+                                        class="w-full sm:w-auto"
                                     />
-                                </template>
-                            </Column>
-                        </DataTable>
-
-                        <!-- Confirm Delete Dialog -->
-                        <Dialog
-                            v-model:visible="deleteVehicleDialog"
-                            :style="{ width: '90%', maxWidth: '450px' }"
-                            header="Confirm"
-                            :modal="true"
-                        >
-                            <div class="flex items-center gap-4">
-                                <i
-                                    class="pi pi-exclamation-triangle text-3xl text-red-500"
-                                />
-                                <span v-if="vehicles">
-                                    Are you sure you want to delete
-                                    <b>{{ vehicleData.vehicle_name }}</b
-                                    >?
-                                </span>
+                                    <IconField class="w-full sm:w-64">
+                                        <InputIcon>
+                                            <i class="pi pi-search" />
+                                        </InputIcon>
+                                        <InputText
+                                            v-model="filters['global'].value"
+                                            placeholder="Search..."
+                                            class="w-full"
+                                        />
+                                    </IconField>
+                                </div>
                             </div>
-                            <template #footer>
-                                <Button
-                                    label="No"
-                                    icon="pi pi-times"
-                                    text
-                                    @click="deleteVehicleDialog = false"
-                                />
-                                <Button
-                                    label="Yes"
-                                    icon="pi pi-check"
-                                    @click="deleteVehicle(vehicleData.id)"
+                        </template>
+
+                        <!-- Table Columns -->
+                        <Column
+                            selectionMode="multiple"
+                            style="width: 3rem"
+                            :exportable="false"
+                        />
+                        <Column
+                            field="license_plate"
+                            header="Plate number"
+                            sortable
+                            style="min-width: 10rem"
+                        />
+                        <Column
+                            field="model"
+                            header="Model"
+                            sortable
+                            style="min-width: 10rem"
+                        />
+                        <Column
+                            field="engine_number"
+                            header="Engine number"
+                            sortable
+                            style="min-width: 10rem"
+                        />
+                        <Column
+                            field="capacity"
+                            header="Capacity"
+                            sortable
+                            style="min-width: 10rem"
+                        />
+                        <Column
+                            field="status"
+                            header="Status"
+                            sortable
+                            style="min-width: 10rem"
+                        >
+                            <template #body="slotProps">
+                                <Tag
+                                    class="status"
+                                    :value="slotProps.data.status"
+                                    :severity="
+                                        getStatusLabel(slotProps.data.status)
+                                    "
                                 />
                             </template>
-                        </Dialog>
-
-                        <!-- Confirm Delete Multiple Dialog -->
-                        <Dialog
-                            v-model:visible="deleteVehiclesDialog"
-                            :style="{ width: '90%', maxWidth: '450px' }"
-                            header="Confirm"
-                            :modal="true"
+                        </Column>
+                        <Column
+                            header="Action"
+                            :exportable="false"
+                            style="min-width: 10rem"
                         >
-                            <div class="flex items-center gap-4">
-                                <i
-                                    class="pi pi-exclamation-triangle text-3xl text-red-500"
-                                />
-                                <span v-if="vehicles">
-                                    Are you sure you want to delete the selected
-                                    vehicles?
-                                </span>
-                            </div>
-                            <template #footer>
+                            <template #body="slotProps">
                                 <Button
-                                    label="No"
-                                    icon="pi pi-times"
-                                    text
-                                    @click="deleteVehiclesDialog = false"
+                                    icon="pi pi-pencil"
+                                    outlined
+                                    rounded
+                                    class="mr-2"
+                                    @click="showDetail(slotProps.data.id)"
                                 />
                                 <Button
-                                    label="Yes"
-                                    icon="pi pi-check"
-                                    text
-                                    @click="deleteSelectedVehicles"
+                                    icon="pi pi-trash"
+                                    outlined
+                                    rounded
+                                    severity="danger"
+                                    @click="
+                                        confirmDeleteVehicle(slotProps.data)
+                                    "
                                 />
                             </template>
-                        </Dialog>
-                    </div>
+                        </Column>
+                    </DataTable>
+
+                    <!-- Confirm Delete Dialog -->
+                    <Dialog
+                        v-model:visible="deleteVehicleDialog"
+                        :style="{ width: '90%', maxWidth: '450px' }"
+                        header="Confirm"
+                        :modal="true"
+                    >
+                        <div class="flex items-center gap-4">
+                            <i
+                                class="pi pi-exclamation-triangle text-3xl text-red-500"
+                            />
+                            <span v-if="vehicles">
+                                Are you sure you want to delete
+                                <b>{{ vehicleData.vehicle_name }}</b
+                                >?
+                            </span>
+                        </div>
+                        <template #footer>
+                            <Button
+                                label="No"
+                                icon="pi pi-times"
+                                text
+                                @click="deleteVehicleDialog = false"
+                            />
+                            <Button
+                                label="Yes"
+                                icon="pi pi-check"
+                                @click="deleteVehicle(vehicleData.id)"
+                            />
+                        </template>
+                    </Dialog>
+
+                    <!-- Confirm Delete Multiple Dialog -->
+                    <Dialog
+                        v-model:visible="deleteVehiclesDialog"
+                        :style="{ width: '90%', maxWidth: '450px' }"
+                        header="Confirm"
+                        :modal="true"
+                    >
+                        <div class="flex items-center gap-4">
+                            <i
+                                class="pi pi-exclamation-triangle text-3xl text-red-500"
+                            />
+                            <span v-if="vehicles">
+                                Are you sure you want to delete the selected
+                                vehicles?
+                            </span>
+                        </div>
+                        <template #footer>
+                            <Button
+                                label="No"
+                                icon="pi pi-times"
+                                text
+                                @click="deleteVehiclesDialog = false"
+                            />
+                            <Button
+                                label="Yes"
+                                icon="pi pi-check"
+                                text
+                                @click="deleteSelectedVehicles"
+                            />
+                        </template>
+                    </Dialog>
                 </div>
             </div>
         </div>

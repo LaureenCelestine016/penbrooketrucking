@@ -8,301 +8,117 @@
                 Location List
             </h2>
         </template>
-        <div class="py-4">
-            <div class="mx-12">
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="card">
-                        <DataTable
-                            ref="dt"
-                            v-model:selection="selectedLocation"
-                            :value="location"
-                            dataKey="id"
-                            :paginator="true"
-                            :rows="5"
-                            :filters="filters"
-                            paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-                            :rowsPerPageOptions="[5, 10, 25]"
-                            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} vehicles"
-                        >
-                            <template #header>
+        <div class="py-4 px-4 sm:px-2 lg:px-2">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="card">
+                    <DataTable
+                        ref="dt"
+                        v-model:selection="selectedLocation"
+                        :value="location"
+                        dataKey="id"
+                        :paginator="true"
+                        :rows="5"
+                        :filters="filters"
+                        paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+                        :rowsPerPageOptions="[5, 10, 25]"
+                        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} vehicles"
+                    >
+                        <template #header>
+                            <div
+                                class="flex flex-wrap gap-2 items-center justify-between p-1"
+                            >
+                                <Button
+                                    label="EXPORT TO EXCEL"
+                                    icon="pi pi-upload"
+                                    severity="secondary"
+                                    @click="exportCSV($event)"
+                                />
+
                                 <div
-                                    class="flex flex-wrap gap-2 items-center justify-between p-1"
+                                    class="flex gap-4 justify-center items-center"
                                 >
                                     <Button
-                                        label="EXPORT TO EXCEL"
-                                        icon="pi pi-upload"
-                                        severity="secondary"
-                                        @click="exportCSV($event)"
+                                        label="Delete"
+                                        icon="pi pi-trash"
+                                        severity="danger"
+                                        outlined
+                                        @click="confirmDeleteSelected"
+                                        :disabled="
+                                            !selectedLocation ||
+                                            !selectedLocation.length
+                                        "
                                     />
-
-                                    <div
-                                        class="flex gap-4 justify-center items-center"
-                                    >
-                                        <Button
-                                            label="Delete"
-                                            icon="pi pi-trash"
-                                            severity="danger"
-                                            outlined
-                                            @click="confirmDeleteSelected"
-                                            :disabled="
-                                                !selectedLocation ||
-                                                !selectedLocation.length
-                                            "
+                                    <IconField>
+                                        <InputIcon>
+                                            <i class="pi pi-search" />
+                                        </InputIcon>
+                                        <InputText
+                                            v-model="filters['global'].value"
+                                            placeholder="Search..."
                                         />
-                                        <IconField>
-                                            <InputIcon>
-                                                <i class="pi pi-search" />
-                                            </InputIcon>
-                                            <InputText
-                                                v-model="
-                                                    filters['global'].value
-                                                "
-                                                placeholder="Search..."
-                                            />
-                                        </IconField>
-                                    </div>
+                                    </IconField>
                                 </div>
-                            </template>
+                            </div>
+                        </template>
 
-                            <Column
-                                selectionMode="multiple"
-                                style="width: 3rem"
-                                :exportable="false"
-                            ></Column>
-                            <Column
-                                field="address"
-                                header="Adress"
-                                sortable
-                                style="min-width: 7rem"
-                            ></Column>
+                        <Column
+                            selectionMode="multiple"
+                            style="width: 3rem"
+                            :exportable="false"
+                        ></Column>
+                        <Column
+                            field="address"
+                            header="Adress"
+                            sortable
+                            style="min-width: 7rem"
+                        ></Column>
 
-                            <Column
-                                header="Action"
-                                sortable=""
-                                :exportable="false"
-                                style="min-width: 5rem"
-                            >
-                                <template #body="slotProps">
-                                    <!-- <Button
+                        <Column
+                            header="Action"
+                            sortable=""
+                            :exportable="false"
+                            style="min-width: 5rem"
+                        >
+                            <template #body="slotProps">
+                                <!-- <Button
                                         icon="pi pi-pencil"
                                         outlined
                                         rounded
                                         class="mr-2"
                                         @click="editLocation(slotProps.data)"
                                     /> -->
-                                    <Button
-                                        icon="pi pi-trash"
-                                        outlined
-                                        rounded
-                                        class="ml-2"
-                                        severity="danger"
-                                        @click="
-                                            confirmDeleteLocation(
-                                                slotProps.data
-                                            )
-                                        "
-                                    />
-                                </template>
-                            </Column>
-                        </DataTable>
-                        <form @submit.prevent="submit">
-                            <Dialog
-                                v-model:visible="locationDialog"
-                                :style="{ width: '750px' }"
-                                header="Location Details"
-                                :modal="true"
-                            >
-                                <div class="flex flex-row gap-5 mb-4">
-                                    <div class="w-full">
-                                        <label
-                                            for="name"
-                                            class="block font-bold mb-3"
-                                            >Landmark</label
-                                        >
-                                        <InputText
-                                            id="name"
-                                            required="true"
-                                            v-model="form.name"
-                                            fluid
-                                        />
-                                        <small
-                                            v-if="submitted && !product.name"
-                                            class="text-red-500"
-                                            >Name is required.</small
-                                        >
-                                    </div>
-                                    <div class="w-full">
-                                        <label
-                                            for="name"
-                                            class="block font-bold mb-3"
-                                            >Street</label
-                                        >
-                                        <InputText
-                                            id="name"
-                                            required="true"
-                                            v-model="form.street"
-                                            fluid
-                                        />
-                                        <small
-                                            v-if="submitted && !product.name"
-                                            class="text-red-500"
-                                            >Name is required.</small
-                                        >
-                                    </div>
-                                </div>
-                                <div class="flex flex-row gap-5 mb-4">
-                                    <div class="w-full">
-                                        <label
-                                            for="name"
-                                            class="block font-bold mb-3"
-                                            >Barangay</label
-                                        >
-                                        <InputText
-                                            id="name"
-                                            required="true"
-                                            v-model="form.barangay"
-                                            fluid
-                                        />
-                                        <small
-                                            v-if="submitted && !product.name"
-                                            class="text-red-500"
-                                            >Name is required.</small
-                                        >
-                                    </div>
-                                    <div
-                                        class="w-full"
-                                        v-if="form.municipality"
-                                    >
-                                        <label
-                                            for="name"
-                                            class="block font-bold mb-3"
-                                            >Municipality</label
-                                        >
-                                        <InputText
-                                            id="name"
-                                            required="true"
-                                            v-model="form.municipality"
-                                            fluid
-                                        />
-                                        <small
-                                            v-if="submitted && !product.name"
-                                            class="text-red-500"
-                                            >Name is required.</small
-                                        >
-                                    </div>
-                                    <div class="w-full" v-else>
-                                        <label
-                                            for="name"
-                                            class="block font-bold mb-3"
-                                            >City</label
-                                        >
-                                        <InputText
-                                            id="name"
-                                            required="true"
-                                            v-model="form.city"
-                                            fluid
-                                        />
-                                        <small
-                                            v-if="submitted && !product.name"
-                                            class="text-red-500"
-                                            >Name is required.</small
-                                        >
-                                    </div>
-                                </div>
-
-                                <div class="flex flex-row gap-5 mb-4">
-                                    <div class="w-full">
-                                        <label
-                                            for="name"
-                                            class="block font-bold mb-3"
-                                            >Province</label
-                                        >
-                                        <InputText
-                                            id="name"
-                                            required="true"
-                                            v-model="form.province"
-                                            fluid
-                                        />
-                                        <small
-                                            v-if="submitted && !product.name"
-                                            class="text-red-500"
-                                            >Name is required.</small
-                                        >
-                                    </div>
-                                    <div class="w-full">
-                                        <label
-                                            for="name"
-                                            class="block font-bold mb-3"
-                                            >Region</label
-                                        >
-                                        <InputText
-                                            id="name"
-                                            required="true"
-                                            v-model="form.region"
-                                            fluid
-                                        />
-                                        <small
-                                            v-if="submitted && !product.name"
-                                            class="text-red-500"
-                                            >Name is required.</small
-                                        >
-                                    </div>
-                                </div>
-                                <div class="flex flex-row gap-5 mb-4">
-                                    <div class="w-full">
-                                        <label
-                                            for="name"
-                                            class="block font-bold mb-3"
-                                            >Latitude</label
-                                        >
-                                        <InputText
-                                            id="name"
-                                            disabled=""
-                                            required="true"
-                                            v-model="form.latitude"
-                                            class="!bg-gray-50"
-                                            fluid
-                                        />
-                                        <small
-                                            v-if="submitted && !product.name"
-                                            class="text-red-500"
-                                            >Name is required.</small
-                                        >
-                                    </div>
-                                    <div class="w-full">
-                                        <label
-                                            for="name"
-                                            class="block font-bold mb-3"
-                                            >Longitude</label
-                                        >
-                                        <InputText
-                                            id="name"
-                                            required="true"
-                                            disabled=""
-                                            v-model="form.longitude"
-                                            class="!bg-gray-50"
-                                            fluid
-                                        />
-                                        <small
-                                            v-if="submitted && !product.name"
-                                            class="text-red-500"
-                                            >Name is required.</small
-                                        >
-                                    </div>
-                                </div>
+                                <Button
+                                    icon="pi pi-trash"
+                                    outlined
+                                    rounded
+                                    class="ml-2"
+                                    severity="danger"
+                                    @click="
+                                        confirmDeleteLocation(slotProps.data)
+                                    "
+                                />
+                            </template>
+                        </Column>
+                    </DataTable>
+                    <form @submit.prevent="submit">
+                        <Dialog
+                            v-model:visible="locationDialog"
+                            :style="{ width: '750px' }"
+                            header="Location Details"
+                            :modal="true"
+                        >
+                            <div class="flex flex-row gap-5 mb-4">
                                 <div class="w-full">
                                     <label
                                         for="name"
                                         class="block font-bold mb-3"
-                                        >Address</label
+                                        >Landmark</label
                                     >
                                     <InputText
                                         id="name"
-                                        disabled=""
                                         required="true"
-                                        v-model="form.address"
+                                        v-model="form.name"
                                         fluid
-                                        class="!bg-gray-50"
                                     />
                                     <small
                                         v-if="submitted && !product.name"
@@ -310,78 +126,247 @@
                                         >Name is required.</small
                                     >
                                 </div>
-
-                                <template #footer>
-                                    <Button
-                                        label="UPDATE CHANGE"
-                                        icon="pi pi-pencil"
-                                        @click="submit"
-                                        class="w-full mt-4"
+                                <div class="w-full">
+                                    <label
+                                        for="name"
+                                        class="block font-bold mb-3"
+                                        >Street</label
+                                    >
+                                    <InputText
+                                        id="name"
+                                        required="true"
+                                        v-model="form.street"
+                                        fluid
                                     />
-                                </template>
-                            </Dialog>
-                        </form>
-                        <Dialog
-                            v-model:visible="deleteLocationsDialog"
-                            :style="{ width: '450px' }"
-                            header="Confirm"
-                            :modal="true"
-                        >
-                            <div class="flex items-center gap-4">
-                                <i
-                                    class="pi pi-exclamation-triangle !text-3xl"
-                                />
-                                <span
-                                    >Are you sure you want to delete the
-                                    selected location?</span
-                                >
+                                    <small
+                                        v-if="submitted && !product.name"
+                                        class="text-red-500"
+                                        >Name is required.</small
+                                    >
+                                </div>
                             </div>
-                            <template #footer>
-                                <Button
-                                    label="No"
-                                    icon="pi pi-times"
-                                    text
-                                    @click="deleteLocationsDialog = false"
-                                />
-                                <Button
-                                    label="Yes"
-                                    icon="pi pi-check"
-                                    @click="deleteSelectedLocation"
-                                />
-                            </template>
-                        </Dialog>
+                            <div class="flex flex-row gap-5 mb-4">
+                                <div class="w-full">
+                                    <label
+                                        for="name"
+                                        class="block font-bold mb-3"
+                                        >Barangay</label
+                                    >
+                                    <InputText
+                                        id="name"
+                                        required="true"
+                                        v-model="form.barangay"
+                                        fluid
+                                    />
+                                    <small
+                                        v-if="submitted && !product.name"
+                                        class="text-red-500"
+                                        >Name is required.</small
+                                    >
+                                </div>
+                                <div class="w-full" v-if="form.municipality">
+                                    <label
+                                        for="name"
+                                        class="block font-bold mb-3"
+                                        >Municipality</label
+                                    >
+                                    <InputText
+                                        id="name"
+                                        required="true"
+                                        v-model="form.municipality"
+                                        fluid
+                                    />
+                                    <small
+                                        v-if="submitted && !product.name"
+                                        class="text-red-500"
+                                        >Name is required.</small
+                                    >
+                                </div>
+                                <div class="w-full" v-else>
+                                    <label
+                                        for="name"
+                                        class="block font-bold mb-3"
+                                        >City</label
+                                    >
+                                    <InputText
+                                        id="name"
+                                        required="true"
+                                        v-model="form.city"
+                                        fluid
+                                    />
+                                    <small
+                                        v-if="submitted && !product.name"
+                                        class="text-red-500"
+                                        >Name is required.</small
+                                    >
+                                </div>
+                            </div>
 
-                        <Dialog
-                            v-model:visible="deleteLocationDialog"
-                            :style="{ width: '450px' }"
-                            header="Confirm"
-                            :modal="true"
-                        >
-                            <div class="flex items-center gap-4">
-                                <i
-                                    class="pi pi-exclamation-triangle !text-3xl"
+                            <div class="flex flex-row gap-5 mb-4">
+                                <div class="w-full">
+                                    <label
+                                        for="name"
+                                        class="block font-bold mb-3"
+                                        >Province</label
+                                    >
+                                    <InputText
+                                        id="name"
+                                        required="true"
+                                        v-model="form.province"
+                                        fluid
+                                    />
+                                    <small
+                                        v-if="submitted && !product.name"
+                                        class="text-red-500"
+                                        >Name is required.</small
+                                    >
+                                </div>
+                                <div class="w-full">
+                                    <label
+                                        for="name"
+                                        class="block font-bold mb-3"
+                                        >Region</label
+                                    >
+                                    <InputText
+                                        id="name"
+                                        required="true"
+                                        v-model="form.region"
+                                        fluid
+                                    />
+                                    <small
+                                        v-if="submitted && !product.name"
+                                        class="text-red-500"
+                                        >Name is required.</small
+                                    >
+                                </div>
+                            </div>
+                            <div class="flex flex-row gap-5 mb-4">
+                                <div class="w-full">
+                                    <label
+                                        for="name"
+                                        class="block font-bold mb-3"
+                                        >Latitude</label
+                                    >
+                                    <InputText
+                                        id="name"
+                                        disabled=""
+                                        required="true"
+                                        v-model="form.latitude"
+                                        class="!bg-gray-50"
+                                        fluid
+                                    />
+                                    <small
+                                        v-if="submitted && !product.name"
+                                        class="text-red-500"
+                                        >Name is required.</small
+                                    >
+                                </div>
+                                <div class="w-full">
+                                    <label
+                                        for="name"
+                                        class="block font-bold mb-3"
+                                        >Longitude</label
+                                    >
+                                    <InputText
+                                        id="name"
+                                        required="true"
+                                        disabled=""
+                                        v-model="form.longitude"
+                                        class="!bg-gray-50"
+                                        fluid
+                                    />
+                                    <small
+                                        v-if="submitted && !product.name"
+                                        class="text-red-500"
+                                        >Name is required.</small
+                                    >
+                                </div>
+                            </div>
+                            <div class="w-full">
+                                <label for="name" class="block font-bold mb-3"
+                                    >Address</label
+                                >
+                                <InputText
+                                    id="name"
+                                    disabled=""
+                                    required="true"
+                                    v-model="form.address"
+                                    fluid
+                                    class="!bg-gray-50"
                                 />
-                                <span v-if="locationData"
-                                    >Are you sure you want to delete this
-                                    location?</span
+                                <small
+                                    v-if="submitted && !product.name"
+                                    class="text-red-500"
+                                    >Name is required.</small
                                 >
                             </div>
+
                             <template #footer>
                                 <Button
-                                    label="No"
-                                    icon="pi pi-times"
-                                    text
-                                    @click="deleteVehiclesDialog = false"
-                                />
-                                <Button
-                                    label="Yes"
-                                    icon="pi pi-check"
-                                    text
-                                    @click="deleteLocation(locationData.id)"
+                                    label="UPDATE CHANGE"
+                                    icon="pi pi-pencil"
+                                    @click="submit"
+                                    class="w-full mt-4"
                                 />
                             </template>
                         </Dialog>
-                    </div>
+                    </form>
+                    <Dialog
+                        v-model:visible="deleteLocationsDialog"
+                        :style="{ width: '450px' }"
+                        header="Confirm"
+                        :modal="true"
+                    >
+                        <div class="flex items-center gap-4">
+                            <i class="pi pi-exclamation-triangle !text-3xl" />
+                            <span
+                                >Are you sure you want to delete the selected
+                                location?</span
+                            >
+                        </div>
+                        <template #footer>
+                            <Button
+                                label="No"
+                                icon="pi pi-times"
+                                text
+                                @click="deleteLocationsDialog = false"
+                            />
+                            <Button
+                                label="Yes"
+                                icon="pi pi-check"
+                                @click="deleteSelectedLocation"
+                            />
+                        </template>
+                    </Dialog>
+
+                    <Dialog
+                        v-model:visible="deleteLocationDialog"
+                        :style="{ width: '450px' }"
+                        header="Confirm"
+                        :modal="true"
+                    >
+                        <div class="flex items-center gap-4">
+                            <i class="pi pi-exclamation-triangle !text-3xl" />
+                            <span v-if="locationData"
+                                >Are you sure you want to delete this
+                                location?</span
+                            >
+                        </div>
+                        <template #footer>
+                            <Button
+                                label="No"
+                                icon="pi pi-times"
+                                text
+                                @click="deleteVehiclesDialog = false"
+                            />
+                            <Button
+                                label="Yes"
+                                icon="pi pi-check"
+                                text
+                                @click="deleteLocation(locationData.id)"
+                            />
+                        </template>
+                    </Dialog>
                 </div>
             </div>
         </div>

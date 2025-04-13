@@ -146,6 +146,10 @@ use Inertia\Inertia;
         Route::get('/maintenanceFilter', [ReportController::class,'filterMaintenanceReports'])->name('reports.maintenancefilter');
         Route::get('/expenses', [ReportController::class,'reportexpenses'])->name('reports.expenses');
         Route::get('/expensesFilter', [ReportController::class,'filterExpensesReports'])->name('reports.expensesfilter');
+        Route::post('/route-report/pdf', [ReportController::class, 'downloadPdfRoute'])->name('reports.routespdf');
+        Route::post('/fuel-report/pdf', [ReportController::class, 'downloadPdfFuel'])->name('reports.fuelpdf');
+
+
     });
 
     Route::middleware('auth')->group(function () {

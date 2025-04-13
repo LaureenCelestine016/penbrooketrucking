@@ -14,6 +14,8 @@ use App\Models\Maintenance_task;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Carbon\Carbon;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\DB;
 
 class ReportController extends Controller
 {
@@ -71,18 +73,27 @@ class ReportController extends Controller
 
         return Inertia::render('Report/Fuel',[
             'tractor' => Vehicle::orderBy('created_at', 'desc')->get(['license_plate']),
+            'driver' => Driver::orderBy('created_at', 'desc')
+            ->select(DB::raw("CONCAT(first_name, ' ', last_name) as full_name"), 'id')
+            ->get(),
         ]);
     }
 
     public function filterFuelReports(Request $request)
     {
 
-        $query = Fuel_record::with(['vehicle']);
+        $query = Fuel_record::with(['vehicle','driver']);
 
         if ($request->start_date && $request->end_date) {
             $query->whereBetween('refueling_date', [$request->start_date, $request->end_date]);
         }
 
+        if ($request->driver && isset($request->driver['full_name'])) {
+            $fullName = strtolower(trim($request->driver['full_name']));
+            $query->whereHas('driver', function ($q) use ($fullName) {
+                $q->whereRaw("LOWER(TRIM(CONCAT(first_name, ' ', last_name))) = ?", [$fullName]);
+            });
+        }
 
         if ($request->vehicle) {
             $query->whereHas('vehicle', function ($q) use ($request) {
@@ -91,15 +102,15 @@ class ReportController extends Controller
         }
 
         if ($request->liters) {
-            $query->where('liters', '>=', $request->liters);
+            $query->where('total_refuel', '>=', $request->liters);
         }
 
         if ($request->min_cost) {
-            $query->where('cost', '>=', $request->min_cost);
+            $query->where('amount', '>=', $request->min_cost);
         }
 
         if ($request->max_cost) {
-            $query->where('cost', '<=', $request->max_cost);
+            $query->where('amount', '<=', $request->max_cost);
         }
 
         return Inertia::render('Report/Fuel', [
@@ -213,32 +224,27 @@ class ReportController extends Controller
         ]);
     }
 
-    public function show(Report $report)
+    public function downloadPdfRoute(Request $request)
     {
-        //
+        $routes = $request->input('routes'); // array of routes
+        // dd($routes);
+        \Log::info('Generating PDF for routes:', $routes); // Optional debug
+
+        $pdf = Pdf::loadView('pdf.route-report', ['routes' => $routes]);
+
+        return $pdf->download('route_report.pdf');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Report $report)
+    public function downloadPdfFuel(Request $request)
     {
-        //
+        $fuels = $request->input('fuels'); // array of routes
+
+        \Log::info('Generating PDF for fuels:', $fuels); // Optional debug
+
+        $pdf = Pdf::loadView('pdf.fuel-report', ['fuels' => $fuels]);
+
+        return $pdf->download('fuel_report.pdf');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Report $report)
-    {
-        //
-    }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Report $report)
-    {
-        //
-    }
 }
