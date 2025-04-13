@@ -10,13 +10,19 @@
         </template>
         <div class="py-4 px-4 sm:px-2 lg:px-2">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-md p-4">
-                <div class="card flex justify-center mb-5">
+                <div class="card flex gap-4 justify-between mb-5">
                     <DatePicker
                         v-model="dates"
                         selectionMode="range"
                         :manualInput="false"
                         placeholder="Select Date Range"
                         showIcon
+                    />
+                    <Button
+                        icon="pi pi-refresh"
+                        label="Refresh"
+                        class="w-[100px]"
+                        @click="refresh"
                     />
                 </div>
                 <div class="grid grid-cols-2 gap-4 mb-4">
@@ -50,9 +56,11 @@
                 <!-- Data Table -->
                 <DataTable
                     :value="routes"
-                    ref="dt"
+                    paginator
+                    :rows="5"
+                    :rowsPerPageOptions="[5, 10, 20, 50]"
                     tableStyle="min-width: 50rem"
-                    class="mt-6"
+                    ref="dt"
                 >
                     <template #header>
                         <div class="flex flex-row gap-2 justify-end pb-4">
@@ -72,13 +80,46 @@
                     </template>
                     <Column
                         field="vehicle.license_plate"
+                        header="Truck"
+                        style="width: 10%"
+                    ></Column>
+                    <Column
+                        field="driver.first_name"
+                        header="First name"
+                        style="width: 10%"
+                    ></Column>
+                    <Column
+                        field="driver.last_name"
+                        header="Last name"
+                        style="width: 10%"
+                    ></Column>
+                    <Column
+                        field="start_date"
+                        header="Trip Date"
+                        style="width: 10%"
+                    ></Column>
+                    <Column
+                        field="end_location.address"
+                        header="Location"
+                        style="width: 30%"
+                    ></Column>
+                </DataTable>
+                <!-- <DataTable
+                    :value="routes"
+                    ref="dt"
+                    tableStyle="min-width: 50rem"
+                    class="mt-6"
+                >
+
+                    <Column
+                        field="vehicle.license_plate"
                         header="Tractor / Trailer"
                     />
                     <Column field="driver.first_name" header="First Name" />
                     <Column field="driver.last_name" header="Last Name" />
                     <Column field="start_date" header="Trip Date" />
                     <Column field="end_location.address" header="Location" />
-                </DataTable>
+                </DataTable> -->
             </div>
         </div>
     </AuthenticatedLayout>
@@ -86,7 +127,7 @@
 
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { Head, useForm, usePage } from "@inertiajs/vue3";
+import { Head, useForm, usePage, router } from "@inertiajs/vue3";
 import { ref } from "vue";
 import DatePicker from "primevue/datepicker";
 import AutoComplete from "primevue/autocomplete";
@@ -193,5 +234,9 @@ const exportPDF = () => {
         .catch((error) => {
             console.error("PDF export failed", error);
         });
+};
+
+const refresh = () => {
+    router.get("/reports/route");
 };
 </script>

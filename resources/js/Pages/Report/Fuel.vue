@@ -17,7 +17,6 @@
                         :manualInput="false"
                         placeholder="Select Date Range"
                         showIcon
-                        disabled="true"
                     />
                     <Button
                         icon="pi pi-refresh"
@@ -88,9 +87,11 @@
                 <!-- Data Table -->
                 <DataTable
                     :value="fuelFilter"
-                    ref="dt"
+                    paginator
+                    :rows="5"
+                    :rowsPerPageOptions="[5, 10, 20, 50]"
                     tableStyle="min-width: 50rem"
-                    class="mt-6"
+                    ref="dt"
                 >
                     <template #header>
                         <div class="flex flex-row gap-2 justify-end pb-4">
@@ -110,34 +111,34 @@
                     </template>
                     <Column
                         field="vehicle.license_plate"
-                        header="Tractor / Trailer"
-                        style="min-width: 15rem"
-                    />
+                        header="Truck"
+                        style="width: 15%"
+                    ></Column>
                     <Column
                         field="driver.first_name"
                         header="First name"
-                        style="min-width: 15rem"
-                    />
+                        style="width: 15%"
+                    ></Column>
                     <Column
                         field="driver.last_name"
                         header="Last name"
-                        style="min-width: 15rem"
-                    />
+                        style="width: 15%"
+                    ></Column>
                     <Column
                         field="total_refuel"
                         header="Liters"
-                        style="min-width: 15rem"
-                    />
+                        style="width: 15%"
+                    ></Column>
                     <Column
                         field="amount"
                         header="Cost"
-                        style="min-width: 15rem"
-                    />
+                        style="width: 15%"
+                    ></Column>
                     <Column
                         field="refueling_date"
                         header="Date"
-                        style="min-width: 15rem"
-                    />
+                        style="width: 15%"
+                    ></Column>
                 </DataTable>
             </div>
         </div>
@@ -203,7 +204,6 @@ const submitForm = () => {
 
     // Send request to fetch filtered data
     form.get(route("reports.fuelfilter"));
-    isDisabled.value = false;
 };
 
 // Driver and Vehicle lists
@@ -263,6 +263,5 @@ const exportPDF = () => {
 
 const refresh = () => {
     router.get("/reports/fuel");
-    isDisabled.value = false;
 };
 </script>

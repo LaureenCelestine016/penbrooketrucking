@@ -77,7 +77,7 @@
                 <tr>
                     <td>{{ $fuel['vehicle'] ?? 'N/A' }}</td>
                     <td class="driver-name">{{ trim(($fuel['first_name'] ?? '') . ' ' . ($fuel['last_name'] ?? '')) }}</td>
-                    <td class="liters">{{ number_format($fuel['liters'] ?? 0, 2) }}</td>
+                    <td class="liters">{{ $fuel['liters']}}</td>
                     <td class="amount">{{ number_format($fuel['amount'] ?? 0, 2) }}</td>
                     <td class="date">{{ \Carbon\Carbon::parse($fuel['date'])->format('F d, Y') }}</td>
                 </tr>
