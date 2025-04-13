@@ -10,7 +10,7 @@
         </template>
         <div class="py-4 px-4 sm:px-2 lg:px-2">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-md p-4">
-                <div class="card flex justify-center mb-5">
+                <div class="card flex gap-4 justify-between mb-5">
                     <DatePicker
                         v-model="dates"
                         selectionMode="range"
@@ -18,24 +18,54 @@
                         placeholder="Select Date Range"
                         showIcon
                     />
+                    <Button
+                        icon="pi pi-refresh"
+                        label="Refresh"
+                        class="w-[100px]"
+                        @click="refresh"
+                    />
                 </div>
-                <div class="grid grid-cols-2 gap-4 mb-4">
+                <div class="flex flex-row gap-x-8 mb-6">
+                    <div class="flex items-center gap-2">
+                        <RadioButton
+                            v-model="truck"
+                            inputId="ingredient1"
+                            name="truck"
+                            value="1"
+                        />
+                        <label for="ingredient1">TRACTOR HEAD</label>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <RadioButton
+                            v-model="truck"
+                            inputId="ingredient2"
+                            name="truck"
+                            value="2"
+                        />
+                        <label for="ingredient2">TRAILER</label>
+                    </div>
+                </div>
+                <div class="mb-4">
                     <!-- Vehicle Selection -->
                     <AutoComplete
+                        v-if="truck === '1'"
                         v-model="vehicle"
                         dropdown
                         :suggestions="vehicles"
                         optionLabel="license_plate"
                         @complete="searchVehicles"
                         placeholder="Select Tractor"
+                        class="w-full"
                     />
                     <AutoComplete
+                        v-else
                         v-model="trailer"
                         dropdown
                         :suggestions="trailers"
                         optionLabel="license_plate"
                         @complete="searchTrailer"
                         placeholder="Select Trailer"
+                        class="w-full"
                     />
 
                     <!-- Generate Report Button -->
@@ -72,18 +102,30 @@
                 <Button
                     @click="submitForm"
                     label="Generate Report"
-                    class="p-button-primary w-full mt-5"
+                    class="p-button-primary w-full my-5"
                 />
+                <p class="text-red-600">
+                    Add Modal the content paper size and paper orientation
+                </p>
 
                 <!-- Data Table -->
                 <DataTable
                     :value="maintenanceFilter"
-                    ref="dt"
+                    paginator
+                    :rows="5"
+                    :rowsPerPageOptions="[5, 10, 20, 50]"
                     tableStyle="min-width: 50rem"
-                    class="mt-6"
+                    ref="dt"
                 >
                     <template #header>
-                        <div class="text-end pb-4">
+                        <div class="flex flex-row gap-2 justify-end pb-4">
+                            <Button
+                                icon="pi pi-file-pdf"
+                                label="PDF"
+                                severity="danger"
+                                class="w-[100px]"
+                                @click="exportPDF"
+                            />
                             <Button
                                 icon="pi pi-external-link"
                                 label="Export"
@@ -91,17 +133,45 @@
                             />
                         </div>
                     </template>
-                    <Column field="vehicle.license_plate" header="Tractor" />
-                    <Column field="trailer.license_plate" header="Trailer" />
+                    <Column
+                        :field="
+                            truck === '1'
+                                ? 'vehicle.license_plate'
+                                : 'trailer.license_plate'
+                        "
+                        :header="truck === '1' ? 'Tractor' : 'Trailer'"
+                        style="width: 15%"
+                    ></Column>
                     <Column
                         field="item_description"
                         header="Item and Description"
-                    />
-                    <Column field="price" header="Price" />
-                    <Column field="total" header="Total" />
-                    <Column field="supplier" header="Supplier" />
-                    <Column field="breakdown_date" header="Breakdown Date" />
-                    <Column field="up_date" header="Up date" />
+                        style="width: 15%"
+                    ></Column>
+                    <Column
+                        field="price"
+                        header="Price"
+                        style="width: 15%"
+                    ></Column>
+                    <Column
+                        field="total"
+                        header="Total"
+                        style="width: 15%"
+                    ></Column>
+                    <Column
+                        field="supplier"
+                        header="Supplier"
+                        style="width: 15%"
+                    ></Column>
+                    <Column
+                        field="breakdown_date"
+                        header="Breakdown Date"
+                        style="width: 15%"
+                    ></Column>
+                    <Column
+                        field="up_date"
+                        header="Up date"
+                        style="width: 15%"
+                    ></Column>
                 </DataTable>
             </div>
         </div>
@@ -110,7 +180,7 @@
 
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { Head, useForm, usePage } from "@inertiajs/vue3";
+import { Head, useForm, usePage, router } from "@inertiajs/vue3";
 import { ref } from "vue";
 import DatePicker from "primevue/datepicker";
 import AutoComplete from "primevue/autocomplete";
@@ -119,8 +189,11 @@ import Column from "primevue/column";
 import Button from "primevue/button";
 import InputNumber from "primevue/inputnumber";
 import InputText from "primevue/inputtext";
+import RadioButton from "primevue/radiobutton";
 
 const { filters } = usePage().props;
+
+const truck = ref("1"); // Tracks selected vehicle type
 
 // Reactive form data
 const form = useForm({
@@ -166,7 +239,10 @@ const submitForm = () => {
     form.trailer = trailer.value;
 
     // Send request to fetch filtered data
-    form.get(route("reports.maintenancefilter"));
+    form.get(route("reports.maintenancefilter"), {
+        preserveState: true,
+        preserveScroll: true,
+    });
 };
 
 // Driver and Vehicle lists
@@ -197,5 +273,41 @@ const searchTrailer = (event) => {
 
 const exportCSV = () => {
     dt.value.exportCSV();
+};
+
+const exportPDF = () => {
+    const maintenanceData = props.maintenanceFilter.map((maintain) => ({
+        vehicle: maintain.vehicle?.license_plate ?? "",
+        trailer: maintain.trailer?.license_plate ?? "",
+        item: maintain?.item_description ?? "",
+        price: maintain?.price ?? "",
+        total: maintain?.total ?? "",
+        supplier: maintain?.supplier ?? "",
+        breakdown: maintain?.breakdown_date ?? "",
+        up: maintain?.up_date ?? "",
+    }));
+
+    axios
+        .post(
+            route("reports.maintenancepdf"),
+            { maintenance: maintenanceData },
+            { responseType: "blob" }
+        )
+        .then((response) => {
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement("a");
+            link.href = url;
+            link.setAttribute("download", "maintenance_report.pdf");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        })
+        .catch((error) => {
+            console.error("PDF export failed", error);
+        });
+};
+
+const refresh = () => {
+    router.get("/reports/maintenance");
 };
 </script>

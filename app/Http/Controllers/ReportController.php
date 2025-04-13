@@ -146,7 +146,7 @@ class ReportController extends Controller
 
         if ($request->trailer) {
             $query->whereHas('trailer', function ($q) use ($request) {
-                $q->where('license_plate', $request->vehicle);
+                $q->where('license_plate', $request->trailer);
             });
         }
 
@@ -155,11 +155,11 @@ class ReportController extends Controller
         }
 
         if ($request->min_cost) {
-            $query->where('price', '>=', $request->min_cost);
+            $query->where('total', '>=', $request->min_cost);
         }
 
         if ($request->max_cost) {
-            $query->where('price', '<=', $request->max_cost);
+            $query->where('total', '<=', $request->max_cost);
         }
 
         return Inertia::render('Report/Maintenance', [
@@ -227,8 +227,6 @@ class ReportController extends Controller
     public function downloadPdfRoute(Request $request)
     {
         $routes = $request->input('routes'); // array of routes
-        // dd($routes);
-        \Log::info('Generating PDF for routes:', $routes); // Optional debug
 
         $pdf = Pdf::loadView('pdf.route-report', ['routes' => $routes]);
 
@@ -239,11 +237,19 @@ class ReportController extends Controller
     {
         $fuels = $request->input('fuels'); // array of routes
 
-        \Log::info('Generating PDF for fuels:', $fuels); // Optional debug
-
         $pdf = Pdf::loadView('pdf.fuel-report', ['fuels' => $fuels]);
 
         return $pdf->download('fuel_report.pdf');
+    }
+
+    public function downloadPdfMaintenance(Request $request)
+    {
+
+        $maintenance = $request->input('maintenance'); // array of routes
+
+        $pdf = Pdf::loadView('pdf.maintenance-report', ['maintenance' => $maintenance])
+                    ->setPaper('a4', 'landscape'); // <-- set to landscape
+        return $pdf->download('maintenance_report.pdf');
     }
 
 

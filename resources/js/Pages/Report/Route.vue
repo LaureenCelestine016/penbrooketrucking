@@ -180,7 +180,10 @@ const submitForm = () => {
     form.vehicle = vehicle.value;
 
     // Send request to fetch filtered data
-    form.get(route("reports.routesfilter"));
+    form.get(route("reports.routesfilter"), {
+        preserveState: true,
+        preserveScroll: true,
+    });
 };
 
 // Driver and Vehicle lists

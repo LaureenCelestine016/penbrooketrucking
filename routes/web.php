@@ -148,6 +148,7 @@ use Inertia\Inertia;
         Route::get('/expensesFilter', [ReportController::class,'filterExpensesReports'])->name('reports.expensesfilter');
         Route::post('/route-report/pdf', [ReportController::class, 'downloadPdfRoute'])->name('reports.routespdf');
         Route::post('/fuel-report/pdf', [ReportController::class, 'downloadPdfFuel'])->name('reports.fuelpdf');
+        Route::post('/maintenance-report/pdf', [ReportController::class, 'downloadPdfMaintenance'])->name('reports.maintenancepdf');
 
 
     });

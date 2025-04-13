@@ -80,7 +80,7 @@
                 <Button
                     @click="submitForm"
                     label="Generate Report"
-                    class="p-button-primary w-full mt-5"
+                    class="p-button-primary w-full my-5"
                     :disabled="!isDisabled"
                 />
 
@@ -203,7 +203,10 @@ const submitForm = () => {
     form.driver = driver.value;
 
     // Send request to fetch filtered data
-    form.get(route("reports.fuelfilter"));
+    form.get(route("reports.fuelfilter"), {
+        preserveState: true,
+        preserveScroll: true,
+    });
 };
 
 // Driver and Vehicle lists
