@@ -51,6 +51,14 @@
             width: 100px;
         }
 
+        td.truck {
+            width: 100px;
+        }
+
+        td.number {
+            width: 10px;
+        }
+
         .footer {
             margin-top: 40px;
             text-align: center;
@@ -65,7 +73,8 @@
     <table>
         <thead>
             <tr>
-                <th>Vehicle</th>
+                <th class="number">#</th>
+                <th class="truck">Truck</th>
                 <th class="driver-name">Driver Name</th>
                 <th class="liters">Liters</th>
                 <th class="amount">Amount</th>
@@ -73,9 +82,10 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($fuels as $fuel)
+            @foreach($fuels as $index => $fuel)
                 <tr>
-                    <td>{{ $fuel['vehicle'] ?? 'N/A' }}</td>
+                    <td class="number">{{ $index + 1 }}</td>
+                    <td class="truck">{{ $fuel['vehicle'] ?? 'N/A' }}</td>
                     <td class="driver-name">{{ trim(($fuel['first_name'] ?? '') . ' ' . ($fuel['last_name'] ?? '')) }}</td>
                     <td class="liters">{{ $fuel['liters']}}</td>
                     <td class="amount">{{ number_format($fuel['amount'] ?? 0, 2) }}</td>

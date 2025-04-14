@@ -44,6 +44,14 @@
             width: 100px;
         }
 
+        td.truck {
+            width: 60px;
+        }
+
+        td.number {
+            width: 10px;
+        }
+
         .footer {
             margin-top: 40px;
             text-align: center;
@@ -58,15 +66,17 @@
     <table>
         <thead>
             <tr>
-                <th>Tractor / Trailer</th>
+                <th class="number">#</th>
+                <th class="truck">Truck</th>
                 <th>Driver Name</th>
                 <th class="trip-date">Trip Date</th>
                 <th>Location</th>
             </tr>
         </thead>
         <tbody>
-            @foreach($routes as $route)
+            @foreach($routes as $index => $route)
                 <tr>
+                    <td class="number">{{ $index + 1 }}</td>
                     <td>{{ $route['license_plate'] ?? 'N/A' }}</td>
                     <td class="driver-name">{{ trim(($route['first_name'] ?? '') . ' ' . ($route['last_name'] ?? '')) }}</td>
                     <td class="trip-date">{{ $route['end_date'] ?? 'N/A' }}</td>

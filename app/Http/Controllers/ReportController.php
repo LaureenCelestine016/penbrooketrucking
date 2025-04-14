@@ -228,8 +228,8 @@ class ReportController extends Controller
     {
         $routes = $request->input('routes'); // array of routes
 
-        $pdf = Pdf::loadView('pdf.route-report', ['routes' => $routes]);
-
+        $pdf = Pdf::loadView('pdf.route-report', ['routes' => $routes])
+                ->setPaper($request->papersize, $request->orientation);
         return $pdf->download('route_report.pdf');
     }
 
@@ -237,8 +237,8 @@ class ReportController extends Controller
     {
         $fuels = $request->input('fuels'); // array of routes
 
-        $pdf = Pdf::loadView('pdf.fuel-report', ['fuels' => $fuels]);
-
+        $pdf = Pdf::loadView('pdf.fuel-report', ['fuels' => $fuels])
+                ->setPaper($request->papersize, $request->orientation);
         return $pdf->download('fuel_report.pdf');
     }
 
@@ -248,7 +248,7 @@ class ReportController extends Controller
         $maintenance = $request->input('maintenance'); // array of routes
 
         $pdf = Pdf::loadView('pdf.maintenance-report', ['maintenance' => $maintenance])
-                    ->setPaper('a4', 'landscape'); // <-- set to landscape
+                    ->setPaper($request->papersize, $request->orientation); // <-- set to landscape
         return $pdf->download('maintenance_report.pdf');
     }
 
