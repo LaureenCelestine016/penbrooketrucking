@@ -200,7 +200,6 @@ const fetchFuelStats = async () => {
         });
 
         fuelStatsData.value = response.data.fuelStats;
-        console.log("Fuel Stats:", fuelStatsData.value);
 
         await nextTick();
         updateFuelChart();

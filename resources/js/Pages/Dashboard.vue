@@ -393,6 +393,47 @@
                 </div>
             </div>
         </div>
+
+        <Sidebar
+            v-model:visible="visibleSidebar"
+            position="right"
+            :baseZIndex="1000"
+            :modal="false"
+            :dismissable="false"
+            :showCloseIcon="false"
+            class="chat-sidebar"
+        >
+            <div class="chat-header flex justify-between items-center p-3">
+                <h4 class="text-white text-sm">All Drivers</h4>
+                <Button
+                    icon="pi pi-times"
+                    class="p-button-rounded p-button-text text-white"
+                    @click="visibleSidebar = false"
+                />
+            </div>
+
+            <div class="chat-body p-3">
+                <div v-if="props.drivers.length">
+                    <div
+                        v-for="driver in props.drivers"
+                        :key="driver.id"
+                        class="driver-card flex justify-between items-center p-2 mb-2"
+                    >
+                        <div class="text-xs text-white font-medium">
+                            {{ driver.first_name }}
+                        </div>
+                        <Button
+                            icon="pi pi-comments"
+                            class="p-button-rounded p-button-text text-white"
+                            @click="openChat(driver.id)"
+                        />
+                    </div>
+                </div>
+                <div v-else class="text-center text-white">
+                    No drivers available.
+                </div>
+            </div>
+        </Sidebar>
     </AuthenticatedLayout>
 </template>
 
@@ -421,8 +462,7 @@ import Dialog from "primevue/dialog";
 import Sidebar from "primevue/sidebar";
 
 const { props } = usePage();
-console.log(props);
-
+const toast = useToast();
 const user = props.auth.user;
 const isAdmin = user.user_type === 1;
 
@@ -436,6 +476,21 @@ const formatNumber = (value) => {
     }
     return value.toString();
 };
+
+if (isAdmin) {
+    onMounted(() => {
+        // Get notifications passed from Laravel
+        const notifications = props.notification;
+        notifications.forEach((notification) => {
+            toast.add({
+                severity: "warn",
+                summary: "Vehicle Expiration Alert",
+                detail: notification.message,
+                life: 5000,
+            });
+        });
+    });
+}
 </script>
 
 <style scoped>

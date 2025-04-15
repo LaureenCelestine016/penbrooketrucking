@@ -188,6 +188,7 @@ class ReportController extends Controller
 
      public function filterExpensesReports(Request $request)
         {
+
         $query = Expenses::with(['tractor', 'trailer', 'category']);
 
         // Convert date formats
@@ -199,6 +200,12 @@ class ReportController extends Controller
         if (!empty($request->trailer['license_plate'])) {
             $query->whereHas('trailer', function ($q) use ($request) {
                 $q->where('license_plate', $request->trailer['license_plate']);
+            });
+        }
+
+        if (!empty($request->vehicle['license_plate'])) {
+            $query->whereHas('tractor', function ($q) use ($request) {
+                $q->where('license_plate', $request->vehicle['license_plate']);
             });
         }
 
@@ -245,11 +252,21 @@ class ReportController extends Controller
     public function downloadPdfMaintenance(Request $request)
     {
 
-        $maintenance = $request->input('maintenance'); // array of routes
+        $maintenance = $request->input('expenses'); // array of routes
 
         $pdf = Pdf::loadView('pdf.maintenance-report', ['maintenance' => $maintenance])
                     ->setPaper($request->papersize, $request->orientation); // <-- set to landscape
         return $pdf->download('maintenance_report.pdf');
+    }
+
+    public function downloadPdfExpenses(Request $request)
+    {
+
+        $expenses = $request->input('expenses'); // array of routes
+
+        $pdf = Pdf::loadView('pdf.expenses-report', ['expenses' => $expenses])
+                    ->setPaper($request->papersize, $request->orientation); // <-- set to landscape
+        return $pdf->download('expenses_report.pdf');
     }
 
 

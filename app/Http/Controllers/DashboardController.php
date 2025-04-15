@@ -57,6 +57,8 @@ class DashboardController extends Controller
             // Default monthly maintenance costs for the current year
             $maintenanceCosts = $this->getMaintenanceDataByYear($currentYear);
 
+            $driversUser = User::where('user_type', 0)->get(['driver_id','first_name','last_name']);
+
             // Fetch Yearly Expenses
             $yearlyExpenses = Expenses::select(
                 DB::raw("YEAR(expense_date) as year"),
@@ -117,9 +119,14 @@ class DashboardController extends Controller
 
             $monthlyGrowth = $currentMonthRefuel - $sameMonthLastYear;
 
+            $notification = Notification::where('status', 'pending')->get();
+            $notificationCount = Notification::where('status', 'pending')->count();
+
+
             return Inertia::render('Dashboard', [
                 'truck' => $trucks,
                 'driver' => $driver,
+                'chatDrivers' => $driversUser,
                 'maintenanceTotal' => $maintenanceTotal,
                 'fuelTotal' => $fuelTotal,
                 'operationalData' => [
@@ -134,6 +141,8 @@ class DashboardController extends Controller
                 'expensesData' => $expensesData, // Default monthly expenses
                 'litersByDriver' => $litersByDriver, // ✅ Add this line
                 'litersPerMonth' => $litersPerMonth,
+                'notification' => $notification,
+                'notificationCount' => $notificationCount,
                 'fuelStats' => [
                     'lastYearYTD' => $lastYearYTD,
                     'currentYearYTD' => $currentYearYTD,

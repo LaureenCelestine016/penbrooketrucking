@@ -15,6 +15,295 @@
 
                     <!-- Desktop Right Menu -->
                     <div class="hidden sm:flex items-center gap-4">
+                        <!-- Notification Bell -->
+
+                        <!-- Message Icon -->
+                        <div v-if="$page.props.auth.user.user_type === 1">
+                            <div
+                                @click="toggleChatSidebar"
+                                class="relative cursor-pointer"
+                            >
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="32"
+                                    height="32"
+                                    viewBox="0 0 24 24"
+                                    style="color: whitesmoke"
+                                >
+                                    <!-- Icon from Mage Icons by MageIcons - https://github.com/Mage-Icons/mage-icons/blob/main/License.txt -->
+                                    <g
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="1.5"
+                                    >
+                                        <path
+                                            d="M12.686 18.222q.603.117 1.218.123a7.3 7.3 0 0 0 2.992-.64l3.095.455a1.03 1.03 0 0 0 1.032-1.135l-.372-3.126a7.2 7.2 0 0 0 .599-2.9a7.304 7.304 0 0 0-7.336-7.284a7.295 7.295 0 0 0-7.109 5.654"
+                                        />
+                                        <path
+                                            d="M13.904 14.745a5.66 5.66 0 0 1-1.218 3.477a5.61 5.61 0 0 1-4.375 2.063a5.7 5.7 0 0 1-2.29-.495l-2.311.413a.754.754 0 0 1-.826-.877l.32-2.363a5.5 5.5 0 0 1-.454-2.219A5.58 5.58 0 0 1 6.805 9.37a5.2 5.2 0 0 1 1.517-.217a5.59 5.59 0 0 1 5.582 5.593"
+                                        />
+                                    </g>
+                                </svg>
+                                <span
+                                    v-if="totalUnread > 0"
+                                    class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] leading-none px-1.5 py-0.5 rounded-full font-bold"
+                                >
+                                    {{ totalUnread }}
+                                </span>
+                            </div>
+
+                            <!-- Chat Sidebar -->
+                            <div
+                                v-if="showChatSidebar"
+                                class="fixed right-0 top-20 h-[calc(100vh-5rem)] w-80 bg-white shadow-xl z-50 p-4 overflow-y-auto border-l border-gray-200 sidebar"
+                            >
+                                <!-- Header -->
+                                <div
+                                    class="flex justify-between items-center mb-4"
+                                >
+                                    <h2 class="text-xl font-bold text-gray-800">
+                                        Chat
+                                    </h2>
+                                    <button
+                                        @click="toggleChatSidebar"
+                                        class="text-gray-400 hover:text-red-500 text-2xl"
+                                    >
+                                        ✖
+                                    </button>
+                                </div>
+
+                                <!-- Chat User List -->
+                                <ul class="space-y-2">
+                                    <li
+                                        v-for="driver in chatDriver"
+                                        :key="driver.id"
+                                        @click="openChat(driver)"
+                                        class="flex items-center gap-3 py-2 px-3 hover:bg-blue-50 rounded-lg cursor-pointer transition duration-150"
+                                    >
+                                        <!-- Profile Picture or Initials -->
+                                        <div
+                                            class="w-10 h-10 rounded-full bg-gray-200 overflow-hidden flex items-center justify-center text-gray-600 font-semibold text-sm"
+                                        >
+                                            <img
+                                                v-if="driver.avatar"
+                                                :src="driver.avatar"
+                                                alt="avatar"
+                                                class="w-full h-full object-cover"
+                                            />
+                                            <span v-else>
+                                                {{
+                                                    getInitials(
+                                                        driver.first_name,
+                                                        driver.last_name
+                                                    )
+                                                }}
+                                            </span>
+                                        </div>
+
+                                        <!-- Name -->
+                                        <div class="flex-1">
+                                            <p
+                                                class="text-sm font-medium text-gray-800"
+                                            >
+                                                {{ driver.first_name }}
+                                                {{ driver.last_name }}
+                                            </p>
+                                        </div>
+
+                                        <!-- Chat Icon -->
+                                        <span class="text-gray-400 text-base"
+                                            >💬
+                                            <span
+                                                v-if="
+                                                    unreadDrivers[driver.id] > 0
+                                                "
+                                                class="absolute top-0 right-0 h-2 w-2 bg-red-500 rounded-full"
+                                            ></span
+                                        ></span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <!-- Popup Chat Boxes -->
+                            <div
+                                v-for="(chat, index) in activeChats"
+                                :key="chat.id"
+                                class="fixed bottom-4 w-80 bg-white shadow-xl rounded-lg border border-gray-300 z-50 overflow-hidden"
+                                :style="{ right: `${1 + index * 21}rem` }"
+                            >
+                                <!-- Header -->
+                                <div
+                                    class="bg-navyblue text-white px-4 py-2 flex justify-between items-center"
+                                    @click="markAsRead(chat)"
+                                >
+                                    <span class="font-semibold text-sm">
+                                        {{ chat.first_name }}
+                                        {{ chat.last_name }}
+                                    </span>
+                                    <button
+                                        @click="closeChat(chat)"
+                                        class="text-white hover:text-gray-200"
+                                    >
+                                        ✖
+                                    </button>
+                                </div>
+
+                                <!-- Message Area -->
+
+                                <div
+                                    class="p-3 text-sm text-gray-600 h-64 overflow-y-auto"
+                                >
+                                    <div
+                                        v-for="(msg, idx) in chat.messages"
+                                        :key="idx"
+                                        class="mb-2"
+                                    >
+                                        <div
+                                            :class="[
+                                                'px-3 py-2 rounded w-fit',
+                                                msg.from === 'me'
+                                                    ? 'ml-auto bg-blue-500 text-white'
+                                                    : 'bg-gray-200 text-black',
+                                            ]"
+                                        >
+                                            {{ msg.text }}
+                                        </div>
+                                        <div
+                                            class="text-xs text-gray-400 mt-1"
+                                            :class="{
+                                                'text-right': msg.from === 'me',
+                                            }"
+                                        >
+                                            {{ msg.time }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Input & Send -->
+                                <div class="px-3 py-2 border-t">
+                                    <div class="flex items-center space-x-2">
+                                        <input
+                                            v-model="chat.message"
+                                            @focus="focusChat(chat)"
+                                            type="text"
+                                            class="flex-1 text-sm px-3 py-2 border rounded focus:outline-none focus:ring"
+                                            placeholder="Type a message..."
+                                            @keyup.enter="sendMessage(chat)"
+                                        />
+                                        <button
+                                            @click="sendMessage(chat)"
+                                            class="bg-navyblue text-white px-3 py-2 text-sm rounded hover:bg-blue-900 transition"
+                                        >
+                                            Send
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div v-else>
+                            <!-- Header Icon (toggle chat) -->
+                            <div
+                                @click="toggleChatBox"
+                                class="relative cursor-pointer"
+                            >
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="32"
+                                    height="32"
+                                    viewBox="0 0 24 24"
+                                    style="color: whitesmoke"
+                                >
+                                    <g
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="1.5"
+                                    >
+                                        <path
+                                            d="M12.686 18.222q.603.117 1.218.123a7.3 7.3 0 0 0 2.992-.64l3.095.455a1.03 1.03 0 0 0 1.032-1.135l-.372-3.126a7.2 7.2 0 0 0 .599-2.9a7.304 7.304 0 0 0-7.336-7.284a7.295 7.295 0 0 0-7.109 5.654"
+                                        />
+                                        <path
+                                            d="M13.904 14.745a5.66 5.66 0 0 1-1.218 3.477a5.61 5.61 0 0 1-4.375 2.063a5.7 5.7 0 0 1-2.29-.495l-2.311.413a.754.754 0 0 1-.826-.877l.32-2.363a5.5 5.5 0 0 1-.454-2.219A5.58 5.58 0 0 1 6.805 9.37a5.2 5.2 0 0 1 1.517-.217a5.59 5.59 0 0 1 5.582 5.593"
+                                        />
+                                    </g>
+                                </svg>
+                            </div>
+                            <!-- Driver Chat Box -->
+                            <div
+                                v-if="showChat"
+                                class="fixed bottom-4 right-4 w-80 bg-white shadow-xl rounded-lg border border-gray-300 z-50 overflow-hidden"
+                            >
+                                <!-- Header -->
+                                <div
+                                    class="bg-navyblue text-white px-4 py-2 flex justify-between items-center"
+                                >
+                                    <span class="font-semibold text-sm"
+                                        >Chat with Admin</span
+                                    >
+                                    <button
+                                        @click="toggleChatBox"
+                                        class="text-white hover:text-gray-300 text-lg"
+                                    >
+                                        ✖
+                                    </button>
+                                </div>
+
+                                <!-- Messages -->
+                                <div
+                                    class="p-3 text-sm text-gray-600 h-64 overflow-y-auto"
+                                    ref="messagesContainer"
+                                >
+                                    <div
+                                        v-for="(msg, index) in messages"
+                                        :key="index"
+                                        class="mb-2"
+                                    >
+                                        <div
+                                            :class="[
+                                                'px-3 py-2 rounded w-fit',
+                                                msg.from === 'me'
+                                                    ? 'ml-auto bg-blue-500 text-white'
+                                                    : 'bg-gray-200 text-black',
+                                            ]"
+                                        >
+                                            {{ msg.text }}
+                                        </div>
+                                        <div
+                                            class="text-xs text-gray-400 mt-1"
+                                            :class="{
+                                                'text-right': msg.from === 'me',
+                                            }"
+                                        >
+                                            {{ msg.time }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Input -->
+                                <div class="px-3 py-2 border-t">
+                                    <div class="flex items-center space-x-2">
+                                        <input
+                                            v-model="message"
+                                            type="text"
+                                            class="flex-1 text-sm px-3 py-2 border rounded focus:outline-none focus:ring"
+                                            placeholder="Type a message..."
+                                            @keyup.enter="sendMessage"
+                                        />
+                                        <button
+                                            @click="sendMessage"
+                                            class="bg-navyblue text-white px-3 py-2 text-sm rounded hover:bg-blue-900 transition"
+                                        >
+                                            Send
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <Dropdown align="right" width="48" class="dropdown">
                             <template #trigger>
                                 <div
@@ -183,7 +472,7 @@
 </template>
 
 <script setup>
-import { computed, ref } from "vue";
+import { computed, onMounted, ref, nextTick, onBeforeUnmount } from "vue";
 import Dropdown from "@/Components/Dropdown.vue";
 import DropdownLink from "@/Components/DropdownLink.vue";
 import Chat from "@/Pages/Chat.vue";
@@ -193,11 +482,35 @@ import Menubar from "primevue/menubar";
 import Badge from "primevue/badge";
 import Button from "primevue/button";
 import Dialog from "primevue/dialog";
+import axios from "axios";
+import Echo from "laravel-echo";
+import Pusher from "pusher-js";
 
 // Get the current authenticated user
 const user = usePage().props.auth.user;
-const isChatOpen = ref(false); // Controls the popup visibility
-// Define menu items for Admin (user_type === 1)
+const currentUserId = user.id;
+// console.log(currentUserId);
+
+window.Pusher = Pusher;
+
+let pollingInterval = null;
+
+const { chatDriver } = usePage().props;
+const { adminId } = usePage().props;
+const showChatSidebar = ref(false);
+const activeChats = ref([]);
+const showChat = ref(false);
+const messages = ref([]);
+const message = ref("");
+const messagesContainer = ref(null);
+const unreadDrivers = ref({});
+const totalUnread = computed(() => {
+    return Object.values(unreadDrivers.value).reduce(
+        (sum, val) => sum + val,
+        0
+    );
+});
+
 const adminItems = ref([
     {
         label: "Operational Management",
@@ -448,6 +761,233 @@ const items = computed(() => {
 });
 
 const showingNavigationDropdown = ref(false);
+
+const toggleChatSidebar = () => {
+    if (user.user_type === 1) {
+        showChatSidebar.value = !showChatSidebar.value;
+    }
+};
+
+const toggleChatBox = () => {
+    if (user.user_type !== 1) {
+        showChat.value = !showChat.value;
+        if (showChat.value) {
+            fetchMessages();
+        }
+    }
+};
+
+const openChat = (driver) => {
+    let existingChat = activeChats.value.find((c) => c.id === driver.id);
+
+    if (!existingChat) {
+        existingChat = {
+            ...driver,
+            messages: [],
+            message: "",
+            unreadCount: 0,
+            unread: false,
+            focused: true,
+        };
+        activeChats.value.push(existingChat);
+    } else {
+        existingChat.focused = true;
+        existingChat.unread = false;
+        existingChat.unreadCount = 0;
+    }
+
+    unreadDrivers.value[driver.id] = 0; // store count instead of true/false
+
+    fetchMessages(driver.id);
+    showChatSidebar.value = false;
+};
+
+const closeChat = (driver) => {
+    activeChats.value = activeChats.value.filter((c) => c.id !== driver.id);
+};
+
+const getInitials = (firstName, lastName) => {
+    return `${firstName?.[0] || ""}${lastName?.[0] || ""}`.toUpperCase();
+};
+
+const sendMessage = async (chat = null) => {
+    const isAdmin = user.user_type === 1;
+    let targetId = isAdmin ? chat?.id : adminId;
+    let msgText = isAdmin ? chat?.message : message.value;
+
+    if (!msgText?.trim()) return;
+
+    try {
+        await axios.post("/chat/send", {
+            receiver_id: targetId,
+            message: msgText,
+        });
+
+        if (isAdmin) {
+            chat.messages.push({
+                from: "me",
+                text: msgText,
+                time: new Date().toLocaleTimeString(),
+            });
+            chat.message = "";
+        } else {
+            messages.value.push({
+                from: "me",
+                text: msgText,
+                time: new Date().toLocaleTimeString(),
+            });
+            message.value = "";
+            scrollToBottom();
+        }
+    } catch (error) {
+        console.error("Send failed:", error);
+    }
+};
+
+const fetchMessages = async (id = null, preventScroll = false) => {
+    const isAdmin = user.user_type === 1;
+    const targetId = isAdmin ? id || activeChats.value[0]?.id : adminId;
+
+    try {
+        const res = await axios.get(`/chat/messages/${targetId}`);
+        const msgs = res.data.map((msg) => ({
+            from: msg.sender_id === currentUserId ? "me" : "them",
+            text: msg.message,
+            time: new Date(msg.created_at).toLocaleTimeString(),
+        }));
+
+        if (isAdmin) {
+            const chat = activeChats.value.find((c) => c.id === targetId);
+
+            if (chat) {
+                const isNew =
+                    JSON.stringify(chat.messages) !== JSON.stringify(msgs);
+                console.log(isNew);
+
+                if (isNew) {
+                    // 🚨 Only count if not focused
+                    if (!chat.focused) {
+                        chat.unread = true;
+                        chat.unreadCount =
+                            (chat.unreadCount || 0) +
+                            (msgs.length - chat.messages.length);
+                    }
+
+                    chat.messages = msgs;
+
+                    if (!preventScroll) scrollToBottom(chat);
+                }
+            }
+        } else {
+            const isNew =
+                JSON.stringify(messages.value) !== JSON.stringify(msgs);
+            messages.value = msgs;
+
+            if (isNew && !document.hasFocus()) {
+                // Add notification if needed
+            }
+
+            if (!preventScroll) scrollToBottom();
+        }
+    } catch (error) {
+        console.error("Error fetching messages:", error);
+    }
+};
+
+const scrollToBottom = (chat = null) => {
+    nextTick(() => {
+        if (chat) {
+            const containers = document.querySelectorAll(".chat-box");
+            const element = containers[chat.id];
+            if (element) {
+                element.scrollTop = element.scrollHeight;
+            }
+        } else {
+            messagesContainer.value.scrollTop =
+                messagesContainer.value.scrollHeight;
+        }
+    });
+};
+
+onMounted(() => {
+    startPolling();
+
+    window.Echo = new Echo({
+        broadcaster: "pusher",
+        key: "1a215997760520209b35",
+        cluster: "ap1",
+        forceTLS: true,
+        encrypted: false,
+        authEndpoint: "/broadcasting/auth",
+        auth: {
+            headers: {
+                "X-CSRF-TOKEN": document.head.querySelector(
+                    'meta[name="csrf-token"]'
+                ).content,
+            },
+        },
+    });
+
+    window.Echo.private(`chat.${currentUserId}`).listen("MessageSent", (e) => {
+        if (user.user_type === 1) {
+            // For admin, check if the message is for one of the active chats
+            const chat = activeChats.value.find((c) => c.id === e.sender.id);
+            if (chat) {
+                chat.messages.push({
+                    from: "them",
+                    text: e.message.message,
+                    time: new Date(e.message.created_at).toLocaleTimeString(),
+                });
+            }
+        } else {
+            // For the driver, update their chat with the admin
+            if (e.sender.id === adminId) {
+                messages.value.push({
+                    from: "them",
+                    text: e.message.message,
+                    time: new Date(e.message.created_at).toLocaleTimeString(),
+                });
+                scrollToBottom();
+            }
+        }
+    });
+});
+
+const markAsRead = (chat, e) => {
+    chat.unread = false;
+    chat.focused = true;
+};
+
+const startPolling = () => {
+    if (user.user_type === 1) {
+        pollingInterval = setInterval(() => {
+            activeChats.value.forEach((chat) => {
+                fetchMessages(chat.id, true); // pass true to prevent auto-scroll
+            });
+        }, 5000);
+    } else {
+        pollingInterval = setInterval(() => {
+            fetchMessages(adminId, true);
+        }, 5000);
+    }
+};
+
+const stopPolling = () => {
+    if (pollingInterval) {
+        clearInterval(pollingInterval);
+        pollingInterval = null;
+    }
+};
+
+const focusChat = (chat) => {
+    chat.focused = true;
+    chat.unread = false;
+    chat.unreadCount = 0;
+};
+
+onBeforeUnmount(() => {
+    stopPolling();
+});
 </script>
 
 <style scoped>
@@ -463,5 +1003,10 @@ const showingNavigationDropdown = ref(false);
 
 .dropdown {
     z-index: 9999;
+}
+
+.sidebar {
+    z-index: 9999;
+    scroll-behavior: smooth;
 }
 </style>

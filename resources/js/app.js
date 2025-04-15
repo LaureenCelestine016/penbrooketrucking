@@ -3,6 +3,8 @@ import "../css/app.css";
 import "leaflet/dist/leaflet.css";
 import "primeicons/primeicons.css";
 import "vue-tel-input/vue-tel-input.css";
+import Echo from "laravel-echo";
+import Pusher from "pusher-js";
 
 import Tooltip from "primevue/tooltip";
 
@@ -17,6 +19,8 @@ import { definePreset } from "@primevue/themes";
 import { TinyColor } from "@ctrl/tinycolor";
 
 const appName = import.meta.env.VITE_APP_NAME || "Laravel";
+
+window.Pusher = Pusher;
 
 const baseColor = "#213555";
 
@@ -70,3 +74,5 @@ createInertiaApp({
         color: "#4B5563",
     },
 });
+
+const activeChats = []; // Probably reactive or managed via Vuex/Pinia/composable
