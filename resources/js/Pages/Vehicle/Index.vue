@@ -1,5 +1,5 @@
 <template>
-    <Head title="Vehicle" />
+    <Head title="Tractor" />
     <Toast />
 
     <AuthenticatedLayout>

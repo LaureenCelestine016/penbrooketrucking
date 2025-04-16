@@ -98,7 +98,7 @@
                                                     >Email Address:</label
                                                 >
                                                 <span class=""
-                                                    >{{ User?.email }}
+                                                    >{{ User?.email || "N/A" }}
                                                 </span>
                                             </div>
 
@@ -1096,25 +1096,23 @@
                                                         class="border mt-5 overflow-x-auto"
                                                     >
                                                         <DataTable
-                                                            v-model:selection="
-                                                                selectedProduct
-                                                            "
                                                             :value="
                                                                 driverTruckUsed
                                                             "
-                                                            scrollable
-                                                            scrollHeight="200px"
-                                                            dataKey="id"
+                                                            paginator
+                                                            :rows="5"
+                                                            :rowsPerPageOptions="[
+                                                                5, 10, 20, 50,
+                                                            ]"
                                                             tableStyle="min-width: 50rem"
-                                                            class="h-[20rem]"
+                                                            ref="dt"
                                                         >
                                                             <Column
-                                                                header="Tractor / Trailer"
+                                                                header="Truck"
                                                                 style="
-                                                                    min-width: 12rem;
+                                                                    width: 10%;
                                                                 "
-                                                            >
-                                                                <template
+                                                                ><template
                                                                     #body="slotProps"
                                                                 >
                                                                     {{
@@ -1130,13 +1128,12 @@
                                                                             .trailer
                                                                             .license_plate
                                                                     }}
-                                                                </template>
-                                                            </Column>
+                                                                </template></Column
+                                                            >
                                                             <Column
-                                                                field="start_date"
                                                                 header="Delivered Location"
                                                                 style="
-                                                                    min-width: 10rem;
+                                                                    width: 15%;
                                                                 "
                                                                 ><template
                                                                     #body="slotProps"

@@ -3,16 +3,39 @@
 <head>
     <title>Expenses Report</title>
     <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: Arial, sans-serif;
             font-size: 12px;
-            margin: 20px;
+            margin: 0;
+            padding: 20px; /* you can adjust this as needed */
             color: #333;
+        }
+
+        .logo-header {
+            text-align: left;
+            margin-bottom: 28px;
+            padding: 0;
+            line-height: 0; /* removes vertical space caused by text baseline */
+        }
+
+        .logo-header img {
+            max-width: 250px;
+            height: auto;
+            display: block; /* avoids inline spacing issues */
+            margin-bottom: 28px;
+            padding: 0;
         }
 
         h2 {
             text-align: center;
-            margin-bottom: 30px;
+            margin: 30px 0;
         }
 
         table {
@@ -67,9 +90,15 @@
             color: #666;
         }
     </style>
+
+
 </head>
 <body>
-    <h2>Expenses Report</h2>
+    <div class="logo-header">
+        <img src="{{ public_path('Headerlogo.png') }}" alt="Company Logo" >
+    </div>
+
+    <h2 style="margin-top:32px">Expenses Report</h2>
 
     <table>
         <thead>

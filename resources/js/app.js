@@ -18,7 +18,7 @@ import { ZiggyVue } from "../../vendor/tightenco/ziggy";
 import { definePreset } from "@primevue/themes";
 import { TinyColor } from "@ctrl/tinycolor";
 
-const appName = import.meta.env.VITE_APP_NAME || "Laravel";
+const appName = import.meta.env.VITE_APP_NAME || "Penbrooke";
 
 window.Pusher = Pusher;
 

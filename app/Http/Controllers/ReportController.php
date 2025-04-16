@@ -265,7 +265,8 @@ class ReportController extends Controller
         $expenses = $request->input('expenses'); // array of routes
 
         $pdf = Pdf::loadView('pdf.expenses-report', ['expenses' => $expenses])
-                    ->setPaper($request->papersize, $request->orientation); // <-- set to landscape
+                    ->setPaper($request->papersize, $request->orientation);
+
         return $pdf->download('expenses_report.pdf');
     }
 

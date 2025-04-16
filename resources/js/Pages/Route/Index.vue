@@ -75,7 +75,7 @@
                         ></Column>
                         <Column
                             field=""
-                            header="Vehicle"
+                            header="Truck"
                             sortable
                             style="min-width: 9rem"
                             ><template #body="slotProps">

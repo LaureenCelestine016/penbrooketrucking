@@ -1,4 +1,5 @@
 <template>
+    <Head title="Login" />
     <div class="min-h-screen bg-gray-50 flex items-center justify-center p-4">
         <div
             class="flex flex-col md:flex-row bg-white shadow-xl rounded-3xl overflow-hidden w-full max-w-5xl"

@@ -45,7 +45,7 @@ class TracksolidController extends Controller
 
     $url = "https://hk-open.tracksolidpro.com/route/rest";
     $response = Http::get($url, $params);
-
+    dd($response);
     return back()->with([
         'tracksolid' => [
             'timestamp' => $params['timestamp'],
@@ -57,6 +57,7 @@ class TracksolidController extends Controller
 
     public function getLocation(Request $request)
 {
+
     $accessToken = $request->input('accessToken');
     $deviceId = $request->input('deviceId');
     $target = "your_target_value"; // Replace with actual target value

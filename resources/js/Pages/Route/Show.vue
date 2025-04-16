@@ -55,7 +55,7 @@
                                         <label
                                             for="vehicle"
                                             class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                            >Vehicle<span
+                                            >Truck<span
                                                 class="ml-1 text-red-400"
                                                 >*</span
                                             ></label

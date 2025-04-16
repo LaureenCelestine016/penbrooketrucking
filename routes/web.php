@@ -115,6 +115,7 @@ use Inertia\Inertia;
         Route::post('/store', [MaintenanceTaskController::class,'store'])->name('maintenance.store');
         Route::delete('/delete/{maintenance_task}', [MaintenanceTaskController::class, 'destroy'])->name('maintenance.delete');
         Route::post('/delete-all', [MaintenanceTaskController::class, 'deletedAll'])->name('maintenances.delete');
+        Route::put('/{maintenance_task}', [MaintenanceTaskController::class,'update'])->name('maintenance.update');
     });
 
     Route::middleware('auth')->prefix('expenses')->group(function () {
@@ -123,6 +124,7 @@ use Inertia\Inertia;
         Route::post('/store', [ExpensesController::class,'store'])->name('expenses.store');
         Route::delete('/delete/{expenses}', [ExpensesController::class, 'destroy'])->name('expenses.delete');
         Route::post('/delete-all', [ExpensesController::class, 'deletedAll'])->name('expensess.delete');
+        Route::put('/{expenses}', [ExpensesController::class,'update'])->name('expenses.update');
     });
 
     Route::middleware('auth')->prefix('registration')->group(function () {

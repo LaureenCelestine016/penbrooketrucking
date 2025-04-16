@@ -4,7 +4,7 @@
     <AuthenticatedLayout>
         <template #header>
             <h2 class="font-semibold text-2xl text-gray-800 leading-tight mb-8">
-                Driver Dashborad
+                Driver Dashboard
             </h2>
             <div class="flex flex-row items-center gap-x-4 border p-2 rounded">
                 <i

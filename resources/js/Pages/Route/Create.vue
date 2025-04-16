@@ -563,9 +563,9 @@ const fuelAmountSearch = () => {
     if (selectedVehicle) {
         fuelAmount.value = selectedVehicle.fuel_records.map((record) => ({
             id: record.id,
-            cost: record.cost,
+            cost: record.amount,
             date: record.refueling_date,
-            display: `₱ ${record.cost} -- Refuel Date: ${record.refueling_date}`, // UI display value
+            display: `₱ ${record.amount} -- Refuel Date: ${record.refueling_date}`, // UI display value
         }));
     } else {
         fuelAmount.value = []; // Clear if no vehicle found

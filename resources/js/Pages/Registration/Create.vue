@@ -708,7 +708,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="mt-8">
+                            <!-- <div class="mt-8">
                                 <label
                                     for="remarks"
                                     class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
@@ -732,7 +732,7 @@
                                         >
                                     </template>
                                 </FileUpload>
-                            </div>
+                            </div> -->
                         </div>
                         <div class="mt-11 mb-11" v-else-if="truck === '2'">
                             <div>
@@ -1102,7 +1102,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="mt-8">
+                            <!-- <div class="mt-8">
                                 <label
                                     for="remarks"
                                     class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
@@ -1126,7 +1126,7 @@
                                         >
                                     </template>
                                 </FileUpload>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                     <Button

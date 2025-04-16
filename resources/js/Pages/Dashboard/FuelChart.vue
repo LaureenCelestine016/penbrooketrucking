@@ -423,6 +423,14 @@ const updateYTDChart = () => {
                 },
                 barGap: 0,
                 barWidth: 150,
+                label: {
+                    show: true,
+                    position: "top",
+                    fontWeight: "bold",
+                    fontSize: 14,
+                    color: "#213555",
+                    formatter: `{c} L`,
+                },
             },
             {
                 name: "Current Year",
@@ -432,6 +440,14 @@ const updateYTDChart = () => {
                     color: "#74c0fc",
                 },
                 barWidth: 150,
+                label: {
+                    show: true,
+                    position: "top",
+                    fontWeight: "bold",
+                    fontSize: 14,
+                    color: "#74c0fc",
+                    formatter: `{c} L`,
+                },
             },
         ],
     };
@@ -495,6 +511,14 @@ const updateMonthComparisonChart = () => {
                 },
                 barGap: 0,
                 barWidth: 150,
+                label: {
+                    show: true,
+                    position: "top",
+                    fontWeight: "bold",
+                    fontSize: 14,
+                    color: "#213555",
+                    formatter: `{c} L`,
+                },
             },
             {
                 name: "Current Month",
@@ -504,6 +528,14 @@ const updateMonthComparisonChart = () => {
                     color: "#74c0fc",
                 },
                 barWidth: 150,
+                label: {
+                    show: true,
+                    position: "top",
+                    fontWeight: "bold",
+                    fontSize: 14,
+                    color: "#74c0fc",
+                    formatter: `{c} L`,
+                },
             },
         ],
     };

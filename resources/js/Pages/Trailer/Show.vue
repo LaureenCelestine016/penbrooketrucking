@@ -616,12 +616,6 @@
                                                     </div>
                                                     <!-- Conveyance -->
                                                 </div>
-                                                <Button
-                                                    label="UPDATE CHANGE"
-                                                    type="submit"
-                                                    icon="pi pi-pencil"
-                                                    class="w-full"
-                                                />
                                             </TabPanel>
                                             <!-- Technical Specifications -->
                                             <TabPanel
@@ -630,156 +624,58 @@
                                             >
                                                 <div class="border mt-5">
                                                     <DataTable
-                                                        v-model:selection="
-                                                            selectedProduct
-                                                        "
                                                         :value="maintenance"
-                                                        dataKey="id"
-                                                        tableStyle="min-width: 50rem"
-                                                        class="h-[20rem]"
-                                                    >
-                                                        <Column
-                                                            field="item_description"
-                                                            header="Item and Description"
-                                                        ></Column>
-                                                        <Column
-                                                            field="quantity"
-                                                            header="Quantity"
-                                                        ></Column>
-                                                        <Column
-                                                            field="price"
-                                                            header="Price"
-                                                        ></Column>
-                                                        <Column
-                                                            field="total"
-                                                            header="Total"
-                                                        ></Column>
-
-                                                        <Column
-                                                            field="supplier"
-                                                            header="Supplier"
-                                                        ></Column>
-                                                        <Column
-                                                            field="breakdown_date"
-                                                            header="Breakdown Date"
-                                                        ></Column>
-                                                        <Column
-                                                            field="up_date"
-                                                            header="Up Date"
-                                                        ></Column>
-                                                    </DataTable>
-                                                </div>
-                                            </TabPanel>
-                                            <!-- Maintenance History -->
-                                            <TabPanel value="3">
-                                                <div class="cards">
-                                                    <DataTable
-                                                        :value="customers"
                                                         paginator
                                                         :rows="5"
                                                         :rowsPerPageOptions="[
                                                             5, 10, 20, 50,
                                                         ]"
                                                         tableStyle="min-width: 50rem"
+                                                        ref="dt"
                                                     >
                                                         <Column
-                                                            field="name"
-                                                            header="Name"
-                                                            style="width: 25%"
+                                                            field="item_description"
+                                                            header="Item and Description"
+                                                            style="width: 10%"
                                                         ></Column>
                                                         <Column
-                                                            field="country.name"
-                                                            header="Country"
-                                                            style="width: 25%"
+                                                            field="quantity"
+                                                            header="Quantity"
+                                                            style="width: 2%"
                                                         ></Column>
                                                         <Column
-                                                            field="company"
-                                                            header="Company"
-                                                            style="width: 25%"
+                                                            field="price"
+                                                            header="Price"
+                                                            style="width: 2%"
                                                         ></Column>
                                                         <Column
-                                                            field="representative.name"
-                                                            header="Representative"
-                                                            style="width: 25%"
+                                                            field="total"
+                                                            header="Total"
+                                                            style="width: 2%"
                                                         ></Column>
-                                                        <template
-                                                            #paginatorcontainer="{
-                                                                first,
-                                                                last,
-                                                                page,
-                                                                pageCount,
-                                                                prevPageCallback,
-                                                                nextPageCallback,
-                                                                totalRecords,
-                                                            }"
-                                                        >
-                                                            <div
-                                                                class="flex items-center gap-4 border border-primary bg-transparent rounded-full w-full py-1 px-2 justify-between"
-                                                            >
-                                                                <Button
-                                                                    icon="pi pi-chevron-left"
-                                                                    rounded
-                                                                    text
-                                                                    @click="
-                                                                        prevPageCallback
-                                                                    "
-                                                                    :disabled="
-                                                                        page ===
-                                                                        0
-                                                                    "
-                                                                />
-                                                                <div
-                                                                    class="text-color font-medium"
-                                                                >
-                                                                    <span
-                                                                        class="hidden sm:block"
-                                                                        >Showing
-                                                                        {{
-                                                                            first
-                                                                        }}
-                                                                        to
-                                                                        {{
-                                                                            last
-                                                                        }}
-                                                                        of
-                                                                        {{
-                                                                            totalRecords
-                                                                        }}</span
-                                                                    >
-                                                                    <span
-                                                                        class="block sm:hidden"
-                                                                        >Page
-                                                                        {{
-                                                                            page +
-                                                                            1
-                                                                        }}
-                                                                        of
-                                                                        {{
-                                                                            pageCount
-                                                                        }}</span
-                                                                    >
-                                                                </div>
-                                                                <Button
-                                                                    icon="pi pi-chevron-right"
-                                                                    rounded
-                                                                    text
-                                                                    @click="
-                                                                        nextPageCallback
-                                                                    "
-                                                                    :disabled="
-                                                                        page ===
-                                                                        pageCount -
-                                                                            1
-                                                                    "
-                                                                />
-                                                            </div>
-                                                        </template>
+                                                        <Column
+                                                            field="supplier"
+                                                            header="Supplier"
+                                                            style="width: 5%"
+                                                        ></Column>
+                                                        <Column
+                                                            field="breakdown_date"
+                                                            header="Breakdown Date"
+                                                            style="width: 5%"
+                                                        ></Column>
+                                                        <Column
+                                                            field="up_date"
+                                                            header="Up Date"
+                                                            style="width: 5%"
+                                                        ></Column>
                                                     </DataTable>
                                                 </div>
                                             </TabPanel>
+                                            <!-- Maintenance History -->
                                         </TabPanels>
-                                    </form> </Tabs
-                            ></template>
+                                    </form>
+                                </Tabs></template
+                            >
                         </Card>
                         <!-- <Card class="card">
                                 <template #content> </template>

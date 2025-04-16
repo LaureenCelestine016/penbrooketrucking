@@ -1012,12 +1012,6 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <Button
-                                                    label="UPDATE CHANGE"
-                                                    type="submit"
-                                                    icon="pi pi-pencil"
-                                                    class="w-full"
-                                                />
                                             </TabPanel>
                                             <!-- Technical Specifications -->
                                             <TabPanel
@@ -1347,45 +1341,54 @@
                                             <TabPanel value="3">
                                                 <div class="border mt-5">
                                                     <DataTable
-                                                        v-model:selection="
-                                                            selectedProduct
-                                                        "
                                                         :value="Maintenance"
-                                                        dataKey="id"
+                                                        paginator
+                                                        :rows="5"
+                                                        :rowsPerPageOptions="[
+                                                            5, 10, 20, 50,
+                                                        ]"
                                                         tableStyle="min-width: 50rem"
-                                                        class="h-[20rem]"
+                                                        ref="dt"
                                                     >
                                                         <Column
                                                             field="item_description"
                                                             header="Item and Description"
+                                                            style="width: 10%"
                                                         ></Column>
                                                         <Column
                                                             field="quantity"
                                                             header="Quantity"
+                                                            style="width: 2%"
                                                         ></Column>
                                                         <Column
                                                             field="price"
                                                             header="Price"
+                                                            style="width: 2%"
                                                         ></Column>
                                                         <Column
                                                             field="total"
                                                             header="Total"
+                                                            style="width: 2%"
                                                         ></Column>
                                                         <Column
                                                             field="odometer"
                                                             header="Odometer"
+                                                            style="width: 2%"
                                                         ></Column>
                                                         <Column
                                                             field="supplier"
                                                             header="Supplier"
+                                                            style="width: 5%"
                                                         ></Column>
                                                         <Column
                                                             field="breakdown_date"
                                                             header="Breakdown Date"
+                                                            style="width: 5%"
                                                         ></Column>
                                                         <Column
                                                             field="up_date"
                                                             header="Up Date"
+                                                            style="width: 5%"
                                                         ></Column>
                                                     </DataTable>
                                                 </div>
@@ -1395,63 +1398,48 @@
                                                 <div class="border mt-5">
                                                     <DataTable
                                                         :value="fuel"
-                                                        dataKey="id"
+                                                        paginator
+                                                        :rows="5"
+                                                        :rowsPerPageOptions="[
+                                                            5, 10, 20, 50,
+                                                        ]"
                                                         tableStyle="min-width: 50rem"
-                                                        class="h-[20rem]"
+                                                        ref="dt"
                                                     >
                                                         <Column
                                                             field="current_odometer"
                                                             header="Current Odometer"
-                                                            style="
-                                                                min-width: 5rem;
-                                                            "
-                                                            :headerStyle="{
-                                                                'text-align':
-                                                                    'center',
-                                                            }"
-                                                            bodyStyle="text-align: center"
+                                                            style="width: 15%"
                                                         ></Column>
                                                         <Column
                                                             field="previous_odometer"
                                                             header="Previous Odometer"
-                                                            style="
-                                                                min-width: 5rem;
-                                                            "
+                                                            style="width: 15%"
                                                         ></Column>
                                                         <Column
                                                             field="total_distance"
                                                             header="Distance"
-                                                            style="
-                                                                min-width: 5rem;
-                                                            "
+                                                            style="width: 15%"
                                                         ></Column>
                                                         <Column
                                                             field="total_refuel"
                                                             header="Liters"
-                                                            style="
-                                                                min-width: 5rem;
-                                                            "
+                                                            style="width: 15%"
                                                         ></Column>
                                                         <Column
                                                             field="avg_fuel_consumption"
                                                             header="Avg. Fuel"
-                                                            style="
-                                                                min-width: 5rem;
-                                                            "
+                                                            style="width: 15%"
                                                         ></Column>
                                                         <Column
                                                             field="amount"
                                                             header="Amount"
-                                                            style="
-                                                                min-width: 5rem;
-                                                            "
+                                                            style="width: 15%"
                                                         ></Column>
                                                         <Column
                                                             field="refueling_date"
                                                             header="Date Refilled"
-                                                            style="
-                                                                min-width: 5rem;
-                                                            "
+                                                            style="width: 15%"
                                                         ></Column>
                                                     </DataTable>
                                                 </div>

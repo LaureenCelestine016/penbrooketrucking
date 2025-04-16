@@ -7,7 +7,7 @@
 
         <title inertia>{{ config('app.name', 'Penbrooke') }}</title>
 
-        <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
+        <link rel="icon" type="image/png" href="{{ asset('penbrookelogo.png') }}">
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">

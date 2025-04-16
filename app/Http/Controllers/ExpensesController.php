@@ -85,7 +85,20 @@ class ExpensesController extends Controller
      */
     public function update(Request $request, Expenses $expenses)
     {
-        //
+
+        $request->validate([
+            'amount'            => 'required|numeric|min:1',
+            'expense_date'      => 'required|date',
+            'description'       => 'required|string',
+        ]);
+
+        $expenses->update([
+            'amount'            => $request->amount,
+            'description'       => $request->description,
+            'expense_date'      => $request->expense_date,
+        ]);
+
+        return redirect()->route('expenses', $expenses)->with('success', 'Expenses record updated successfully!');
     }
 
     /**

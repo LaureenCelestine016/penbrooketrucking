@@ -115,7 +115,31 @@ class MaintenanceTaskController extends Controller
      */
     public function update(Request $request, Maintenance_task $maintenance_task)
     {
-        //
+
+        $request->validate([
+            'odometer'       => 'required|numeric|min:1',
+            'quantity'       => 'required|numeric|min:1',
+            'price'          => 'required|numeric|min:1',
+            'total'          => 'required|numeric|min:1',
+            'supplier'       => 'required|string',
+            'breakdown'      => 'required|date',
+            'up'             => 'required|date',
+            'remarks'         => 'required|string',
+        ]);
+
+        $maintenance_task->update([
+            'odometer'          => $request->odometer,
+            'quantity'          => $request->quantity,
+            'price'             => $request->price,
+            'total'             => $request->total,
+            'supplier'          => $request->supplier,
+            'breakdown'         => $request->breakdown,
+            'up'                => $request->up,
+            'remarks'           => $request->remarks,
+        ]);
+
+        return redirect()->route('maintenance', $maintenance_task)->with('success', 'Maintenance record updated successfully!');
+
     }
 
     /**
