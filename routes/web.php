@@ -54,6 +54,10 @@ use Inertia\Inertia;
         Route::get('/detail/{vehicle}', [VehicleController::class, 'show'])->name('vehicle.show');
         Route::post('/delete-all', [VehicleController::class, 'deletedAll'])->name('vehicles.delete');
         Route::post('/image/upload', [VehicleController::class, 'upload'])->name('vehicles.upload');
+
+        Route::post('/get-location', [VehicleController::class, 'getLocation']);
+        Route::post('/get-token', [VehicleController::class, 'getToken']);
+
     });
 
     Route::middleware('auth', 'check.trailer.expiration')->prefix('trailer')->group(function () {

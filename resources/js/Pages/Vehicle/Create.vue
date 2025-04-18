@@ -789,6 +789,74 @@
                                             </FormField>
                                         </div>
                                     </div>
+
+                                    <div
+                                        :class="[
+                                            'grid grid-cols-2 gap-10 ',
+                                            form.hasErrors ? 'mt-3' : 'mt-6',
+                                        ]"
+                                    >
+                                        <div class="w-full">
+                                            <label
+                                                for="PMSMileage"
+                                                class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                                >IMEI No.
+                                            </label>
+                                            <FormField
+                                                id="PMSMileage"
+                                                name="PMSMileage"
+                                                class="flex flex-col gap-1"
+                                            >
+                                                <InputText
+                                                    id="PMSMileage"
+                                                    type="text"
+                                                    placeholder="IMEI no."
+                                                    v-model="form.imei"
+                                                />
+                                                <Message
+                                                    v-if="form.errors.imei"
+                                                    severity="error"
+                                                    size="small"
+                                                    variant="simple"
+                                                    >{{
+                                                        form.errors.imei
+                                                    }}</Message
+                                                >
+                                            </FormField>
+                                        </div>
+                                        <div class="w-full">
+                                            <label
+                                                for="PMSMileage"
+                                                class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                                >Access Token
+                                            </label>
+                                            <FormField
+                                                id="manufacturer_year"
+                                                name="manufacturer_year"
+                                                class="flex flex-col gap-1"
+                                            >
+                                                <InputText
+                                                    id="manufacturer_year"
+                                                    type="text"
+                                                    placeholder="Access Token"
+                                                    v-model="form.accesToken"
+                                                />
+                                                <Message
+                                                    v-if="
+                                                        form.errors
+                                                            .nextPMSMileage
+                                                    "
+                                                    severity="error"
+                                                    size="small"
+                                                    variant="simple"
+                                                    >{{
+                                                        form.errors
+                                                            .nextPMSMileage
+                                                    }}</Message
+                                                >
+                                            </FormField>
+                                        </div>
+                                    </div>
                                 </div>
                             </AccordionContent>
                         </AccordionPanel>
@@ -849,6 +917,7 @@ import Accordion from "primevue/accordion";
 import AccordionPanel from "primevue/accordionpanel";
 import AccordionHeader from "primevue/accordionheader";
 import AccordionContent from "primevue/accordioncontent";
+import InputNumber from "primevue/inputnumber";
 
 const csrfToken = document
     .querySelector('meta[name="csrf-token"]')
@@ -880,6 +949,8 @@ const form = useForm({
     PMSCurrentReading: "",
     consumeMileage: "",
     nextPMSMileage: "",
+    imei: "",
+    accesToken: "daede562b5e43bf57282f9532b93a407",
 });
 
 const submit = () => {

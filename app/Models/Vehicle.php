@@ -37,7 +37,9 @@ class Vehicle extends Model
        'pms_current_reading',
        'consume_mileage',
        'next_pms_mileage',
-       'image'
+       'image',
+       'imei',
+       'token'
     ];
 
 

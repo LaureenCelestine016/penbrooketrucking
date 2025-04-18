@@ -74,15 +74,16 @@ const getToken = () => {
 };
 
 const getLocation = () => {
-    if (!tokenData.value) return alert("Please get token first!");
+    // if (!tokenData.value) return alert("Please get token first!");
 
     const parsed = JSON.parse(tokenData.value);
     const accessToken = parsed?.result?.accessToken;
-    const deviceId = "VL01LA-48139"; // Your device ID
+
+    // const deviceId = "VL01LA-48139"; // Your device ID
 
     router.post(
         "/tracksolid/location",
-        { accessToken, deviceId },
+        { accessToken },
         {
             preserveScroll: true,
             preserveState: true,
