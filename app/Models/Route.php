@@ -12,7 +12,7 @@ class Route extends Model
 
     protected $fillable = [
         'gpstracker_id', 'vehicle_id', 'driver_id', 'trailer_id',
-        'start_location_id', 'end_location_id', 'fuel_id',
+        'start_location_id', 'end_location_id',
         'start_date', 'end_date', 'distance_km', 'status'
     ];
 

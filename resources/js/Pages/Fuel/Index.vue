@@ -600,24 +600,37 @@ const showDetail = (fuel) => {
     fuelDialog.value = true;
 };
 
-const tractorNameSearch = () => {
-    tractorName.value = props.tractor.map((tr) => ({
-        id: tr.id,
-        license_plate: tr.license_plate,
-    }));
-};
+const tractorNameSearch = (event) => {
+    const query = event.query.toLowerCase();
 
+    if (Array.isArray(props.tractor) && props.tractor.length > 0) {
+        tractorName.value = props.tractor
+            .filter((tr) => tr.license_plate.toLowerCase().includes(query))
+            .map((tr) => ({
+                id: tr.id,
+                license_plate: tr.license_plate,
+            }));
+    }
+};
 const onTractorSelect = (event) => {
     form.vehicleId = event.value.id;
 };
 
-const driverNameSearch = () => {
-    driverName.value = props.drivers.map((dr) => ({
-        id: dr.id,
-        firstName: dr.first_name,
-        lastName: dr.last_name,
-        display: `${dr.first_name} ${dr.last_name}`,
-    }));
+const driverNameSearch = (event) => {
+    const query = event.query.toLowerCase();
+
+    if (Array.isArray(props.drivers) && props.drivers.length > 0) {
+        driverName.value = props.drivers
+            .filter((dr) =>
+                `${dr.first_name} ${dr.last_name}`.toLowerCase().includes(query)
+            )
+            .map((dr) => ({
+                id: dr.id,
+                firstName: dr.first_name,
+                lastName: dr.last_name,
+                display: `${dr.first_name} ${dr.last_name}`,
+            }));
+    }
 };
 
 const onDriverSelect = (event) => {
@@ -659,15 +672,4 @@ watch(
         }
     }
 );
-
-// const getStatusLabel = (status) => {
-//     switch (status) {
-//         case "1":
-//             return "info";
-//         case "0":
-//             return "warn";
-//         default:
-//             return "secondary";
-//     }
-// };
 </script>

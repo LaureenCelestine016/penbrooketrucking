@@ -130,11 +130,10 @@ class ReportController extends Controller
     public function filterMaintenanceReports(Request $request)
     {
 
-
         $query = Maintenance_task::with(['vehicle', 'trailer']);
 
         if ($request->start_date && $request->end_date) {
-            $query->whereBetween('created_at', [$request->start_date, $request->end_date]);
+            $query->whereBetween('breakdown_date', [$request->start_date, $request->end_date]);
         }
 
 
@@ -252,7 +251,7 @@ class ReportController extends Controller
     public function downloadPdfMaintenance(Request $request)
     {
 
-        $maintenance = $request->input('expenses'); // array of routes
+        $maintenance = $request->input('maintenance'); // array of routes
 
         $pdf = Pdf::loadView('pdf.maintenance-report', ['maintenance' => $maintenance])
                     ->setPaper($request->papersize, $request->orientation); // <-- set to landscape

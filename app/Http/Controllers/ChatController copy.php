@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
+namespace App\Http\Controllers;
+
 use App\Models\ChatMessage;
-use App\Events\MessageSent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
+use App\Events\MessageSent;
 
 class ChatController extends Controller
 {
@@ -17,18 +18,13 @@ class ChatController extends Controller
 
     public function fetchMessages($receiverId)
     {
-        // Mark messages from receiver as read
-        ChatMessage::where('sender_id', $receiverId)
-            ->where('receiver_id', auth()->id())
-            ->where('is_read', 0)
-            ->update(['is_read' => 1]);
 
         $messages = ChatMessage::where(function ($query) use ($receiverId) {
             $query->where('sender_id', auth()->id())
-                ->where('receiver_id', $receiverId);
+                  ->where('receiver_id', $receiverId);
         })->orWhere(function ($query) use ($receiverId) {
             $query->where('sender_id', $receiverId)
-                ->where('receiver_id', auth()->id());
+                  ->where('receiver_id', auth()->id());
         })->orderBy('created_at')->get();
 
         return response()->json($messages);
@@ -36,6 +32,7 @@ class ChatController extends Controller
 
     public function sendMessage(Request $request)
     {
+
         $sender = Auth::user();
         $receiverId = $request->receiver_id;
 
@@ -43,35 +40,10 @@ class ChatController extends Controller
             'sender_id' => $sender->id,
             'receiver_id' => $receiverId,
             'message' => $request->message,
-            'is_read' => 0,
         ]);
 
         broadcast(new MessageSent($sender, $receiverId, $message))->toOthers();
 
         return response()->json($message);
-    }
-
-    public function unreadCounts()
-    {
-
-        $userId = auth()->id();
-
-        $counts = ChatMessage::select('sender_id', DB::raw('COUNT(*) as count'))
-            ->where('receiver_id', $userId)
-            ->where('is_read', 0)
-            ->groupBy('sender_id')
-            ->pluck('count', 'sender_id');
-
-        return response()->json($counts);
-    }
-
-    public function markAsRead(Request $request)
-    {
-        ChatMessage::where('sender_id', $request->sender_id)
-            ->where('receiver_id', auth()->id())
-            ->where('is_read', 0)
-            ->update(['is_read' => 1]);
-
-        return response()->json(['status' => 'ok']);
     }
 }

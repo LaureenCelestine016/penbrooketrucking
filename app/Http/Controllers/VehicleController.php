@@ -93,7 +93,6 @@ class VehicleController extends Controller
         'consume_mileage'              => $validatedData['consumeMileage'],
         'next_pms_mileage'             => $validatedData['nextPMSMileage'],
         'imei'                         => $request->imei,
-        'token'                        => $request->accessToken,
 
     ]);
 

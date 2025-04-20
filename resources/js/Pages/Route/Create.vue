@@ -288,7 +288,7 @@
                                 </FormField>
                             </div>
                         </div>
-                        <div class="grid grid-cols-2 gap-10 mb-5">
+                        <div class="mb-5">
                             <div class="w-full">
                                 <label
                                     for="First_name"
@@ -318,7 +318,7 @@
                                     >
                                 </FormField>
                             </div>
-                            <div class="w-full">
+                            <!-- <div class="w-full">
                                 <label
                                     for="fuel"
                                     class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
@@ -368,7 +368,7 @@
                                         >{{ form.errors.fuelId }}</Message
                                     >
                                 </FormField>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                     <div>
@@ -415,7 +415,6 @@ const driverName = ref([]);
 const startLoc = ref([]);
 const endLoc = ref([]);
 const tripStatus = ref([]);
-const fuelAmount = ref([]);
 const toast = useToast();
 const startLat = ref(null);
 const startLng = ref(null);
@@ -452,7 +451,6 @@ const form = useForm({
     driverId: "",
     startLocId: "",
     endLocId: "",
-    fuelId: "",
     dateStart: "",
     dateEnd: "",
     status: "",
@@ -480,15 +478,18 @@ const submit = () => {
     });
 };
 
-const tructorNameSearch = () => {
-    // Ensure props.tructor is an array and has elements
+const tructorNameSearch = (event) => {
+    console.log(event);
+
+    const query = event.query.toLowerCase(); // get the input string
+
     if (Array.isArray(props.tructor) && props.tructor.length > 0) {
-        // Filter based on fuel_records.length >= 1
         tructors.value = props.tructor
             .filter(
                 (tructor) =>
                     Array.isArray(tructor.fuel_records) &&
-                    tructor.fuel_records.length >= 1
+                    tructor.fuel_records.length >= 1 &&
+                    tructor.license_plate.toLowerCase().includes(query)
             )
             .map((tructor) => ({
                 id: tructor.id,
@@ -501,35 +502,55 @@ const onTructorSelect = (event) => {
     form.tructorId = event.value.id;
 };
 
-const trailerNameSearch = () => {
-    trailers.value = props.trailer.map((trailer) => ({
-        id: trailer.id,
-        name: trailer.license_plate,
-    }));
+const trailerNameSearch = (event) => {
+    const query = event.query.toLowerCase();
+
+    if (Array.isArray(props.trailer) && props.trailer.length > 0) {
+        trailers.value = props.trailer
+            .filter((trailer) =>
+                trailer.license_plate.toLowerCase().includes(query)
+            )
+            .map((trailer) => ({
+                id: trailer.id,
+                name: trailer.license_plate,
+            }));
+    }
 };
 
 const onTrailerSelect = (event) => {
     form.trailerId = event.value.id;
 };
 
-const driverNameSearch = () => {
-    driverName.value = props.drivers.map((driver) => ({
-        id: driver.id,
-        name: driver.fullname,
-    }));
+const driverNameSearch = (event) => {
+    const query = event.query.toLowerCase();
+
+    if (Array.isArray(props.drivers) && props.drivers.length > 0) {
+        driverName.value = props.drivers
+            .filter((driver) => driver.fullname.toLowerCase().includes(query))
+            .map((driver) => ({
+                id: driver.id,
+                name: driver.fullname,
+            }));
+    }
 };
 
 const onDriverSelect = (event) => {
     form.driverId = event.value.id;
 };
 
-const startLocSearch = () => {
-    startLoc.value = props.locations.map((stLoc) => ({
-        id: stLoc.id,
-        address: stLoc.address,
-        latitude: stLoc.latitude,
-        longitude: stLoc.longitude,
-    }));
+const startLocSearch = (event) => {
+    const query = event.query.toLowerCase();
+
+    if (Array.isArray(props.locations) && props.locations.length > 0) {
+        startLoc.value = props.locations
+            .filter((stLoc) => stLoc.address.toLowerCase().includes(query))
+            .map((stLoc) => ({
+                id: stLoc.id,
+                address: stLoc.address,
+                latitude: stLoc.latitude,
+                longitude: stLoc.longitude,
+            }));
+    }
 };
 
 const onStLocSelect = async (event) => {
@@ -538,13 +559,19 @@ const onStLocSelect = async (event) => {
     startLng.value = event.value.longitude;
 };
 
-const endLocSearch = () => {
-    endLoc.value = props.locations.map((endLoc) => ({
-        id: endLoc.id,
-        address: endLoc.address,
-        latitude: endLoc.latitude,
-        longitude: endLoc.longitude,
-    }));
+const endLocSearch = (event) => {
+    const query = event.query.toLowerCase();
+
+    if (Array.isArray(props.locations) && props.locations.length > 0) {
+        endLoc.value = props.locations
+            .filter((loc) => loc.address.toLowerCase().includes(query))
+            .map((loc) => ({
+                id: loc.id,
+                address: loc.address,
+                latitude: loc.latitude,
+                longitude: loc.longitude,
+            }));
+    }
 };
 
 const onEndLocSelect = (event) => {
@@ -553,27 +580,14 @@ const onEndLocSelect = (event) => {
     endLng.value = event.value.longitude;
 };
 
-const tripStatusSearch = () => {
-    tripStatus.value = ["Yet to start", "Completed", "Ongoing", "Cancelled"];
-};
+const tripStatusSearch = (event) => {
+    const query = event.query.toLowerCase();
 
-const fuelAmountSearch = () => {
-    const selectedVehicle = props.tructor.find((v) => v.id === form.tructorId);
+    const allStatuses = ["Yet to start", "Completed", "Ongoing", "Cancelled"];
 
-    if (selectedVehicle) {
-        fuelAmount.value = selectedVehicle.fuel_records.map((record) => ({
-            id: record.id,
-            cost: record.amount,
-            date: record.refueling_date,
-            display: `₱ ${record.amount} -- Refuel Date: ${record.refueling_date}`, // UI display value
-        }));
-    } else {
-        fuelAmount.value = []; // Clear if no vehicle found
-    }
-};
-
-const onFuelSelect = (event) => {
-    form.fuelId = event.value.id;
+    tripStatus.value = allStatuses.filter((status) =>
+        status.toLowerCase().includes(query)
+    );
 };
 
 const location = async () => {

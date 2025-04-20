@@ -161,9 +161,13 @@ use Inertia\Inertia;
     });
 
     Route::middleware('auth')->group(function () {
-        Route::get('/chat/{receiverId}', [ChatController::class, 'index'])->name('chat.index');
+
         Route::post('/chat/send', [ChatController::class, 'sendMessage'])->name('chat.send');
         Route::get('/chat/messages/{receiverId}', [ChatController::class, 'fetchMessages'])->name('chat.fetch');
+
+        Route::get('/chat/unread-counts', [ChatController::class, 'unreadCounts']);
+        Route::get('/chat/{receiverId}', [ChatController::class, 'index'])->name('chat.index');
+        Route::post('/chat/mark-as-read', [ChatController::class, 'markAsRead']);
     });
 
     Route::middleware(['web'])->group(function () {

@@ -369,10 +369,15 @@ const searchTrailer = (event) => {
 
 const searchCategory = (event) => {
     const query = event.query.toLowerCase();
-    categories.value = props.category.map((cat) => ({
-        id: cat.id,
-        name: cat.name,
-    }));
+
+    if (Array.isArray(props.category) && props.category.length > 0) {
+        categories.value = props.category
+            .filter((cat) => cat.name.toLowerCase().includes(query))
+            .map((cat) => ({
+                id: cat.id,
+                name: cat.name,
+            }));
+    }
 };
 
 const onCategorySelect = (event) => {

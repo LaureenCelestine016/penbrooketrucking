@@ -523,22 +523,38 @@ const submit = () => {
     });
 };
 
-const tructorNameSearch = () => {
-    tructors.value = props.tructor.map((tructor) => ({
-        id: tructor.id,
-        name: tructor.license_plate,
-    }));
+const tructorNameSearch = (event) => {
+    const query = event.query.toLowerCase();
+
+    if (Array.isArray(props.tructor) && props.tructor.length > 0) {
+        tructors.value = props.tructor
+            .filter((tructor) =>
+                tructor.license_plate.toLowerCase().includes(query)
+            )
+            .map((tructor) => ({
+                id: tructor.id,
+                name: tructor.license_plate,
+            }));
+    }
 };
 
 const onTructorSelect = (event) => {
     form.tructorId = event.value.id;
 };
 
-const trailerNameSearch = () => {
-    trailers.value = props.trailer.map((trailer) => ({
-        id: trailer.id,
-        name: trailer.license_plate,
-    }));
+const trailerNameSearch = (event) => {
+    const query = event.query.toLowerCase();
+
+    if (Array.isArray(props.trailer) && props.trailer.length > 0) {
+        trailers.value = props.trailer
+            .filter((trailer) =>
+                trailer.license_plate.toLowerCase().includes(query)
+            )
+            .map((trailer) => ({
+                id: trailer.id,
+                name: trailer.license_plate,
+            }));
+    }
 };
 
 const onTrailerSelect = (event) => {

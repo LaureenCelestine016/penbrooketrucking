@@ -194,6 +194,11 @@ const initLitersChart = () => {
 const updateLitersChart = () => {
     if (!litersChartInstance.value) return;
 
+    // Dynamically adjust chart height based on number of drivers
+    const chartHeight = litersByDriver.value.length * 28;
+    litersChartInstance.value.getDom().style.height = `${chartHeight}px`;
+    litersChartInstance.value.resize();
+
     const option = {
         tooltip: { trigger: "axis" },
         grid: {

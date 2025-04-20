@@ -792,7 +792,6 @@
 
                                     <div
                                         :class="[
-                                            'grid grid-cols-2 gap-10 ',
                                             form.hasErrors ? 'mt-3' : 'mt-6',
                                         ]"
                                     >
@@ -820,38 +819,6 @@
                                                     variant="simple"
                                                     >{{
                                                         form.errors.imei
-                                                    }}</Message
-                                                >
-                                            </FormField>
-                                        </div>
-                                        <div class="w-full">
-                                            <label
-                                                for="PMSMileage"
-                                                class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                                >Access Token
-                                            </label>
-                                            <FormField
-                                                id="manufacturer_year"
-                                                name="manufacturer_year"
-                                                class="flex flex-col gap-1"
-                                            >
-                                                <InputText
-                                                    id="manufacturer_year"
-                                                    type="text"
-                                                    placeholder="Access Token"
-                                                    v-model="form.accesToken"
-                                                />
-                                                <Message
-                                                    v-if="
-                                                        form.errors
-                                                            .nextPMSMileage
-                                                    "
-                                                    severity="error"
-                                                    size="small"
-                                                    variant="simple"
-                                                    >{{
-                                                        form.errors
-                                                            .nextPMSMileage
                                                     }}</Message
                                                 >
                                             </FormField>

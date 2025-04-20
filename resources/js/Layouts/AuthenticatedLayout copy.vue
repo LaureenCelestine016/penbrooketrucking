@@ -113,15 +113,15 @@
                                         </div>
 
                                         <!-- Chat Icon -->
-                                        <span class="relative">
-                                            💬
+                                        <span class="text-gray-400 text-base"
+                                            >💬
                                             <span
                                                 v-if="
                                                     unreadDrivers[driver.id] > 0
                                                 "
-                                                class="absolute -top-1 -right-1 h-3 w-3 bg-red-500 rounded-full border border-white"
-                                            ></span>
-                                        </span>
+                                                class="absolute top-0 right-0 h-2 w-2 bg-red-500 rounded-full"
+                                            ></span
+                                        ></span>
                                     </li>
                                 </ul>
                             </div>
@@ -504,7 +504,7 @@ const messages = ref([]);
 const message = ref("");
 const messagesContainer = ref(null);
 const unreadDrivers = ref({});
-const loading = ref(false);
+console.log(unreadDrivers.value);
 
 const totalUnread = computed(() => {
     return Object.values(unreadDrivers.value).reduce(
@@ -805,9 +805,8 @@ const openChat = (driver) => {
     showChatSidebar.value = false;
 };
 
-const closeChat = (chat) => {
-    chat.focused = false;
-    chat.unreadCount = 0; // Reset unread count when closed
+const closeChat = (driver) => {
+    activeChats.value = activeChats.value.filter((c) => c.id !== driver.id);
 };
 
 const getInitials = (firstName, lastName) => {
@@ -822,29 +821,26 @@ const sendMessage = async (chat = null) => {
     if (!msgText?.trim()) return;
 
     try {
-        // Send message to backend
         await axios.post("/chat/send", {
             receiver_id: targetId,
             message: msgText,
         });
 
-        // Update frontend chat for admin or driver
         if (isAdmin) {
             chat.messages.push({
                 from: "me",
                 text: msgText,
                 time: new Date().toLocaleTimeString(),
             });
-            chat.message = ""; // Clear input for admin
-            scrollToBottom(chat); // Optional: Scroll to the bottom for admin chat
+            chat.message = "";
         } else {
             messages.value.push({
                 from: "me",
                 text: msgText,
                 time: new Date().toLocaleTimeString(),
             });
-            message.value = ""; // Clear input for driver
-            scrollToBottom(); // Scroll to the bottom for driver chat
+            message.value = "";
+            scrollToBottom();
         }
     } catch (error) {
         console.error("Send failed:", error);
@@ -869,6 +865,7 @@ const fetchMessages = async (id = null, preventScroll = false) => {
             if (chat) {
                 const isNew =
                     JSON.stringify(chat.messages) !== JSON.stringify(msgs);
+                console.log(isNew);
 
                 if (isNew) {
                     // 🚨 Only count if not focused
@@ -900,30 +897,6 @@ const fetchMessages = async (id = null, preventScroll = false) => {
     }
 };
 
-const fetchUnreadCounts = async () => {
-    if (user.user_type === 1) {
-        try {
-            loading.value = true;
-            const response = await axios.get("/chat/unread-counts");
-            unreadDrivers.value = response.data;
-            console.log(unreadDrivers.value);
-
-            // Apply counts only to chats that are NOT focused
-            activeChats.value.forEach((chat) => {
-                if (!chat.focused) {
-                    chat.unreadCount = unreadDrivers.value[chat.id] || 0;
-                } else {
-                    chat.unreadCount = 0; // reset if chat is open
-                }
-            });
-        } catch (error) {
-            console.error("Failed to fetch unread counts", error);
-        } finally {
-            loading.value = false;
-        }
-    }
-};
-
 const scrollToBottom = (chat = null) => {
     nextTick(() => {
         if (chat) {
@@ -940,10 +913,6 @@ const scrollToBottom = (chat = null) => {
 };
 
 onMounted(() => {
-    setTimeout(() => {
-        fetchUnreadCounts();
-    }, 500); // 0.5s delay
-
     startPolling();
 
     window.Echo = new Echo({
@@ -963,8 +932,8 @@ onMounted(() => {
     });
 
     window.Echo.private(`chat.${currentUserId}`).listen("MessageSent", (e) => {
-        console.log("New message received:", e);
         if (user.user_type === 1) {
+            // For admin, check if the message is for one of the active chats
             const chat = activeChats.value.find((c) => c.id === e.sender.id);
             if (chat) {
                 chat.messages.push({
@@ -972,9 +941,9 @@ onMounted(() => {
                     text: e.message.message,
                     time: new Date(e.message.created_at).toLocaleTimeString(),
                 });
-                scrollToBottom(chat);
             }
         } else {
+            // For the driver, update their chat with the admin
             if (e.sender.id === adminId) {
                 messages.value.push({
                     from: "them",
@@ -987,27 +956,23 @@ onMounted(() => {
     });
 });
 
-const markAsRead = async (chat) => {
+const markAsRead = (chat, e) => {
     chat.unread = false;
     chat.focused = true;
-    unreadDrivers.value[chat.id] = 0;
-
-    try {
-        await axios.post(`/chat/mark-as-read`, { sender_id: chat.id });
-    } catch (e) {
-        console.error("Failed to mark as read", e);
-    }
 };
 
 const startPolling = () => {
-    pollingInterval = setInterval(() => {
-        activeChats.value.forEach((chat) => {
-            if (!chat.focused) {
-                fetchUnreadCounts();
-                fetchMessages(chat.id, true); // Prevent auto-scroll
-            }
-        });
-    }, 5000);
+    if (user.user_type === 1) {
+        pollingInterval = setInterval(() => {
+            activeChats.value.forEach((chat) => {
+                fetchMessages(chat.id, true); // pass true to prevent auto-scroll
+            });
+        }, 5000);
+    } else {
+        pollingInterval = setInterval(() => {
+            fetchMessages(adminId, true);
+        }, 5000);
+    }
 };
 
 const stopPolling = () => {
@@ -1020,11 +985,7 @@ const stopPolling = () => {
 const focusChat = (chat) => {
     chat.focused = true;
     chat.unread = false;
-    chat.unreadCount = 0; // Clear count
-    unreadDrivers.value[chat.id] = 0;
-
-    // Optionally mark messages as read on server
-    markAsRead(chat);
+    chat.unreadCount = 0;
 };
 
 onBeforeUnmount(() => {

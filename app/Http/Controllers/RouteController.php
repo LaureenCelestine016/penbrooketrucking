@@ -67,7 +67,6 @@ class RouteController extends Controller
             'trailerId'          => 'required|integer|exists:trailers,id',
             'startLocId'        => 'required|integer|exists:locations,id',
             'endLocId'          => 'required|integer|exists:locations,id',
-            'fuelId'            => 'required|integer|exists:fuel_records,id',
             'dateStart'         => 'required|date',
             'dateEnd'           => 'required|date',
             'status'            => 'required|string',
@@ -81,17 +80,12 @@ class RouteController extends Controller
             'driver_id'                  => $validatedData['driverId'],
             'start_location_id'          => $validatedData['startLocId'],
             'end_location_id'            => $validatedData['endLocId'],
-            'fuel_id'                    => $validatedData['fuelId'],
             'start_date'                 => $validatedData['dateStart'],
             'end_date'                   => $validatedData['dateEnd'],
             'distance_km'                => $validatedData['aproxKM'],
             'status'                     => $validatedData['status'],
 
         ]);
-
-        $fuel = Fuel_record::find($request->fuelId);
-        $fuel->is_used = 1;
-        $fuel->save();
 
         return redirect()->route('route')->with('success', 'Route created successfully!');
 
