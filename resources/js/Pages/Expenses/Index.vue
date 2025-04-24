@@ -385,6 +385,7 @@ const expensesData = ref({});
 const deleteExpensessDialog = ref(false);
 const deleteExpensesDialog = ref(false);
 const expensesDialog = ref(false);
+const dt = ref();
 
 const form = useForm({
     id: "",
@@ -504,6 +505,10 @@ const submit = () => {
 const filters = ref({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
 });
+
+const exportCSV = () => {
+    dt.value.exportCSV();
+};
 
 const getStatusLabel = (status) => {
     switch (status) {

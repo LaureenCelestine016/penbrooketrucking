@@ -19,13 +19,6 @@
                         :paginator="true"
                         :rows="5"
                         :filters="filters"
-                        :globalFilterFields="[
-                            'name.first',
-                            'name.middle',
-                            'name.last',
-                            'license_details.license_number',
-                            'status',
-                        ]"
                         paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                         :rowsPerPageOptions="[5, 10, 25]"
                         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} vehicles"
@@ -74,14 +67,11 @@
                             :exportable="false"
                         ></Column>
                         <Column
-                            field=""
+                            field="vehicle.license_plate"
                             header="Truck"
                             sortable
                             style="min-width: 9rem"
-                            ><template #body="slotProps">
-                                {{ slotProps.data.vehicle?.license_plate }}
-                            </template></Column
-                        >
+                        ></Column>
                         <Column
                             field=""
                             header="Driver"

@@ -36,13 +36,14 @@ class RouteController extends Controller
     {
 
         return Inertia::render('Route/Create', [
-            "tructor" => Vehicle::with(['fuelRecords' => function ($query) {
-                $query->where('is_used', 0) // Filter only unused fuel records
-                      ->orderBy('created_at', 'desc');
-            }])
-            ->where('status', 'Operational')
-            ->orderBy('created_at', 'desc')
-            ->get(['id', 'license_plate']),
+            // "tructor" => Vehicle::with(['fuelRecords' => function ($query) {
+            //     $query->where('is_used', 0) // Filter only unused fuel records
+            //           ->orderBy('created_at', 'desc');
+            // }])
+            // ->where('status', 'Operational')
+            // ->orderBy('created_at', 'desc')
+            // ->get(['id', 'license_plate']),
+            "tructor" =>  Vehicle::where('status','Operational')->orderBy('created_at', 'desc')->get(),
 
             "trailer" =>  Trailer::where('status','Operational')->orderBy('created_at', 'desc')->get(),
 

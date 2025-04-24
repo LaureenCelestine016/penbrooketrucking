@@ -1,6 +1,47 @@
 <template>
     <Head title="Dashboard" />
-    <Toast />
+    <Toast>
+        <template #message="slotProps">
+            <template v-if="slotProps.message.severity === 'warn'">
+                <div
+                    class="custom-toast"
+                    @click="
+                        handleToastClick(
+                            slotProps.message.data.truckId,
+                            slotProps.message.data.truckType
+                        )
+                    "
+                >
+                    <div class="toast-header">
+                        <i
+                            class="pi pi-exclamation-triangle text-yellow-500 mr-2"
+                        ></i>
+                        <span class="font-semibold text-yellow-600 flex-1">
+                            {{ slotProps.message.summary }}
+                        </span>
+                    </div>
+                    <div class="toast-content text-sm text-gray-700 mt-1">
+                        {{ slotProps.message.detail }}
+                    </div>
+                </div>
+            </template>
+            <template v-else>
+                <div class="toast-header">
+                    <i
+                        class="pi pi-check-circle text-green-500 text-lg mr-2"
+                    ></i>
+
+                    <span class="font-semibold text-green-600 flex-1">
+                        {{ slotProps.message.summary }}
+                    </span>
+                </div>
+                <div class="toast-content-success text-sm text-gray-700 mt-1">
+                    {{ slotProps.message.detail }}
+                </div>
+            </template>
+        </template>
+    </Toast>
+
     <AuthenticatedLayout>
         <!-- <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -444,7 +485,7 @@ import MaintenanceOverview from "../Pages/Dashboard/MaintenanceOverview.vue";
 import ExpensesChart from "../Pages/Dashboard/ExpensesChart.vue";
 import FuelChart from "../Pages/Dashboard/FuelChart.vue";
 import FuelChartDriver from "../Pages/Dashboard/FuelChartDriver.vue";
-import { ref, onMounted, onBeforeUnmount, watch } from "vue";
+import { ref, onMounted, onBeforeUnmount, watch, h, toRaw } from "vue";
 import { Head, usePage, router } from "@inertiajs/vue3";
 import AutoComplete from "primevue/autocomplete";
 
@@ -479,18 +520,26 @@ const formatNumber = (value) => {
 
 if (isAdmin) {
     onMounted(() => {
-        // Get notifications passed from Laravel
         const notifications = props.notification;
+
         notifications.forEach((notification) => {
             toast.add({
                 severity: "warn",
                 summary: "Vehicle Expiration Alert",
                 detail: notification.message,
-                life: 5000,
+                life: 8000,
+                data: {
+                    truckId: notification.vehicle_id ?? notification.trailer_id,
+                    truckType: notification.trailer_id === null ? "1" : "2",
+                },
             });
         });
     });
 }
+
+const handleToastClick = (id, type) => {
+    router.get(`/registration/edit/${id}/${type}`);
+};
 </script>
 
 <style scoped>
@@ -503,5 +552,19 @@ h3 {
     width: 100%;
     height: 100%;
     min-height: 300px;
+}
+
+.custom-toast {
+    cursor: pointer;
+    max-width: 400px;
+}
+
+.toast-header {
+    display: flex;
+    align-items: center;
+}
+
+.toast-content {
+    margin-left: 1.5rem; /* offset to align with icon */
 }
 </style>

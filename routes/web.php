@@ -35,6 +35,8 @@ use Inertia\Inertia;
         Route::get('/dashboard/fuel-stats', [DashboardController::class, 'getFuelStats'])->name('dashboard.getFuelStats');
 
         Route::get('/dashboard/driver/{id}', [DashboardController::class, 'driverDashboard'])->name('dashboard.driver');
+
+        Route::post('/admin/generate-key', [DashboardController::class, 'generateKey'])->name('admin.generate-key');
     });
 
     Route::middleware('auth')->group(function () {
@@ -136,6 +138,7 @@ use Inertia\Inertia;
         Route::get('/create', [TruckRegistrationController::class,'create'])->name('registration.create');
         Route::post('/store', [TruckRegistrationController::class,'store'])->name('registration.store');
         Route::put('/{id}', [TruckRegistrationController::class,'update'])->name('registration.update');
+        Route::get('/edit/{id}/{type}', [TruckRegistrationController::class,'edit'])->name('registration.edit');
     });
 
     Route::middleware('auth')->prefix('notification')->group(function () {

@@ -16,6 +16,20 @@
                     <!-- Desktop Right Menu -->
                     <div class="hidden sm:flex items-center gap-4">
                         <!-- Notification Bell -->
+                        <div>
+                            <form @submit.prevent="generateKey">
+                                <div
+                                    v-if="$page.props.auth.user.user_type === 1"
+                                    logi
+                                    class="inline-flex items-center justify-center w-8 h-8 bg-blue-900 hover:bg-blue-700 rounded-full cursor-pointer"
+                                    @click="generateKey"
+                                >
+                                    <i
+                                        class="pi pi-key text-white text-2xl"
+                                    ></i>
+                                </div>
+                            </form>
+                        </div>
 
                         <!-- Message Icon -->
                         <div v-if="$page.props.auth.user.user_type === 1">
@@ -231,6 +245,12 @@
                                         />
                                     </g>
                                 </svg>
+                                <span
+                                    v-if="unreadAdmin"
+                                    class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] leading-none px-1.5 py-0.5 rounded-full font-bold"
+                                >
+                                    ●
+                                </span>
                             </div>
                             <!-- Driver Chat Box -->
                             <div
@@ -343,9 +363,9 @@
                             </template>
 
                             <template #content>
-                                <DropdownLink :href="route('profile.edit')"
+                                <!-- <DropdownLink :href="route('profile.edit')"
                                     >Profile</DropdownLink
-                                >
+                                > -->
                                 <DropdownLink
                                     :href="route('logout')"
                                     method="post"
@@ -437,6 +457,27 @@
                 </div>
             </div>
         </nav>
+        <Dialog
+            v-model:visible="visible"
+            modal
+            header="Generated Key"
+            :style="{ width: '25rem' }"
+        >
+            <div class="flex items-center gap-2 mb-4">
+                <InputText
+                    id="generatedKey"
+                    v-model="generatedKey"
+                    class="flex-auto"
+                    readonly
+                />
+                <Button
+                    icon="pi pi-copy"
+                    class="p-button-secondary"
+                    @click="copyToClipboard"
+                    v-tooltip="'Copy to clipboard'"
+                />
+            </div>
+        </Dialog>
 
         <!-- Menu Bar -->
         <nav class="bg-white border-b border-gray-200">
@@ -485,11 +526,12 @@ import Dialog from "primevue/dialog";
 import axios from "axios";
 import Echo from "laravel-echo";
 import Pusher from "pusher-js";
+import InputText from "primevue/inputtext";
+import { useToast } from "primevue/usetoast";
 
 // Get the current authenticated user
 const user = usePage().props.auth.user;
 const currentUserId = user.id;
-// console.log(currentUserId);
 
 window.Pusher = Pusher;
 
@@ -505,6 +547,10 @@ const message = ref("");
 const messagesContainer = ref(null);
 const unreadDrivers = ref({});
 const loading = ref(false);
+const unreadAdmin = ref(false); // for drivers
+const visible = ref(false);
+const generatedKey = ref(""); // Assign this value when key is generated
+const toast = useToast();
 
 const totalUnread = computed(() => {
     return Object.values(unreadDrivers.value).reduce(
@@ -806,8 +852,10 @@ const openChat = (driver) => {
 };
 
 const closeChat = (chat) => {
-    chat.focused = false;
-    chat.unreadCount = 0; // Reset unread count when closed
+    const index = activeChats.value.findIndex((c) => c.id === chat.id);
+    if (index !== -1) {
+        activeChats.value.splice(index, 1); // Remove the chat box
+    }
 };
 
 const getInitials = (firstName, lastName) => {
@@ -871,7 +919,6 @@ const fetchMessages = async (id = null, preventScroll = false) => {
                     JSON.stringify(chat.messages) !== JSON.stringify(msgs);
 
                 if (isNew) {
-                    // 🚨 Only count if not focused
                     if (!chat.focused) {
                         chat.unread = true;
                         chat.unreadCount =
@@ -887,10 +934,14 @@ const fetchMessages = async (id = null, preventScroll = false) => {
         } else {
             const isNew =
                 JSON.stringify(messages.value) !== JSON.stringify(msgs);
-            messages.value = msgs;
 
-            if (isNew && !document.hasFocus()) {
-                // Add notification if needed
+            if (isNew) {
+                // 👇 Add this check to show badge only when chat is closed
+                if (!showChat.value) {
+                    unreadAdmin.value = true;
+                }
+
+                messages.value = msgs;
             }
 
             if (!preventScroll) scrollToBottom();
@@ -905,8 +956,7 @@ const fetchUnreadCounts = async () => {
         try {
             loading.value = true;
             const response = await axios.get("/chat/unread-counts");
-            unreadDrivers.value = response.data;
-            console.log(unreadDrivers.value);
+            unreadDrivers.value = response.data.counts; // access counts directly
 
             // Apply counts only to chats that are NOT focused
             activeChats.value.forEach((chat) => {
@@ -916,6 +966,9 @@ const fetchUnreadCounts = async () => {
                     chat.unreadCount = 0; // reset if chat is open
                 }
             });
+
+            // Wait for DOM updates to apply
+            await nextTick();
         } catch (error) {
             console.error("Failed to fetch unread counts", error);
         } finally {
@@ -924,15 +977,44 @@ const fetchUnreadCounts = async () => {
     }
 };
 
+const fetchUnreadFromAdmin = async () => {
+    if (user.user_type !== 1) {
+        try {
+            const res = await axios.get("/chat/unread-counts");
+            const count = res.data.from_admin || 0;
+
+            if (!showChat.value && count > 0) {
+                unreadAdmin.value = true;
+            } else {
+                unreadAdmin.value = false;
+            }
+        } catch (error) {
+            console.error("Failed to fetch driver's unread messages", error);
+        }
+    }
+};
+
+onMounted(() => {
+    setInterval(() => {
+        fetchUnreadCounts();
+    }, 5000); // every 5 seconds
+});
+
 const scrollToBottom = (chat = null) => {
     nextTick(() => {
         if (chat) {
             const containers = document.querySelectorAll(".chat-box");
-            const element = containers[chat.id];
+            const element =
+                containers[
+                    activeChats.value.findIndex((c) => c.id === chat.id)
+                ];
             if (element) {
-                element.scrollTop = element.scrollHeight;
+                const innerBox = element.querySelector(".messages-container"); // make sure this class exists
+                if (innerBox) {
+                    innerBox.scrollTop = innerBox.scrollHeight;
+                }
             }
-        } else {
+        } else if (messagesContainer.value) {
             messagesContainer.value.scrollTop =
                 messagesContainer.value.scrollHeight;
         }
@@ -941,8 +1023,12 @@ const scrollToBottom = (chat = null) => {
 
 onMounted(() => {
     setTimeout(() => {
-        fetchUnreadCounts();
-    }, 500); // 0.5s delay
+        fetchUnreadCounts(); // Admin unread counts
+    }, 500); // 0.5s delay for fetching admin unread counts
+
+    setTimeout(() => {
+        fetchUnreadFromAdmin(); // Driver unread count from admin
+    }, 500); // Ensure the driver gets updated too
 
     startPolling();
 
@@ -965,6 +1051,7 @@ onMounted(() => {
     window.Echo.private(`chat.${currentUserId}`).listen("MessageSent", (e) => {
         console.log("New message received:", e);
         if (user.user_type === 1) {
+            // Admin
             const chat = activeChats.value.find((c) => c.id === e.sender.id);
             if (chat) {
                 chat.messages.push({
@@ -972,15 +1059,24 @@ onMounted(() => {
                     text: e.message.message,
                     time: new Date(e.message.created_at).toLocaleTimeString(),
                 });
+                // Increment unread count for admin chat
+                if (!chat.focused) {
+                    chat.unreadCount = (chat.unreadCount || 0) + 1;
+                }
                 scrollToBottom(chat);
             }
         } else {
+            // Driver
             if (e.sender.id === adminId) {
                 messages.value.push({
                     from: "them",
                     text: e.message.message,
                     time: new Date(e.message.created_at).toLocaleTimeString(),
                 });
+                // Increment unread count for driver if chat is not focused
+                if (!document.hasFocus()) {
+                    unreadAdmin.value = true; // Trigger badge or notification for unread messages
+                }
                 scrollToBottom();
             }
         }
@@ -1030,6 +1126,32 @@ const focusChat = (chat) => {
 onBeforeUnmount(() => {
     stopPolling();
 });
+
+const generateKey = async () => {
+    try {
+        const response = await axios.post("/admin/generate-key");
+        generatedKey.value = response.data.key;
+        visible.value = true;
+    } catch (error) {
+        toast.add({
+            severity: "error",
+            summary: "Error",
+            detail: "Failed to generate key",
+            life: 2000,
+        });
+    }
+};
+
+const copyToClipboard = () => {
+    navigator.clipboard.writeText(generatedKey.value).then(() => {
+        toast.add({
+            severity: "success",
+            summary: "Copied!",
+            detail: "Key copied to clipboard",
+            life: 2000,
+        });
+    });
+};
 </script>
 
 <style scoped>

@@ -16,6 +16,8 @@ use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use App\Models\RegistrationKey;
+use Illuminate\Support\Str;
 
 class DashboardController extends Controller
 {
@@ -97,27 +99,40 @@ class DashboardController extends Controller
                     ];
                 });
 
-            $lastYearYTD = Fuel_record::whereYear('refueling_date', $lastYear)
+                $lastYearYTD = Fuel_record::whereYear('refueling_date', $lastYear)
                 ->sum('total_refuel');
 
             $currentYearYTD = Fuel_record::whereYear('refueling_date', $currentYear)
                 ->sum('total_refuel');
 
-            $totalGrowth = $lastYearYTD > 0
-                ? round((($currentYearYTD - $lastYearYTD) / $lastYearYTD) * 100, 2)
-                : null; // Avoid division by zero
+            // Safely calculate total growth percentage
+            $totalGrowth = null;
+            if ($lastYearYTD > 0) {
+                $totalGrowth = round((($currentYearYTD - $lastYearYTD) / $lastYearYTD) * 100, 2);
+            } elseif ($currentYearYTD > 0) {
+                // If there's no data last year but some this year, define it as 100% growth
+                $totalGrowth = 100;
+            } else {
+                $totalGrowth = 0; // No growth if both are zero
+            }
 
             $sameMonthLastYear = Fuel_record::whereYear('refueling_date', $lastYear)
                 ->whereMonth('refueling_date', $currentMonth)
                 ->sum('total_refuel');
 
-
-
             $currentMonthRefuel = Fuel_record::whereYear('refueling_date', $currentYear)
                 ->whereMonth('refueling_date', $currentMonth)
                 ->sum('total_refuel');
 
-            $monthlyGrowth = $currentMonthRefuel - $sameMonthLastYear;
+// Safely calculate monthly growth percentage
+            $monthlyGrowth = null;
+            if ($sameMonthLastYear > 0) {
+                $monthlyGrowth = round((($currentMonthRefuel - $sameMonthLastYear) / $sameMonthLastYear) * 100, 2);
+            } elseif ($currentMonthRefuel > 0) {
+                $monthlyGrowth = 100; // Considered 100% growth from 0
+            } else {
+                $monthlyGrowth = 0; // No growth if both are zero
+            }
 
             $notification = Notification::where('status', 'pending')->get();
             $notificationCount = Notification::where('status', 'pending')->count();
@@ -312,60 +327,72 @@ class DashboardController extends Controller
     }
 
     public function driverDashboard($driverId)
-{
-    $currentYear = date('Y');
-    $lastYear = $currentYear - 1;
+    {
+        $currentYear = date('Y');
+        $lastYear = $currentYear - 1;
 
-    $driver = Driver::findOrFail($driverId); // 🚨 make sure driver exists
+        $driver = Driver::findOrFail($driverId); // 🚨 make sure driver exists
 
-    $currentMonthStart = Carbon::now()->startOfMonth();
-    $currentMonthEnd = Carbon::now()->endOfMonth();
-    $lastMonthStart = Carbon::now()->subMonthNoOverflow()->startOfMonth();
-    $lastMonthEnd = Carbon::now()->subMonthNoOverflow()->endOfMonth();
+        $currentMonthStart = Carbon::now()->startOfMonth();
+        $currentMonthEnd = Carbon::now()->endOfMonth();
+        $lastMonthStart = Carbon::now()->subMonthNoOverflow()->startOfMonth();
+        $lastMonthEnd = Carbon::now()->subMonthNoOverflow()->endOfMonth();
 
-    $assignedRides = Route::where('driver_id', $driverId)->where('status', 'Yet to start')->count();
-    $onGoingRides = Route::where('driver_id', $driverId)->where('status', 'Ongoing')->count();
-    $completeRides = Route::where('driver_id', $driverId)->where('status', 'Completed')->count();
-    $cancelledRide = Route::where('driver_id', $driverId)->where('status', 'Cancelled')->count();
+        $assignedRides = Route::where('driver_id', $driverId)->where('status', 'Yet to start')->count();
+        $onGoingRides = Route::where('driver_id', $driverId)->where('status', 'Ongoing')->count();
+        $completeRides = Route::where('driver_id', $driverId)->where('status', 'Completed')->count();
+        $cancelledRide = Route::where('driver_id', $driverId)->where('status', 'Cancelled')->count();
 
-    $driverTruckUsed = Route::with('vehicle', 'trailer', 'startLocation', 'endLocation')
-        ->where('driver_id', $driverId)->where('status','Completed')->get();
+        $driverTruckUsed = Route::with('vehicle', 'trailer', 'startLocation', 'endLocation')
+            ->where('driver_id', $driverId)->where('status','Completed')->get();
 
-    $lastYearYTD = Fuel_record::where('driver_id', $driverId)->whereYear('refueling_date', $lastYear)
-        ->sum('total_refuel');
+        $lastYearYTD = Fuel_record::where('driver_id', $driverId)->whereYear('refueling_date', $lastYear)
+            ->sum('total_refuel');
 
-    $currentYearYTD = Fuel_record::where('driver_id', $driverId)->whereYear('refueling_date', $currentYear)
-        ->sum('total_refuel');
+        $currentYearYTD = Fuel_record::where('driver_id', $driverId)->whereYear('refueling_date', $currentYear)
+            ->sum('total_refuel');
 
-    $totalFuel = Fuel_record::where('driver_id', $driverId)->sum('total_refuel');
+        $totalFuel = Fuel_record::where('driver_id', $driverId)->sum('total_refuel');
 
-    $lastMonthTotalFuel = Fuel_record::where('driver_id', $driverId)
-        ->whereBetween('refueling_date', [$lastMonthStart, $lastMonthEnd])
-        ->sum('total_refuel');
+        $lastMonthTotalFuel = Fuel_record::where('driver_id', $driverId)
+            ->whereBetween('refueling_date', [$lastMonthStart, $lastMonthEnd])
+            ->sum('total_refuel');
 
-    $currentMonthTotalFuel = Fuel_record::where('driver_id', $driverId)
-        ->whereBetween('refueling_date', [$currentMonthStart, $currentMonthEnd])
-        ->sum('total_refuel');
+        $currentMonthTotalFuel = Fuel_record::where('driver_id', $driverId)
+            ->whereBetween('refueling_date', [$currentMonthStart, $currentMonthEnd])
+            ->sum('total_refuel');
 
-    return Inertia::render('Dashboard/DriverDashboard', [ // <- create this view
-        'driver' => $driver,
-        'driver_id' => $driverId,
-        'assignedRides' => $assignedRides,
-        'ongoingRides' => $onGoingRides,
-        'completedRides' => $completeRides ,
-        'cancelledRide' => $cancelledRide,
-        'driverTruckUsed' => $driverTruckUsed,
-        'fuelStats' => [
-           'lastYearYTD' => $lastYearYTD,
-           'currentYearYTD' => $currentYearYTD,
-           'totalFuel' => $totalFuel,
-        ],
-        'lastCurrentMonth' => [
-            'lastMonthTotalFuel' => $lastMonthTotalFuel,
-            'currentMonthTotalFuel' => $currentMonthTotalFuel
-        ]
-    ]);
-}
+        return Inertia::render('Dashboard/DriverDashboard', [ // <- create this view
+            'driver' => $driver,
+            'driver_id' => $driverId,
+            'assignedRides' => $assignedRides,
+            'ongoingRides' => $onGoingRides,
+            'completedRides' => $completeRides ,
+            'cancelledRide' => $cancelledRide,
+            'driverTruckUsed' => $driverTruckUsed,
+            'fuelStats' => [
+            'lastYearYTD' => $lastYearYTD,
+            'currentYearYTD' => $currentYearYTD,
+            'totalFuel' => $totalFuel,
+            ],
+            'lastCurrentMonth' => [
+                'lastMonthTotalFuel' => $lastMonthTotalFuel,
+                'currentMonthTotalFuel' => $currentMonthTotalFuel
+            ]
+        ]);
+    }
+
+    public function generateKey()
+    {
+
+        $key = Str::upper(Str::random(10));
+
+        $newKey = RegistrationKey::create([
+            'key' => $key,
+        ]);
+
+        return response()->json(['key' => $newKey->key]);
+    }
 
 }
 

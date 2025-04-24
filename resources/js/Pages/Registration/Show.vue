@@ -12,8 +12,11 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-md">
                 <form @submit.prevent="submit" class="p-6">
                     <div class="">
-                        <div class="flex flex-row gap-x-8 mb-6">
-                            <div class="flex items-center gap-2">
+                        <!-- <div class="flex flex-row gap-x-8 mb-6">
+                            <div
+                                v-if="truck === '1'"
+                                class="flex items-center gap-2"
+                            >
                                 <RadioButton
                                     v-model="truck"
                                     inputId="ingredient1"
@@ -22,7 +25,7 @@
                                 />
                                 <label for="ingredient1">TRACTOR HEAD</label>
                             </div>
-                            <div class="flex items-center gap-2">
+                            <div v-else class="flex items-center gap-2">
                                 <RadioButton
                                     v-model="truck"
                                     inputId="ingredient2"
@@ -31,9 +34,9 @@
                                 />
                                 <label for="ingredient2">TRAILER</label>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="grid grid-cols-2 gap-10 mb-6">
-                            <div class="w-full">
+                            <div v-if="truck === '1'" class="w-full">
                                 <label
                                     for="tructor"
                                     class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
@@ -47,20 +50,16 @@
                                     name="tructor"
                                     class="flex flex-col gap-1"
                                 >
-                                    <AutoComplete
-                                        id="tructor"
-                                        class="w-full"
-                                        :suggestions="tructors"
-                                        @complete="tructorNameSearch"
-                                        @item-select="onTructorSelect"
-                                        optionLabel="name"
-                                        dropdown
-                                        placeholder="Plate no."
-                                        :disabled="truck !== '1'"
+                                    <InputText
+                                        disabled=""
+                                        type="text"
+                                        placeholder="LTO Expired Date"
+                                        v-model="form.license_plate"
+                                        class="!bg-gray-50"
                                     />
                                 </FormField>
                             </div>
-                            <div class="w-full">
+                            <div v-else class="w-full">
                                 <label
                                     for="trailer"
                                     class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
@@ -74,16 +73,12 @@
                                     name="trailer"
                                     class="flex flex-col gap-1"
                                 >
-                                    <AutoComplete
-                                        id="trailer"
-                                        class="w-full"
-                                        :suggestions="trailers"
-                                        @complete="trailerNameSearch"
-                                        @item-select="onTrailerSelect"
-                                        optionLabel="name"
-                                        dropdown
-                                        placeholder="Plate no."
-                                        :disabled="truck !== '2'"
+                                    <InputText
+                                        disabled=""
+                                        type="text"
+                                        placeholder=""
+                                        v-model="form.license_plate"
+                                        class="!bg-gray-50"
                                     />
                                 </FormField>
                             </div>
@@ -133,7 +128,6 @@
                                                 :showOnFocus="false"
                                                 inputId="registrationExp"
                                                 placeholder="LTO Registration Date"
-                                                :disabled="!tructorId"
                                             />
                                             <Message
                                                 v-if="form.errors.lto_reg_date"
@@ -252,7 +246,6 @@
                                                     :showOnFocus="false"
                                                     inputId="conveyDate"
                                                     placeholder="Conveyance Date"
-                                                    :disabled="!tructorId"
                                                 />
                                             </div>
                                             <Message
@@ -382,7 +375,6 @@
                                                     :showOnFocus="false"
                                                     inputId="filcomFab"
                                                     placeholder="Filcom Fab Date"
-                                                    :disabled="!tructorId"
                                                 />
                                             </div>
                                             <Message
@@ -504,7 +496,6 @@
                                                     :showOnFocus="false"
                                                     inputId="LTFRBReg"
                                                     placeholder="LTFRB Date"
-                                                    :disabled="!tructorId"
                                                 />
                                             </div>
                                             <Message
@@ -1142,7 +1133,7 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head, router, useForm, usePage } from "@inertiajs/vue3";
-import { ref, watch, nextTick, computed } from "vue";
+import { ref, watch, nextTick, computed, onMounted } from "vue";
 import axios from "axios";
 
 import dayjs from "dayjs";
@@ -1158,20 +1149,25 @@ import Textarea from "primevue/textarea";
 import FileUpload from "primevue/fileupload";
 import Toast from "primevue/toast";
 import { useToast } from "primevue/usetoast";
+import { number } from "echarts";
 
 const props = defineProps({
     tructor: {
-        type: Array,
+        type: Object,
         required: true,
     },
     trailer: {
-        type: Array,
+        type: Object,
+        required: true,
+    },
+    truckType: {
+        type: Number,
         required: true,
     },
 });
 
 const toast = useToast();
-const truck = ref(""); // Tracks selected vehicle type
+const truck = ref(props.truckType); // Tracks selected vehicle type
 const tructors = ref([]);
 const trailers = ref([]);
 
@@ -1201,83 +1197,49 @@ const form = useForm({
     truckId: null,
 });
 
+// const isLtoTractorExpired = computed(() => {
+//     const selectedTractor = props.tructor.find((v) => v.id === tructorId.value);
+//     return selectedTractor ? selectedTractor.lto_is_Expired === 1 : false;
+// });
+
 const isLtoTractorExpired = computed(() => {
-    const selectedTractor = props.tructor.find((v) => v.id === tructorId.value);
-    return selectedTractor ? selectedTractor.lto_is_Expired === 1 : false;
+    return props.truckType == 1 && props.tructor?.lto_is_Expired === 1;
 });
 
 const isconveyanceExpired = computed(() => {
-    const selectedTractor = props.tructor.find((v) => v.id === tructorId.value);
-    return selectedTractor
-        ? selectedTractor.conveyance_is_Expired === 1
-        : false;
+    return props.truckType == 1 && props.tructor?.conveyance_is_Expired === 1;
 });
 
 const isFilcomExpired = computed(() => {
-    const selectedTractor = props.tructor.find((v) => v.id === tructorId.value);
-    return selectedTractor ? selectedTractor.filcon_is_Expired === 1 : false;
+    return props.truckType == 1 && props.tructor?.filcon_is_Expired === 1;
 });
 
 const isLftbExpired = computed(() => {
-    const selectedTractor = props.tructor.find((v) => v.id === tructorId.value);
-    return selectedTractor ? selectedTractor.ltfrb_is_Expired === 1 : false;
+    return props.truckType == 1 && props.tructor?.ltfrb_is_Expired === 1;
 });
 
 const isLtoTrailerExpired = computed(() => {
-    const selectedTrailer = props.trailer.find((v) => v.id === trailerId.value);
-    return selectedTrailer ? selectedTrailer.lto_is_Expired === 1 : false;
+    return props.truckType == 2 && props.trailer?.lto_is_Expired === 1;
 });
 
 const isCalibrationExpired = computed(() => {
-    const selectedTrailer = props.trailer.find((v) => v.id === trailerId.value);
-    return selectedTrailer
-        ? selectedTrailer.calibration_is_Expired === 1
-        : false;
+    return props.truckType == 2 && props.trailer.calibration_is_Expired === 1;
 });
 
 // Populate dropdowns
-const tructorNameSearch = (event) => {
-    const query = event.query.toLowerCase();
-
-    if (Array.isArray(props.tructor) && props.tructor.length > 0) {
-        tructors.value = props.tructor
-            .filter((tructor) =>
-                tructor.license_plate.toLowerCase().includes(query)
-            )
-            .map((tructor) => ({
-                id: tructor.id,
-                name: tructor.license_plate,
-            }));
-    }
-};
-
-const trailerNameSearch = (event) => {
-    const query = event.query.toLowerCase();
-
-    if (Array.isArray(props.trailer) && props.trailer.length > 0) {
-        trailers.value = props.trailer
-            .filter((trailer) =>
-                trailer.license_plate.toLowerCase().includes(query)
-            )
-            .map((trailer) => ({
-                id: trailer.id,
-                name: trailer.license_plate,
-            }));
-    }
-};
 
 // When a tractor is selected
 const onTructorSelect = async (event) => {
-    const selectedTractor = props.tructor.find((v) => v.id === event.value.id);
+    const selectedTractor = props.tructor;
 
     if (selectedTractor) {
-        tructorId.value = selectedTractor.id;
+        tructorId.value = selectedTractor.vehicle_id;
 
-        // Reset form and assign only the selected tractor
         Object.assign(
             form,
             useForm({
                 id: selectedTractor.id,
+                license_plate: selectedTractor.license_plate,
                 lto_reg_date: selectedTractor.lto_reg_date,
                 conveyance_date: selectedTractor.conveyance_date,
                 filcom_fab_date: selectedTractor.filcom_fab_date,
@@ -1292,13 +1254,13 @@ const onTructorSelect = async (event) => {
                 truckId: truck.value,
             })
         );
-        await nextTick(); // Ensures UI updates reactively
+        await nextTick(); // Make sure the UI updates
     }
 };
 
 // When a trailer is selected
 const onTrailerSelect = async (event) => {
-    const selectedTrailer = props.trailer.find((v) => v.id === event.value.id);
+    const selectedTrailer = props.trailer;
 
     if (selectedTrailer) {
         trailerId.value = selectedTrailer.id;
@@ -1308,6 +1270,7 @@ const onTrailerSelect = async (event) => {
             form,
             useForm({
                 id: selectedTrailer.id,
+                license_plate: selectedTrailer.license_plate,
                 lto_reg_date: selectedTrailer.lto_reg_date,
                 calibration_date: selectedTrailer.calibration_date,
                 lto_exp_date: selectedTrailer.lto_exp_date,
@@ -1351,6 +1314,11 @@ const submit = () => {
         },
     });
 };
+
+onMounted(() => {
+    onTructorSelect();
+    onTrailerSelect();
+});
 
 watch(
     () => form.lto_reg_date, // Only watch this field
@@ -1424,24 +1392,12 @@ watch(
 watch(truck, (newVal) => {
     if (newVal !== "1") {
         tructorId.value = "";
-        form.lto_reg_date = "";
-        form.lto_exp_date = "";
-        form.conveyance_date = "";
-        form.conveyance_exp_date = "";
-        form.filcom_fab_date = "";
-        form.filcon_exp_date = "";
-        form.ltfrb_reg_date = "";
-        form.ltfrb_exp_date = "";
 
         if (tructors.value.length > 0) {
             tructors.value[0].name = "";
         }
     } else if (newVal !== "2") {
         trailerId.value = "";
-        form.lto_reg_date = "";
-        form.lto_exp_date = "";
-        form.calibration_date = "";
-        form.calibration_exp_date = "";
 
         if (trailers.value.length > 0) {
             trailers.value[0].name = "";

@@ -1,372 +1,269 @@
 <template>
-    <Head title="Register" />
-    <Toast />
-    <div class="w-full h-16 border-b bg-navyblue">
-        <div class="flex h-full mx-12">
-            <div class="flex h-full items-center">
-                <h2 class="text-2xl font-bold tracking-widest text-white">
-                    Penbrooke Inc.
-                </h2>
-            </div>
-            <div class="grow h-100"></div>
-            <div class="flex gap-3 items-center flex-none h-full">
-                <Link
-                    v-if="$page.component === 'Auth/Register'"
-                    :href="route('login')"
-                    class="font-sans font-semibold hover:text-blue-50 text-blue-100"
-                    >Log in</Link
-                >
-            </div>
-        </div>
-    </div>
-    <div>
-        <div class="grid grid-cols-2 h-screen">
-            <div class="flex flex-col items-center justify-center">
-                <div class="card flex justify-center w-3/4">
-                    <form @submit.prevent="submit" class="form">
-                        <h2 class="font-semibold text-2xl text-slate-600 mb-6">
-                            Create your Account
-                        </h2>
+    <Head title="Admin Registration" />
+    <div
+        class="min-h-screen bg-gray-50 flex items-center justify-center py-6 px-4"
+    >
+        <div
+            class="flex flex-col md:flex-row bg-white shadow-xl rounded-3xl overflow-hidden w-full max-w-5xl"
+        >
+            <!-- Left Section with Stepper -->
+            <div class="w-full md:w-1/2 p-6 md:p-8">
+                <div class="text-center mb-4">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-2">
+                        Admin Account Setup
+                    </h2>
+                    <p class="text-gray-500 text-base px-1">
+                        Complete the form to create your admin account.
+                    </p>
+                </div>
 
-                        <!-- Full Name -->
-                        <div class="grid grid-cols-2 gap-5">
-                            <div class="w-full">
-                                <!-- First Name -->
-                                <label
-                                    for="vehicle_name"
-                                    class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                    >First name<span class="ml-1 text-red-400"
-                                        >*</span
-                                    ></label
-                                >
-                                <FormField
-                                    id="firstname"
-                                    name="firstName"
-                                    class="flex flex-col gap-1"
-                                >
-                                    <InputText
-                                        type="text"
-                                        placeholder="First Name"
-                                        class="user--input firstName"
-                                        v-model="form.firstName"
-                                    />
-                                    <Message
-                                        v-if="form.errors.firstName"
-                                        severity="error"
-                                        size="small"
-                                        variant="simple"
-                                        >{{ form.errors.firstName }}</Message
-                                    >
-                                </FormField>
-                            </div>
+                <Stepper v-model:value="activeStep" class="w-full">
+                    <form @submit.prevent="submit">
+                        <StepPanels class="stepClass">
+                            <!-- Step 1 -->
+                            <StepPanel :value="1" v-slot="{ activateCallback }">
+                                <div class="flex flex-col gap-4 px-1">
+                                    <div class="flex flex-row justify-between">
+                                        <div class="flex flex-col gap-1">
+                                            <label
+                                                class="text-gray-700 font-medium"
+                                                >First Name</label
+                                            >
+                                            <InputText
+                                                v-model="form.firstname"
+                                                placeholder="First name"
+                                                class="w-[205px]"
+                                            />
+                                        </div>
+                                        <div class="flex flex-col gap-1">
+                                            <label
+                                                class="text-gray-700 font-medium"
+                                                >Last Name</label
+                                            >
+                                            <InputText
+                                                v-model="form.lastname"
+                                                placeholder="Last name"
+                                                class="w-[205px]"
+                                            />
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="flex flex-col gap-1">
+                                            <label
+                                                class="text-gray-700 font-medium"
+                                                >Admin Access Key</label
+                                            >
+                                            <InputText
+                                                v-model="form.access_key"
+                                                placeholder="Enter your Admin Access Key"
+                                                class="w-full"
+                                            />
+                                        </div>
+                                    </div>
 
-                            <!-- Last Name -->
-                            <div class="w-full">
-                                <label
-                                    for="vehicle_name"
-                                    class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
-                                    >Last name<span class="ml-1 text-red-400"
-                                        >*</span
-                                    ></label
-                                >
-                                <FormField
-                                    id="lastname"
-                                    name="lastName"
-                                    class="flex flex-col gap-1 justify-end"
-                                >
-                                    <InputText
-                                        type="text"
-                                        placeholder="Last Name"
-                                        v-model="form.lastName"
-                                        class="user--input lastName"
-                                    />
-                                    <Message
-                                        v-if="form.errors.lastName"
-                                        severity="error"
-                                        size="small"
-                                        variant="simple"
-                                        >{{ form.errors.lastName }}</Message
-                                    >
-                                </FormField>
-                            </div>
-                        </div>
+                                    <div class="flex flex-col gap-1">
+                                        <label class="text-gray-700 font-medium"
+                                            >Email Address</label
+                                        >
+                                        <InputText
+                                            v-model="form.email"
+                                            placeholder="Enter admin email"
+                                            class="w-full"
+                                        />
+                                    </div>
 
-                        <!-- Mobile Number -->
-                        <FormField
-                            name="mobileNumber"
-                            class="flex flex-col gap-1"
-                        >
-                            <label
-                                for="mobile_number"
-                                class="text-sm text-slate-800"
-                                >Mobile number</label
-                            >
-                            <span class="text-xs text-slate-500"
-                                >e.g. +63917XXXXXXXX</span
-                            >
-                            <InputText
-                                id="mobile_number"
-                                type="text"
-                                placeholder="+63"
-                                v-model="form.mobileNumber"
-                                class="user--input"
-                            />
-                            <Message
-                                v-if="form.errors.mobileNumber"
-                                severity="error"
-                                size="small"
-                                variant="simple"
-                                >{{ form.errors.mobileNumber }}</Message
-                            >
-                        </FormField>
+                                    <div class="flex justify-between mt-2">
+                                        <Button
+                                            label="Back"
+                                            severity="secondary"
+                                            icon="pi pi-arrow-left"
+                                            :disabled="activeStep"
+                                        />
+                                        <Button
+                                            label="Next"
+                                            icon="pi pi-arrow-right"
+                                            iconPos="right"
+                                            @click="activateCallback(2)"
+                                        />
+                                    </div>
+                                </div>
+                            </StepPanel>
 
-                        <!-- Email -->
-                        <FormField name="email" class="flex flex-col gap-1">
-                            <label
-                                for="emailaddress"
-                                class="text-sm mb-1 text-slate-800"
-                                >Email address</label
-                            >
-                            <InputText
-                                id="emailaddress"
-                                type="text"
-                                placeholder="johndoe@example.com"
-                                v-model="form.email"
-                                class="user--input"
-                            />
-                            <Message
-                                v-if="form.errors.email"
-                                severity="error"
-                                size="small"
-                                variant="simple"
-                                >{{ form.errors.email }}</Message
-                            >
-                        </FormField>
+                            <!-- Step 2 -->
+                            <StepPanel :value="2" v-slot="{ activateCallback }">
+                                <div class="flex flex-col gap-4 px-1">
+                                    <div class="flex flex-col gap-1">
+                                        <label class="text-gray-700 font-medium"
+                                            >Mobile Number</label
+                                        >
+                                        <InputText
+                                            v-model="form.mobile"
+                                            placeholder="09*********"
+                                            class="w-full"
+                                        />
+                                    </div>
+                                    <div class="flex flex-col gap-1">
+                                        <label class="text-gray-700 font-medium"
+                                            >Username</label
+                                        >
+                                        <InputText
+                                            v-model="form.username"
+                                            placeholder="Choose a username"
+                                            class="w-full"
+                                        />
+                                    </div>
 
-                        <!-- Username -->
-                        <FormField name="username" class="flex flex-col gap-1">
-                            <label
-                                for="license"
-                                class="text-sm mb-1 text-slate-800"
-                                >Username</label
-                            >
-                            <InputText
-                                id="license"
-                                type="text"
-                                placeholder="Username"
-                                v-model="form.username"
-                                class="user--input"
-                            />
-                            <Message
-                                v-if="form.errors.username"
-                                severity="error"
-                                size="small"
-                                variant="simple"
-                                >{{ form.errors.username }}</Message
-                            >
-                        </FormField>
+                                    <div class="flex flex-row justify-between">
+                                        <div class="flex flex-col gap-1">
+                                            <label
+                                                class="text-gray-700 font-medium"
+                                                >Password</label
+                                            >
+                                            <InputText
+                                                v-model="form.password"
+                                                type="password"
+                                                placeholder="Password"
+                                                class="w-full"
+                                            />
+                                        </div>
+                                        <div class="flex flex-col gap-1">
+                                            <label
+                                                class="text-gray-700 font-medium"
+                                                >Confirm Password</label
+                                            >
+                                            <InputText
+                                                v-model="
+                                                    form.password_confirmation
+                                                "
+                                                type="password"
+                                                placeholder="Confirm Password"
+                                                class="w-full"
+                                            />
+                                        </div>
+                                    </div>
 
-                        <!-- Password -->
-                        <FormField name="password" class="flex flex-col gap-1">
-                            <label
-                                for="password"
-                                class="text-sm mb-1 text-slate-800"
-                                >Password</label
-                            >
-                            <Password
-                                id="password"
-                                name="password"
-                                placeholder="••••••••••"
-                                v-model="form.password"
-                                :feedback="false"
-                                toggleMask
-                                fluid
-                                class="user--input"
-                            />
-                            <Message
-                                v-if="form.errors.password"
-                                severity="error"
-                                size="small"
-                                variant="simple"
-                                >{{ form.errors.password }}</Message
-                            >
-                        </FormField>
-
-                        <FormField name="password" class="flex flex-col gap-1">
-                            <label
-                                for="password"
-                                class="text-sm mb-1 text-slate-800"
-                                >Confirm Password</label
-                            >
-                            <Password
-                                id="password"
-                                name="password"
-                                placeholder="••••••••••"
-                                v-model="form.password_confirmation"
-                                :feedback="false"
-                                toggleMask
-                                fluid
-                                class="user--input"
-                            />
-                            <Message
-                                v-if="form.errors.password_confirmation"
-                                severity="error"
-                                size="small"
-                                variant="simple"
-                                >{{
-                                    form.errors.password_confirmation
-                                }}</Message
-                            >
-                        </FormField>
-
-                        <!-- Submit Button -->
-                        <Button
-                            type="submit"
-                            label="Sign up"
-                            class="btn-submit"
-                        />
+                                    <div class="flex justify-between mt-2">
+                                        <Button
+                                            label="Back"
+                                            severity="secondary"
+                                            icon="pi pi-arrow-left"
+                                            @click="activateCallback(1)"
+                                        />
+                                        <Button
+                                            label="Register as Admin"
+                                            type="submit"
+                                            icon="pi pi-check"
+                                        />
+                                    </div>
+                                </div>
+                            </StepPanel>
+                        </StepPanels>
                     </form>
+                </Stepper>
+
+                <p class="text-center text-gray-600 text-base">
+                    Already an admin?
+                    <Link
+                        :href="route('login')"
+                        class="text-primary font-semibold"
+                    >
+                        Log in here
+                    </Link>
+                </p>
+            </div>
+
+            <!-- Right Section -->
+            <div
+                class="hidden md:flex w-1/2 relative items-center justify-center gradient-section"
+            >
+                <img
+                    src="/blog-02-01-22.jpg"
+                    alt="Admin Dashboard Illustration"
+                    class="absolute inset-0 w-full h-full object-cover"
+                />
+                <div class="absolute inset-0 animated-gradient"></div>
+                <div class="text-center text-white z-10 max-w-xs">
+                    <h3 class="text-3xl font-semibold mb-4">
+                        Penbrooke Administrator Access Portal
+                    </h3>
+                    <p class="text-lg">
+                        Efficiently oversee users, fleet operations, and system
+                        settings with your administrator account.
+                    </p>
                 </div>
             </div>
-            <div id="map" class="w-full"></div>
         </div>
     </div>
 </template>
 
 <script setup>
+import { ref } from "vue";
 import { Head, Link, useForm } from "@inertiajs/vue3";
-import { onMounted, ref } from "vue";
-import L from "leaflet";
-
-import { FormField } from "@primevue/forms";
 import InputText from "primevue/inputtext";
-import { useToast } from "primevue/usetoast";
-import Message from "primevue/message";
-import Password from "primevue/password";
 import Button from "primevue/button";
-const toast = useToast();
+import Dropdown from "primevue/dropdown";
+import Stepper from "primevue/stepper";
+import Step from "primevue/step";
+import StepList from "primevue/steplist";
+import StepPanels from "primevue/steppanels";
+import StepPanel from "primevue/steppanel";
+
+const activeStep = ref(1);
 
 const form = useForm({
-    firstName: "",
-    lastName: "",
-    email: "",
-    mobileNumber: "",
+    access_key: "",
+    firstname: "",
+    lastname: "",
+    mobile: "",
     username: "",
     password: "",
+    email: "",
     password_confirmation: "",
-    userType: 1,
 });
 
-const trimFormFields = () => {
-    for (const key in form) {
-        if (typeof form[key] === "string") {
-            form[key] = form[key].trim();
-        }
-    }
+const submit = () => {
+    form.post(route("register"), {
+        onSuccess: () => form.reset("password", "password_confirmation"),
+    });
 };
 
-// const submit = () => {
-//     trimFormFields();
-
-//     form.post(route("register"), {
-//         onSuccess: () => {
-//             toast.add({
-//                 severity: "success",
-//                 summary: "Success",
-//                 detail: "Account created successfully!",
-//                 life: 3000,
-//             });
-//             form.reset("password", "password_confirmation");
-//         },
-//         onError: () => {
-//             toast.add({
-//                 severity: "error",
-//                 summary: "Error",
-//                 detail: "There were errors in your form submission.",
-//                 life: 3000,
-//             });
-//         },
-//         onFinish: () => {},
-//     });
-// };
-
-const location = () => {
-    const map = ref(null);
-
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            function (position) {
-                const { latitude } = position.coords;
-                const { longitude } = position.coords;
-
-                // const coords = [latitude, longitude];
-                const coords = ["13.782294521077622", "122.9807388708657"];
-
-                // Initialize the map
-                map.value = L.map("map").setView(coords, 13);
-
-                // Add a tile layer to the map
-                L.tileLayer(
-                    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                ).addTo(map.value);
-
-                // Add a marker to the map
-                L.marker(coords)
-                    .addTo(map.value)
-                    .bindPopup("You are here!")
-                    .openPopup();
-            },
-            function () {
-                alert(`Could not get your position`);
-            }
-        );
-    }
+const stepIconClass = (value, active) => {
+    return [
+        "rounded-full border-2 w-10 h-10 flex items-center justify-center",
+        value <= active
+            ? "bg-primary text-white border-primary"
+            : "border-gray-300",
+    ];
 };
-
-onMounted(() => {
-    location();
-});
 </script>
+
 <style scoped>
-.form {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    width: 100%;
+.animated-gradient {
+    background: linear-gradient(
+        to right,
+        rgba(0, 102, 204, 0.8),
+        rgba(0, 76, 153, 0.8),
+        rgba(0, 51, 102, 0.8),
+        rgba(0, 153, 255, 0.8)
+    );
+    background-size: 200% 100%;
+    animation: gradientBG 6s ease infinite;
 }
 
-.user--input {
-    height: 48px;
-    background-color: #f8f9fa;
+@keyframes gradientBG {
+    0% {
+        background-position: 0% 0;
+    }
+    50% {
+        background-position: 100% 0;
+    }
+    100% {
+        background-position: 0% 0;
+    }
 }
 
-.label-fullname {
-    font-size: 14px;
-    line-height: 20px;
-    margin-bottom: 8px !important;
-}
-
-/* .firstName {
-    width: 139% !important;
-} */
-
-/* .lastName {
-    width: 139% !important;
-} */
-
-.btn-submit {
-    background-color: #213555;
+.step-button {
+    background: transparent;
     border: none;
-    margin-top: 14px;
-    color: rgb(219 234 254);
-    height: 52px;
-    font-weight: 900;
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 18px;
-}
-
-.btn-submit:hover {
-    background-color: rgb(41, 71, 167) !important;
-    border: none !important;
 }
 </style>

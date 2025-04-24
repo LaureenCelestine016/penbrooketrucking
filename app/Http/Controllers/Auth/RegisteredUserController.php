@@ -14,6 +14,9 @@ use Illuminate\Validation\Rules;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Validation\Rules\Password;
+use Illuminate\Support\Facades\DB;
+use App\Models\Driver;
+use App\Models\RegistrationKey;
 
 class RegisteredUserController extends Controller
 {
@@ -33,27 +36,37 @@ class RegisteredUserController extends Controller
     public function store(Request $request): RedirectResponse
     {
 
-        $request->validate([
-            'firstName' => ['required', 'string', 'max:255'],
-            'lastName' => ['required', 'string', 'max:255'],
-            'mobileNumber' => ['nullable', 'string', 'regex:/^\+63\d{10}$/', 'unique:users,mobile_number'], // Ensure uniqueness
-            'username' => ['nullable', 'string', 'max:255', 'unique:'.User::class],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
+        $validated = $request->validate([
+            'firstname' => ['required', 'string', 'max:255'],
+            'lastname' => ['required', 'string', 'max:255'],
+            'username' => ['required', 'string', 'max:255', 'unique:users'],
+            'mobile' => ['required', 'string', 'regex:/^\d{10,15}$/'],
+            'email' => ['nullable', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'confirmed', Password::min(8)],
+            'access_key' => ['required', 'exists:registration_keys,key'], // ✅ Fix here
         ]);
 
+        $key = RegistrationKey::where('key', $validated['access_key'])
+            ->where('used', false)
+            ->first();
+
+        if (!$key) {
+            return back()->withErrors(['access_key' => 'Invalid or already used registration key.']);
+        }
+
+        $key->update(['used' => true]);
+
         $user = User::create([
-            'first_name' => $request->firstName,
-            'last_name' => $request->lastName,
-            'mobile_number' => $request->mobileNumber,
-            'username' => $request->username,
-            'email' => $request->email,
-            'user_type' => $request->userType,
-            'password' => Hash::make($request->password),
+            'first_name' => $validated['firstname'],
+            'last_name' => $validated['lastname'],
+            'username' => $validated['username'],
+            'email' => $validated['email'] ?? null,
+            'mobile_number' => $validated['mobile'],
+            'user_type' => 1, // Admin role
+            'password' => Hash::make($validated['password']),
         ]);
 
         event(new Registered($user));
-
         Auth::login($user);
 
         return redirect(RouteServiceProvider::HOME);

@@ -71,12 +71,14 @@
                     />
                 </form>
 
-                <!-- <p class="text-center mt-4 text-gray-600">
+                <p class="text-center mt-4 text-gray-600">
                     Don't have an account?
-                    <a href="#" class="text-primary font-semibold"
+                    <a
+                        :href="route('register')"
+                        class="text-primary font-semibold"
                         >Create one</a
                     >
-                </p> -->
+                </p>
             </div>
 
             <!-- Right Section with Gradient Animation -->

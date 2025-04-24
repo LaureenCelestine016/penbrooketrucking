@@ -1511,10 +1511,7 @@
                             :style="{ width: '80rem', height: '50rem' }"
                             :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
                         >
-                            <div
-                                id="map"
-                                style="height: 550px; width: 100%"
-                            ></div>
+                            <div id="map" style="height: 550px; width: 100%" />
                         </Dialog>
                     </div>
                 </div>
@@ -1525,8 +1522,9 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head, useForm, router } from "@inertiajs/vue3";
-import { onMounted, ref, watch } from "vue";
+import { onMounted, ref, watch, onBeforeUnmount } from "vue";
 import L from "leaflet";
+import axios from "axios";
 // import { CustomerService } from "@/service/CustomerService";
 
 import dayjs from "dayjs";
@@ -1553,8 +1551,13 @@ const toast = useToast();
 const vehicleStatus = ref([]);
 const visible = ref(false);
 const map = ref(null);
-const location = ref(null);
+const marker = ref(null);
+const location = ref({ lat: 0, lng: 0 });
 const loading = ref(false);
+const previousCoords = ref([]); // 🧭 for route trail
+const routeLine = ref(null);
+const endMarker = ref(null); // ✅ Add this
+let intervalId = null;
 
 const props = defineProps({
     Vehicle: {
@@ -1580,6 +1583,25 @@ const props = defineProps({
     },
 });
 
+const truckIcon = L.icon({
+    iconUrl: "/storage/images/trucks.png",
+    iconSize: [50, 50], // size of the icon
+    iconAnchor: [20, 40], // point of the icon which will correspond to marker's location
+    popupAnchor: [0, -40], // point from which the popup should open relative to the iconAnchor
+});
+
+const startIcon = L.icon({
+    iconUrl: "https://cdn-icons-png.flaticon.com/64/2776/2776067.png",
+    iconSize: [20, 20],
+    iconAnchor: [15, 30],
+});
+
+const endIcon = L.icon({
+    iconUrl: "https://cdn-icons-png.flaticon.com/64/2776/2776061.png",
+    iconSize: [20, 20],
+    iconAnchor: [15, 30],
+});
+
 const form = useForm({
     ...props.Vehicle,
     // Bind all vehicle fields to the form
@@ -1587,13 +1609,9 @@ const form = useForm({
 
 const openModal = async () => {
     visible.value = true;
-    loading.value = true;
 
     try {
         const tokenResponse = await axios.post("/vehicle/get-token");
-
-        console.log("Token response:", tokenResponse.data); // Debug line
-
         const accessToken = tokenResponse.data.accessToken;
 
         if (!accessToken) {
@@ -1602,22 +1620,24 @@ const openModal = async () => {
         }
 
         await getTruckLocation(accessToken);
+
+        intervalId = setInterval(() => {
+            getTruckLocation(accessToken);
+        }, 5000);
     } catch (error) {
         console.error("Token fetch error:", error);
         alert("Failed to retrieve access token");
-    } finally {
-        loading.value = false;
     }
 };
 
 const getTruckLocation = async (accessToken) => {
     const imei = props.Vehicle.imei;
+
     try {
         const response = await axios.post("/vehicle/get-location", {
             accessToken,
             imei,
         });
-        console.log("Full location response:", response.data);
 
         const item = response.data?.location?.[0];
         if (!item) {
@@ -1625,36 +1645,118 @@ const getTruckLocation = async (accessToken) => {
             return;
         }
 
-        location.value = {
-            lat: item.lat,
-            lng: item.lng,
-        };
+        const lat = parseFloat(item.lat);
+        const lng = parseFloat(item.lng);
+        const speed = parseFloat(item.speed || 0);
 
-        setTimeout(() => {
-            initMap(item.lat, item.lng);
-        }, 100);
+        location.value = { lat, lng };
+        previousCoords.value.push([lat, lng]);
+
+        // Initial map setup
+        if (!map.value) {
+            initMap(lat, lng);
+        }
+
+        // Add start marker
+        if (previousCoords.value.length === 1) {
+            L.marker([lat, lng], { icon: startIcon })
+                .addTo(map.value)
+                .bindPopup("Start");
+        }
+
+        // Update truck marker
+        if (!marker.value) {
+            marker.value = L.marker([lat, lng], { icon: truckIcon }).addTo(
+                map.value
+            );
+        } else {
+            marker.value.setLatLng([lat, lng]);
+        }
+
+        // Pan to current location
+        map.value.panTo([lat, lng]);
+
+        // Update or create end marker
+        if (!endMarker.value) {
+            endMarker.value = L.marker([lat, lng], { icon: endIcon })
+                .addTo(map.value)
+                .bindPopup("Current Location");
+        } else {
+            endMarker.value.setLatLng([lat, lng]);
+        }
+
+        // Draw colored segment from previous point
+        if (previousCoords.value.length >= 2) {
+            const [prevLat, prevLng] =
+                previousCoords.value[previousCoords.value.length - 2];
+            const color = speed < 5 ? "red" : "blue";
+
+            L.polyline(
+                [
+                    [prevLat, prevLng],
+                    [lat, lng],
+                ],
+                {
+                    color,
+                    weight: 5,
+                }
+            ).addTo(map.value);
+        }
+
+        // Total distance (console)
+        let totalDistance = 0;
+        for (let i = 1; i < previousCoords.value.length; i++) {
+            const [lat1, lon1] = previousCoords.value[i - 1];
+            const [lat2, lon2] = previousCoords.value[i];
+            totalDistance += getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2);
+        }
+
+        console.log(`Total Distance: ${totalDistance.toFixed(2)} km`);
     } catch (error) {
         console.error("Failed to get location:", error);
-        alert("Error getting location");
     }
 };
 
 const initMap = (lat, lng) => {
-    if (map.value) {
-        map.value.remove();
-    }
-
     map.value = L.map("map").setView([lat, lng], 15);
 
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         attribution: "&copy; OpenStreetMap contributors",
     }).addTo(map.value);
-
-    L.marker([lat, lng])
-        .addTo(map.value)
-        .bindPopup("Truck Location")
-        .openPopup();
 };
+
+const getDistanceFromLatLonInKm = (lat1, lon1, lat2, lon2) => {
+    const R = 6371; // km
+    const dLat = ((lat2 - lat1) * Math.PI) / 180;
+    const dLon = ((lon2 - lon1) * Math.PI) / 180;
+    const a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos((lat1 * Math.PI) / 180) *
+            Math.cos((lat2 * Math.PI) / 180) *
+            Math.sin(dLon / 2) *
+            Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+};
+
+watch(visible, (val) => {
+    if (!val) {
+        if (intervalId) {
+            clearInterval(intervalId);
+            intervalId = null;
+        }
+
+        if (map.value) {
+            map.value.remove();
+            map.value = null;
+        }
+
+        marker.value = null;
+        endMarker.value = null;
+        previousCoords.value = [];
+        routeLine.value = null;
+    }
+});
 
 const submit = () => {
     form.put(route("vehicle.update", props.Vehicle.id), {
@@ -1677,36 +1779,6 @@ const submit = () => {
             });
         },
     });
-};
-
-const getLocation = () => {
-    const imei = props.Vehicle.imei;
-    const accessToken = props.Vehicle.token;
-
-    router.post(
-        "/vehicle/location",
-        { accessToken, imei },
-        {
-            preserveScroll: true,
-            preserveState: true,
-            onSuccess: (page) => {
-                if (page.props.location) {
-                    locationData.value = JSON.stringify(
-                        page.props.location,
-                        null,
-                        2
-                    );
-                    errorMessage.value = null; // Clear any previous errors
-                } else {
-                    errorMessage.value = "No location data returned.";
-                }
-            },
-            onError: () => {
-                errorMessage.value = "Failed to get location data.";
-                locationData.value = null;
-            },
-        }
-    );
 };
 
 const statusSearch = () => {

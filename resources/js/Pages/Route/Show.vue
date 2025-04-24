@@ -284,7 +284,9 @@
 
                             <div class="h-[600px] p-2">
                                 <div class="border p-1 overflow-hidden">
+                                    <div v-if="isLoading">Loading map...</div>
                                     <div
+                                        v-else
                                         id="map"
                                         style="
                                             width: 100%;
@@ -303,7 +305,7 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head, useForm, router } from "@inertiajs/vue3";
-import { ref, watch, nextTick, onMounted } from "vue";
+import { ref, watch, nextTick, onMounted, onUnmounted } from "vue";
 import L from "leaflet";
 import "leaflet-routing-machine";
 import dayjs from "dayjs";
@@ -332,6 +334,12 @@ const driverName = ref([]);
 const toast = useToast();
 const map = ref(null);
 const marker = ref(null);
+const endMarker = ref(null);
+const previousCoords = ref([]);
+const location = ref(null);
+const routeLine = ref(null);
+const isLoading = ref(true);
+let intervalId = null;
 const secondMarker = ref(null);
 const routingControl = ref(null);
 const startLat = ref(props.route.start_location.latitude);
@@ -343,67 +351,182 @@ const form = useForm({
     ...props.route,
 });
 
-const location = async () => {
-    const mapContainer = document.getElementById("map");
-    if (!mapContainer) {
-        console.error("Map container not found!"); // Debugging log
+const truckIcon = L.icon({
+    iconUrl: "/storage/images/trucks.png",
+    iconSize: [50, 50], // size of the icon
+    iconAnchor: [20, 40], // point of the icon which will correspond to marker's location
+    popupAnchor: [0, -40], // point from which the popup should open relative to the iconAnchor
+});
+
+const startIcon = L.icon({
+    iconUrl: "https://cdn-icons-png.flaticon.com/64/2776/2776067.png",
+    iconSize: [20, 20],
+    iconAnchor: [15, 30],
+});
+
+const endIcon = L.icon({
+    iconUrl: "https://cdn-icons-png.flaticon.com/64/2776/2776061.png",
+    iconSize: [20, 20],
+    iconAnchor: [15, 30],
+});
+
+const getToken = async () => {
+    try {
+        const tokenResponse = await axios.post("/vehicle/get-token");
+        const accessToken = tokenResponse.data.accessToken;
+        console.log(accessToken);
+
+        if (!accessToken) {
+            alert("Access token is missing.");
+            return;
+        }
+
+        // Initial fetch
+        await getTruckLocation(accessToken);
+
+        // Polling every 2 seconds (you can adjust this)
+        intervalId = setInterval(() => {
+            getTruckLocation(accessToken);
+        }, 2000);
+    } catch (error) {
+        console.error("Token fetch error:", error);
+        alert("Failed to retrieve access token");
+    }
+};
+
+const getTruckLocation = async (accessToken) => {
+    const imei = props.route.vehicle.imei;
+
+    try {
+        const response = await axios.post("/vehicle/get-location", {
+            accessToken,
+            imei,
+        });
+
+        const item = response.data?.location?.[0];
+        if (!item) {
+            alert("No location data found.");
+            return;
+        }
+
+        const lat = parseFloat(item.lat);
+        const lng = parseFloat(item.lng);
+        const speed = parseFloat(item.speed || 0);
+
+        location.value = { lat, lng };
+        previousCoords.value.push([lat, lng]);
+
+        if (!map.value) {
+            initMap(lat, lng);
+            isLoading.value = false;
+        }
+
+        // Add start marker once
+        if (previousCoords.value.length === 1) {
+            L.marker([lat, lng], { icon: startIcon })
+                .addTo(map.value)
+                .bindPopup("Start");
+        }
+
+        // Update truck marker
+        if (!marker.value) {
+            marker.value = L.marker([lat, lng], { icon: truckIcon }).addTo(
+                map.value
+            );
+        } else {
+            marker.value.setLatLng([lat, lng]);
+        }
+
+        map.value.panTo([lat, lng]);
+
+        // End marker (moving)
+        if (!endMarker.value) {
+            endMarker.value = L.marker([lat, lng], { icon: endIcon })
+                .addTo(map.value)
+                .bindPopup("Current Location");
+        } else {
+            endMarker.value.setLatLng([lat, lng]);
+        }
+
+        // Draw polyline segment
+        if (previousCoords.value.length >= 2) {
+            const [prevLat, prevLng] =
+                previousCoords.value[previousCoords.value.length - 2];
+            const color = speed < 5 ? "red" : "blue";
+
+            L.polyline(
+                [
+                    [prevLat, prevLng],
+                    [lat, lng],
+                ],
+                {
+                    color,
+                    weight: 5,
+                }
+            ).addTo(map.value);
+        }
+
+        // Log total distance
+        let totalDistance = 0;
+        for (let i = 1; i < previousCoords.value.length; i++) {
+            const [lat1, lon1] = previousCoords.value[i - 1];
+            const [lat2, lon2] = previousCoords.value[i];
+            totalDistance += getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2);
+        }
+
+        form.distance_km = totalDistance.toFixed(2);
+
+        form.status =
+            previousCoords.value.length <= 1
+                ? "Yet to start"
+                : speed >= 5
+                ? "Ongoing"
+                : "Completed";
+
+        console.log(`Total Distance: ${totalDistance.toFixed(2)} km`);
+    } catch (error) {
+        console.error("Failed to get location:", error);
+    }
+};
+
+const initMap = (lat, lng) => {
+    const mapElement = document.getElementById("map");
+    if (!mapElement) {
+        console.error("Map container not found.");
         return;
     }
 
-    let truckIcon = L.icon({
-        iconUrl: "/storage/images/trucks.png",
-        iconSize: [50, 50],
-    });
+    map.value = L.map(mapElement).setView([lat, lng], 15);
 
-    if (!map.value) {
-        map.value = L.map("map").setView([startLat.value, startLng.value], 13);
-        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(
-            map.value
-        );
-    } else {
-        map.value.setView([startLat.value, startLng.value], 2);
-    }
-
-    if (!marker.value) {
-        marker.value = L.marker([startLat.value, startLng.value], {
-            icon: truckIcon,
-        }).addTo(map.value);
-    } else {
-        marker.value.setLatLng([startLat.value, startLng.value]);
-    }
-
-    if (!secondMarker.value) {
-        secondMarker.value = L.marker([endLat.value, endLng.value]).addTo(
-            map.value
-        );
-    } else {
-        secondMarker.value.setLatLng([endLat.value, endLng.value]);
-    }
-
-    if (routingControl.value) {
-        map.value.removeControl(routingControl.value); // Remove previous route
-    }
-
-    routingControl.value = L.Routing.control({
-        waypoints: [
-            L.latLng(startLat.value, startLng.value), // User's current location
-            L.latLng(endLat.value, endLng.value), // Destination
-        ],
-        createMarker: () => null, // Prevent extra markers
-        routeWhileDragging: true, // Allow dragging waypoints
-    })
-        // .on("routesfound", function (e) {
-        //     console.log(e);
-        //     e.routes[0].coordinates.forEach(function (coord, index) {
-        //         setTimeout(() => {
-        //             if (marker.value) {
-        //                 marker.value.setLatLng([coord.lat, coord.lng]);
-        //             }
-        //         }, 1000 * index);
-        //     });
-        // })
-        .addTo(map.value);
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution: "&copy; OpenStreetMap contributors",
+    }).addTo(map.value);
 };
+
+const getDistanceFromLatLonInKm = (lat1, lon1, lat2, lon2) => {
+    const R = 6371;
+    const dLat = ((lat2 - lat1) * Math.PI) / 180;
+    const dLon = ((lon2 - lon1) * Math.PI) / 180;
+    const a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos((lat1 * Math.PI) / 180) *
+            Math.cos((lat2 * Math.PI) / 180) *
+            Math.sin(dLon / 2) *
+            Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+};
+
+onMounted(() => {
+    nextTick(() => {
+        getToken();
+    });
+});
+
+onUnmounted(() => {
+    if (intervalId) clearInterval(intervalId);
+    if (map.value) map.value.remove();
+});
 
 const submit = () => {
     form.put(route("route.update", props.route.id), {
@@ -446,10 +569,6 @@ const driverNameSearch = () => {
 const onDriverSelect = (event) => {
     form.driver.id = event.value.id;
 };
-
-onMounted(() => {
-    location();
-});
 
 watch(
     form,

@@ -485,11 +485,8 @@ const tructorNameSearch = (event) => {
 
     if (Array.isArray(props.tructor) && props.tructor.length > 0) {
         tructors.value = props.tructor
-            .filter(
-                (tructor) =>
-                    Array.isArray(tructor.fuel_records) &&
-                    tructor.fuel_records.length >= 1 &&
-                    tructor.license_plate.toLowerCase().includes(query)
+            .filter((tructor) =>
+                tructor.license_plate.toLowerCase().includes(query)
             )
             .map((tructor) => ({
                 id: tructor.id,

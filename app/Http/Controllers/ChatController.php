@@ -7,6 +7,8 @@ use App\Events\MessageSent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Models\User;
+
 
 class ChatController extends Controller
 {
@@ -52,18 +54,31 @@ class ChatController extends Controller
     }
 
     public function unreadCounts()
-    {
+{
+    $user = auth()->user();
 
-        $userId = auth()->id();
+    $adminId = User::where('user_type', 1)->value('id');
 
-        $counts = ChatMessage::select('sender_id', DB::raw('COUNT(*) as count'))
-            ->where('receiver_id', $userId)
-            ->where('is_read', 0)
-            ->groupBy('sender_id')
-            ->pluck('count', 'sender_id');
+    if ($user->user_type === 1) {
+        // Admin: return unread per driver
+        $counts = ChatMessage::where('receiver_id', $user->id)
+                         ->where('is_read', false)
+                         ->groupBy('sender_id')
+                         ->selectRaw('sender_id, COUNT(*) as count')
+                         ->pluck('count', 'sender_id')
+                         ->toArray();
 
-        return response()->json($counts);
+        return response()->json(['counts' => $counts ]);
+    } else {
+        // Driver: return count from admin
+        $count = ChatMessage::where('receiver_id', $user->id)
+                        ->where('sender_id', $adminId) // Set admin ID globally or config
+                        ->where('is_read', false)
+                        ->count();
+
+        return response()->json(['from_admin' => $count]);
     }
+}
 
     public function markAsRead(Request $request)
     {

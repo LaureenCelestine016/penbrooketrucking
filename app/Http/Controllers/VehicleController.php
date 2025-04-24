@@ -9,6 +9,8 @@ use App\Models\Vehicle;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Cache;
+
 
 
 class VehicleController extends Controller
@@ -193,6 +195,11 @@ class VehicleController extends Controller
 
     public function getToken(Request $request)
     {
+        if (Cache::has('tracksolid_token')) {
+            return response()->json([
+                'accessToken' => Cache::get('tracksolid_token'),
+            ]);
+        }
 
         $appKey = "8FB345B8693CCD0087407F68D5CEC35D339A22A4105B6558";
         $appSecret = "c8c3a6075b5346dc8a6c14480b646eb5";

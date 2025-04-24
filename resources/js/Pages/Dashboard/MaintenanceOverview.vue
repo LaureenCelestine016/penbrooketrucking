@@ -71,7 +71,7 @@ const initSelectedYear = () => {
 
 const filterYears = (event) => {
     const query = event.query.toLowerCase();
-    const availableYears = Array.from({ length: 5 }, (_, i) => {
+    const availableYears = Array.from({ length: 4 }, (_, i) => {
         const year = new Date().getFullYear() - i;
         return { label: year.toString(), value: year };
     });
@@ -165,6 +165,21 @@ const updateMaintenanceChart = () => {
         yAxis: {
             type: "value",
             min: 0,
+            name: "Cost",
+            nameLocation: "end", // Aligns to bottom
+            nameGap: 10, // Space between label and axis
+            nameRotate: 0, // Make it horizontal
+            nameTextStyle: {
+                align: "left",
+                verticalAlign: "bottom",
+                padding: [0, 0, -20, 0], // Fine-tune position (optional)
+                fontSize: 12,
+            },
+            axisLabel: {
+                fontSize: 12,
+                formatter: (value) =>
+                    value >= 1000 ? `${value / 1000}k` : value,
+            },
             splitLine: {
                 show: true,
                 lineStyle: { color: "#ddd", type: "dashed" },
@@ -175,13 +190,31 @@ const updateMaintenanceChart = () => {
                 type: "bar",
                 data: isYearly ? data.map((y) => y.value) : data,
                 barWidth: "40px",
-                itemStyle: { color: "#213555", borderRadius: [4, 4, 0, 0] },
+                itemStyle: {
+                    color: "#213555",
+                    borderRadius: [4, 4, 0, 0],
+                },
                 label: {
                     show: true,
                     position: "top",
                     fontSize: 12,
                     fontWeight: "bold",
                     color: "#333",
+                    formatter: (val) =>
+                        val.value >= 1000 ? `${val.value / 1000}k` : val.value,
+                },
+            },
+        ],
+
+        graphic: [
+            {
+                type: "text",
+                left: 5,
+                bottom: 10,
+                style: {
+                    text: "Cost",
+                    font: "12px sans-serif",
+                    fill: "#333",
                 },
             },
         ],

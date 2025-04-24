@@ -93,7 +93,7 @@ class TruckRegistrationController extends Controller
             ]);
 
             return redirect()->route('registration.create', $vehicle)
-                ->with('success', 'Tractor registration updated successfully!');
+                ->with('success', 'Vehicle registration updated successfully!');
         }
 
         if($request->truckId == "2") {
@@ -129,16 +129,6 @@ class TruckRegistrationController extends Controller
 
             $this->updateNotifications($originalTrailer, $request);
 
-            Expenses::create([
-                'vehicle_id'                => $id,
-                'category_id'               => 1,
-                'amount'                    => $validatedData['cost'],
-                'description'               => $validatedData['remarks'],
-                'expense_date'              => $validatedData['expenses_date']
-            ]);
-
-            return redirect()->route('registration.create', $trailer)
-                ->with('success', 'Tractor registration updated successfully!');
         }
 
     }
@@ -202,21 +192,12 @@ class TruckRegistrationController extends Controller
         }
     }
 
-    public function edit($id, $type)
+    public function edit($id)
     {
-        $vehicle = null;
-        $trailer = null;
+        $vehicle = Vehicle::findOrFail($id);
 
-        if ($type == "1") {
-            $vehicle = Vehicle::findOrFail($id);
-        } else {
-            $trailer = Trailer::findOrFail($id);
-        }
-
-        return Inertia::render('Registration/Show', [
-            "tructor" => $vehicle,
-            "trailer" => $trailer,
-            "truckType" => $type,
+        return Inertia::render('Registration/Create', [
+            "Vehicle" => $vehicle,
             ]
         );
     }

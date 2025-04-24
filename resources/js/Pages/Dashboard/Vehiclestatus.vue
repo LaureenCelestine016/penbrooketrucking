@@ -25,13 +25,17 @@ const initChart = () => {
         myChart = echarts.init(vehicleStatusChart.value);
         const option = {
             tooltip: { trigger: "item" },
-            legend: { top: "5%", left: "center" },
+            legend: {
+                orient: "horizontal",
+                bottom: "5%",
+                left: "center",
+            },
             series: [
                 {
                     name: "Operational Status",
                     type: "pie",
                     radius: ["45%", "75%"],
-                    center: ["50%", "58%"],
+                    center: ["50%", "44%"], // Optional: adjust if needed
                     data: [
                         {
                             value: props.operationalData.operationalCount,
