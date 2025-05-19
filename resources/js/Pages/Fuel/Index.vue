@@ -19,10 +19,9 @@
                         :paginator="true"
                         :rows="10"
                         :filters="filters"
-                        :globalFilterFields="['vehicle.name']"
                         paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                         :rowsPerPageOptions="[5, 10, 25]"
-                        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} vehicles"
+                        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} Fuels"
                     >
                         <template #header>
                             <div

@@ -28,7 +28,7 @@
                         ]"
                         paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                         :rowsPerPageOptions="[5, 10, 25]"
-                        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} vehivcles"
+                        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} Drivers"
                     >
                         <template #header>
                             <div

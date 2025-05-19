@@ -10,7 +10,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules;
+use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Validation\Rules\Password;
@@ -44,6 +44,10 @@ class RegisteredUserController extends Controller
             'email' => ['nullable', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'confirmed', Password::min(8)],
             'access_key' => ['required', 'exists:registration_keys,key'], // ✅ Fix here
+            'access_key' => [
+            'required',
+                Rule::exists('registration_keys', 'key')->where('used', false),
+        ],
         ]);
 
         $key = RegistrationKey::where('key', $validated['access_key'])
@@ -51,7 +55,9 @@ class RegisteredUserController extends Controller
             ->first();
 
         if (!$key) {
-            return back()->withErrors(['access_key' => 'Invalid or already used registration key.']);
+            return redirect()->back()->withErrors([
+                'access_key' => 'Invalid or already used registration key.',
+            ]);
         }
 
         $key->update(['used' => true]);

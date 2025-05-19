@@ -33,9 +33,7 @@
                         class="bg-white rounded-xl p-5 shadow text-center border border-gray-200 flex flex-col justify-center h-full"
                     >
                         <div class="text-3xl font-bold text-gray-900">
-                            {{
-                                formatPercentage(props.fuelStats.monthlyGrowth)
-                            }}
+                            {{ formatPercentage(props.fuelStats.totalGrowth) }}
                         </div>
                         <div class="text-sm text-gray-500">Total Growth</div>
                     </div>

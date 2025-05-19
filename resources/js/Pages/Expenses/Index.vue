@@ -22,7 +22,7 @@
                         :filters="filters"
                         paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                         :rowsPerPageOptions="[5, 10, 25]"
-                        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} vehicles"
+                        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} Expenses"
                     >
                         <template #header>
                             <div
@@ -509,6 +509,15 @@ const filters = ref({
 const exportCSV = () => {
     dt.value.exportCSV();
 };
+
+watch(
+    () => form.expense_date,
+    (newValue) => {
+        if (newValue) {
+            form.expense_date = dayjs(newValue).format("YYYY-MM-DD");
+        }
+    }
+);
 
 const getStatusLabel = (status) => {
     switch (status) {

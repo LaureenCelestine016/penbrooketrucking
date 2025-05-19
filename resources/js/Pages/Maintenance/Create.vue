@@ -365,7 +365,40 @@
                                 </FormField>
                             </div>
                         </div>
-                        <div class="grid grid-cols-2 gap-10 mb-2">
+                        <div class="grid grid-cols-3 gap-10 mb-2">
+                            <div class="w-full">
+                                <label
+                                    for="breakdown"
+                                    class="text-gray-700 dark:text-surface-0 text-sm font-medium mb-2 block"
+                                    >Expense Date<span class="ml-1 text-red-400"
+                                        >*</span
+                                    >
+                                </label>
+                                <FormField
+                                    id="breakdown"
+                                    name="breakdown"
+                                    class="flex flex-col gap-1"
+                                >
+                                    <div class="flex-auto">
+                                        <DatePicker
+                                            id="breakdown"
+                                            showIcon
+                                            fluid
+                                            v-model="form.expenseDate"
+                                            :showOnFocus="false"
+                                            inputId="expenseDate"
+                                            placeholder="Expense Date"
+                                        />
+                                    </div>
+                                    <Message
+                                        v-if="form.errors.breakdown"
+                                        severity="error"
+                                        size="small"
+                                        variant="simple"
+                                        >{{ form.errors.breakdown }}</Message
+                                    >
+                                </FormField>
+                            </div>
                             <div class="w-full">
                                 <label
                                     for="breakdown"
@@ -500,6 +533,7 @@ const form = useForm({
     remarks: "",
     breakdown: "",
     up: "",
+    expenseDate: "",
 });
 
 const submit = () => {
@@ -579,6 +613,15 @@ watch(
     (newValue) => {
         if (newValue) {
             form.up = dayjs(newValue).format("YYYY-MM-DD");
+        }
+    }
+);
+
+watch(
+    () => form.expenseDate,
+    (newValue) => {
+        if (newValue) {
+            form.expenseDate = dayjs(newValue).format("YYYY-MM-DD");
         }
     }
 );

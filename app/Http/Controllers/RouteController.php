@@ -50,7 +50,7 @@ class RouteController extends Controller
             "locations" => Location::get(['id', 'address', 'latitude', 'longitude']),
 
             "drivers" => Driver::selectRaw("id, CONCAT(first_name, ' ', last_name) AS fullname")
-                ->orderBy('created_at', 'desc')
+                ->orderBy('created_at', 'desc')->where('status','Active')
                 ->get(),
         ]);
 

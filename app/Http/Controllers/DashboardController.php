@@ -116,13 +116,18 @@ class DashboardController extends Controller
                 $totalGrowth = 0; // No growth if both are zero
             }
 
+
+
             $sameMonthLastYear = Fuel_record::whereYear('refueling_date', $lastYear)
                 ->whereMonth('refueling_date', $currentMonth)
                 ->sum('total_refuel');
 
+
             $currentMonthRefuel = Fuel_record::whereYear('refueling_date', $currentYear)
                 ->whereMonth('refueling_date', $currentMonth)
                 ->sum('total_refuel');
+
+
 
 // Safely calculate monthly growth percentage
             $monthlyGrowth = null;
@@ -134,6 +139,7 @@ class DashboardController extends Controller
                 $monthlyGrowth = 0; // No growth if both are zero
             }
 
+            
             $notification = Notification::where('status', 'pending')->get();
             $notificationCount = Notification::where('status', 'pending')->count();
 

@@ -54,7 +54,8 @@ class MaintenanceTaskController extends Controller
             'ref_no'        => 'required|string',
             'remarks'       => 'nullable|string',
             'breakdown'     => 'required|date', // Adjusted for timestamp format
-            'up'            => 'nullable|date|after_or_equal:breakdown', // Adjusted for timestamp format
+            'up'            => 'nullable|date|after_or_equal:breakdown',
+            'expenseDate'  => 'required|date',
         ]);
 
 
@@ -83,7 +84,7 @@ class MaintenanceTaskController extends Controller
                     'category_id'               => 2,
                     'amount'                    => $validatedData['total'],
                     'description'               => $validatedData['description'],
-                    'expense_date'              => $maintenance->created_at,
+                    'expense_date'              => $validatedData['expenseDate'],
 
                 ]);
             });
@@ -128,14 +129,14 @@ class MaintenanceTaskController extends Controller
         ]);
 
         $maintenance_task->update([
-            'odometer'          => $request->odometer,
-            'quantity'          => $request->quantity,
-            'price'             => $request->price,
-            'total'             => $request->total,
-            'supplier'          => $request->supplier,
-            'breakdown'         => $request->breakdown,
-            'up'                => $request->up,
-            'remarks'           => $request->remarks,
+            'odometer'        => $request->odometer,
+            'quantity'        => $request->quantity,
+            'price'           => $request->price,
+            'total'           => $request->total,
+            'supplier'        => $request->supplier,
+            'breakdown_date'  => $request->breakdown, // mapped correctly
+            'up_date'         => $request->up,        // mapped correctly
+            'remarks'         => $request->remarks,
         ]);
 
         return redirect()->route('maintenance', $maintenance_task)->with('success', 'Maintenance record updated successfully!');

@@ -16,36 +16,39 @@
                 </div>
 
                 <form @submit.prevent="submit">
-                    <label class="block mb-2 text-gray-700"
-                        >Email or Username</label
-                    >
-                    <InputText
-                        v-model="form.login"
-                        placeholder="Enter your email or username"
-                        class="w-full mb-4"
-                    />
-                    <Message
-                        v-if="form.errors.login"
-                        severity="error"
-                        size="small"
-                        variant="simple"
-                        >{{ form.errors.login }}</Message
-                    >
-
-                    <label class="block mb-2 text-gray-700">Password</label>
-                    <InputText
-                        v-model="form.password"
-                        type="password"
-                        placeholder="Enter your password"
-                        class="w-full mb-4"
-                    />
-                    <Message
-                        v-if="form.errors.password"
-                        severity="error"
-                        size="small"
-                        variant="simple"
-                        >{{ form.errors.password }}</Message
-                    >
+                    <div class="mb-3">
+                        <label class="block mb-2 text-gray-700"
+                            >Email or Username</label
+                        >
+                        <InputText
+                            v-model="form.login"
+                            placeholder="Enter your email or username"
+                            class="w-full mb-1"
+                        />
+                        <Message
+                            v-if="form.errors.login"
+                            severity="error"
+                            size="small"
+                            variant="simple"
+                            >{{ form.errors.login }}</Message
+                        >
+                    </div>
+                    <div>
+                        <label class="block mb-2 text-gray-700">Password</label>
+                        <InputText
+                            v-model="form.password"
+                            type="password"
+                            placeholder="Enter your password"
+                            class="w-full mb-1"
+                        />
+                        <Message
+                            v-if="form.errors.password"
+                            severity="error"
+                            size="small"
+                            variant="simple"
+                            >{{ form.errors.password }}</Message
+                        >
+                    </div>
 
                     <div class="flex justify-between items-center mb-4 mt-4">
                         <div class="flex items-center">

@@ -1,6 +1,6 @@
 <template>
     <Head title="Admin Registration" />
-    <Toast position="top-center" />
+    <Toast />
     <div
         class="min-h-screen bg-gray-50 flex items-center justify-center py-6 px-4"
     >
@@ -130,7 +130,7 @@
                                             label="Next"
                                             icon="pi pi-arrow-right"
                                             iconPos="right"
-                                            @click="validateAndProceed"
+                                            @click="activateCallback(2)"
                                         />
                                     </div>
                                 </div>
@@ -280,22 +280,20 @@
 </template>
 
 <script setup>
-import { ref, nextTick } from "vue";
+import { ref } from "vue";
 import { Head, Link, useForm } from "@inertiajs/vue3";
 import InputText from "primevue/inputtext";
 import Button from "primevue/button";
+import Dropdown from "primevue/dropdown";
 import Stepper from "primevue/stepper";
+import Step from "primevue/step";
+import StepList from "primevue/steplist";
 import StepPanels from "primevue/steppanels";
 import StepPanel from "primevue/steppanel";
 import Message from "primevue/message";
 import Toast from "primevue/toast";
-import { useToast } from "primevue/usetoast";
 
 const activeStep = ref(1);
-const toast = useToast();
-
-// Errors for manual validation
-const localErrors = ref({});
 
 const form = useForm({
     access_key: "",
@@ -306,82 +304,22 @@ const form = useForm({
     password: "",
     email: "",
     password_confirmation: "",
+    errors: {},
 });
-
-const validateAndProceed = () => {
-    localErrors.value = {}; // Reset
-
-    if (!form.firstname) localErrors.value.firstname = "First name is required";
-    if (!form.lastname) localErrors.value.lastname = "Last name is required";
-    if (!form.access_key)
-        localErrors.value.access_key = "Access key is required";
-
-    if (Object.keys(localErrors.value).length) {
-        showErrorsAsToasts();
-        return;
-    }
-
-    activeStep.value = 2; // Move to next step
-};
-
-const showErrorsAsToasts = () => {
-    nextTick(() => {
-        Object.values(localErrors.value).forEach((msg) => {
-            toast.add({
-                severity: "error",
-                summary: "Validation Error",
-                detail: msg,
-                life: 3000,
-            });
-        });
-    });
-};
 
 const submit = () => {
     form.post(route("register"), {
-        onSuccess: () => {
-            form.reset("password", "password_confirmation");
-            toast.add({
-                severity: "success",
-                summary: "Registration Successful",
-                detail: "Your account has been created.",
-                life: 3000,
-            });
-        },
-        onError: () => {
-            // Show backend errors from form.errors
-            showBackendErrorsAsToasts(form.errors);
-
-            // Auto-navigate to step 1 if any step 1 field has errors
-            const step1Fields = [
-                "access_key",
-                "firstname",
-                "lastname",
-                "email",
-            ];
-            const step1HasErrors = step1Fields.some(
-                (field) => form.errors[field]
-            );
-            if (step1HasErrors) {
-                activeStep.value = 1;
-            }
-        },
+        onSuccess: () => form.reset("password", "password_confirmation"),
     });
 };
 
-const showBackendErrorsAsToasts = (errors) => {
-    if (!errors) return;
-
-    nextTick(() => {
-        Object.values(errors).forEach((msg) => {
-            toast.add({
-                severity: "error",
-                summary: "Validation Error",
-                detail: msg,
-                life: 3000,
-            });
-        });
-    });
+const stepIconClass = (value, active) => {
+    return [
+        "rounded-full border-2 w-10 h-10 flex items-center justify-center",
+        value <= active
+            ? "bg-primary text-white border-primary"
+            : "border-gray-300",
+    ];
 };
 </script>
 

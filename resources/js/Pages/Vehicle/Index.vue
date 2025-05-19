@@ -24,7 +24,7 @@
                         :filters="filters"
                         paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                         :rowsPerPageOptions="[5, 10, 25]"
-                        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} vehicles"
+                        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} Tractor"
                         class="w-full overflow-auto"
                     >
                         <!-- Table Header -->

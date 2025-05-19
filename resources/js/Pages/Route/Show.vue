@@ -250,6 +250,7 @@
                                         </FormField>
                                     </div>
                                 </div>
+
                                 <Button
                                     label="UPDATE CHANGE"
                                     icon="pi pi-pencil"
@@ -397,6 +398,11 @@ const getToken = async () => {
 const getTruckLocation = async (accessToken) => {
     const imei = props.route.vehicle.imei;
 
+    if (!imei) {
+        console.warn("IMEI not available for this vehicle.");
+        return;
+    }
+
     try {
         const response = await axios.post("/vehicle/get-location", {
             accessToken,
@@ -404,6 +410,8 @@ const getTruckLocation = async (accessToken) => {
         });
 
         const item = response.data?.location?.[0];
+        console.log(item);
+
         if (!item) {
             alert("No location data found.");
             return;
